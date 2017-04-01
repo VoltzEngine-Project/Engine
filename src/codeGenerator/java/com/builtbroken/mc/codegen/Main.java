@@ -36,7 +36,7 @@ public class Main
         //Load arguments
         HashMap<String, String> launchSettings = loadArgs(args);
 
-        if (launchSettings.containsKey("src"))
+        if (launchSettings.containsKey("src") && launchSettings.containsKey("templates"))
         {
             File runFolder = new File(".");
             File targetFolder;
@@ -96,7 +96,7 @@ public class Main
         }
         else
         {
-            logger.info("In order for code to be parsed and generator you need to specify: src=\"path/to/source/files\"");
+            logger.info("In order for code to be parsed and generator you need to specify: src=\"path/to/source/files\" templates=\"path/to/source/templates\"");
             System.exit(1);
         }
 
@@ -323,11 +323,19 @@ public class Main
                 Processor processor = new Processor();
                 try
                 {
-                    processor.loadFile(file);
-
-                    if (processor.isValid())
+                    processor = processor.loadFile(file);
+                    //If returns null the file was not a template
+                    if (processor != null)
                     {
-                        map.put(processor.getKey(), processor);
+                        if (processor.isValid())
+                        {
+                            map.put(processor.getKey(), processor);
+                        }
+                        else
+                        {
+                            logger.info("Template file is invalid, exiting to prevent issues " + file);
+                            System.exit(1);
+                        }
                     }
                 }
                 catch (Exception e)

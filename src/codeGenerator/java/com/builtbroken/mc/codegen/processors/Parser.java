@@ -18,7 +18,7 @@ public class Parser
         List<String> annotations = new ArrayList();
 
         final Matcher matcher = annotationPattern.matcher(line);
-        if (matcher.matches())
+        while(matcher.find())
         {
             for (int i = 1; i <= matcher.groupCount(); i++)
             {

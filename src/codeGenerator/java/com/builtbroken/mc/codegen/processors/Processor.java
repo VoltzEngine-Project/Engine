@@ -1,11 +1,14 @@
 package com.builtbroken.mc.codegen.processors;
 
 import com.builtbroken.mc.codegen.Main;
+import com.builtbroken.mc.codegen.templates.TileWrappedTemplate;
+import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,17 +26,24 @@ public class Processor
     public static Pattern extendsPattern2 = Pattern.compile("extends(.*?)\\{");
     public static Pattern implementsPattern = Pattern.compile("implements(.*?)\\{");
 
-    private List<String> imports;
-    private List<String> interfaces;
+    public static Pattern methodBodyPattern = Pattern.compile("(?s)#StartMethods#(.*?)#EndMethods#(?-s)");
+    public static Pattern fieldBodyPattern = Pattern.compile("(?s)#StartFields#(.*?)#EndFields#(?-s)");
+
+    private List<String> imports = new ArrayList();
+    private List<String> interfaces = new ArrayList();
+    private List<String> annotations = new ArrayList();
     //private HashMap<String, Method> methods = new HashMap();
     //private HashMap<String, Field> fields = new HashMap();
+    private String fieldBody; //TODO replace with list of fields
+    private String methodBody; //TODO replace with list of methods
 
     String classExtending;
-    private boolean valid;
+    private boolean valid = true;
     private String key;
 
     public Processor loadFile(File file) throws IOException
     {
+        Main.logger.info("Parsing Template: " + file);
         //TODO load the file
         //TODO parse out all data
         //TODO ensure extends TileEntityWrapper and nothing else
@@ -60,7 +70,7 @@ public class Processor
             //Convert to string and parse imports
             String string = builder.toString();
             Matcher matcher = importPattern.matcher(string);
-            if (matcher.matches())
+            while(matcher.find())
             {
                 for (int i = 1; i <= matcher.groupCount(); i++)
                 {
@@ -94,7 +104,25 @@ public class Processor
 
             //Match annotations from builder
             string = builder.toString();
-            List<String> annotations = Parser.getAnnotations(string);
+            annotations.addAll(Parser.getAnnotations(string));
+            Main.logger.info("  Annotations:");
+            //Output annotation and parse
+            for (String annotation : annotations)
+            {
+                Main.logger.info("      " + annotation);
+                if (annotation.startsWith(TileWrappedTemplate.class.getName()))
+                {
+                    String data = annotation.substring(annotation.indexOf("(") + 1, annotation.length() - 1);
+                    key = data.split("=")[1].trim();
+                }
+            }
+
+            if (key == null)
+            {
+                Main.logger.info("Class does not contain " + TileWrappedTemplate.class.getName() + " or the key set was empty");
+                valid = false;
+                return null;
+            }
 
             //Read everything until start of class body
             builder = new StringBuilder();
@@ -115,6 +143,10 @@ public class Processor
                     if (line.contains("{"))
                     {
                         builder.append(line);
+                        if (!line.startsWith("{"))
+                        {
+                            line = line.substring(line.indexOf("{") + 1, line.length());
+                        }
                         break;
                     }
                     else
@@ -127,7 +159,7 @@ public class Processor
 
             //Remove comments and java docs from header
             matcher = multiLineCommentPattern.matcher(string);
-            if (matcher.matches())
+            while(matcher.find())
             {
                 for (int i = 1; i <= matcher.groupCount(); i++)
                 {
@@ -138,33 +170,81 @@ public class Processor
             }
 
             //Match for extends
+            Main.logger.info("  Interfaces:");
             matcher = extendsPattern.matcher(string);
             //Check if pattern 1 works, extends class implements
-            if (matcher.matches())
+            if(matcher.find())
             {
-                 classExtending = matcher.group(1);
+                classExtending = matcher.group(1).trim();
             }
             //else try pattern 2, extends class {
-            else
+            if(classExtending == null)
             {
                 matcher = extendsPattern2.matcher(string);
-                if (matcher.matches())
+                if(matcher.find())
                 {
-                    classExtending = matcher.group(1);
+                    classExtending = matcher.group(1).trim();
                 }
+            }
+
+            //Validate
+            if (classExtending != null)
+            {
+                Main.logger.info("      " + classExtending);
+                if (!classExtending.equals(TileEntityWrapper.class.getName()))
+                {
+                    Main.logger.info("      Error class must " + TileEntityWrapper.class.getName());
+                    valid = false;
+                    return this;
+                }
+            }
+            else
+            {
+                Main.logger.info("      none");
+                Main.logger.info("      Error class must extend something");
+                valid = false;
+                return this;
             }
 
             //Match interfaces
+            Main.logger.info("  Interfaces:");
             matcher = implementsPattern.matcher(string);
-            if (matcher.matches())
+            while(matcher.find())
             {
                 String[] imps = matcher.group(1).trim().split(",");
-                for(String imp :imps)
+                for (String imp : imps)
                 {
                     interfaces.add(imp);
+                    Main.logger.info("      " + imp);
                 }
             }
+            if(interfaces.isEmpty())
+            {
+                Main.logger.info("      none");
+            }
 
+            //Read reset of file
+            builder = new StringBuilder();
+            builder.append(line); //Add remaining bits of line
+            while ((line = br.readLine()) != null)
+            {
+                builder.append(line.trim());
+            }
+            string = builder.toString();
+
+            //match fields body
+            matcher = fieldBodyPattern.matcher(string);
+            if (matcher.find())
+            {
+                fieldBody = matcher.group(1);
+            }
+
+            //Match method body
+            matcher = methodBodyPattern.matcher(string);
+            if (matcher.find())
+            {
+                methodBody = matcher.group(1);
+            }
         }
         finally
         {
