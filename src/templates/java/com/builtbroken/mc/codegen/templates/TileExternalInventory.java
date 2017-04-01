@@ -24,10 +24,6 @@ public class TileExternalInventory extends TileEntityWrapper implements IInvento
         super(controller);
     }
 
-    //#StartFields#
-
-    //#EndFeidls#
-
     //#StartMethods#
     @Override
     public IInventory getInventory()

@@ -25,16 +25,16 @@ public class Processor
     public static Pattern extendsPattern2 = Pattern.compile("extends(.*?)\\{");
     public static Pattern implementsPattern = Pattern.compile("implements(.*?)\\{");
 
-    public static Pattern methodBodyPattern = Pattern.compile("(?s)#StartMethods#(.*?)#EndMethods#(?-s)");
-    public static Pattern fieldBodyPattern = Pattern.compile("(?s)#StartFields#(.*?)#EndFields#(?-s)");
+    public static Pattern methodBodyPattern = Pattern.compile("(?s)#StartMethods#(.*?)//#EndMethods#(?-s)");
+    public static Pattern fieldBodyPattern = Pattern.compile("(?s)#StartFields#(.*?)//#EndFields#(?-s)");
 
     private List<String> imports = new ArrayList();
     private List<String> interfaces = new ArrayList();
     private List<String> annotations = new ArrayList();
     //private HashMap<String, Method> methods = new HashMap();
     //private HashMap<String, Field> fields = new HashMap();
-    private String fieldBody; //TODO replace with list of fields
-    private String methodBody; //TODO replace with list of methods
+    public String fieldBody; //TODO replace with list of fields
+    public String methodBody; //TODO replace with list of methods
 
     String classExtending;
     private boolean valid = true;
@@ -232,7 +232,8 @@ public class Processor
             builder.append(line); //Add remaining bits of line
             while ((line = br.readLine()) != null)
             {
-                builder.append(line.trim());
+                builder.append(line);
+                builder.append("\n");
             }
             string = builder.toString();
 

@@ -383,7 +383,40 @@ public class Main
 
     public static void createBody(StringBuilder builder, List<Processor> processors)
     {
+        for (Processor processor : processors)
+        {
+            if (processor.fieldBody != null)
+            {
+                builder.append("\t//Fields from ");
+                builder.append(processor.getKey());
+                builder.append("\n");
 
+                String[] fields = processor.fieldBody.split(";");
+                for (String field : fields)
+                {
+                    if(!field.isEmpty())
+                    {
+                        builder.append("\t");
+                        builder.append(field.trim());
+                        builder.append(";\n");
+                    }
+                }
+            }
+        }
+
+        for (Processor processor : processors)
+        {
+            if (processor.methodBody != null)
+            {
+                builder.append("\t//============================\n\t//==Methods:");
+                builder.append(processor.getKey());
+                builder.append("\n\t//============================\n");
+                builder.append("\n");
+
+                builder.append(processor.methodBody);
+                builder.append("\n");
+            }
+        }
     }
 
     public static HashMap<String, Processor> getProcessors(File directory, int depth)
