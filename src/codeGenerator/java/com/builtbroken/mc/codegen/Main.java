@@ -80,15 +80,16 @@ public class Main
             }
 
             //Ensure we have an output folder
-            if (outputFolder.exists() && !templateFolder.isDirectory())
+            if (outputFolder.exists() && !outputFolder.isDirectory())
             {
                 logger.info("output folder is not a directory: " + outputFolder);
                 System.exit(1);
             }
-            else if (!outputFolder.exists())
+            if(!outputFolder.delete())
             {
-                outputFolder.mkdirs();
+                logger.info("Failed to delete output folder: " + outputFolder);
             }
+            outputFolder.mkdirs();
 
             //Ensure we have a target source folder
             if (targetFolder.exists() && targetFolder.isDirectory())
@@ -286,7 +287,7 @@ public class Main
                 builder.append("()\n\t{");
                 builder.append("\n\t\tsuper(new ");
                 builder.append(fileClassName);
-                builder.append("()\n");
+                builder.append("());\n");
                 builder.append("\t}\n\n");
 
                 createBody(builder, processors);
@@ -329,6 +330,31 @@ public class Main
     public static void createImports(StringBuilder builder, List<Processor> processors)
     {
         List<String> imports = new ArrayList();
+        //Add ignored files
+        imports.add("com.builtbroken.mc.codegen.processors.TileWrappedTemplate");
+
+        //Check if we can ignore imports
+        boolean containsITileNodeImport = false;
+        for (Processor processor : processors)
+        {
+            if(processor.fieldBody != null && processor.fieldBody.contains("ITileNode"))
+            {
+                containsITileNodeImport = true;
+                break;
+            }
+            if(processor.methodBody != null && processor.methodBody.contains("ITileNode"))
+            {
+                containsITileNodeImport = true;
+                break;
+            }
+        }
+
+        if(!containsITileNodeImport)
+        {
+            imports.add("com.builtbroken.mc.framework.logic.ITileNode");
+        }
+
+        //Add imports
         for (Processor processor : processors)
         {
             List<String> importsFromProcessor = processor.getImports();
@@ -355,6 +381,7 @@ public class Main
 
         //Add implements
         List<String> interfaces = new ArrayList();
+
         for (Processor processor : processors)
         {
             List<String> interfacesFromProcessor = processor.getInterfaces();
@@ -367,7 +394,7 @@ public class Main
                 }
             }
         }
-        if (interfaces != null)
+        if (!interfaces.isEmpty())
         {
             builder.append(" implements ");
             for (int i = 0; i < interfaces.size(); i++)
