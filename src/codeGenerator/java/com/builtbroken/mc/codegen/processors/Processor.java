@@ -272,4 +272,9 @@ public class Processor
     {
         return key;
     }
+
+    public List<String> getInterfaces()
+    {
+        return interfaces;
+    }
 }

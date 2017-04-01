@@ -5,10 +5,7 @@ import com.builtbroken.mc.codegen.processors.Processor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,11 +32,12 @@ public class Main
         //Load arguments
         HashMap<String, String> launchSettings = loadArgs(args);
 
-        if (launchSettings.containsKey("src") && launchSettings.containsKey("templates"))
+        if (launchSettings.containsKey("src") && launchSettings.containsKey("templates") && launchSettings.containsKey("output"))
         {
             File runFolder = new File(".");
             File targetFolder;
             File templateFolder;
+            File outputFolder;
 
             //Get source folder path
             String path = launchSettings.get("src");
@@ -63,12 +61,33 @@ public class Main
                 templateFolder = new File(path);
             }
 
+            path = launchSettings.get("output");
+            if (path.startsWith("."))
+            {
+                outputFolder = new File(runFolder, path.substring(1, path.length()));
+            }
+            else
+            {
+                outputFolder = new File(path);
+            }
+
 
             //Ensure we have a template folder
             if (!templateFolder.exists() || !templateFolder.isDirectory())
             {
                 logger.info("The template folder does not exist. Folder: " + templateFolder);
                 System.exit(1);
+            }
+
+            //Ensure we have an output folder
+            if (outputFolder.exists() && !templateFolder.isDirectory())
+            {
+                logger.info("output folder is not a directory: " + outputFolder);
+                System.exit(1);
+            }
+            else if (!outputFolder.exists())
+            {
+                outputFolder.mkdirs();
             }
 
             //Ensure we have a target source folder
@@ -86,9 +105,10 @@ public class Main
                     System.exit(1);
                 }
 
+                //Load classes
                 logger.info("");
                 logger.info("Loading classes from " + targetFolder);
-                handleDirectory(targetFolder, processors, 0);
+                handleDirectory(targetFolder, processors, outputFolder, 0);
             }
             else
             {
@@ -98,14 +118,14 @@ public class Main
         }
         else
         {
-            logger.info("In order for code to be parsed and generator you need to specify: src=\"path/to/source/files\" templates=\"path/to/source/templates\"");
+            logger.info("In order for code to be parsed and generator you need to specify in the program arguments: -src=\"path/to/source/files\" -templates=\"path/to/source/templates\" -output=\"path/to/source/output\"");
             System.exit(1);
         }
 
         logger.info("Exiting...");
     }
 
-    public static void handleDirectory(File directory, HashMap<String, Processor> processors, int depth)
+    public static void handleDirectory(File directory, HashMap<String, Processor> processors, File outputFolder, int depth)
     {
         //Generate spacer to make debug look nice
         String spacer;
@@ -123,7 +143,7 @@ public class Main
         {
             if (file.isDirectory())
             {
-                handleDirectory(file, processors, ++depth);
+                handleDirectory(file, processors, outputFolder, ++depth);
             }
             else
             {
@@ -132,7 +152,7 @@ public class Main
                 logger.info(spacer + " |------------------------->");
                 try
                 {
-                    handleFile(file, processors, spacer + " |");
+                    handleFile(file, processors, outputFolder, spacer + " |");
                 }
                 catch (IOException e)
                 {
@@ -144,10 +164,12 @@ public class Main
         }
     }
 
-    public static void handleFile(File file, HashMap<String, Processor> allProcessors, String spacer) throws IOException
+    public static void handleFile(File file, HashMap<String, Processor> allProcessors, File outputFolder, String spacer) throws IOException
     {
-        if (file.getName().endsWith(".java"))
+        String fileClassName = file.getName();
+        if (fileClassName.endsWith(".java"))
         {
+            fileClassName = fileClassName.substring(0, fileClassName.length() - 5);
             String classPackage = null;
             List<String> annotations = new ArrayList();
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -211,11 +233,11 @@ public class Main
                 {
                     if (s.contains("id"))
                     {
-                        id = s.split("=")[1].trim();
+                        id = s.split("=")[1].replace("\"", "").trim();
                     }
                     else if (s.contains("className"))
                     {
-                        className = s.split("=")[1].trim();
+                        className = s.split("=")[1].replace("\"", "").trim();
                     }
                 }
 
@@ -256,12 +278,45 @@ public class Main
                 builder.append("\n");
 
                 createClassHeader(builder, className, processors);
-                builder.append("{\n");
+                builder.append("\n{\n");
+
+                //Create constructor
+                builder.append("\tpublic ");
+                builder.append(className);
+                builder.append("()\n\t{");
+                builder.append("\n\t\tsuper(new ");
+                builder.append(fileClassName);
+                builder.append("()\n");
+                builder.append("\t}\n\n");
+
                 createBody(builder, processors);
                 builder.append("}");
 
-                //TODO write file
+                //Write file to disk
+                try
+                {
+                    File outFile = new File(outputFolder, classPackage.replace(".", File.separator) + File.separator + className + ".java");
+                    logger.info(spacer + "  Writing file to disk, file = " + outFile);
+                    if (!outFile.getParentFile().exists())
+                    {
+                        outFile.getParentFile().mkdirs();
+                        logger.info(spacer + "   Created directories");
+                    }
+                    else if (outFile.exists())
+                    {
+                        logger.info(spacer + "   Overriding existing file");
+                    }
 
+                    FileWriter fileWriter = new FileWriter(outFile);
+                    fileWriter.write(builder.toString());
+                    fileWriter.flush();
+                    fileWriter.close();
+                }
+                catch (Exception e)
+                {
+                    logger.info(spacer + "    Error writing file", e);
+                    System.exit(1);
+                }
             }
             else
             {
@@ -294,7 +349,36 @@ public class Main
 
     public static void createClassHeader(StringBuilder builder, String className, List<Processor> processors)
     {
+        //TODO implement annotations
+        //Create header
+        builder.append("public class " + className + " extends TileEntityWrapper");
 
+        //Add implements
+        List<String> interfaces = new ArrayList();
+        for (Processor processor : processors)
+        {
+            List<String> interfacesFromProcessor = processor.getInterfaces();
+            for (String imp : interfacesFromProcessor)
+            {
+                //Prevent duplication
+                if (!interfaces.contains(imp))
+                {
+                    interfaces.add(imp);
+                }
+            }
+        }
+        if (interfaces != null)
+        {
+            builder.append(" implements ");
+            for (int i = 0; i < interfaces.size(); i++)
+            {
+                builder.append(interfaces.get(i));
+                if (i != (interfaces.size() - 1))
+                {
+                    builder.append(", ");
+                }
+            }
+        }
     }
 
     public static void createBody(StringBuilder builder, List<Processor> processors)

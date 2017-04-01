@@ -39,3 +39,4 @@ libs/industrialcraft-2-2.2.824-experimental-dev.jar
 libs/industrialcraft-2-2.2.824-experimental-api.jar
 tmp/
 run2/
+src/generated/
