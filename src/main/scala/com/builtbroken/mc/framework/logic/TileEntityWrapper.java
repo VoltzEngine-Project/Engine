@@ -13,14 +13,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Wrapper class for {@link ITileController}
+ * <p>
+ * Keep in mind this is designed to be a template for automatic code generation to extend. It should not be
+ * used as an actual parent class unless testing.
+ *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/30/2017.
  */
-public class TileEntityWrapper extends TileEntity
+public abstract class TileEntityWrapper extends TileEntity
 {
     public static final HashMap<String, Class<? extends ITileController>> nameToClass = new HashMap();
 
-    public ITileController tile;
+    public final ITileController tile;
 
     /** TILE, Current tick count, starts when the tile is placed */
     public long ticks = 0L;
@@ -29,6 +34,11 @@ public class TileEntityWrapper extends TileEntity
 
     /** TILE, Set of player's with this tile's interface open, mainly used for GUI packet updates */
     protected final Set<EntityPlayer> playersUsing = new HashSet();
+
+    public TileEntityWrapper(ITileController controller)
+    {
+        tile = controller;
+    }
 
     /**
      * TILE, Called by the world to update the tile. Never
@@ -103,7 +113,6 @@ public class TileEntityWrapper extends TileEntity
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
-        tile = loadTile(nbt);
         if (tile instanceof ISave)
         {
             ((ISave) tile).load(nbt);
@@ -119,26 +128,5 @@ public class TileEntityWrapper extends TileEntity
             ((ISave) tile).save(nbt);
         }
         nbt.setString("tileID", tile.getUniqueID());
-    }
-
-    public static ITileController loadTile(NBTTagCompound save)
-    {
-        ITileController tile = null;
-
-        Class oclass;
-        try
-        {
-            oclass = (Class) nameToClass.get(save.getString("tileID"));
-
-            if (oclass != null)
-            {
-                tile = (ITileController) oclass.newInstance();
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-        }
-        return tile;
     }
 }

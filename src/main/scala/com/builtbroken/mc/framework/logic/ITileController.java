@@ -13,7 +13,10 @@ public interface ITileController
     /**
      * Called for the first tick of the controller
      */
-    void firstTick();
+    default void firstTick()
+    {
+
+    }
 
     /**
      * Called each tick
@@ -25,25 +28,27 @@ public interface ITileController
     /**
      * Called to destroy the controller
      */
-    void destroy();
+    default void destroy()
+    {
+
+    }
 
     /**
      * Called every so often to clean up data
      * and refresh the tile's cache values.
      */
-    void doCleanupCheck();
+    default void doCleanupCheck()
+    {
+
+    }
 
     /**
      * How long to wait between cleanup calls
      *
      * @return
      */
-    int getNextCleanupTick();
-
-    /**
-     * Unique save ID used to ID this tile
-     *
-     * @return
-     */
-    String getUniqueID();
+    default int getNextCleanupTick()
+    {
+        return 200; //every 10 seconds (20 ticks a second, or 50ms a tick with 1000ms a second)
+    }
 }
