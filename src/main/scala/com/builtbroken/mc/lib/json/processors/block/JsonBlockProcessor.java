@@ -77,6 +77,16 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         BlockPropertyData blockPropertyData = new BlockPropertyData(this, id, mod, name);
         blockPropertyData.setMaterial(material);
 
+        if(blockData.has("resistance"))
+        {
+            blockPropertyData.setResistance(blockData.get("resistance").getAsFloat());
+        }
+
+        if(blockData.has("hardness"))
+        {
+            blockPropertyData.setResistance(blockData.get("hardness").getAsFloat());
+        }
+
         //Meta data loading
         if (blockData.has("subtypes"))
         {

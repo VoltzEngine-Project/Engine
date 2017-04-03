@@ -1,0 +1,15 @@
+{
+  "author": {
+    "name": "${voltzengine}"
+  },
+  "block": {
+    "name": "veTestBlock2",
+    "id": "veTestBlock2",
+    "mod":"voltzenginetest",
+    "material": "rock",
+    "tileEntity": {
+      "id": "veTestBlockTile",
+      "class": "com.builtbroken.test.mod.block.TileEntityVETestBlock"
+    }
+  }
+}

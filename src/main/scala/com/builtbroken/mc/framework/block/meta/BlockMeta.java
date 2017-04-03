@@ -31,7 +31,7 @@ public class BlockMeta extends BlockBase
         if (!registered)
         {
             registered = true;
-            manager.newBlock(data.ID, this, ItemBlockMeta.class);
+            manager.newBlock(data.registryKey, this, ItemBlockMeta.class);
             if (data.tileEntityProvider != null)
             {
                 data.register(mod, manager);

@@ -13,13 +13,16 @@ import net.minecraft.block.material.Material;
 public class BlockPropertyData extends JsonGenData
 {
     /** Unique id to register the block with */
-    public final String ID;
+    public final String registryKey;
     /** Mod that owners the block */
     public final String MOD;
     /** Name of the block, used for localizations */
     public final String name;
 
-    private String material;
+
+    private Material material;
+    private float hardness = 5;
+    private float resistance = 5;
 
     /** Localization of the block */
     public String localization = "tile.${name}";
@@ -29,21 +32,41 @@ public class BlockPropertyData extends JsonGenData
     /** Handles supplying the tile entity for the block */
     public ITileProvider tileEntityProvider;
 
-    public BlockPropertyData(IJsonProcessor processor, String ID, String MOD, String name)
+    public BlockPropertyData(IJsonProcessor processor, String registryKey, String MOD, String name)
     {
         super(processor);
-        this.ID = ID;
+        this.registryKey = registryKey;
         this.MOD = MOD;
         this.name = name;
     }
 
     public Material getMaterial()
     {
-        return MaterialDict.get(material);
+        return material;
     }
 
     public void setMaterial(String matName)
     {
-        this.material = matName;
+        this.material = MaterialDict.get(matName);
+    }
+
+    public float getHardness()
+    {
+        return hardness;
+    }
+
+    public void setHardness(float hardness)
+    {
+        this.hardness = hardness;
+    }
+
+    public float getResistance()
+    {
+        return resistance;
+    }
+
+    public void setResistance(float resistance)
+    {
+        this.resistance = resistance;
     }
 }

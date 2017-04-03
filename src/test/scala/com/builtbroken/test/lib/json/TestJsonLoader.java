@@ -63,7 +63,7 @@ public class TestJsonLoader extends AbstractTest
 
         //Check block is loaded, and its sub processors are loaded
         assertSame(loader.blockProcessor, loader.processors.get("block"));
-        assertEquals(4, loader.blockProcessor.subProcessors.size());
+        assertEquals(5, loader.blockProcessor.subProcessors.size());
         assertSame(loader.craftingRecipeProcessor, loader.blockProcessor.subProcessors.get("craftingGridRecipe"));
         assertSame(loader.furnaceRecipeProcessor, loader.blockProcessor.subProcessors.get("furnaceRecipe"));
         assertSame(loader.worldOreGenProcessor, loader.blockProcessor.subProcessors.get("worldGenerator"));

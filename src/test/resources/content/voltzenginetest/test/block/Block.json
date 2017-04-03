@@ -1,0 +1,11 @@
+{
+  "author": {
+    "name": "${voltzengine}"
+  },
+  "block": {
+    "name": "veTestBlock",
+    "id": "veTestBlock",
+    "mod":"voltzenginetest",
+    "material": "rock"
+  }
+}
