@@ -1,10 +1,9 @@
 package com.builtbroken.mc.framework.block;
 
 import com.builtbroken.jlib.data.Colors;
-import com.builtbroken.mc.api.tile.listeners.IActivationListener;
 import com.builtbroken.mc.api.tile.access.IGuiTile;
+import com.builtbroken.mc.api.tile.listeners.*;
 import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
-import com.builtbroken.mc.api.tile.listeners.IWrenchListener;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
@@ -40,6 +39,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -55,6 +55,8 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     public IJsonGenMod mod;
 
     protected boolean registered = false;
+
+    private final HashMap<String, List<ITileEventListener>> listeners = new HashMap();
 
     public BlockBase(BlockPropertyData data)
     {
@@ -139,20 +141,85 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public void fillWithRain(World world, int x, int y, int z)
     {
-        //TODO implement
+        if (listeners.containsKey("rain"))
+        {
+            for (ITileEventListener listener : listeners.get("rain"))
+            {
+                if (listener instanceof IFillRainListener)
+                {
+                    if (listener instanceof IBlockListener)
+                    {
+                        ((IBlockListener) listener).inject(world, x, y, z);
+                        ((IFillRainListener) listener).onFilledWithRain();
+                        ((IBlockListener) listener).eject();
+                    }
+                    else
+                    {
+                        ((IFillRainListener) listener).onFilledWithRain();
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public float getExplosionResistance(Entity entity)
     {
-        //TODO implement
+        if (listeners.containsKey("resistance"))
+        {
+            float re = -1;
+            for (ITileEventListener listener : listeners.get("resistance"))
+            {
+                if (listener instanceof IResistanceListener)
+                {
+                    float value = ((IResistanceListener) listener).getExplosionResistance(entity);
+                    if (value >= 0 && (value < re || re < 0))
+                    {
+                        re = value;
+                    }
+                }
+            }
+            if (re >= 0)
+            {
+                return re;
+            }
+        }
         return data.getResistance() / 5.0F;
     }
 
     @Override
     public float getExplosionResistance(Entity entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
     {
-        //TODO implement
+        if (listeners.containsKey("resistance"))
+        {
+            float re = -1;
+            for (ITileEventListener listener : listeners.get("resistance"))
+            {
+                if (listener instanceof IResistanceListener)
+                {
+                    float value;
+                    if (listener instanceof IBlockListener)
+                    {
+                        ((IBlockListener) listener).inject(world, x, y, z);
+                        value = ((IResistanceListener) listener).getExplosionResistance(entity, explosionX, explosionY, explosionZ);
+                        ((IBlockListener) listener).eject();
+                    }
+                    else
+                    {
+                        value = ((IResistanceListener) listener).getExplosionResistance(entity, explosionX, explosionY, explosionZ);
+                    }
+
+                    if (value >= 0 && (value < re || re < 0))
+                    {
+                        re = value;
+                    }
+                }
+            }
+            if (re >= 0)
+            {
+                return re;
+            }
+        }
         return getExplosionResistance(entity);
     }
 
