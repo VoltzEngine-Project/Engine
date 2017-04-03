@@ -1,7 +1,7 @@
 package com.builtbroken.mc.framework.multiblock.types
 
-import com.builtbroken.mc.api.tile.IInventoryProvider
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileInvHost
+import com.builtbroken.mc.api.tile.provider.IInventoryProvider
 import com.builtbroken.mc.prefab.tile.traits.TSidedInvProvider
 import net.minecraft.inventory.IInventory
 

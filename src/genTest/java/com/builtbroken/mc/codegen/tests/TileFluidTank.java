@@ -1,6 +1,6 @@
 package com.builtbroken.mc.codegen.tests;
 
-import com.builtbroken.mc.api.tile.ITankProvider;
+import com.builtbroken.mc.api.tile.provider.ITankProvider;
 import com.builtbroken.mc.framework.logic.TileNode;
 import com.builtbroken.mc.framework.logic.annotations.TankProviderWrapped;
 import com.builtbroken.mc.framework.logic.annotations.TileWrapped;

@@ -1,0 +1,15 @@
+{
+  "author": {
+    "name": "${voltzengine}"
+  },
+  "block": {
+    "name": "inventoryTestTile",
+    "id": "inventoryTestTile",
+    "mod":"voltzenginetest",
+    "material": "rock",
+    "tileEntity": {
+      "id": "inventoryTestTile",
+      "class": "com.builtbroken.mc.codegen.tests.tile.TileEntityWrapperTestInventory"
+    }
+  }
+}

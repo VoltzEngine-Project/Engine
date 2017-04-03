@@ -196,14 +196,17 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost
      */
     protected void toStringData(StringBuilder builder)
     {
-        //Out client or server
-        if (world().isRemote)
+        if(world() != null)
         {
-            builder.append("client, ");
-        }
-        else
-        {
-            builder.append("server, ");
+            //Out client or server
+            if (world().isRemote)
+            {
+                builder.append("client, ");
+            }
+            else
+            {
+                builder.append("server, ");
+            }
         }
 
         //Out world

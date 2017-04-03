@@ -1,10 +1,12 @@
 package com.builtbroken.mc.codegen.tests;
 
-import com.builtbroken.mc.api.tile.IInventoryProvider;
+import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
 import com.builtbroken.mc.framework.logic.TileNode;
 import com.builtbroken.mc.framework.logic.annotations.ExternalInventoryWrapped;
 import com.builtbroken.mc.framework.logic.annotations.TileWrapped;
 import com.builtbroken.mc.prefab.inventory.ExternalInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Test tile to see if {@link com.builtbroken.mc.codegen.Main} functions correctly for tile processing
@@ -26,5 +28,17 @@ public final class TileTestInventory extends TileNode implements IInventoryProvi
             inventory = new ExternalInventory(this, 10);
         }
         return inventory;
+    }
+
+    @Override
+    public boolean canStore(ItemStack stack, ForgeDirection side)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean canRemove(ItemStack stack, ForgeDirection side)
+    {
+        return true;
     }
 }

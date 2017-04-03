@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.mod;
 
-import com.builtbroken.mc.api.tile.IGuiTile;
+import com.builtbroken.mc.api.tile.access.IGuiTile;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;

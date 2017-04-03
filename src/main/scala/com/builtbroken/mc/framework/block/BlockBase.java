@@ -1,16 +1,20 @@
 package com.builtbroken.mc.framework.block;
 
 import com.builtbroken.jlib.data.Colors;
-import com.builtbroken.mc.api.tile.IActivatable;
-import com.builtbroken.mc.api.tile.IGuiTile;
+import com.builtbroken.mc.api.tile.listeners.IActivationListener;
+import com.builtbroken.mc.api.tile.access.IGuiTile;
+import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
+import com.builtbroken.mc.api.tile.listeners.IWrenchListener;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
-import com.builtbroken.mc.framework.logic.ITileNode;
 import com.builtbroken.mc.framework.logic.imp.ITileNodeHost;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
+import com.builtbroken.mc.lib.helper.WrenchUtility;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.prefab.inventory.InventoryIterator;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.builtbroken.mc.prefab.items.ItemBlockAbstract;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -153,24 +157,6 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     }
 
     @Override
-    public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
-    {
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof ITileNodeHost)
-        {
-            ITileNode node = ((ITileNodeHost) tile).getTileNode();
-            if (node instanceof IActivatable)
-            {
-                ((IActivatable) node).onPlayerClicked(player);
-            }
-        }
-        else if (tile instanceof IActivatable)
-        {
-            ((IActivatable) tile).onPlayerClicked(player);
-        }
-    }
-
-    @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
         //TODO implement
@@ -201,10 +187,37 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     public void breakBlock(World world, int x, int y, int z, Block block, int par6)
     {
         //TODO implement
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof IInventory)
+        Object tile = world.getTileEntity(x, y, z);
+        IInventory inventory = null;
+        while (tile != null && inventory == null)
         {
+            if (tile instanceof IInventory)
+            {
+                inventory = (IInventory) tile;
+            }
+            else if (tile instanceof IInventoryProvider)
+            {
+                inventory = ((IInventoryProvider) tile).getInventory();
+            }
 
+            if (tile instanceof ITileNodeHost)
+            {
+                tile = ((ITileNodeHost) tile).getTileNode();
+            }
+            else
+            {
+                tile = null;
+            }
+        }
+
+        if (inventory != null)
+        {
+            InventoryIterator iterator = new InventoryIterator(inventory, true);
+            for (ItemStack stack : iterator)
+            {
+                InventoryUtility.dropItemStack(world, x, y, z, stack, 0, 0);
+                inventory.setInventorySlotContents(iterator.slot(), null);
+            }
         }
         super.breakBlock(world, x, y, z, block, par6);
     }
@@ -250,33 +263,39 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     }
 
     @Override
+    public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
+    {
+        Object tile = getTile(world, x, y, z);
+        if (tile instanceof IActivationListener)
+        {
+            ((IActivationListener) tile).onPlayerClicked(player);
+        }
+    }
+
+    @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
         try
         {
-            //TODO implement
-            TileEntity tile = world.getTileEntity(x, y, z);
-            if (tile instanceof ITileNodeHost)
+            Object tile = getTile(world, x, y, z);
+            if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem(), x, y, z)
+                    && tile instanceof IWrenchListener && ((IWrenchListener) tile).handlesWrenchRightClick())
             {
-                ITileNode node = ((ITileNodeHost) tile).getTileNode();
-                if (node instanceof IGuiTile)
+                if (((IWrenchListener) tile).onPlayerRightClickWrench(player, side, hitX, hitY, hitZ))
                 {
-                    player.openGui(mod, 0, world, x, y, z);
+                    WrenchUtility.damageWrench(player, player.inventory.getCurrentItem(), x, y, z);
                     return true;
                 }
-                else if (node instanceof IActivatable)
-                {
-                    return ((IActivatable) node).onPlayerActivated(player, side, hitX, hitY, hitZ);
-                }
+                return false;
             }
-            else if (tile instanceof IGuiTile)
+            else if (tile instanceof IGuiTile && ((IGuiTile) tile).shouldOpenOnRightClick(player))
             {
-                player.openGui(mod, 0, world, x, y, z);
+                player.openGui(mod, ((IGuiTile) tile).getDefaultGuiID(player), world, x, y, z);
                 return true;
             }
-            else if (tile instanceof IActivatable)
+            else if (tile instanceof IActivationListener)
             {
-                return ((IActivatable) tile).onPlayerActivated(player, side, hitX, hitY, hitZ);
+                return ((IActivationListener) tile).onPlayerActivated(player, side, hitX, hitY, hitZ);
             }
             return false;
         }
@@ -286,6 +305,16 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             player.addChatComponentMessage(new ChatComponentText(Colors.RED.code + LanguageUtility.getLocal("blockTile.error.onBlockActivated")));
         }
         return false;
+    }
+
+    protected Object getTile(World world, int x, int y, int z)
+    {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof ITileNodeHost)
+        {
+            return ((ITileNodeHost) tile).getTileNode();
+        }
+        return tile;
     }
 
     @Override
