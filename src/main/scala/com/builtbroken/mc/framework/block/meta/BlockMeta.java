@@ -3,6 +3,8 @@ package com.builtbroken.mc.framework.block.meta;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.block.BlockPropertyData;
+import com.builtbroken.mc.framework.block.tile.ITileProvider;
+import com.builtbroken.mc.framework.block.tile.TileProviderMeta;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -18,6 +20,9 @@ public class BlockMeta extends BlockBase
     public BlockMeta(BlockPropertyData data)
     {
         super(data);
+        ITileProvider provider = data.tileEntityProvider;
+        data.tileEntityProvider = new TileProviderMeta();
+        ((TileProviderMeta) data.tileEntityProvider).backupProvider = provider;
     }
 
     @Override
@@ -27,7 +32,7 @@ public class BlockMeta extends BlockBase
         {
             registered = true;
             manager.newBlock(data.ID, this, ItemBlockMeta.class);
-            if(data.tileEntityProvider != null)
+            if (data.tileEntityProvider != null)
             {
                 data.register(mod, manager);
             }

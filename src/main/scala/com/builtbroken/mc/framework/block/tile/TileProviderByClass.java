@@ -48,6 +48,6 @@ public class TileProviderByClass implements ITileProvider
     @Override
     public void register(BlockBase block, IJsonGenMod mod, ModManager manager)
     {
-        manager.registerTileEntity(id, block, createNewTileEntity(block, null, 0));
+        manager.registerTileEntity(id, block, create(clazz));
     }
 }

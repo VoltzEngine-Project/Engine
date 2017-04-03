@@ -14,6 +14,8 @@ import net.minecraft.world.World;
  */
 public class TileProviderMeta implements ITileProvider
 {
+    public ITileProvider backupProvider;
+
     @Override
     public TileEntity createNewTileEntity(BlockBase block, World world, int meta)
     {
@@ -21,7 +23,7 @@ public class TileProviderMeta implements ITileProvider
         {
             return ((BlockMeta) block).meta[meta].tileEntityProvider.createNewTileEntity(block, world, meta);
         }
-        return null;
+        return backupProvider != null ? backupProvider.createNewTileEntity(block, world, meta) : null;
     }
 
     @Override
@@ -36,6 +38,10 @@ public class TileProviderMeta implements ITileProvider
                     data.tileEntityProvider.register(block, mod, manager);
                 }
             }
+        }
+        if (backupProvider != null)
+        {
+            backupProvider.register(block, mod, manager);
         }
     }
 }

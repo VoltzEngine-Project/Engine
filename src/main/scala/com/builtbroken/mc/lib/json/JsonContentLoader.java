@@ -10,6 +10,7 @@ import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockProcessor;
+import com.builtbroken.mc.lib.json.processors.block.JsonBlockTileProcessor;
 import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.lib.json.processors.item.processor.JsonItemProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.crafting.JsonCraftingRecipeProcessor;
@@ -120,6 +121,8 @@ public final class JsonContentLoader extends AbstractLoadable
         validateFilePaths();
         //Load processors
         add(blockProcessor);
+        blockProcessor.addSubProcessor(JsonBlockTileProcessor.KEY, new JsonBlockTileProcessor());
+
         add(itemProcessor);
         add(new JsonOreNameProcessor());
         //TODO add entity loading
