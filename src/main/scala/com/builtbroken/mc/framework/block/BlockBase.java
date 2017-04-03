@@ -3,7 +3,6 @@ package com.builtbroken.mc.framework.block;
 import com.builtbroken.jlib.data.Colors;
 import com.builtbroken.mc.api.tile.access.IGuiTile;
 import com.builtbroken.mc.api.tile.listeners.*;
-import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
@@ -12,8 +11,6 @@ import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
-import com.builtbroken.mc.prefab.inventory.InventoryIterator;
-import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.builtbroken.mc.prefab.items.ItemBlockAbstract;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,7 +22,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -247,44 +243,92 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion ex)
     {
-        //TODO implement
+        if (listeners.containsKey("break"))
+        {
+            for (ITileEventListener listener : listeners.get("break"))
+            {
+                if (listener instanceof IDestroyedListener)
+                {
+                    if (listener instanceof IBlockListener)
+                    {
+                        ((IBlockListener) listener).inject(world, x, y, z);
+                        ((IDestroyedListener) listener).onDestroyedByExplosion(ex);
+                        ((IBlockListener) listener).eject();
+                    }
+                    else
+                    {
+                        ((IDestroyedListener) listener).onDestroyedByExplosion(ex);
+                    }
+                }
+            }
+        }
+        //Check tile
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IDestroyedListener)
+        {
+            ((IDestroyedListener) tile).onDestroyedByExplosion(ex);
+        }
+        //Do calls for tile listeners
+        if (tile instanceof ITileWithListeners)
+        {
+            for (ITileEventListener listener : ((ITileWithListeners) tile).getListeners("break"))
+            {
+                if (listener instanceof IDestroyedListener)
+                {
+                    ((IDestroyedListener) listener).onDestroyedByExplosion(ex);
+                }
+            }
+        }
+        //Check node
+        if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() instanceof IDestroyedListener)
+        {
+            ((IDestroyedListener) ((ITileNodeHost) tile).getTileNode()).onDestroyedByExplosion(ex);
+        }
     }
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int par6)
     {
-        //TODO implement
-        Object tile = world.getTileEntity(x, y, z);
-        IInventory inventory = null;
-        while (tile != null && inventory == null)
+        if (listeners.containsKey("break"))
         {
-            if (tile instanceof IInventory)
+            for (ITileEventListener listener : listeners.get("break"))
             {
-                inventory = (IInventory) tile;
-            }
-            else if (tile instanceof IInventoryProvider)
-            {
-                inventory = ((IInventoryProvider) tile).getInventory();
-            }
-
-            if (tile instanceof ITileNodeHost)
-            {
-                tile = ((ITileNodeHost) tile).getTileNode();
-            }
-            else
-            {
-                tile = null;
+                if (listener instanceof IDestroyedListener)
+                {
+                    if (listener instanceof IBlockListener)
+                    {
+                        ((IBlockListener) listener).inject(world, x, y, z);
+                        ((IDestroyedListener) listener).breakBlock(block, par6);
+                        ((IBlockListener) listener).eject();
+                    }
+                    else
+                    {
+                        ((IDestroyedListener) listener).breakBlock(block, par6);
+                    }
+                }
             }
         }
-
-        if (inventory != null)
+        //Check tile
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IDestroyedListener)
         {
-            InventoryIterator iterator = new InventoryIterator(inventory, true);
-            for (ItemStack stack : iterator)
+            ((IDestroyedListener) tile).breakBlock(block, par6);
+        }
+        //Do calls for tile listeners
+        if (tile instanceof ITileWithListeners)
+        {
+            for (ITileEventListener listener : ((ITileWithListeners) tile).getListeners("break"))
             {
-                InventoryUtility.dropItemStack(world, x, y, z, stack, 0, 0);
-                inventory.setInventorySlotContents(iterator.slot(), null);
+                if (listener instanceof IDestroyedListener)
+                {
+                    ((IDestroyedListener) listener).breakBlock(block, par6);
+                }
             }
+        }
+        //Check node
+        if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() instanceof IDestroyedListener)
+        {
+            ((IDestroyedListener) ((ITileNodeHost) tile).getTileNode()).breakBlock(block, par6);
         }
         super.breakBlock(world, x, y, z, block, par6);
     }
@@ -292,7 +336,47 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
     {
-        //TODO implement
+        if (listeners.containsKey("break"))
+        {
+            for (ITileEventListener listener : listeners.get("break"))
+            {
+                if (listener instanceof IDestroyedListener)
+                {
+                    if (listener instanceof IBlockListener)
+                    {
+                        ((IBlockListener) listener).inject(world, x, y, z);
+                        ((IDestroyedListener) listener).removedByPlayer(player, willHarvest);
+                        ((IBlockListener) listener).eject();
+                    }
+                    else
+                    {
+                        ((IDestroyedListener) listener).removedByPlayer(player, willHarvest);
+                    }
+                }
+            }
+        }
+        //Check tile
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IDestroyedListener)
+        {
+            ((IDestroyedListener) tile).removedByPlayer(player, willHarvest);
+        }
+        //Do calls for tile listeners
+        if (tile instanceof ITileWithListeners)
+        {
+            for (ITileEventListener listener : ((ITileWithListeners) tile).getListeners("break"))
+            {
+                if (listener instanceof IDestroyedListener)
+                {
+                    ((IDestroyedListener) listener).removedByPlayer(player, willHarvest);
+                }
+            }
+        }
+        //Check node
+        if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() instanceof IDestroyedListener)
+        {
+            ((IDestroyedListener) ((ITileNodeHost) tile).getTileNode()).removedByPlayer(player, willHarvest);
+        }
         return super.removedByPlayer(world, player, x, y, z, willHarvest);
     }
 
