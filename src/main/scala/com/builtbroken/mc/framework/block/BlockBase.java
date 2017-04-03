@@ -2,7 +2,6 @@ package com.builtbroken.mc.framework.block;
 
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
-import com.builtbroken.mc.lib.helper.MaterialDict;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import net.minecraft.block.BlockContainer;
@@ -19,27 +18,14 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGenObject
 {
-    /** Unique id to register the block with */
-    public final String ID;
-    /** Mod that owners the block */
-    public final String MOD;
-    /** Name of the block, used for localizations */
-    public final String name;
-
-    /** Localization of the block */
-    public String localization = "tile.${name}";
-    /** Global ore dict name of the block */
-    public String oreName;
-
+    public final BlockPropertyData data;
     protected boolean registered = false;
 
-    public BlockBase(String name, String mat, String id, String mod)
+    public BlockBase(BlockPropertyData data)
     {
-        super(MaterialDict.get(mat));
-        this.ID = id;
-        this.MOD = mod;
-        this.name = name;
-        this.setBlockName(localization.replace("${name}", name));
+        super(data.getMaterial());
+        this.data = data;
+        this.setBlockName(data.localization.replace("${name}", data.name));
     }
 
     @Override
@@ -51,7 +37,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public String getMod()
     {
-        return MOD;
+        return data.MOD;
     }
 
     public void setCreativeTab(String name)
@@ -65,16 +51,16 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
         if (!registered)
         {
             registered = true;
-            manager.newBlock(ID, this);
+            manager.newBlock(data.ID, this);
         }
     }
 
     @Override
     public void onRegistered()
     {
-        if (oreName != null)
+        if (data.oreName != null)
         {
-            OreDictionary.registerOre(oreName, new ItemStack(this));
+            OreDictionary.registerOre(data.oreName, new ItemStack(this));
         }
     }
 
@@ -87,7 +73,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public String toString()
     {
-        return "BlockJson[" + name + "]";
+        return "Block[" + data.name + "]";
     }
 
     @Override

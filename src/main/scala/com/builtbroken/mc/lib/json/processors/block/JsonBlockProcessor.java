@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.json.processors.block;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.framework.block.BlockPropertyData;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
@@ -73,17 +74,20 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         String name = blockData.get("name").getAsString();
         String material = blockData.get("material").getAsString();
 
+        BlockPropertyData blockPropertyData = new BlockPropertyData(this, id, mod, name);
+        blockPropertyData.setMaterial(material);
+
         //Meta data loading
         if (blockData.has("subtypes"))
         {
-            block = new BlockMeta(name, material, id, mod);
+            block = new BlockMeta(blockPropertyData);
             //Call to load metadata
             readMeta((BlockMeta) block, blockData.get("subtypes").getAsJsonArray(), objectList);
         }
         //No meta data
         else
         {
-            block = new BlockBase(name, material, id, mod);
+            block = new BlockBase(blockPropertyData);
         }
 
         //Call to process extra tags from file
@@ -131,7 +135,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
                     }
                     else
                     {
-                        throw new IllegalArgumentException("JsonBlockProcessor: Meta value[" + m + "] was overridden inside the same file for block " + block.name);
+                        throw new IllegalArgumentException("JsonBlockProcessor: Meta value[" + m + "] was overridden inside the same file for block " + block.data.name);
                     }
                 }
                 else
@@ -201,13 +205,13 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
             else
             {
                 //Ignore unknown entries for backwards compatibility TODO add config option to enforce all data is read
-                Engine.logger().error("JsonBlockProcessor: Error processing data for block " + block.name + ", processor rejected entry[" + name + "]=" + element);
+                Engine.logger().error("JsonBlockProcessor: Error processing data for block " + block.data.name + ", processor rejected entry[" + name + "]=" + element);
             }
         }
         else
         {
             //Ignore unknown entries for backwards compatibility TODO add config option to enforce all data is read
-            Engine.logger().error("JsonBlockProcessor: Error processing data for block " + block.name + ", no processor found for entry[" + name + "]=" + element);
+            Engine.logger().error("JsonBlockProcessor: Error processing data for block " + block.data.name + ", no processor found for entry[" + name + "]=" + element);
         }
     }
 

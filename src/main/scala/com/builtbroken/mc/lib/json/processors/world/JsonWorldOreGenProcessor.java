@@ -94,7 +94,7 @@ public class JsonWorldOreGenProcessor extends JsonProcessor<JsonWorldOreGenData>
     @Override
     public void process(BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
-        JsonWorldOreGenData object = process(block, 0, block.oreName, element);
+        JsonWorldOreGenData object = process(block, 0, block.data.oreName, element);
         if (object != null)
         {
             objectList.add(object);

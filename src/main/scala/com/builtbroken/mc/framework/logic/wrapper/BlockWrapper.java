@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.logic.wrapper;
 
 import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.framework.block.BlockPropertyData;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -8,8 +9,8 @@ import com.builtbroken.mc.framework.block.BlockBase;
  */
 public class BlockWrapper extends BlockBase
 {
-    public BlockWrapper(String name, String mat, String id, String mod)
+    public BlockWrapper(BlockPropertyData data)
     {
-        super(name, mat, id, mod);
+        super(data);
     }
 }

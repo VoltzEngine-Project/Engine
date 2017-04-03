@@ -1,9 +1,10 @@
 package com.builtbroken.mc.framework.block.meta;
 
 import com.builtbroken.mc.core.registry.ModManager;
-import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.framework.block.BlockPropertyData;
 import com.builtbroken.mc.framework.block.ItemBlockJson;
+import com.builtbroken.mc.lib.json.IJsonGenMod;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -15,9 +16,9 @@ public class BlockMeta extends BlockBase
 {
     public MetaData[] meta = new MetaData[16];
 
-    public BlockMeta(String name, String mat, String id, String mod)
+    public BlockMeta(BlockPropertyData data)
     {
-        super(name, mat, id, mod);
+        super(data);
     }
 
     @Override
@@ -26,7 +27,7 @@ public class BlockMeta extends BlockBase
         if (!registered)
         {
             registered = true;
-            manager.newBlock(ID, this, ItemBlockJson.class);
+            manager.newBlock(data.ID, this, ItemBlockJson.class);
         }
     }
 
@@ -34,11 +35,11 @@ public class BlockMeta extends BlockBase
     public void onRegistered()
     {
         //Register main ore name
-        if (oreName != null)
+        if (data.oreName != null)
         {
-            if (!oreName.contains("$"))
+            if (!data.oreName.contains("$"))
             {
-                OreDictionary.registerOre(oreName, new ItemStack(this));
+                OreDictionary.registerOre(data.oreName, new ItemStack(this));
             }
             else
             {
@@ -47,7 +48,7 @@ public class BlockMeta extends BlockBase
                 {
                     if (meta[i] != null)
                     {
-                        String oreName = this.oreName.replace("${metaLocalization}", meta[i].localization);
+                        String oreName = data.oreName.replace("${metaLocalization}", meta[i].localization);
                         OreDictionary.registerOre(oreName, new ItemStack(this, 1, i));
                     }
                 }
@@ -74,6 +75,6 @@ public class BlockMeta extends BlockBase
     @Override
     public String toString()
     {
-        return "BlockJsonMeta[" + name + "]";
+        return "BlockMeta[" + data.name + "]";
     }
 }

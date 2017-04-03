@@ -55,7 +55,7 @@ public class ItemBlockJson extends ItemBlock
     @Override
     public String getUnlocalizedName()
     {
-        return getBlockJson().localization;
+        return getBlockJson().data.localization;
     }
 
     public BlockMeta getBlockJson()

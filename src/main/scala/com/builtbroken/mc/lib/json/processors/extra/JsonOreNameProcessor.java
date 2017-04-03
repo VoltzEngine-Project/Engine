@@ -56,11 +56,11 @@ public class JsonOreNameProcessor extends JsonProcessor<JsonOreNameData> impleme
         {
             JsonObject data = element.getAsJsonObject();
             ensureValuesExist(data, "name");
-            block.oreName = data.getAsJsonPrimitive("name").getAsString();
+            block.data.oreName = data.getAsJsonPrimitive("name").getAsString();
         }
         else if (element instanceof JsonPrimitive)
         {
-            block.oreName = element.getAsJsonPrimitive().getAsString();
+            block.data.oreName = element.getAsJsonPrimitive().getAsString();
         }
     }
 
