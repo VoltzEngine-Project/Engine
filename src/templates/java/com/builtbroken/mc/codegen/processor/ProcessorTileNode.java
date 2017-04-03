@@ -1,11 +1,12 @@
 package com.builtbroken.mc.codegen.processor;
 
+import com.builtbroken.mc.codegen.data.BuildData;
 import com.builtbroken.mc.codegen.template.Template;
+import com.builtbroken.mc.codegen.template.TileWrappedTemplate;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -15,47 +16,35 @@ import java.util.List;
 public class ProcessorTileNode extends Processor
 {
     public static final String TILE_WRAPPER_ANNOTATION = "TileWrapped";
-    public static final String ID_KEY = "id";
+    public static final String TEMPLATE_ANNOTATION = "TileWrappedTemplate";
     public static final String CLASS_KEY = "className";
     public static final String EMPTY_TEMPLATE_KEY = "Empty";
 
     public ProcessorTileNode()
     {
-        super(TILE_WRAPPER_ANNOTATION);
+        super(TILE_WRAPPER_ANNOTATION, TEMPLATE_ANNOTATION);
     }
 
     @Override
-    public void handleFile(File outputFolder, HashMap<String, String> annotations, String classPackage, String fileClassName, String spacer) throws IOException
+    public void handleFile(File outputFolder, BuildData data, String spacer) throws IOException
     {
-        String[] annotationData = annotations.get(annotationKey).split(",");
-        String id = null;
-        String className = null;
+        String[] annotationData = data.annotations.get(annotationKey).split(",");
         for (String s : annotationData)
         {
-            if (s.contains(ID_KEY))
+            if (s.contains(CLASS_KEY))
             {
-                id = s.split("=")[1].replace("\"", "").trim();
+                data.outputClassName = s.split("=")[1].replace("\"", "").trim();
             }
-            else if (s.contains(CLASS_KEY))
-            {
-                className = s.split("=")[1].replace("\"", "").trim();
-            }
-        }
-
-        //Ensure we have an ID
-        if (id == null)
-        {
-            throw new RuntimeException("Missing " + ID_KEY + " from " + TILE_WRAPPER_ANNOTATION + " annotation");
         }
         //Ensure we have a class name
-        if (className == null)
+        if (data.outputClassName == null)
         {
             throw new RuntimeException("Missing " + CLASS_KEY + " from " + TILE_WRAPPER_ANNOTATION + " annotation");
         }
 
         //Get template processors for this file
         List<Template> templates = new ArrayList();
-        for (String key : annotations.keySet())
+        for (String key : data.annotations.keySet())
         {
             if (templateMap.containsKey(key))
             {
@@ -69,27 +58,27 @@ public class ProcessorTileNode extends Processor
             templates.add(templateMap.get(EMPTY_TEMPLATE_KEY));
         }
 
-        build(outputFolder, templates, classPackage, className, fileClassName, spacer);
+        build(outputFolder, templates, data, spacer);
     }
 
     @Override
-    protected void createConstructor(StringBuilder builder, String className, String fileClassName, List<Template> templates)
+    protected void createConstructor(StringBuilder builder, List<Template> templates, BuildData data)
     {
         //Create constructor
         builder.append("\tpublic ");
-        builder.append(className);
+        builder.append(data.outputClassName);
         builder.append("()\n\t{");
         builder.append("\n\t\tsuper(new ");
-        builder.append(fileClassName);
+        builder.append(data.className);
         builder.append("());\n");
         builder.append("\t}\n\n");
     }
 
     @Override
-    protected void collectIgnoredImports(List<String> imports, List<Template> templates)
+    protected void collectIgnoredImports(List<String> imports, List<Template> templates, BuildData data)
     {
         //Add ignored files
-        imports.add("com.builtbroken.mc.codegen.processors.TileWrappedTemplate");
+        imports.add(TileWrappedTemplate.class.getName());
 
         //Check if we can ignore imports
         boolean containsITileNodeImport = false;

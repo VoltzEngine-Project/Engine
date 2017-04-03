@@ -12,9 +12,9 @@ import net.minecraftforge.common.util.ForgeDirection;
  * Created by Dark(DarkGuardsman, Robert) on 4/1/2017.
  */
 @TileWrappedTemplate(annotationName = "EnergyWrapped")
-public class TileEnergy extends TileEntityWrapper implements IEnergyBufferProvider
+public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBufferProvider
 {
-    public TileEnergy(ITileNode controller)
+    public TileTemplateEnergy(ITileNode controller)
     {
         super(controller);
     }

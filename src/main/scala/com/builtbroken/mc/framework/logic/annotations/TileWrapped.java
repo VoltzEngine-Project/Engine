@@ -16,9 +16,6 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.SOURCE)
 public @interface TileWrapped
 {
-    /** ID to register tile with */
-    String id();
-
     /** File name to use for the class */
     String className();
 }

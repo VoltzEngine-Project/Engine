@@ -28,10 +28,14 @@ public class TileTemplate extends TileEntityWrapper
     */
 
     //#StartFields#
-    //Place all of your fields between these two lines
+    public static final String TEST_FIELD = "DATA";
     //#EndFields#
 
     //#StartMethods#
-    //Place all of your methods between these two lines
+    @Override
+    public String getClassDisplayName()
+    {
+        return "TileEntityWrapper(Empty)";
+    }
     //#EndMethods#
 }

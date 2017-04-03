@@ -12,9 +12,9 @@ import net.minecraftforge.fluids.*;
  * Created by Dark(DarkGuardsman, Robert) on 4/1/2017.
  */
 @TileWrappedTemplate(annotationName = "TankProviderWrapped")
-public class TileFluidTank extends TileEntityWrapper implements IFluidHandler
+public class TileTemplateFluidTank extends TileEntityWrapper implements IFluidHandler
 {
-    public TileFluidTank(ITileNode controller)
+    public TileTemplateFluidTank(ITileNode controller)
     {
         super(controller);
     }

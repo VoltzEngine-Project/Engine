@@ -17,9 +17,9 @@ import net.minecraft.item.ItemStack;
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2017.
  */
 @TileWrappedTemplate(annotationName = "ExternalInventoryWrapped")
-public class TileExternalInventory extends TileEntityWrapper implements IInventoryProvider, ISidedInventory
+public class TileTemplateExternalInventory extends TileEntityWrapper implements IInventoryProvider, ISidedInventory
 {
-    public TileExternalInventory(ITileNode controller)
+    public TileTemplateExternalInventory(ITileNode controller)
     {
         super(controller);
     }
