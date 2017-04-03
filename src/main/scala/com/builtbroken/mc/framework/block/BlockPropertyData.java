@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.block;
 
+import com.builtbroken.mc.framework.block.tile.ITileProvider;
 import com.builtbroken.mc.lib.helper.MaterialDict;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
@@ -24,6 +25,9 @@ public class BlockPropertyData extends JsonGenData
     public String localization = "tile.${name}";
     /** Global ore dict name of the block */
     public String oreName;
+
+    /** Handles supplying the tile entity for the block */
+    public ITileProvider tileEntityProvider;
 
     public BlockPropertyData(IJsonProcessor processor, String ID, String MOD, String name)
     {

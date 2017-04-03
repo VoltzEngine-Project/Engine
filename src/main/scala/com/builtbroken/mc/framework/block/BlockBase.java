@@ -4,7 +4,9 @@ import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.prefab.items.ItemBlockAbstract;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -16,7 +18,7 @@ import net.minecraftforge.oredict.OreDictionary;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
  */
-public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGenObject
+public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGenObject, ITileEntityProvider
 {
     public final BlockPropertyData data;
     protected boolean registered = false;
@@ -51,7 +53,11 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
         if (!registered)
         {
             registered = true;
-            manager.newBlock(data.ID, this);
+            manager.newBlock(data.ID, this, ItemBlockAbstract.class);
+            if(data.tileEntityProvider != null)
+            {
+                data.tileEntityProvider.register(this, mod, manager);
+            }
         }
     }
 
@@ -77,8 +83,12 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     }
 
     @Override
-    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+    public TileEntity createNewTileEntity(World world, int meta)
     {
+        if (data.tileEntityProvider != null)
+        {
+            return data.tileEntityProvider.createNewTileEntity(this, world, meta);
+        }
         return null;
     }
 }

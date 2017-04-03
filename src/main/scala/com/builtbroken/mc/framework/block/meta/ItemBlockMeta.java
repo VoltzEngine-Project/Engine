@@ -1,20 +1,19 @@
-package com.builtbroken.mc.framework.block;
+package com.builtbroken.mc.framework.block.meta;
 
-import com.builtbroken.mc.framework.block.meta.BlockMeta;
+import com.builtbroken.mc.prefab.items.ItemBlockAbstract;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/26/2016.
  */
-public class ItemBlockJson extends ItemBlock
+public class ItemBlockMeta extends ItemBlockAbstract
 {
     /** Quick cache of localization by meta data to provide a small speed bonus */
     public String[] localizationCache = new String[16];
 
-    public ItemBlockJson(Block block)
+    public ItemBlockMeta(Block block)
     {
         super(block);
         this.setHasSubtypes(true);

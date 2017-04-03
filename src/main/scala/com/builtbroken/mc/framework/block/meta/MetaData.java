@@ -1,5 +1,7 @@
 package com.builtbroken.mc.framework.block.meta;
 
+import com.builtbroken.mc.framework.block.tile.ITileProvider;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +13,13 @@ import java.util.List;
  */
 public class MetaData
 {
-    /** Name of the texture */
-    public String textureName;
     /** Suffix to append to the block's localization */
     public String localization;
     /** List of ore names to register after block is registered */
     public List<String> oreNames;
     /** Index in the meta array, between 0-15 */
     public int index;
+    public ITileProvider tileEntityProvider;
 
     /**
      * Adds an ore name to be registered
