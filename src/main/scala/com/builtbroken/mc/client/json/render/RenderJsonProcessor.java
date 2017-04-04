@@ -66,13 +66,19 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                 JsonPrimitive stateIDElement = renderStateObject.getAsJsonPrimitive("id");
                 String stateID = stateIDElement.getAsString();
 
-                if (renderStateObject.has("modelID"))
+                if (renderStateObject.has("modelID") || renderStateObject.has("parent"))
                 {
                     //Data
-                    String model = renderStateObject.get("modelID").getAsString();
+                    String modelID = null;
                     Pos offset = null;
                     Pos scale = null;
                     EulerAngle rotation = null;
+
+                    //Load model ID, child objects may or may not contain this
+                    if(renderStateObject.has("modelID"))
+                    {
+                        modelID = renderStateObject.get("modelID").getAsString();
+                    }
 
                     //Loads position offset
                     if (renderStateObject.has("offset"))
@@ -116,7 +122,7 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                                 rotationObject.getAsJsonPrimitive("roll").getAsDouble());
                     }
                     //Creates state object
-                    renderState = new ModelState(stateID, model, offset, scale, rotation);
+                    renderState = new ModelState(stateID, modelID, offset, scale, rotation);
 
                     //Loads parts to render if all is not selected
                     if (renderStateObject.has("parts"))
@@ -171,6 +177,8 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                 }
             }
         }
+        //TODO validate states to ensure they fill function
+        //TODO ensure modelID exists if model state
         return data;
     }
 }

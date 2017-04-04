@@ -63,6 +63,7 @@ public class ItemJsonRenderer implements IItemRenderer
                 {
                     if (s != null && data.render(type, s, item))
                     {
+                        GL11.glPopMatrix();
                         return;
                     }
                 }
