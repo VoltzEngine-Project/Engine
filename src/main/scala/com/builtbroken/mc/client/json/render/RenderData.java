@@ -2,6 +2,8 @@ package com.builtbroken.mc.client.json.render;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
+import com.builtbroken.mc.client.json.imp.IModelState;
+import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
 import net.minecraft.item.ItemStack;
@@ -15,22 +17,20 @@ import java.util.HashMap;
  */
 public class RenderData extends JsonGenData
 {
-    public static final int DEFAULT_RENDER = -1;
-    public static final int INVENTORY_RENDER_ID = 0;
-    public static final int EQUIPPED_RENDER_ID = 1;
-    public static final int FIRST_PERSON_RENDER_ID = 2;
-    public static final int ENTITY_RENDER_ID = 3;
+    public static final String INVENTORY_RENDER_KEY = "item.inventory";
+    public static final String EQUIPPED_RENDER_KEY = "item.equipped";
+    public static final String FIRST_PERSON_RENDER_KEY = "item.first";
+    public static final String ENTITY_RENDER_KEY = "item.entity";
 
     /** ID to reference the content that this render data belongs to */
     public final String contentID;
     /** Type of render, defaults to VE render code */
     public final String renderType;
 
-    /** States for the renderer to handle */
-    public HashMap<Integer, RenderState> renderStates = new HashMap();
+    public int itemRenderLayers = 1;
 
     /** Map for quickly looking up name of the state with it's render ID */
-    private HashMap<String, RenderState> renderStatesByName = new HashMap();
+    public HashMap<String, IRenderState> renderStatesByName = new HashMap();
 
     public RenderData(IJsonProcessor processor, String contentID, String type)
     {
@@ -39,31 +39,9 @@ public class RenderData extends JsonGenData
         this.renderType = type;
     }
 
-    /**
-     * Called to render a state raw with
-     * no modifying data
-     *
-     * @param state
-     * @return true if something was renderer
-     */
-    public boolean render(int state)
-    {
-        return canRenderState(state) && getState(state).render();
-    }
-
-    public RenderState getState(int state)
-    {
-        return renderStates.get(state);
-    }
-
-    public RenderState getState(String state)
+    public IRenderState getState(String state)
     {
         return renderStatesByName.get(state);
-    }
-
-    public boolean hasState(int state)
-    {
-        return renderStates.get(state) != null;
     }
 
     public boolean hasState(String state)
@@ -71,14 +49,9 @@ public class RenderData extends JsonGenData
         return renderStatesByName.get(state) != null;
     }
 
-    public boolean canRenderState(int state)
-    {
-        return hasState(state) && getState(state).isModelRenderer();
-    }
-
     public boolean canRenderState(String state)
     {
-        return hasState(state) && getState(state).isModelRenderer();
+        return hasState(state) && getState(state) instanceof IModelState;
     }
 
     /**
@@ -90,7 +63,7 @@ public class RenderData extends JsonGenData
      */
     public boolean render(String state)
     {
-        return canRenderState(state) && getState(state).render();
+        return canRenderState(state) && ((IModelState)getState(state)).render();
     }
 
     @Override
@@ -99,66 +72,47 @@ public class RenderData extends JsonGenData
         ClientDataHandler.INSTANCE.addRenderData(contentID, this);
     }
 
-    /**
-     * Called to render the object in its state
-     *
-     * @param type - type of render being applied
-     * @param item - object being rendered
-     * @return
-     */
-    public boolean render(IItemRenderer.ItemRenderType type, Object item)
+    public boolean render(IItemRenderer.ItemRenderType type, String stateKey, Object item)
     {
-        return render(getRenderIDForState(type, item));
+        return render(getRenderKeyForState(type, stateKey, item));
     }
 
-    /**
-     * Gets the render ID for the state of the object and renderer
-     *
-     * @param type - type of render being applied by Item rendering
-     * @param item - object being rendered (normally an entity, tile, or item)
-     * @return ID to use
-     */
-    public int getRenderIDForState(IItemRenderer.ItemRenderType type, Object item)
+    public String getRenderKeyForState(IItemRenderer.ItemRenderType type, String stateKey, Object item)
     {
-        int renderID = DEFAULT_RENDER;
+        String key = null;
         if (item instanceof IJsonRenderStateProvider)
         {
-            renderID = ((IJsonRenderStateProvider) item).getRenderStateID(type, item);
+            key = ((IJsonRenderStateProvider) item).getRenderStateKey(type, stateKey, item);
         }
         else if (item instanceof ItemStack && ((ItemStack) item).getItem() instanceof IJsonRenderStateProvider)
         {
-            renderID = ((IJsonRenderStateProvider) ((ItemStack) item).getItem()).getRenderStateID(type, item);
+            key = ((IJsonRenderStateProvider) ((ItemStack) item).getItem()).getRenderStateKey(type, stateKey, item);
         }
 
-        //Use defaults if -1
-        if (renderID == DEFAULT_RENDER)
+        switch (type)
         {
-            switch (type)
-            {
-                case ENTITY:
-                    return ENTITY_RENDER_ID;
-                case INVENTORY:
-                    return INVENTORY_RENDER_ID;
-                case EQUIPPED:
-                    return EQUIPPED_RENDER_ID;
-                case EQUIPPED_FIRST_PERSON:
-                    return FIRST_PERSON_RENDER_ID;
-            }
+            case ENTITY:
+                key = ENTITY_RENDER_KEY + (stateKey != null ? "." + stateKey : "");
+                break;
+            case INVENTORY:
+                key = INVENTORY_RENDER_KEY + (stateKey != null ? "." + stateKey : "");
+                break;
+            case EQUIPPED:
+                key = EQUIPPED_RENDER_KEY + (stateKey != null ? "." + stateKey : "");
+                break;
+            case EQUIPPED_FIRST_PERSON:
+                key = FIRST_PERSON_RENDER_KEY + (stateKey != null ? "." + stateKey : "");
+                break;
         }
-        return renderID;
+        return key;
     }
 
-    public boolean shouldRenderType(IItemRenderer.ItemRenderType type, Object item)
+    public boolean shouldRenderType(IItemRenderer.ItemRenderType type, String key, Object item)
     {
-        return canRenderState(getRenderIDForState(type, item));
+        return canRenderState(getRenderKeyForState(type, key, item));
     }
 
-    public void add(int id, RenderState state)
-    {
-        renderStates.put(id, state);
-    }
-
-    public void add(String name, RenderState state)
+    public void add(String name, IRenderState state)
     {
         renderStatesByName.put(name, state);
     }

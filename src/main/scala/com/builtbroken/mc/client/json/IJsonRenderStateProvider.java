@@ -1,6 +1,5 @@
 package com.builtbroken.mc.client.json;
 
-import com.builtbroken.mc.client.json.render.RenderData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraftforge.client.IItemRenderer;
@@ -33,13 +32,15 @@ public interface IJsonRenderStateProvider
      *
      * @param renderType          - type of renderer, if the object is a tile
      *                            entity is the same.
+     * @param key                 - extra key type that was passed in, ex: gun.empty
      * @param objectBeingRendered - normally an entity, tile, or item
-     * @return -1 to use the default, or the ID of the state
+     * @return null to use defaults
+     * value for the render state to use. If key can not be found it defaults to render ID
      */
     @SideOnly(Side.CLIENT)
-    default int getRenderStateID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered)
+    default String getRenderStateKey(IItemRenderer.ItemRenderType renderType, String key, Object objectBeingRendered)
     {
-        return RenderData.DEFAULT_RENDER;
+        return null;
     }
 
     /**
