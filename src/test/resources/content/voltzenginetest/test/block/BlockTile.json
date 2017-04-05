@@ -5,11 +5,35 @@
   "block": {
     "name": "veTestBlock2",
     "id": "veTestBlock2",
-    "mod":"voltzenginetest",
+    "mod": "voltzenginetest",
     "material": "rock",
+    "renderType": -1,
     "tileEntity": {
       "id": "veTestBlockTile",
       "class": "com.builtbroken.test.mod.block.TileEntityVETestBlock"
     }
+  },
+  "render": {
+    "contentID": "voltzenginetest:veTestBlockTile",
+    "type": "tile",
+    "tileClass": "com.builtbroken.test.mod.block.TileEntityVETestBlock",
+    "states": [
+      {
+        "id": "tile",
+        "modelID": "modelThing"
+      },
+      {
+        "id": "tile.2",
+        "parent": "tile",
+        "rotation": {
+          "yaw": 90
+        }
+      }
+    ]
+  },
+  "model": {
+    "key": "modelThing",
+    "domain": "voltzenginetest",
+    "name": "thing.obj"
   }
 }

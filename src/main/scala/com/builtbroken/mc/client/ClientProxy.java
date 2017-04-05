@@ -1,14 +1,18 @@
 package com.builtbroken.mc.client;
 
+import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
 import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.effects.providers.VEProviderShockWave;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.models.ModelJsonProcessor;
-import com.builtbroken.mc.client.json.render.ItemJsonRenderer;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.RenderJsonProcessor;
+import com.builtbroken.mc.client.json.render.item.ItemJsonRenderer;
+import com.builtbroken.mc.client.json.render.tile.TileRenderData;
+import com.builtbroken.mc.client.json.render.tile.TileRenderHandler;
 import com.builtbroken.mc.client.json.texture.TextureJsonProcessor;
+import com.builtbroken.mc.client.listeners.blocks.RotatableIconListener;
 import com.builtbroken.mc.core.CommonProxy;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
@@ -16,13 +20,17 @@ import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
+import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.multiblock.MultiBlockRenderHelper;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.fx.FxBeam;
+import com.builtbroken.mc.prefab.tile.listeners.RotatableListener;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;
@@ -80,7 +88,14 @@ public class ClientProxy extends CommonProxy
         {
             RenderingRegistry.registerBlockHandler(MultiBlockRenderHelper.INSTANCE);
         }
-        postInit();
+        TileRenderHandler tileRenderHandler = new TileRenderHandler();
+        for (RenderData data : ClientDataHandler.INSTANCE.renderData.values())
+        {
+            if (data instanceof TileRenderData && ((TileRenderData) data).tileClass != null)
+            {
+                ClientRegistry.bindTileEntitySpecialRenderer(((TileRenderData) data).tileClass, tileRenderHandler);
+            }
+        }
     }
 
     @Override
@@ -89,6 +104,29 @@ public class ClientProxy extends CommonProxy
         super.postInit();
         //Item that uses a model for all states
         registerItemJsonRenders("VE-Item", new ItemJsonRenderer());
+
+        List<IJsonGenObject> objects = JsonContentLoader.INSTANCE.generatedObjects.get(JsonBlockProcessor.KEY);
+        if(objects != null && !objects.isEmpty())
+        {
+            for (IJsonGenObject object : objects)
+            {
+                if (object instanceof BlockBase)
+                {
+                    List<ITileEventListener> listeners = ((BlockBase) object).listeners.get("placement");
+                    if (listeners != null && !listeners.isEmpty())
+                    {
+                        for (ITileEventListener listener : listeners)
+                        {
+                            if (listener instanceof RotatableListener)
+                            {
+                                ((BlockBase) object).addListener(new RotatableIconListener((BlockBase) object));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

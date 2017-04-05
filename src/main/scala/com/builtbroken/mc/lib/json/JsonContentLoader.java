@@ -9,6 +9,7 @@ import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
+import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockTileProcessor;
 import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
@@ -122,6 +123,7 @@ public final class JsonContentLoader extends AbstractLoadable
         //Load processors
         add(blockProcessor);
         blockProcessor.addSubProcessor(JsonBlockTileProcessor.KEY, new JsonBlockTileProcessor());
+        blockProcessor.addSubProcessor(JsonBlockListenerProcessor.KEY, new JsonBlockListenerProcessor());
 
         add(itemProcessor);
         add(new JsonOreNameProcessor());
@@ -220,7 +222,7 @@ public final class JsonContentLoader extends AbstractLoadable
                             if (data != null)
                             {
                                 //Set author
-                                if(entry.author != null && !entry.author.isEmpty())
+                                if (entry.author != null && !entry.author.isEmpty())
                                 {
                                     data.setAuthor(entry.author);
                                 }

@@ -19,11 +19,6 @@ public class BlockPropertyData extends JsonGenData
     /** Name of the block, used for localizations */
     public final String name;
 
-
-    private Material material;
-    private float hardness = 5;
-    private float resistance = 5;
-
     /** Localization of the block */
     public String localization = "tile.${name}";
     /** Global ore dict name of the block */
@@ -32,12 +27,33 @@ public class BlockPropertyData extends JsonGenData
     /** Handles supplying the tile entity for the block */
     public ITileProvider tileEntityProvider;
 
+
+
+    //Block data
+    private Material material;
+    private boolean isOpaqueCube;
+    public boolean supportsRedstone = false;
+    public boolean isAlpha = false;
+    private float hardness = 5;
+    private float resistance = 5;
+    private int renderType = 0;
+    private int color = -1;
+
+    public int lightValue;
+
+
     public BlockPropertyData(IJsonProcessor processor, String registryKey, String MOD, String name)
     {
         super(processor);
         this.registryKey = registryKey;
         this.MOD = MOD;
         this.name = name;
+    }
+
+    @Override
+    public String getMod()
+    {
+        return MOD;
     }
 
     public Material getMaterial()
@@ -68,5 +84,35 @@ public class BlockPropertyData extends JsonGenData
     public void setResistance(float resistance)
     {
         this.resistance = resistance;
+    }
+
+    public int getRenderType()
+    {
+        return renderType;
+    }
+
+    public void setRenderType(int renderType)
+    {
+        this.renderType = renderType;
+    }
+
+    public int getColor()
+    {
+        return color;
+    }
+
+    public void setColor(int color)
+    {
+        this.color = color;
+    }
+
+    public boolean isOpaqueCube()
+    {
+        return isOpaqueCube;
+    }
+
+    public void setOpaqueCube(boolean opaqueCube)
+    {
+        this.isOpaqueCube = opaqueCube;
     }
 }

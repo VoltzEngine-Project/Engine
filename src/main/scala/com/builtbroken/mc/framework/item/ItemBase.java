@@ -11,16 +11,21 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.common.ChestGenHooks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
- * Container/Wrapper for data representing an item
+ * Prefab used by JSON driven items
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/9/2017.
@@ -71,7 +76,7 @@ public abstract class ItemBase extends Item implements IJsonRenderStateProvider
     @SideOnly(Side.CLIENT)
     public boolean requiresMultipleRenderPasses()
     {
-        return true; //Fix for getting ItemStack
+        return true; //Fix for getting ItemStack calls
     }
 
     @Override
@@ -104,7 +109,7 @@ public abstract class ItemBase extends Item implements IJsonRenderStateProvider
             if (data != null)
             {
                 IRenderState state = data.getState(RenderData.INVENTORY_RENDER_KEY + "." + gunState);
-                if (data != null)
+                if (state != null)
                 {
                     IIcon icon = state.getIcon(renderPass);
                     if (icon != null)
@@ -244,4 +249,31 @@ public abstract class ItemBase extends Item implements IJsonRenderStateProvider
     }
 
     public abstract String getRenderContentID(int meta);
+
+    @Override
+    public WeightedRandomChestContent getChestGenBase(ChestGenHooks chest, Random rnd, WeightedRandomChestContent original)
+    {
+        //TODO implement json hook
+        return original;
+    }
+
+    @Override
+    public EnumAction getItemUseAction(ItemStack stack)
+    {
+        //TODO implement json hook
+        return EnumAction.none;
+    }
+
+    @Override
+    public int getMaxItemUseDuration(ItemStack stack)
+    {
+        //TODO implement json hook
+        return 0;
+    }
+
+    @Override
+    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int uses)
+    {
+        //TODO implement listener hook
+    }
 }

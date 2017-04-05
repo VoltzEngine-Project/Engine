@@ -1,7 +1,8 @@
-package com.builtbroken.mc.client.json.render;
+package com.builtbroken.mc.client.json.render.item;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
+import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.lib.render.RenderUtility;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;

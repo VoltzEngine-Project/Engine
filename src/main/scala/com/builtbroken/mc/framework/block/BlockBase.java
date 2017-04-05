@@ -3,6 +3,10 @@ package com.builtbroken.mc.framework.block;
 import com.builtbroken.jlib.data.Colors;
 import com.builtbroken.mc.api.tile.access.IGuiTile;
 import com.builtbroken.mc.api.tile.listeners.*;
+import com.builtbroken.mc.api.tile.listeners.client.IIconListener;
+import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.imp.IRenderState;
+import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
@@ -22,6 +26,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -47,12 +52,16 @@ import java.util.Random;
  */
 public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGenObject, ITileEntityProvider
 {
+    /** Data about the block */
     public final BlockPropertyData data;
+    /** Mod that claimed this block */
     public IJsonGenMod mod;
 
+    /** Has the block been registered */
     protected boolean registered = false;
 
-    private final HashMap<String, List<ITileEventListener>> listeners = new HashMap();
+    //Listeners
+    public final HashMap<String, List<ITileEventListener>> listeners = new HashMap();
 
     public BlockBase(BlockPropertyData data)
     {
@@ -61,6 +70,10 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
         this.setBlockName(data.localization.replace("${name}", data.name));
         this.setResistance(data.getResistance());
         this.setHardness(data.getHardness());
+
+        //Run later, as the default is set without data working
+        this.opaque = this.isOpaqueCube();
+        this.lightOpacity = this.isOpaqueCube() ? 255 : 0;
     }
 
     @Override
@@ -72,7 +85,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public String getMod()
     {
-        return data.MOD;
+        return data != null ? data.getMod() : null;
     }
 
     @Override
@@ -222,19 +235,139 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
-        //TODO implement
+        if (listeners.containsKey("placement"))
+        {
+            for (ITileEventListener listener : listeners.get("placement"))
+            {
+                if (listener instanceof IPlacementListener)
+                {
+                    if (listener instanceof IBlockListener)
+                    {
+                        ((IBlockListener) listener).inject(world, x, y, z);
+                        ((IPlacementListener) listener).onAdded();
+                        ((IBlockListener) listener).eject();
+                    }
+                    else
+                    {
+                        ((IPlacementListener) listener).onAdded();
+                    }
+                }
+            }
+        }
+        //Check tile
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IPlacementListener)
+        {
+            ((IPlacementListener) tile).onAdded();
+        }
+        //Do calls for tile listeners
+        if (tile instanceof ITileWithListeners)
+        {
+            for (ITileEventListener listener : ((ITileWithListeners) tile).getListeners("placement"))
+            {
+                if (listener instanceof IPlacementListener)
+                {
+                    ((IPlacementListener) listener).onAdded();
+                }
+            }
+        }
+        //Check node
+        if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() instanceof IDestroyedListener)
+        {
+            ((IPlacementListener) ((ITileNodeHost) tile).getTileNode()).onAdded();
+        }
     }
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
     {
-        //TODO implement
+        if (listeners.containsKey("placement"))
+        {
+            for (ITileEventListener listener : listeners.get("placement"))
+            {
+                if (listener instanceof IPlacementListener)
+                {
+                    if (listener instanceof IBlockListener)
+                    {
+                        ((IBlockListener) listener).inject(world, x, y, z);
+                        ((IPlacementListener) listener).onPlacedBy(entityLiving, itemStack);
+                        ((IBlockListener) listener).eject();
+                    }
+                    else
+                    {
+                        ((IPlacementListener) listener).onPlacedBy(entityLiving, itemStack);
+                    }
+                }
+            }
+        }
+        //Check tile
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IPlacementListener)
+        {
+            ((IPlacementListener) tile).onPlacedBy(entityLiving, itemStack);
+        }
+        //Do calls for tile listeners
+        if (tile instanceof ITileWithListeners)
+        {
+            for (ITileEventListener listener : ((ITileWithListeners) tile).getListeners("placement"))
+            {
+                if (listener instanceof IPlacementListener)
+                {
+                    ((IPlacementListener) listener).onPlacedBy(entityLiving, itemStack);
+                }
+            }
+        }
+        //Check node
+        if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() instanceof IDestroyedListener)
+        {
+            ((IPlacementListener) ((ITileNodeHost) tile).getTileNode()).onPlacedBy(entityLiving, itemStack);
+        }
     }
 
     @Override
     public void onPostBlockPlaced(World world, int x, int y, int z, int metadata)
     {
-        //TODO implement
+        if (listeners.containsKey("placement"))
+        {
+            for (ITileEventListener listener : listeners.get("placement"))
+            {
+                if (listener instanceof IPlacementListener)
+                {
+                    if (listener instanceof IBlockListener)
+                    {
+                        ((IBlockListener) listener).inject(world, x, y, z);
+                        ((IPlacementListener) listener).onPostPlaced(metadata);
+                        ((IBlockListener) listener).eject();
+                    }
+                    else
+                    {
+                        ((IPlacementListener) listener).onPostPlaced(metadata);
+                    }
+                }
+            }
+        }
+        //Check tile
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IPlacementListener)
+        {
+            ((IPlacementListener) tile).onPostPlaced(metadata);
+        }
+        //Do calls for tile listeners
+        if (tile instanceof ITileWithListeners)
+        {
+            for (ITileEventListener listener : ((ITileWithListeners) tile).getListeners("placement"))
+            {
+                if (listener instanceof IPlacementListener)
+                {
+                    ((IPlacementListener) listener).onPostPlaced(metadata);
+                }
+            }
+        }
+        //Check node
+        if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() instanceof IDestroyedListener)
+        {
+            ((IPlacementListener) ((ITileNodeHost) tile).getTileNode()).onPostPlaced(metadata);
+        }
     }
 
     /**
@@ -525,7 +658,11 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public int getLightValue(IBlockAccess access, int x, int y, int z)
     {
-        //TODO implement
+        //TODO implement listeners
+        if (data != null && data.lightValue > 0)
+        {
+            return data.lightValue;
+        }
         return 0;
     }
 
@@ -539,8 +676,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public boolean isOpaqueCube()
     {
-        //TODO implement
-        return super.isOpaqueCube();
+        return data != null ? data.isOpaqueCube() : false;
     }
 
     @Override
@@ -554,32 +690,120 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public int getRenderType()
     {
-        //TODO implement
-        return 0;
+        return data != null ? data.getRenderType() : 0;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
-        //TODO implement
-        return super.getIcon(access, x, y, z, side);
+        final int meta = world.getBlockMetadata(x, y, z);
+        if (listeners.containsKey("icon"))
+        {
+            for (ITileEventListener listener : listeners.get("icon"))
+            {
+                if (listener instanceof IIconListener && listener instanceof IBlockListener)
+                {
+                    ((IBlockListener) listener).inject(world, x, y, z);
+                    IIcon icon = ((IIconListener) listener).getTileIcon(side, meta);
+                    if (icon != null)
+                    {
+                        ((IBlockListener) listener).eject();
+                        return icon;
+                    }
+                    ((IBlockListener) listener).eject();
+                }
+            }
+        }
+        //Check tile
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IIconListener)
+        {
+            ((IIconListener) tile).getTileIcon(side, meta);
+        }
+        //Do calls for tile listeners
+        if (tile instanceof ITileWithListeners)
+        {
+            for (ITileEventListener listener : ((ITileWithListeners) tile).getListeners("break"))
+            {
+                if (listener instanceof IIconListener)
+                {
+                    IIcon icon = ((IIconListener) listener).getTileIcon(side, meta);
+                    if (icon != null)
+                    {
+                        return icon;
+                    }
+                }
+            }
+        }
+        //Check node
+        if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() instanceof IIconListener)
+        {
+            IIcon icon = ((IIconListener) ((ITileNodeHost) tile).getTileNode()).getTileIcon(side, meta);
+            if (icon != null)
+            {
+                return icon;
+            }
+
+        }
+        return getIcon(side, meta);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta)
     {
-        //TODO implement
-        return super.getIcon(side, meta);
+        //Handle icon listeners
+        if (listeners.containsKey("icon"))
+        {
+            for (ITileEventListener listener : listeners.get("icon"))
+            {
+                if (listener instanceof IIconListener && !(listener instanceof IBlockListener))
+                {
+                    IIcon icon = ((IIconListener) listener).getTileIcon(side, meta);
+                    if (icon != null)
+                    {
+                        return icon;
+                    }
+                }
+            }
+        }
+        return getIconFromJson(side, meta);
+    }
+
+    public IIcon getIconFromJson(int side, int meta)
+    {
+        //handle json data
+        String contentID = getContentID(meta);
+        RenderData data = ClientDataHandler.INSTANCE.getRenderData(contentID);
+        if (data != null)
+        {
+            for (String key : new String[]{"block." + meta, "tile." + meta, "block", "tile"})
+            {
+                IRenderState state = data.getState(key);
+                if (state != null && state.getIcon(side) != null)
+                {
+                    return state.getIcon(side);
+                }
+            }
+        }
+        return Blocks.wool.getIcon(0, side);
+    }
+
+    public String getContentID(int meta)
+    {
+        if (data == null)
+        {
+            return getClass().getName();
+        }
+        return data.getMod() + ":" + data.registryKey;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
-        super.registerBlockIcons(iconRegister);
-        //TODO implement
+        //Texture registration is handled by ClientDataHandler
     }
 
     @SideOnly(Side.CLIENT)
@@ -594,16 +818,23 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public int getBlockColor()
     {
-        //TODO implement
+        if (data != null && data.getColor() >= 0)
+        {
+            return data.getColor();
+        }
         return super.getBlockColor();
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public int getRenderColor(int i)
+    public int getRenderColor(int meta)
     {
-        //TODO implement
-        return super.getRenderColor(i);
+        //TODO implement metadata values
+        if (data != null && data.getColor() >= 0)
+        {
+            return data.getColor();
+        }
+        return getBlockColor();
     }
 
     @Override
@@ -617,7 +848,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
     {
         //TODO implement
-        return new ArrayList<ItemStack>();
+        return super.getDrops(world, x, y, z, metadata, fortune);
     }
 
     @Override
@@ -633,8 +864,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public boolean canProvidePower()
     {
-        //TODO implement
-        return false;
+        return data != null && data.supportsRedstone;
     }
 
     @Override
@@ -666,14 +896,14 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     protected void dropBlockAsItem(World world, int x, int y, int z, ItemStack itemStack)
     {
+        super.dropBlockAsItem(world, x, y, z, itemStack);
         //TODO implement
     }
 
     @Override
     public int getRenderBlockPass()
     {
-        //TODO implement
-        return super.getRenderBlockPass();
+        return data != null && data.isAlpha ? 1 : 0;
     }
 
     @Override
@@ -701,5 +931,34 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             dim = "" + world.provider.dimensionId;
         }
         Engine.logger().error("Error: " + msg + " \nLocation[" + dim + "w " + x + "x " + y + "y " + z + "z" + "]", e);
+    }
+
+    /**
+     * Called to add a listener to the block
+     *
+     * @param listener
+     */
+    public void addListener(ITileEventListener listener)
+    {
+        if (listener != null)
+        {
+            List<String> keys = listener.getListenerKeys();
+            if (keys != null && !keys.isEmpty())
+            {
+                for (String key : keys)
+                {
+                    if (key != null)
+                    {
+                        List<ITileEventListener> listeners = this.listeners.get(key);
+                        if (listeners == null)
+                        {
+                            listeners = new ArrayList();
+                        }
+                        listeners.add(listener);
+                        this.listeners.put(key, listeners);
+                    }
+                }
+            }
+        }
     }
 }

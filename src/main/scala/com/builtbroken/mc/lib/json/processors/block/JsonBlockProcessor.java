@@ -2,13 +2,13 @@ package com.builtbroken.mc.lib.json.processors.block;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.block.BlockPropertyData;
+import com.builtbroken.mc.framework.block.meta.BlockMeta;
+import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
-import com.builtbroken.mc.framework.block.BlockBase;
-import com.builtbroken.mc.framework.block.meta.BlockMeta;
-import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -77,14 +77,19 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         BlockPropertyData blockPropertyData = new BlockPropertyData(this, id, mod, name);
         blockPropertyData.setMaterial(material);
 
-        if(blockData.has("resistance"))
+        if (blockData.has("resistance"))
         {
             blockPropertyData.setResistance(blockData.get("resistance").getAsFloat());
         }
 
-        if(blockData.has("hardness"))
+        if (blockData.has("hardness"))
         {
             blockPropertyData.setResistance(blockData.get("hardness").getAsFloat());
+        }
+
+        if (blockData.has("renderType"))
+        {
+            blockPropertyData.setRenderType(blockData.get("renderType").getAsInt());
         }
 
         //Meta data loading
