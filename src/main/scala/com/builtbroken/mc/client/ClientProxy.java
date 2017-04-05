@@ -66,13 +66,16 @@ public class ClientProxy extends CommonProxy
         MinecraftForge.EVENT_BUS.register(new PlayerKeyHandler());
         MinecraftForge.EVENT_BUS.register(new RenderSelection());
 
+        //Load in processors for client side json
         JsonContentLoader.INSTANCE.add(new TextureJsonProcessor());
         JsonContentLoader.INSTANCE.add(new ModelJsonProcessor());
         JsonContentLoader.INSTANCE.add(new RenderJsonProcessor());
 
+        //Textures have to be loaded in pre-init or will fail
         JsonContentLoader.INSTANCE.process("texture");
         MinecraftForge.EVENT_BUS.register(ClientDataHandler.INSTANCE);
 
+        //Register icons for explosives
         ExplosiveRegistryClient.registerIcon(new ItemStack(Items.gunpowder), References.PREFIX + "ex.icon.gunpowder");
         ExplosiveRegistryClient.registerIcon(new ItemStack(Items.skull, 1, 4), References.PREFIX + "ex.icon.creeper_head");
         ExplosiveRegistryClient.registerIcon(new ItemStack(Blocks.tnt), References.PREFIX + "ex.icon.tnt");
