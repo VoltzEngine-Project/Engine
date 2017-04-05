@@ -41,6 +41,7 @@ import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
+import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.Mods;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
@@ -73,6 +74,7 @@ import com.builtbroken.mc.mods.tinkers.TinkerProxy;
 import com.builtbroken.mc.mods.ue.TileUniversalBattery;
 import com.builtbroken.mc.prefab.explosive.handler.ExplosiveHandlerTNT;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
+import com.builtbroken.mc.prefab.tile.listeners.RotatableListener;
 import com.builtbroken.mc.prefab.trigger.TriggerNBTBuilder;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -479,6 +481,7 @@ public class Engine
         ToolMode.REGISTRY.add(new ToolModeGeneral());
         ToolMode.REGISTRY.add(new ToolModeRotation());
 
+        registerListeners();
 
         /**
          * Multiblock Handling
@@ -518,13 +521,18 @@ public class Engine
         OreDictionary.registerOre(OreNames.STRING, Items.string);
         OreDictionary.registerOre(OreNames.FLINT, Items.flint);
 
-
         Calendar calendar = Calendar.getInstance();
 
         if (calendar.get(2) + 1 == 12 && calendar.get(5) >= 24 && calendar.get(5) <= 26)
         {
             XMAS = true;
         }
+    }
+
+    protected void registerListeners()
+    {
+        JsonBlockListenerProcessor.addBuilder(new RotatableListener.Builder());
+        proxy.registerListeners();
     }
 
     @EventHandler

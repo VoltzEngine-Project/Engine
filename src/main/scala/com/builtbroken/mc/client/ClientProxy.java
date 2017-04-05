@@ -25,6 +25,7 @@ import com.builtbroken.mc.framework.multiblock.MultiBlockRenderHelper;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.fx.FxBeam;
@@ -80,6 +81,13 @@ public class ClientProxy extends CommonProxy
     }
 
     @Override
+    public void registerListeners()
+    {
+        super.registerListeners();
+        JsonBlockListenerProcessor.addBuilder(new RotatableIconListener.Builder());
+    }
+
+    @Override
     public void init()
     {
         super.init();
@@ -106,7 +114,7 @@ public class ClientProxy extends CommonProxy
         registerItemJsonRenders("VE-Item", new ItemJsonRenderer());
 
         List<IJsonGenObject> objects = JsonContentLoader.INSTANCE.generatedObjects.get(JsonBlockProcessor.KEY);
-        if(objects != null && !objects.isEmpty())
+        if (objects != null && !objects.isEmpty())
         {
             for (IJsonGenObject object : objects)
             {

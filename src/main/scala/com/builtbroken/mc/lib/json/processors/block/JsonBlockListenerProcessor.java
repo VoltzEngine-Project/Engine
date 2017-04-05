@@ -1,12 +1,14 @@
 package com.builtbroken.mc.lib.json.processors.block;
 
+import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
+import com.builtbroken.mc.api.tile.listeners.ITileEventListenerBuilder;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
-import com.builtbroken.mc.prefab.tile.listeners.RotatableListener;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,19 +20,29 @@ import java.util.List;
 public class JsonBlockListenerProcessor extends JsonBlockSubProcessor
 {
     public static final String KEY = "listeners";
+    public static HashMap<String, ITileEventListenerBuilder> builders = new HashMap();
+
+    public static void addBuilder(ITileEventListenerBuilder builder)
+    {
+        builders.put(builder.getListenerKey(), builder);
+    }
 
     @Override
     public void process(BlockBase block, JsonElement arrayElement, List<IJsonGenObject> objectList)
     {
         JsonArray array = arrayElement.getAsJsonArray();
-        for(JsonElement element : array)
+        for (JsonElement element : array)
         {
-            if(element.isJsonPrimitive())
+            if (element.isJsonPrimitive())
             {
-                String s = element.getAsString();
-                if("rotation".equalsIgnoreCase(s))
+                String key = element.getAsString().toLowerCase();
+                if (builders.containsKey(key))
                 {
-                    block.addListener(new RotatableListener());
+                    ITileEventListener listener = builders.get(key).createListener(block);
+                    if (listener != null)
+                    {
+                        block.addListener(listener);
+                    }
                 }
             }
         }

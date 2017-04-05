@@ -106,4 +106,12 @@ public abstract class AbstractProxy extends AbstractLoadable implements IGuiHand
     {
         return Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
     }
+
+    /**
+     * Called to register {@link com.builtbroken.mc.api.tile.listeners.ITileEventListenerBuilder}s
+     */
+    public void registerListeners()
+    {
+
+    }
 }

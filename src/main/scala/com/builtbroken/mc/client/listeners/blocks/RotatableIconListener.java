@@ -1,8 +1,11 @@
 package com.builtbroken.mc.client.listeners.blocks;
 
+import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
+import com.builtbroken.mc.api.tile.listeners.ITileEventListenerBuilder;
 import com.builtbroken.mc.api.tile.listeners.client.IIconListener;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.prefab.tile.listeners.TileListener;
+import net.minecraft.block.Block;
 import net.minecraft.util.IIcon;
 
 /**
@@ -84,5 +87,24 @@ public class RotatableIconListener extends TileListener implements IIconListener
             }
         }
         return block.getIconFromJson(side, meta);
+    }
+
+    public static class Builder implements ITileEventListenerBuilder
+    {
+        @Override
+        public ITileEventListener createListener(Block block)
+        {
+            if (block instanceof BlockBase)
+            {
+                return new RotatableIconListener((BlockBase) block);
+            }
+            return null;
+        }
+
+        @Override
+        public String getListenerKey()
+        {
+            return "rotationIcon";
+        }
     }
 }
