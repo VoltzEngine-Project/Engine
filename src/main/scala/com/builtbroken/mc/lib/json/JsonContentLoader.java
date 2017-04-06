@@ -605,39 +605,41 @@ public final class JsonContentLoader extends AbstractLoadable
             if (url != null)
             {
                 URI uri = url.toURI();
-                Path filePath;
                 if ("jar".equals(uri.getScheme()))
                 {
                     try (FileSystem fs = getFileSystem(uri))
                     {
-                        filePath = fs.getPath(folder);
+                        walkPaths(fs.getPath(folder), indent);
                     }
                 }
                 else
                 {
-                    filePath = Paths.get(uri);
-                }
-
-                Stream<Path> walk = Files.walk(filePath, 100);
-                for (Iterator<Path> it = walk.iterator(); it.hasNext(); )
-                {
-                    Path nextPath = it.next();
-                    String name = nextPath.getFileName().toString();
-                    if (name.lastIndexOf(".") > 1)
-                    {
-                        String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
-                        if (extensionsToLoad.contains(extension))
-                        {
-                            Engine.logger().info(indent + "  Found " + name);
-                            classPathResources.add(nextPath.toUri().toURL());
-                        }
-                    }
+                    walkPaths(Paths.get(uri), indent);
                 }
             }
         }
         catch (Exception e)
         {
             Engine.logger().error("Failed to load resources from class path.", e);
+        }
+    }
+
+    private void walkPaths(Path filePath, String indent) throws IOException
+    {
+        Stream<Path> walk = Files.walk(filePath, 100);
+        for (Iterator<Path> it = walk.iterator(); it.hasNext(); )
+        {
+            Path nextPath = it.next();
+            String name = nextPath.getFileName().toString();
+            if (name.lastIndexOf(".") > 1)
+            {
+                String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
+                if (extensionsToLoad.contains(extension))
+                {
+                    Engine.logger().info(indent + "Found " + name);
+                    classPathResources.add(nextPath.toUri().toURL());
+                }
+            }
         }
     }
 
