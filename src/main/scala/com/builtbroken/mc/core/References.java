@@ -9,7 +9,7 @@ import java.io.File;
  */
 public final class References
 {
-    public static final String ID = "VoltzEngine";
+    public static final String ID = "voltzengine";
     public static final String NAME = "Voltz Engine";
 
     @Deprecated

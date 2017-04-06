@@ -563,14 +563,14 @@ public class Engine implements IJsonGenMod
         //Late registration of content
         if ((getConfig().hasKey("Content", "LoadOres") || metallicOresRequested) && getConfig().getBoolean("LoadOres", "Content", metallicOresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
         {
-            ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
+            ore = contentRegistry.newBlock("veStoneOre", new BlockOre("stone"), ItemBlockOre.class);
             ore.setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
             MetallicOres.registerSet(ore, getConfig());
         }
 
         if ((getConfig().hasKey("Content", "LoadGemOres") || gemOresRequested) && getConfig().getBoolean("LoadGemOres", "Content", gemOresRequested, "Loads up Gem Ores."))
         {
-            gemOre = contentRegistry.newBlock(References.ID + "GemOre", new BlockGemOre("stone"), ItemBlockGemOre.class);
+            gemOre = contentRegistry.newBlock("veGemOre", new BlockGemOre("stone"), ItemBlockGemOre.class);
             GemOres.registerSet(gemOre, getConfig());
         }
 
@@ -860,5 +860,36 @@ public class Engine implements IJsonGenMod
             }
         }
         return false;
+    }
+
+    @Mod.EventHandler
+    public void missingMappingEvent(FMLMissingMappingsEvent event)
+    {
+        for (FMLMissingMappingsEvent.MissingMapping missingMapping : event.getAll())
+        {
+            final String name = missingMapping.name;
+            if (name.startsWith("VoltzEngine:"))
+            {
+                String registryKey = name.split(":")[1];
+                Object object = missingMapping.type.getRegistry().getObject("voltzengine:" + registryKey);
+                if (object == Blocks.air || object == null)
+                {
+                    registryKey = registryKey.replace("VoltzEngine", "ve");
+                    object = missingMapping.type.getRegistry().getObject("voltzengine:" + registryKey);
+                }
+
+                if (object != Blocks.air && object != null)
+                {
+                    if (object instanceof Block)
+                    {
+                        missingMapping.remap((Block) object);
+                    }
+                    else if (object instanceof Item)
+                    {
+                        missingMapping.remap((Item) object);
+                    }
+                }
+            }
+        }
     }
 }
