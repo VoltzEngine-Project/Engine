@@ -328,6 +328,8 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             //TODO load additional mod data directly from mod folder
             File file = container.getSource();
+            List<String> packs = container.getOwnedPackages();
+            System.out.println(packs);
             System.out.println("" + file);
             Object mod = container.getMod();
             if (mod != null)
@@ -593,6 +595,10 @@ public final class JsonContentLoader extends AbstractLoadable
         try
         {
             InputStream stream = clazz.getClassLoader().getResourceAsStream(folder);
+            if (stream == null)
+            {
+                stream = clazz.getResourceAsStream(folder);
+            }
             if (stream != null)
             {
                 final List<String> files = IOUtils.readLines(stream, Charsets.UTF_8);

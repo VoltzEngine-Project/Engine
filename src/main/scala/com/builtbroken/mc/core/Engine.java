@@ -40,6 +40,7 @@ import com.builtbroken.mc.framework.multiblock.ItemBlockMulti;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
+import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
@@ -111,7 +112,7 @@ import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
  */
 
 @Mod(modid = References.ID, name = References.NAME, version = References.VERSION, acceptableRemoteVersions = "*", dependencies = "required-after:Forge;after:TConstruct")
-public class Engine
+public class Engine implements IJsonGenMod
 {
     public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
     public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
@@ -516,7 +517,12 @@ public class Engine
         //Creeper skull
         ExplosiveRegistry.registerExplosiveItem(new ItemStack(Items.skull, 1, 4), ExplosiveRegistry.get("TNT"), tntValue / 10.0);
 
+        //Call loader
         loader.preInit();
+        //Claim json content
+        JsonContentLoader.INSTANCE.claimContent(this);
+
+        //Ore dictionary registry
         OreDictionary.registerOre(OreNames.WOOD_STICK, Items.stick);
         OreDictionary.registerOre(OreNames.STRING, Items.string);
         OreDictionary.registerOre(OreNames.FLINT, Items.flint);
@@ -731,6 +737,18 @@ public class Engine
     public Configuration getConfig()
     {
         return config;
+    }
+
+    @Override
+    public String getPrefix()
+    {
+        return References.PREFIX;
+    }
+
+    @Override
+    public String getDomain()
+    {
+        return References.DOMAIN;
     }
 
     public ModManager getManager()
