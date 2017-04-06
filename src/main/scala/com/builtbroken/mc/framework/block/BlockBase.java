@@ -659,9 +659,9 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     public int getLightValue(IBlockAccess access, int x, int y, int z)
     {
         //TODO implement listeners
-        if (data != null && data.lightValue > 0)
+        if (data != null && data.getLightValue() > 0)
         {
-            return data.lightValue;
+            return data.getLightValue();
         }
         return 0;
     }
@@ -864,7 +864,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public boolean canProvidePower()
     {
-        return data != null && data.supportsRedstone;
+        return data != null && data.isSupportsRedstone();
     }
 
     @Override
@@ -903,7 +903,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public int getRenderBlockPass()
     {
-        return data != null && data.isAlpha ? 1 : 0;
+        return data != null && data.isAlpha() ? 1 : 0;
     }
 
     @Override

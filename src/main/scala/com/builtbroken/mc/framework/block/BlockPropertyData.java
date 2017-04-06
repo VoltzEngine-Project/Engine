@@ -32,14 +32,13 @@ public class BlockPropertyData extends JsonGenData
     //Block data
     private Material material;
     private boolean isOpaqueCube;
-    public boolean supportsRedstone = false;
-    public boolean isAlpha = false;
+    private boolean supportsRedstone = false;
+    private boolean isAlpha = false;
     private float hardness = 5;
     private float resistance = 5;
     private int renderType = 0;
     private int color = -1;
-
-    public int lightValue;
+    private int lightValue;
 
 
     public BlockPropertyData(IJsonProcessor processor, String registryKey, String MOD, String name)
@@ -114,5 +113,35 @@ public class BlockPropertyData extends JsonGenData
     public void setOpaqueCube(boolean opaqueCube)
     {
         this.isOpaqueCube = opaqueCube;
+    }
+
+    public boolean isSupportsRedstone()
+    {
+        return supportsRedstone;
+    }
+
+    public void setSupportsRedstone(boolean supportsRedstone)
+    {
+        this.supportsRedstone = supportsRedstone;
+    }
+
+    public boolean isAlpha()
+    {
+        return isAlpha;
+    }
+
+    public void setAlpha(boolean alpha)
+    {
+        isAlpha = alpha;
+    }
+
+    public int getLightValue()
+    {
+        return lightValue;
+    }
+
+    public void setLightValue(int lightValue)
+    {
+        this.lightValue = lightValue;
     }
 }

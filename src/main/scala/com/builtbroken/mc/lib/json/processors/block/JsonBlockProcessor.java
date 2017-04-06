@@ -42,6 +42,13 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         blockFields.add("subtypes");
         blockFields.add("material");
         blockFields.add("localization");
+        blockFields.add("resistance");
+        blockFields.add("hardness");
+        blockFields.add("renderType");
+        blockFields.add("opaque");
+        blockFields.add("lightOutput");
+        blockFields.add("hasAlphaTextures");
+        blockFields.add("supportsRedstone");
     }
 
     @Override
@@ -90,6 +97,26 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         if (blockData.has("renderType"))
         {
             blockPropertyData.setRenderType(blockData.get("renderType").getAsInt());
+        }
+
+        if (blockData.has("isOpaqueCube"))
+        {
+            blockPropertyData.setOpaqueCube(blockData.get("isOpaqueCube").getAsBoolean());
+        }
+
+        if (blockData.has("lightOutput"))
+        {
+            blockPropertyData.setLightValue(blockData.get("lightOutput").getAsInt());
+        }
+
+        if (blockData.has("hasAlphaTextures"))
+        {
+            blockPropertyData.setAlpha(blockData.get("hasAlphaTextures").getAsBoolean());
+        }
+
+        if (blockData.has("supportsRedstone"))
+        {
+            blockPropertyData.setSupportsRedstone(blockData.get("supportsRedstone").getAsBoolean());
         }
 
         //Meta data loading

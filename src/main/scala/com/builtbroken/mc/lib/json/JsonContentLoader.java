@@ -328,13 +328,11 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             //TODO load additional mod data directly from mod folder
             File file = container.getSource();
-            List<String> packs = container.getOwnedPackages();
-            System.out.println(packs);
-            System.out.println("" + file);
+            Engine.logger().info("File: " + file);
             Object mod = container.getMod();
             if (mod != null)
             {
-                loadResourcesFromPackage(mod.getClass(), "content/" + container.getModId() + "/", 0);
+                loadResourcesFromPackage(mod.getClass(), "/content/" + container.getModId() + "/", 0);
             }
         }
         Engine.logger().info("--------------------------------");
@@ -636,16 +634,25 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public static void loadJsonFileFromResources(String resource, HashMap<String, List<JsonEntry>> entries) throws IOException
     {
-        if (resource != null && !resource.isEmpty())
-        {
-            URL url = JsonContentLoader.class.getClassLoader().getResource(resource);
-            if (url != null)
+            if (resource != null && !resource.isEmpty())
             {
-                InputStream stream = url.openStream();
-                loadJson(resource, new InputStreamReader(stream), entries);
-                stream.close();
+                URL url = JsonContentLoader.class.getClassLoader().getResource(resource);
+                if (url == null)
+                {
+                    url = JsonContentLoader.class.getResource(resource);
+                }
+                if (url != null)
+                {
+                    Engine.logger().error("Loading resource: " + resource);
+                    InputStream stream = url.openStream();
+                    loadJson(resource, new InputStreamReader(stream), entries);
+                    stream.close();
+                }
+                else
+                {
+                    Engine.logger().error("Failed to load resource for " + resource);
+                }
             }
-        }
     }
 
     /**
