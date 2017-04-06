@@ -28,12 +28,14 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.crafting.IRecipe;
-import org.apache.commons.io.Charsets;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -45,7 +47,7 @@ public final class JsonContentLoader extends AbstractLoadable
     public static JsonContentLoader INSTANCE = new JsonContentLoader();
 
     /** Internal files for loading */
-    public final List<String> classPathResources = new ArrayList();
+    public final List<URL> classPathResources = new ArrayList();
     /** External files for loading */
     public final List<File> externalFiles = new ArrayList();
     /** External jar files for loading */
@@ -355,7 +357,7 @@ public final class JsonContentLoader extends AbstractLoadable
 
         Engine.logger().info("\tLoading class path resources as json");
         //Load internal files
-        for (String resource : classPathResources)
+        for (URL resource : classPathResources)
         {
             try
             {
@@ -583,38 +585,52 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void loadResourcesFromPackage(Class clazz, String folder, int depth)
     {
+        //Debug output
         String indent = "";
         for (int i = 0; i <= depth; i++)
         {
             indent += "\t";
         }
         Engine.logger().info(indent + "Scanning for files in " + folder);
-        //http://stackoverflow.com/questions/3923129/get-a-list-of-resources-from-classpath-directory
+
+        //Actual load process
         try
         {
-            InputStream stream = clazz.getClassLoader().getResourceAsStream(folder);
-            if (stream == null)
+            //http://stackoverflow.com/questions/1429172/how-do-i-list-the-files-inside-a-jar-file
+            URL url = clazz.getClassLoader().getResource(folder);
+            if (url == null)
             {
-                stream = clazz.getResourceAsStream(folder);
+                url = clazz.getResource(folder);
             }
-            if (stream != null)
+            if (url != null)
             {
-                final List<String> files = IOUtils.readLines(stream, Charsets.UTF_8);
-                for (String name : files)
+                URI uri = url.toURI();
+                Path filePath;
+                if ("jar".equals(uri.getScheme()))
                 {
-                    final String path = folder + (!folder.endsWith("/") ? "/" : "") + name;
+                    try (FileSystem fs = getFileSystem(uri))
+                    {
+                        filePath = fs.getPath(folder);
+                    }
+                }
+                else
+                {
+                    filePath = Paths.get(uri);
+                }
+
+                Stream<Path> walk = Files.walk(filePath, 100);
+                for (Iterator<Path> it = walk.iterator(); it.hasNext(); )
+                {
+                    Path nextPath = it.next();
+                    String name = nextPath.getFileName().toString();
                     if (name.lastIndexOf(".") > 1)
                     {
                         String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
                         if (extensionsToLoad.contains(extension))
                         {
                             Engine.logger().info(indent + "  Found " + name);
-                            classPathResources.add(path);
+                            classPathResources.add(nextPath.toUri().toURL());
                         }
-                    }
-                    else
-                    {
-                        loadResourcesFromPackage(clazz, path + "/", depth + 1);
                     }
                 }
             }
@@ -625,6 +641,18 @@ public final class JsonContentLoader extends AbstractLoadable
         }
     }
 
+    private FileSystem getFileSystem(URI uri) throws IOException
+    {
+        try
+        {
+            return FileSystems.getFileSystem(uri);
+        }
+        catch (FileSystemNotFoundException e)
+        {
+            return FileSystems.newFileSystem(uri, Collections.<String, String>emptyMap());
+        }
+    }
+
     /**
      * Loads a json file from the resource path
      *
@@ -632,27 +660,14 @@ public final class JsonContentLoader extends AbstractLoadable
      * @return json file as a json element object
      * @throws IOException
      */
-    public static void loadJsonFileFromResources(String resource, HashMap<String, List<JsonEntry>> entries) throws IOException
+    public static void loadJsonFileFromResources(URL resource, HashMap<String, List<JsonEntry>> entries) throws IOException
     {
-            if (resource != null && !resource.isEmpty())
-            {
-                URL url = JsonContentLoader.class.getClassLoader().getResource(resource);
-                if (url == null)
-                {
-                    url = JsonContentLoader.class.getResource(resource);
-                }
-                if (url != null)
-                {
-                    Engine.logger().error("Loading resource: " + resource);
-                    InputStream stream = url.openStream();
-                    loadJson(resource, new InputStreamReader(stream), entries);
-                    stream.close();
-                }
-                else
-                {
-                    Engine.logger().error("Failed to load resource for " + resource);
-                }
-            }
+        if (resource != null)
+        {
+            Engine.logger().error("Loading resource: " + resource);
+            InputStream stream = resource.openStream();
+            loadJson(resource.getFile(), new InputStreamReader(stream), entries);
+        }
     }
 
     /**
