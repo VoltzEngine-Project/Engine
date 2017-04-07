@@ -39,6 +39,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
+ * Content loading system designed to use JSON files and processors to generate game content.
+ *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
  */
@@ -85,6 +87,10 @@ public final class JsonContentLoader extends AbstractLoadable
     /** Object used to wrap the logger to produce clearner debug messages */
     public DebugPrinter debug;
 
+    /**
+     * Left public for JUnit testing
+     * use {@link #INSTANCE} to access system
+     */
     public JsonContentLoader()
     {
         debug = new DebugPrinter(LogManager.getLogger("JsonContentLoader"));
@@ -363,32 +369,35 @@ public final class JsonContentLoader extends AbstractLoadable
     /** Loads resources from folders and class path */
     public void loadResources()
     {
-        Engine.logger().info("Loading json resources");
+        debug.start("Loading json resources");
 
-        Engine.logger().info("--------------------------------");
-        Engine.logger().info("\tScanning mod packages for json data");
+        //---------------------------------------------------------------------------
+        debug.start("\tScanning mod packages for json data");
         for (ModContainer container : Loader.instance().getModList())
         {
             File file = container.getSource();
-            Engine.logger().info("File: " + file);
+            debug.log("Mod: " + container.getName() + "  " + container.getDisplayVersion());
+            debug.log("File: " + file);
             Object mod = container.getMod();
             if (mod != null)
             {
-                loadResourcesFromPackage(mod.getClass(), "/content/" + container.getModId() + "/", 0);
+                loadResourcesFromPackage(mod.getClass(), "/content/" + container.getModId() + "/");
             }
         }
-        Engine.logger().info("--------------------------------");
-        Engine.logger().info("\tScanning for external files");
+        debug.end();
+        //===========================================================================
+        debug.start("Scanning for external files");
         loadResourcesFromFolder(externalContentFolder);
+        debug.end();
 
-        Engine.logger().info("--------------------------------");
-        Engine.logger().info("\tLoading external resources");
+        //===========================================================================
+        debug.start("Loading external resources");
         //Load external files
         for (File file : externalFiles)
         {
             try
             {
-                Engine.logger().error("\t\tLoading resource: " + file);
+                debug.log("Loading resource: " + file);
                 JsonLoader.loadJsonFile(file, jsonEntries);
             }
             catch (IOException e)
@@ -397,15 +406,16 @@ public final class JsonContentLoader extends AbstractLoadable
                 throw new RuntimeException("Failed to load external resource " + file, e);
             }
         }
-        Engine.logger().info("--------------------------------");
+        debug.end();
+        //===========================================================================
 
-        Engine.logger().info("\tLoading class path resources");
+        debug.start("Loading class path resources");
         //Load internal files
         for (URL resource : classPathResources)
         {
             try
             {
-                Engine.logger().error("\t\tLoading resource: " + resource);
+                debug.log("Loading resource: " + resource);
                 JsonLoader.loadJsonFileFromResources(resource, jsonEntries);
             }
             catch (IOException e)
@@ -414,8 +424,9 @@ public final class JsonContentLoader extends AbstractLoadable
                 throw new RuntimeException("Failed to load classpath resource " + resource, e);
             }
         }
-        Engine.logger().info("--------------------------------");
-        Engine.logger().info("Done....");
+        debug.end();
+        //---------------------------------------------------------------------------
+        debug.end("Done....");
     }
 
     /**
@@ -631,20 +642,11 @@ public final class JsonContentLoader extends AbstractLoadable
      *
      * @param folder - package your looking to load data from
      */
-    public void loadResourcesFromPackage(Class clazz, String folder, int depth)
+    public void loadResourcesFromPackage(Class clazz, String folder)
     {
-        //Debug output
-        String indent = "";
-        for (int i = 0; i <= depth; i++)
-        {
-            indent += "\t";
-        }
-        Engine.logger().info(indent + "Scanning for files in " + folder);
-
         //Actual load process
         try
         {
-            //http://stackoverflow.com/questions/1429172/how-do-i-list-the-files-inside-a-jar-file
             URL url = clazz.getClassLoader().getResource(folder);
             if (url == null)
             {
@@ -655,25 +657,31 @@ public final class JsonContentLoader extends AbstractLoadable
                 URI uri = url.toURI();
                 if ("jar".equals(uri.getScheme()))
                 {
+                    debug.error("Jar detected, using secondary method to load resources.");
                     try (FileSystem fs = getFileSystem(uri))
                     {
-                        walkPaths(fs.getPath(folder), indent);
+                        walkPaths(fs.getPath(folder));
                     }
                 }
                 else
                 {
-                    walkPaths(Paths.get(uri), indent);
+                    walkPaths(Paths.get(uri));
                 }
+            }
+            else
+            {
+                debug.error("Could not locate folder[ " + folder + " ]");
             }
         }
         catch (Exception e)
         {
-            Engine.logger().error("Failed to load resources from class path.", e);
+            debug.error("Failed to load resources from class path.", e);
         }
     }
 
-    private void walkPaths(Path filePath, String indent) throws IOException
+    private void walkPaths(Path filePath) throws IOException
     {
+        debug.start("Loading files from " + filePath);
         Stream<Path> walk = Files.walk(filePath, 100);
         for (Iterator<Path> it = walk.iterator(); it.hasNext(); )
         {
@@ -684,11 +692,12 @@ public final class JsonContentLoader extends AbstractLoadable
                 String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
                 if (extensionsToLoad.contains(extension))
                 {
-                    Engine.logger().info(indent + "Found " + name);
+                    debug.log("Found " + name);
                     classPathResources.add(nextPath.toUri().toURL());
                 }
             }
         }
+        debug.end("Done...");
     }
 
     private FileSystem getFileSystem(URI uri) throws IOException
@@ -717,6 +726,7 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             for (IJsonGenObject obj : generatedObjects)
             {
+                debug.start("Handling: " + obj);
                 if (obj instanceof IPostInit)
                 {
                     ((IPostInit) obj).onPostInit();
@@ -725,14 +735,31 @@ public final class JsonContentLoader extends AbstractLoadable
                 {
                     List<IRecipe> recipes = new ArrayList();
                     ((IRecipeContainer) obj).genRecipes(recipes);
-                    for (IRecipe recipe : recipes)
+                    if (recipes.size() > 0)
                     {
-                        if (recipe != null && recipe.getRecipeOutput() != null)
+                        debug.start("Adding recipes from gen object:");
+                        for (IRecipe recipe : recipes)
                         {
-                            GameRegistry.addRecipe(recipe);
+                            if (recipe != null)
+                            {
+                                if (recipe.getRecipeOutput() != null)
+                                {
+                                    GameRegistry.addRecipe(recipe);
+                                }
+                                else
+                                {
+                                    debug.log("Null recipe output detected");
+                                }
+                            }
+                            else
+                            {
+                                debug.log("Null recipe detected");
+                            }
                         }
+                        debug.end();
                     }
                 }
+                debug.end();
             }
         }
     }
@@ -743,6 +770,7 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void clear()
     {
+        debug.log("Clearing cached data to same RAM");
         externalFiles.clear();
         externalJarFiles.clear();
         classPathResources.clear();

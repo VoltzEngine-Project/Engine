@@ -2,6 +2,8 @@ package com.builtbroken.test.lib.json;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
+import com.builtbroken.mc.lib.json.loading.JsonEntry;
+import com.builtbroken.mc.lib.json.loading.JsonLoader;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.google.gson.JsonElement;
@@ -84,15 +86,15 @@ public class TestJsonLoader extends AbstractTest
 
         for (int i = 0; i < 13; i++)
         {
-            JsonContentLoader.loadJsonElement("file" + i, createTestElement("ammo", "ammo" + i), loader.jsonEntries);
+            JsonLoader.loadJsonElement("file" + i, createTestElement("ammo", "ammo" + i), loader.jsonEntries);
         }
         for (int i = 0; i < 5; i++)
         {
-            JsonContentLoader.loadJsonElement("file" + (13 + i), createTestElement("ammoType", "ammoType" + i), loader.jsonEntries);
+            JsonLoader.loadJsonElement("file" + (13 + i), createTestElement("ammoType", "ammoType" + i), loader.jsonEntries);
         }
         for (int i = 0; i < 3; i++)
         {
-            JsonContentLoader.loadJsonElement("file" + (13 + 5 + i), createTestElement("clip", "clip" + i), loader.jsonEntries);
+            JsonLoader.loadJsonElement("file" + (13 + 5 + i), createTestElement("clip", "clip" + i), loader.jsonEntries);
         }
 
         loader.init();
@@ -137,9 +139,9 @@ public class TestJsonLoader extends AbstractTest
     public void testJsonLoad()
     {
         final StringReader reader = new StringReader(TEST_OBJECT_ONE);
-        final HashMap<String, List<JsonContentLoader.JsonEntry>> entryList = new HashMap();
+        final HashMap<String, List<JsonEntry>> entryList = new HashMap();
 
-        JsonContentLoader.loadJson("someFile", reader, entryList);
+        JsonLoader.loadJson("someFile", reader, entryList);
 
         assertEquals(1, entryList.size());
         assertEquals("block", entryList.get("block").get(0).jsonKey);
