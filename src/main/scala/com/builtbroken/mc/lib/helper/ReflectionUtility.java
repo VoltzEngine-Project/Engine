@@ -149,7 +149,6 @@ public class ReflectionUtility extends ReflectionHelper
             Class<?> current = clazz;
             while (current.getSuperclass() != null)
             {
-                current = current.getSuperclass();
                 for(Field field : current.getFields())
                 {
                     if(!fields.contains(field))
@@ -164,6 +163,7 @@ public class ReflectionUtility extends ReflectionHelper
                         fields.add(field);
                     }
                 }
+                current = current.getSuperclass();
             }
         }
         catch (Exception e)
@@ -209,7 +209,7 @@ public class ReflectionUtility extends ReflectionHelper
         return method;
     }
 
-    public static List<Method> getAllMethods(Class clazz) throws ClassNotFoundException
+    public static List<Method> getAllMethods(Class clazz)
     {
         List<Method> fields = getMethods(clazz);
         fields.addAll(getDeclaredMethods(clazz));
@@ -217,31 +217,38 @@ public class ReflectionUtility extends ReflectionHelper
     }
 
     @SafeVarargs
-    public static List<Method> getAllMethods(Class clazz, Class<? extends Annotation>... annotations) throws ClassNotFoundException
+    public static List<Method> getAllMethods(Class clazz, Class<? extends Annotation>... annotations)
     {
         List<Method> fields = getAllMethods(clazz);
         List<Method> returns = new ArrayList();
         for (Method m : fields)
         {
-            for (Class<? extends Annotation> an : annotations)
+            if(annotations != null)
             {
-                if (m.isAnnotationPresent(an))
+                for (Class<? extends Annotation> an : annotations)
                 {
-                    returns.add(m);
+                    if (m.isAnnotationPresent(an))
+                    {
+                        returns.add(m);
+                    }
                 }
+            }
+            else
+            {
+                returns.add(m);
             }
         }
         return fields;
     }
 
-    public static List<Method> getMethods(Class clazz) throws ClassNotFoundException
+    public static List<Method> getMethods(Class clazz)
     {
         List<Method> fields = new ArrayList();
         fields.addAll(Arrays.asList(clazz.getMethods()));
         return fields;
     }
 
-    public static List<Method> getDeclaredMethods(Class clazz) throws ClassNotFoundException
+    public static List<Method> getDeclaredMethods(Class clazz)
     {
         List<Method> fields = new ArrayList();
         fields.addAll(Arrays.asList(clazz.getDeclaredMethods()));

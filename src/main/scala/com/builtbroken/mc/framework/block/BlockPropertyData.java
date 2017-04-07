@@ -30,7 +30,7 @@ public class BlockPropertyData extends JsonGenData
 
 
     //Block data
-    private Material material;
+    private Material material = Material.clay;
     private boolean isOpaqueCube;
     private boolean supportsRedstone = false;
     private boolean isAlpha = false;
@@ -71,7 +71,7 @@ public class BlockPropertyData extends JsonGenData
         return hardness;
     }
 
-    @JsonProcessorData("hardness")
+    @JsonProcessorData(value = "hardness", type = "float")
     public void setHardness(float hardness)
     {
         this.hardness = hardness;
@@ -82,7 +82,7 @@ public class BlockPropertyData extends JsonGenData
         return resistance;
     }
 
-    @JsonProcessorData("resistance")
+    @JsonProcessorData(value = "resistance", type = "float")
     public void setResistance(float resistance)
     {
         this.resistance = resistance;
@@ -93,7 +93,7 @@ public class BlockPropertyData extends JsonGenData
         return renderType;
     }
 
-    @JsonProcessorData("renderType")
+    @JsonProcessorData(value = "renderType", type = "int")
     public void setRenderType(int renderType)
     {
         this.renderType = renderType;
@@ -104,7 +104,7 @@ public class BlockPropertyData extends JsonGenData
         return color;
     }
 
-    @JsonProcessorData("renderColor")
+    @JsonProcessorData(value = "renderColor", type = "int")
     public void setColor(int color)
     {
         this.color = color;
@@ -148,7 +148,7 @@ public class BlockPropertyData extends JsonGenData
         return lightValue;
     }
 
-    @JsonProcessorData("lightOutput")
+    @JsonProcessorData(value = "lightOutput", type = "int")
     public void setLightValue(int lightValue)
     {
         this.lightValue = lightValue;

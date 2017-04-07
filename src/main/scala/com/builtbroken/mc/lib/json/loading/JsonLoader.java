@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.json.loading;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 
@@ -67,8 +68,19 @@ public class JsonLoader
         loadJsonElement(fileName, element, entries);
     }
 
-
-
+    /**
+     * Creates an json element from a string
+     *
+     * @param data - string data, needs to be formatted correctly,
+     *             e.g. { "content" : { "more":"content"} }
+     * @return json element
+     * @throws JsonSyntaxException - if string is not formatted correctly
+     */
+    public static JsonElement createElement(String data)
+    {
+        JsonReader jsonReader = new JsonReader(new StringReader(data));
+        return Streams.parse(jsonReader);
+    }
 
     /**
      * Loads the data from the element passed in and creates {@link JsonEntry} for processing

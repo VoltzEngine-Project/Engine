@@ -1,6 +1,8 @@
 package com.builtbroken.mc.lib.json.loading;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
@@ -12,8 +14,13 @@ import java.lang.annotation.Target;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/7/2017.
  */
+@Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.FIELD, ElementType.METHOD})
 public @interface JsonProcessorData
 {
+    /** List of keys to use */
     String[] value();
+
+    /** Primitive type to load, only use for numbers */
+    String type() default "Unknown";
 }

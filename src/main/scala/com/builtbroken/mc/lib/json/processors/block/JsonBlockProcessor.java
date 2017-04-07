@@ -16,6 +16,7 @@ import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
     public JsonBlockProcessor()
     {
         keyHandler = new JsonProcessorInjectionMap(BlockPropertyData.class);
-        debugPrinter = JsonContentLoader.INSTANCE.debug;
+        debugPrinter = JsonContentLoader.INSTANCE != null ? JsonContentLoader.INSTANCE.debug : new DebugPrinter(LogManager.getLogger());
         //Field entries to prevent sub processors firing
         // each entry need to be lower cased to work
         blockFields.add("id");
@@ -75,7 +76,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
     @Override
     public boolean process(JsonElement element, List<IJsonGenObject> objectList)
     {
-        debugPrinter.start("BlockProcessor", "Processing entry");
+        debugPrinter.start("BlockProcessor", "Processing entry", Engine.runningAsDev);
         //Get object and ensure minimal keys exist
         JsonObject blockData = element.getAsJsonObject();
         ensureValuesExist(blockData, "name", "id", "mod");
@@ -110,7 +111,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         //Call to process extra tags from file
         for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
         {
-            if (keyHandler.handle(entry.getKey().toLowerCase(), entry.getValue()))
+            if (keyHandler.handle(blockPropertyData, entry.getKey().toLowerCase(), entry.getValue()))
             {
                 if (Engine.runningAsDev)
                 {
