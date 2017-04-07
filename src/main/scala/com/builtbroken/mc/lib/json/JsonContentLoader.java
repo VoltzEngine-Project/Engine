@@ -1,14 +1,17 @@
 package com.builtbroken.mc.lib.json;
 
+import com.builtbroken.jlib.lang.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
+import com.builtbroken.mc.lib.json.loading.JsonEntry;
+import com.builtbroken.mc.lib.json.loading.JsonLoader;
+import com.builtbroken.mc.lib.json.loading.ProcessorKeySorter;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockTileProcessor;
@@ -21,18 +24,16 @@ import com.builtbroken.mc.lib.json.processors.world.JsonWorldOreGenProcessor;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.internal.Streams;
-import com.google.gson.stream.JsonReader;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.crafting.IRecipe;
+import org.apache.logging.log4j.LogManager;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
@@ -78,14 +79,15 @@ public final class JsonContentLoader extends AbstractLoadable
     /** Used almost entirely by unit testing to disable file loading */
     public boolean ignoreFileLoading = false;
 
-
+    /** Path to external content folder */
     public File externalContentFolder;
 
-    public ModManager modManager;
+    /** Object used to wrap the logger to produce clearner debug messages */
+    public DebugPrinter debug;
 
     public JsonContentLoader()
     {
-        modManager = new ModManager();
+        debug = new DebugPrinter(LogManager.getLogger("JsonContentLoader"));
         extensionsToLoad.add("json");
         blockProcessor = new JsonBlockProcessor();
         itemProcessor = new JsonItemProcessor();
@@ -101,27 +103,40 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void add(IJsonProcessor processor)
     {
+        debug.start("Added Processor< " + processor.getJsonKey() + ", " + processor + " >");
         processors.put(processor.getJsonKey(), processor);
         //Register sub block processors
         if (processor instanceof IJsonBlockSubProcessor)
         {
             blockProcessor.addSubProcessor(processor.getJsonKey(), (IJsonBlockSubProcessor) processor);
+            debug.log("-is sub block processor");
         }
         //Register loaders
         if (processor instanceof ILoadable)
         {
             Engine.loader.applyModule((ILoadable) processor);
+            debug.log("-is loadable");
         }
         //TODO add item sub processors
+
+        debug.end();
     }
 
     @Override
     public void preInit()
     {
+        debug.start("Phase: Pre-Init");
+        //---------------------------------------------------------------------------
+
+        debug.start("Validating file paths");
         //Init data
         externalContentFolder = new File(References.BBM_CONFIG_FOLDER, "json");
         //Validate data
         validateFilePaths();
+        debug.end("Done...");
+
+        //===========================================================================
+        debug.start("Registering default processors");
         //Load processors
         add(blockProcessor);
         blockProcessor.addSubProcessor(JsonBlockTileProcessor.KEY, new JsonBlockTileProcessor());
@@ -136,32 +151,59 @@ public final class JsonContentLoader extends AbstractLoadable
         add(new JsonRecipeReplacementProcessor());
         //TODO add machine recipes
 
+        debug.end("Done...");
+        //===========================================================================
+
+        debug.start("Loading files");
         //Resources are loaded before they can be processed to allow early processing
         if (!ignoreFileLoading)
         {
             //Load resources from file system
             loadResources();
         }
+        else
+        {
+
+        }
+        debug.end("Done...");
+
+        //===========================================================================
+        debug.start("Process Run[1]");
         processEntries();
+        debug.end("Done...");
+
+        //---------------------------------------------------------------------------
+        debug.end("Done...");
     }
 
     @Override
     public void init()
     {
+        debug.start("Phase: Init");
+        debug.start("Process Run[2]");
         processEntries();
+        debug.end("Done...");
+        debug.end("Done...");
     }
 
     @Override
     public void postInit()
     {
+        debug.start("Phase: Post-Init");
+        debug.start("Process Run[3]");
         processEntries();
+        debug.end("Done...");
 
+        debug.start("Doing post handling for generated objects");
         //Using pre-sorted processor list we can loop generated objects in order
         final List<String> sortingProcessorList = getSortedProcessorList();
         for (String proccessorKey : sortingProcessorList)
         {
             handlePostCalls(generatedObjects.get(proccessorKey));
         }
+        debug.end("Done...");
+
+        debug.end("Done...");
     }
 
     /**
@@ -323,12 +365,10 @@ public final class JsonContentLoader extends AbstractLoadable
     {
         Engine.logger().info("Loading json resources");
 
+        Engine.logger().info("--------------------------------");
         Engine.logger().info("\tScanning mod packages for json data");
-        //TODO implement threading to allow other mods to load while we load content
-        loadResourcesFromFolder(externalContentFolder);
         for (ModContainer container : Loader.instance().getModList())
         {
-            //TODO load additional mod data directly from mod folder
             File file = container.getSource();
             Engine.logger().info("File: " + file);
             Object mod = container.getMod();
@@ -338,35 +378,40 @@ public final class JsonContentLoader extends AbstractLoadable
             }
         }
         Engine.logger().info("--------------------------------");
-
         Engine.logger().info("\tScanning for external files");
+        loadResourcesFromFolder(externalContentFolder);
+
+        Engine.logger().info("--------------------------------");
+        Engine.logger().info("\tLoading external resources");
         //Load external files
         for (File file : externalFiles)
         {
             try
             {
-                loadJsonFile(file, jsonEntries);
+                Engine.logger().error("\t\tLoading resource: " + file);
+                JsonLoader.loadJsonFile(file, jsonEntries);
             }
             catch (IOException e)
             {
                 //Crash as the file may be important
-                throw new RuntimeException("Failed to load resource " + file, e);
+                throw new RuntimeException("Failed to load external resource " + file, e);
             }
         }
         Engine.logger().info("--------------------------------");
 
-        Engine.logger().info("\tLoading class path resources as json");
+        Engine.logger().info("\tLoading class path resources");
         //Load internal files
         for (URL resource : classPathResources)
         {
             try
             {
-                loadJsonFileFromResources(resource, jsonEntries);
+                Engine.logger().error("\t\tLoading resource: " + resource);
+                JsonLoader.loadJsonFileFromResources(resource, jsonEntries);
             }
             catch (IOException e)
             {
                 //Crash as the file may be important
-                throw new RuntimeException("Failed to load resource " + resource, e);
+                throw new RuntimeException("Failed to load classpath resource " + resource, e);
             }
         }
         Engine.logger().info("--------------------------------");
@@ -382,7 +427,7 @@ public final class JsonContentLoader extends AbstractLoadable
     public static List<String> sortSortingValues(List<String> sortingValues)
     {
         //Run a basic sorter on the list to order it values, after:value, before:value:
-        Collections.sort(sortingValues, new StringSortingComparator());
+        Collections.sort(sortingValues, new ProcessorKeySorter());
 
 
         final LinkedList<String> sortedValues = new LinkedList();
@@ -551,7 +596,10 @@ public final class JsonContentLoader extends AbstractLoadable
     }
 
     /**
-     * Called to load json files from the folder
+     * Called to load json files from the folder.
+     * <p>
+     * Recursive call that will go through all folders
+     * in a folder.
      *
      * @param folder
      */
@@ -656,102 +704,6 @@ public final class JsonContentLoader extends AbstractLoadable
     }
 
     /**
-     * Loads a json file from the resource path
-     *
-     * @param resource - resource location
-     * @return json file as a json element object
-     * @throws IOException
-     */
-    public static void loadJsonFileFromResources(URL resource, HashMap<String, List<JsonEntry>> entries) throws IOException
-    {
-        if (resource != null)
-        {
-            Engine.logger().error("Loading resource: " + resource);
-            InputStream stream = resource.openStream();
-            loadJson(resource.getFile(), new InputStreamReader(stream), entries);
-        }
-    }
-
-    /**
-     * Loads a json file from the resource path
-     *
-     * @param file - file to read from
-     * @return json file as a json element object
-     * @throws IOException
-     */
-    public static void loadJsonFile(File file, HashMap<String, List<JsonEntry>> entries) throws IOException
-    {
-        if (file.exists() && file.isFile())
-        {
-            FileReader stream = new FileReader(file);
-            loadJson(file.getName(), new BufferedReader(stream), entries);
-            stream.close();
-        }
-    }
-
-    /**
-     * Loads a json file from a reader
-     *
-     * @param fileName - file the reader loaded from, used only for error logs
-     * @param reader   - reader with the data
-     * @param entries  - place to put json entries into
-     */
-    public static void loadJson(String fileName, Reader reader, HashMap<String, List<JsonEntry>> entries)
-    {
-        JsonReader jsonReader = new JsonReader(reader);
-        JsonElement element = Streams.parse(jsonReader);
-        loadJsonElement(fileName, element, entries);
-    }
-
-    /**
-     * Loads the data from the element passed in and creates {@link JsonEntry} for processing
-     * later on.
-     *
-     * @param file    - file the element was read from
-     * @param element - the element to process
-     * @param entries - list to populate with new entries
-     */
-    public static void loadJsonElement(String file, JsonElement element, HashMap<String, List<JsonEntry>> entries)
-    {
-        if (element.isJsonObject())
-        {
-            JsonObject object = element.getAsJsonObject();
-            String author = null;
-            String helpSite = null;
-            if (object.has("author"))
-            {
-                JsonObject authorData = object.get("author").getAsJsonObject();
-                author = authorData.get("name").getAsString();
-                if (authorData.has("site"))
-                {
-                    helpSite = authorData.get("site").getAsString();
-                }
-            }
-            for (Map.Entry<String, JsonElement> entry : object.entrySet())
-            {
-                if (!entry.getKey().equalsIgnoreCase("author"))
-                {
-                    String key = entry.getKey();
-                    if (key.contains(":"))
-                    {
-                        key = key.split(":")[0];
-                    }
-                    JsonEntry jsonEntry = new JsonEntry(key, file, entry.getValue());
-                    jsonEntry.author = author;
-                    jsonEntry.authorHelpSite = helpSite;
-                    List<JsonEntry> list = entries.get(jsonEntry.jsonKey);
-                    if (list == null)
-                    {
-                        list = new ArrayList();
-                    }
-                    list.add(jsonEntry);
-                    entries.put(jsonEntry.jsonKey, list);
-                }
-            }
-        }
-    }
-
-    /**
      * Called to handle post call code on generated objects.
      * <p>
      * Separated from {@link #postInit()} due to other processors
@@ -795,69 +747,5 @@ public final class JsonContentLoader extends AbstractLoadable
         externalJarFiles.clear();
         classPathResources.clear();
         jsonEntries.clear();
-    }
-
-    /**
-     * Simple pre-sorter that attempt to place tagged string near the bottom
-     * so they are added after tags they depend on.
-     */
-    public static class StringSortingComparator implements Comparator<String>
-    {
-        @Override
-        public int compare(String o1, String o2)
-        {
-            if (o1.contains("@") && !o2.contains("@"))
-            {
-                return 1;
-            }
-            else if (!o1.contains("@") && o2.contains("@"))
-            {
-                return -1;
-            }
-            //TODO attempt to sort using before & after tags
-            return o1.compareTo(o2);
-        }
-    }
-
-    /**
-     * Used to store loaded entries during sorting
-     */
-    public static class JsonEntry
-    {
-        /** Name of the entry type, used for sorting */
-        public final String jsonKey;
-        /** Element entry that goes with the name key */
-        public final JsonElement element;
-        /** File the entry was created from */
-        public final String fileReadFrom;
-
-        /** Who create the entry in the file */
-        public String author;
-        /** Where the error can be reported if the file fails to read */
-        public String authorHelpSite;
-
-        public JsonEntry(String jsonKey, String fileReadFrom, JsonElement element)
-        {
-            this.jsonKey = jsonKey;
-            this.fileReadFrom = fileReadFrom;
-            this.element = element;
-        }
-
-        @Override
-        public String toString()
-        {
-            return jsonKey + "[" + element + "]";
-        }
-
-        @Override
-        public boolean equals(Object object)
-        {
-            if (object instanceof JsonEntry)
-            {
-                return jsonKey.equals(((JsonEntry) object).jsonKey) && element.equals(((JsonEntry) object).element);
-            }
-            return false;
-        }
-        //TODO add hashcode
     }
 }
