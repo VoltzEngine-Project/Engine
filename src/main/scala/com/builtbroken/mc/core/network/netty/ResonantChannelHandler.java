@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.network.netty;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.*;
+import com.builtbroken.mc.core.network.packet.callback.PacketAudio;
 import com.builtbroken.mc.core.network.packet.callback.PacketBlast;
 import com.builtbroken.mc.core.network.packet.user.PacketMouseClick;
 import com.builtbroken.mc.core.network.packet.user.PacketPlayerItemMode;
@@ -31,6 +32,7 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<Abst
         this.addDiscriminator(9, PacketSpawnParticleStream.class);
         this.addDiscriminator(10, PacketMouseClick.class);
         this.addDiscriminator(11, PacketBlast.class);
+        this.addDiscriminator(12, PacketAudio.class);
     }
 
     @Override

@@ -3,8 +3,9 @@ package com.builtbroken.mc.core;
 import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.network.packet.PacketSpawnParticle;
 import com.builtbroken.mc.core.network.packet.PacketSpawnStream;
-import com.builtbroken.mc.lib.mod.AbstractProxy;
+import com.builtbroken.mc.core.network.packet.callback.PacketAudio;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import com.builtbroken.mc.lib.mod.AbstractProxy;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,6 +83,15 @@ public class CommonProxy extends AbstractProxy
         {
             //TODO do a proper distance check as the 90 default is not going to work for very long range laser renders
             Engine.instance.packetHandler.sendToAllAround(new PacketSpawnStream(world.provider.dimensionId, start, end, 0), new NetworkRegistry.TargetPoint(world.provider.dimensionId, start.x(), start.y(), start.z(), 90));
+        }
+    }
+
+    public void playJsonAudio(World world, String audioKey, double x, double y, double z, float pitch, float volume)
+    {
+        if(world != null && !world.isRemote)
+        {
+            PacketAudio packetAudio = new PacketAudio(world, audioKey, x, y, z, pitch, volume);
+            Engine.instance.packetHandler.sendToAllAround(packetAudio, world, x, y, z, 100);
         }
     }
 }

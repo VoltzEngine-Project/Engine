@@ -5,6 +5,8 @@ import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.effects.providers.VEProviderShockWave;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
+import com.builtbroken.mc.client.json.audio.AudioData;
+import com.builtbroken.mc.client.json.audio.AudioJsonProcessor;
 import com.builtbroken.mc.client.json.models.ModelJsonProcessor;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.RenderJsonProcessor;
@@ -70,6 +72,7 @@ public class ClientProxy extends CommonProxy
         JsonContentLoader.INSTANCE.add(new TextureJsonProcessor());
         JsonContentLoader.INSTANCE.add(new ModelJsonProcessor());
         JsonContentLoader.INSTANCE.add(new RenderJsonProcessor());
+        JsonContentLoader.INSTANCE.add(new AudioJsonProcessor());
 
         //Textures have to be loaded in pre-init or will fail
         JsonContentLoader.INSTANCE.process("texture");
@@ -169,6 +172,26 @@ public class ClientProxy extends CommonProxy
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void playJsonAudio(World world, String audioKey, double x, double y, double z, float pitch, float volume)
+    {
+        try
+        {
+            if (audioKey != null)
+            {
+                AudioData data = ClientDataHandler.INSTANCE.getAudio(audioKey);
+                if (data != null)
+                {
+                    data.play(x, y, z, pitch, volume);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Engine.logger().error("Unexpected error while playing audio from Key[" + audioKey + "]", e);
         }
     }
 
