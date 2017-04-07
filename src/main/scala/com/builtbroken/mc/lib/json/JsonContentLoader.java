@@ -169,7 +169,8 @@ public final class JsonContentLoader extends AbstractLoadable
         }
         else
         {
-
+            debug.log("Resource loading is disable, this might be due to testing suits or other reasons");
+            debug.log("JUnit: " + Engine.isJUnitTest());
         }
         debug.end("Done...");
 

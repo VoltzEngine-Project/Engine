@@ -3,6 +3,7 @@ package com.builtbroken.mc.framework.block;
 import com.builtbroken.mc.framework.block.tile.ITileProvider;
 import com.builtbroken.mc.lib.helper.MaterialDict;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
+import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
 import net.minecraft.block.material.Material;
 
@@ -26,7 +27,6 @@ public class BlockPropertyData extends JsonGenData
 
     /** Handles supplying the tile entity for the block */
     public ITileProvider tileEntityProvider;
-
 
 
     //Block data
@@ -60,6 +60,7 @@ public class BlockPropertyData extends JsonGenData
         return material;
     }
 
+    @JsonProcessorData("material")
     public void setMaterial(String matName)
     {
         this.material = MaterialDict.get(matName);
@@ -70,6 +71,7 @@ public class BlockPropertyData extends JsonGenData
         return hardness;
     }
 
+    @JsonProcessorData("hardness")
     public void setHardness(float hardness)
     {
         this.hardness = hardness;
@@ -80,6 +82,7 @@ public class BlockPropertyData extends JsonGenData
         return resistance;
     }
 
+    @JsonProcessorData("resistance")
     public void setResistance(float resistance)
     {
         this.resistance = resistance;
@@ -90,6 +93,7 @@ public class BlockPropertyData extends JsonGenData
         return renderType;
     }
 
+    @JsonProcessorData("renderType")
     public void setRenderType(int renderType)
     {
         this.renderType = renderType;
@@ -100,6 +104,7 @@ public class BlockPropertyData extends JsonGenData
         return color;
     }
 
+    @JsonProcessorData("renderColor")
     public void setColor(int color)
     {
         this.color = color;
@@ -110,6 +115,7 @@ public class BlockPropertyData extends JsonGenData
         return isOpaqueCube;
     }
 
+    @JsonProcessorData("isOpaqueCube")
     public void setOpaqueCube(boolean opaqueCube)
     {
         this.isOpaqueCube = opaqueCube;
@@ -120,6 +126,7 @@ public class BlockPropertyData extends JsonGenData
         return supportsRedstone;
     }
 
+    @JsonProcessorData("supportsRedstone")
     public void setSupportsRedstone(boolean supportsRedstone)
     {
         this.supportsRedstone = supportsRedstone;
@@ -130,6 +137,7 @@ public class BlockPropertyData extends JsonGenData
         return isAlpha;
     }
 
+    @JsonProcessorData("hasAlphaTextures")
     public void setAlpha(boolean alpha)
     {
         isAlpha = alpha;
@@ -140,6 +148,7 @@ public class BlockPropertyData extends JsonGenData
         return lightValue;
     }
 
+    @JsonProcessorData("lightOutput")
     public void setLightValue(int lightValue)
     {
         this.lightValue = lightValue;

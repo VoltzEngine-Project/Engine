@@ -1,13 +1,16 @@
 package com.builtbroken.mc.lib.json.processors.block;
 
+import com.builtbroken.jlib.lang.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.block.BlockPropertyData;
 import com.builtbroken.mc.framework.block.meta.BlockMeta;
 import com.builtbroken.mc.framework.block.meta.MetaData;
+import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.loading.JsonProcessorInjectionMap;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
 import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.google.gson.JsonArray;
@@ -34,21 +37,21 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
     /** Keeps track of json fields that are used for block data directly and can not be used by sub processors */
     public final List<String> blockFields = new ArrayList();
 
+    protected final JsonProcessorInjectionMap keyHandler;
+
+    protected final DebugPrinter debugPrinter;
+
     public JsonBlockProcessor()
     {
+        keyHandler = new JsonProcessorInjectionMap(BlockPropertyData.class);
+        debugPrinter = JsonContentLoader.INSTANCE.debug;
         //Field entries to prevent sub processors firing
         // each entry need to be lower cased to work
+        blockFields.add("id");
         blockFields.add("name");
+        blockFields.add("mod");
         blockFields.add("subtypes");
         blockFields.add("material");
-        blockFields.add("localization");
-        blockFields.add("resistance");
-        blockFields.add("hardness");
-        blockFields.add("renderType");
-        blockFields.add("opaque");
-        blockFields.add("lightOutput");
-        blockFields.add("hasAlphaTextures");
-        blockFields.add("supportsRedstone");
     }
 
     @Override
@@ -72,53 +75,25 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
     @Override
     public boolean process(JsonElement element, List<IJsonGenObject> objectList)
     {
+        debugPrinter.start("BlockProcessor", "Processing entry");
+        //Get object and ensure minimal keys exist
         JsonObject blockData = element.getAsJsonObject();
-        ensureValuesExist(blockData, "name", "material", "id", "mod");
-        BlockBase block;
+        ensureValuesExist(blockData, "name", "id", "mod");
 
+        //Load default data
         String mod = blockData.getAsJsonPrimitive("mod").getAsString();
         String id = blockData.getAsJsonPrimitive("id").getAsString();
         String name = blockData.get("name").getAsString();
-        String material = blockData.get("material").getAsString();
 
+        debugPrinter.log("Name: " + name);
+        debugPrinter.log("Mod: " + mod);
+        debugPrinter.log("ID: " + id);
+
+        //Generate object
         BlockPropertyData blockPropertyData = new BlockPropertyData(this, id, mod, name);
-        blockPropertyData.setMaterial(material);
 
-        if (blockData.has("resistance"))
-        {
-            blockPropertyData.setResistance(blockData.get("resistance").getAsFloat());
-        }
-
-        if (blockData.has("hardness"))
-        {
-            blockPropertyData.setResistance(blockData.get("hardness").getAsFloat());
-        }
-
-        if (blockData.has("renderType"))
-        {
-            blockPropertyData.setRenderType(blockData.get("renderType").getAsInt());
-        }
-
-        if (blockData.has("isOpaqueCube"))
-        {
-            blockPropertyData.setOpaqueCube(blockData.get("isOpaqueCube").getAsBoolean());
-        }
-
-        if (blockData.has("lightOutput"))
-        {
-            blockPropertyData.setLightValue(blockData.get("lightOutput").getAsInt());
-        }
-
-        if (blockData.has("hasAlphaTextures"))
-        {
-            blockPropertyData.setAlpha(blockData.get("hasAlphaTextures").getAsBoolean());
-        }
-
-        if (blockData.has("supportsRedstone"))
-        {
-            blockPropertyData.setSupportsRedstone(blockData.get("supportsRedstone").getAsBoolean());
-        }
-
+        //Load blocks
+        BlockBase block;
         //Meta data loading
         if (blockData.has("subtypes"))
         {
@@ -135,7 +110,14 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         //Call to process extra tags from file
         for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
         {
-            if (!blockFields.contains(entry.getKey().toLowerCase()))
+            if (keyHandler.handle(entry.getKey().toLowerCase(), entry.getValue()))
+            {
+                if (Engine.runningAsDev)
+                {
+                    debugPrinter.log("Injected Key: " + entry.getKey());
+                }
+            }
+            else if (!blockFields.contains(entry.getKey().toLowerCase()))
             {
                 processUnknownEntry(entry.getKey(), entry.getValue(), block, null, objectList);
             }
@@ -143,6 +125,8 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
 
         //Add block to object list
         objectList.add(block);
+
+        debugPrinter.end("Done...");
         return true;
     }
 
