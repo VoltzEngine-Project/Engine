@@ -9,6 +9,7 @@ import com.builtbroken.mc.lib.mod.AbstractProxy;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -88,10 +89,20 @@ public class CommonProxy extends AbstractProxy
 
     public void playJsonAudio(World world, String audioKey, double x, double y, double z, float pitch, float volume)
     {
-        if(world != null && !world.isRemote)
+        if (world != null && !world.isRemote)
         {
             PacketAudio packetAudio = new PacketAudio(world, audioKey, x, y, z, pitch, volume);
             Engine.instance.packetHandler.sendToAllAround(packetAudio, world, x, y, z, 100);
+        }
+    }
+
+    public void playJsonEffect(World world, String key, double x, double y, double z, double mx, double my, double mz, NBTTagCompound nbt)
+    {
+        if (world != null && !world.isRemote)
+        {
+            PacketSpawnParticle packet = new PacketSpawnParticle("JSON_" + key, world.provider.dimensionId, x, y, z, mx, my, mz);
+            packet.otherData = nbt;
+            Engine.instance.packetHandler.sendToAllAround(packet, world, x, y, z, 100);
         }
     }
 }

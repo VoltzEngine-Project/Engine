@@ -1,6 +1,7 @@
 package com.builtbroken.mc.client.json;
 
 import com.builtbroken.mc.client.json.audio.AudioData;
+import com.builtbroken.mc.client.json.effects.EffectData;
 import com.builtbroken.mc.client.json.models.ModelData;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.texture.TextureData;
@@ -24,15 +25,17 @@ public class ClientDataHandler
     public HashMap<String, TextureData> textures = new HashMap();
     /** Render key to render data */
     public HashMap<String, RenderData> renderData = new HashMap();
-    /** Audio key to audio file key */
+    /** Audio key to audio data */
     public HashMap<String, AudioData> audioData = new HashMap();
+    /** Effect key to effect data */
+    public HashMap<String, EffectData> effectData = new HashMap();
 
     /** Global client data handler for Voltz Engine */
     public static final ClientDataHandler INSTANCE = new ClientDataHandler();
 
     public void addTexture(String key, TextureData texture)
     {
-        if (!textures.containsKey(key))
+        if (textures.containsKey(key))
         {
             Engine.logger().error("Overriding " + textures.get(key) + " with " + texture);
         }
@@ -41,7 +44,7 @@ public class ClientDataHandler
 
     public void addModel(String key, ModelData model)
     {
-        if (!models.containsKey(key))
+        if (models.containsKey(key))
         {
             Engine.logger().error("Overriding " + models.get(key) + " with " + model);
         }
@@ -50,7 +53,7 @@ public class ClientDataHandler
 
     public void addRenderData(String key, RenderData data)
     {
-        if (!renderData.containsKey(key))
+        if (renderData.containsKey(key))
         {
             Engine.logger().error("Overriding " + renderData.get(key) + " with " + data);
         }
@@ -59,11 +62,21 @@ public class ClientDataHandler
 
     public void addAudio(String key, AudioData data)
     {
-        if (!audioData.containsKey(key))
+        if (audioData.containsKey(key))
         {
             Engine.logger().error("Overriding " + audioData.get(key) + " with " + data);
         }
         audioData.put(key, data);
+    }
+
+
+    public void addEffect(String key, EffectData data)
+    {
+        if (effectData.containsKey(key))
+        {
+            Engine.logger().error("Overriding " + audioData.get(key) + " with " + data);
+        }
+        effectData.put(key, data);
     }
 
     public RenderData getRenderData(String key)
@@ -100,6 +113,15 @@ public class ClientDataHandler
             return null;
         }
         return audioData.get(key);
+    }
+
+    public EffectData getEffect(String key)
+    {
+        if (key == null || key.isEmpty())
+        {
+            return null;
+        }
+        return effectData.get(key);
     }
 
     @SubscribeEvent

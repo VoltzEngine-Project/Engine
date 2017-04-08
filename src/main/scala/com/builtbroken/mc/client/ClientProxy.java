@@ -7,6 +7,7 @@ import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.audio.AudioData;
 import com.builtbroken.mc.client.json.audio.AudioJsonProcessor;
+import com.builtbroken.mc.client.json.effects.EffectJsonProcessor;
 import com.builtbroken.mc.client.json.models.ModelJsonProcessor;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.RenderJsonProcessor;
@@ -44,6 +45,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
@@ -73,6 +75,7 @@ public class ClientProxy extends CommonProxy
         JsonContentLoader.INSTANCE.add(new ModelJsonProcessor());
         JsonContentLoader.INSTANCE.add(new RenderJsonProcessor());
         JsonContentLoader.INSTANCE.add(new AudioJsonProcessor());
+        JsonContentLoader.INSTANCE.add(new EffectJsonProcessor());
 
         //Textures have to be loaded in pre-init or will fail
         JsonContentLoader.INSTANCE.process("texture");
@@ -178,6 +181,7 @@ public class ClientProxy extends CommonProxy
     @Override
     public void playJsonAudio(World world, String audioKey, double x, double y, double z, float pitch, float volume)
     {
+        super.playJsonAudio(world, audioKey, x, y, z, pitch, volume);
         try
         {
             if (audioKey != null)
@@ -193,6 +197,13 @@ public class ClientProxy extends CommonProxy
         {
             Engine.logger().error("Unexpected error while playing audio from Key[" + audioKey + "]", e);
         }
+    }
+
+    @Override
+    public void playJsonEffect(World world, String key, double x, double y, double z, double mx, double my, double mz, NBTTagCompound nbt)
+    {
+        super.playJsonEffect(world, key, x, y, z, mx, my, mz, nbt);
+        //Handled by packet
     }
 
     @Override

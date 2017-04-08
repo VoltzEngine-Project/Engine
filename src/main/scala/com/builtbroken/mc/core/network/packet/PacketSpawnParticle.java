@@ -3,6 +3,8 @@ package com.builtbroken.mc.core.network.packet;
 
 import com.builtbroken.mc.client.effects.VisualEffectProvider;
 import com.builtbroken.mc.client.effects.VisualEffectRegistry;
+import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.effects.EffectData;
 import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
@@ -81,29 +83,45 @@ public class PacketSpawnParticle extends PacketType
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        try
+        if (player.worldObj.provider.dimensionId == dim)
         {
-            if (name.startsWith("VEP_"))
+            try
             {
-                String key = name.substring(4, name.length());
-                VisualEffectProvider provider = VisualEffectRegistry.main.get(key);
-                if (provider != null)
+                if (name.startsWith("JSON_"))
                 {
-                    provider.displayEffect(player.getEntityWorld(), x, y, z, vx, vy, vz, otherData != null ? otherData : new NBTTagCompound());
+                    String key = name.substring(5, name.length()).toLowerCase();
+                    EffectData data = ClientDataHandler.INSTANCE.getEffect(key);
+                    if (data != null)
+                    {
+                        data.trigger(player.getEntityWorld(), x, y, z, vx, vy, vz, otherData != null ? otherData : new NBTTagCompound());
+                    }
+                    else if (Engine.runningAsDev)
+                    {
+                        Engine.logger().error("Failed to find a effect data for key '" + name + "'");
+                    }
                 }
-                else if (Engine.runningAsDev)
+                else if (name.startsWith("VEP_"))
                 {
-                    Engine.logger().error("Failed to find a visual effect provider for name= " + name + "");
+                    String key = name.substring(4, name.length());
+                    VisualEffectProvider provider = VisualEffectRegistry.main.get(key);
+                    if (provider != null)
+                    {
+                        provider.displayEffect(player.getEntityWorld(), x, y, z, vx, vy, vz, otherData != null ? otherData : new NBTTagCompound());
+                    }
+                    else if (Engine.runningAsDev)
+                    {
+                        Engine.logger().error("Failed to find a visual effect provider for name '" + name + "'");
+                    }
+                }
+                else
+                {
+                    player.worldObj.spawnParticle(name, x, y, z, vx, vy, vz);
                 }
             }
-            else if (player.worldObj.provider.dimensionId == dim)
+            catch (Exception e)
             {
-                player.worldObj.spawnParticle(name, x, y, z, vx, vy, vz);
+                Engine.logger().error("Failed handling particle spawn packet with [name=" + name + ", dim=" + dim + ",pos=" + x + ", " + y + ", " + z + ", Vel=" + vx + ", " + vy + ", " + vz + "]", e);
             }
-        }
-        catch (Exception e)
-        {
-            Engine.logger().error("Failed handling particle spawn packet with [name=" + name + ", dim=" + dim + ",pos=" + x + ", " + y + ", " + z + ", Vel=" + vx + ", " + vy + ", " + vz + "]", e);
         }
     }
 }
