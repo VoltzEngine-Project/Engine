@@ -101,11 +101,7 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                 //Loads position offset
                 if (renderStateObject.has("offset"))
                 {
-                    JsonObject offsetObject = renderStateObject.get("offset").getAsJsonObject();
-                    offset = new Pos(
-                            offsetObject.getAsJsonPrimitive("x").getAsDouble(),
-                            offsetObject.getAsJsonPrimitive("y").getAsDouble(),
-                            offsetObject.getAsJsonPrimitive("z").getAsDouble());
+                    offset = Pos.fromJsonObject(renderStateObject.get("offset").getAsJsonObject());
                 }
 
                 //Loads scale value
@@ -114,11 +110,7 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                     JsonElement scaleElement = renderStateObject.get("scale");
                     if (scaleElement.isJsonObject())
                     {
-                        JsonObject scaleObject = scaleElement.getAsJsonObject();
-                        scale = new Pos(
-                                scaleObject.getAsJsonPrimitive("x").getAsDouble(),
-                                scaleObject.getAsJsonPrimitive("y").getAsDouble(),
-                                scaleObject.getAsJsonPrimitive("z").getAsDouble());
+                        offset = Pos.fromJsonObject(renderStateObject.get("scale").getAsJsonObject());
                     }
                     else if (scaleElement.isJsonPrimitive())
                     {
