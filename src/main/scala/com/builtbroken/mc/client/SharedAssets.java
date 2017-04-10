@@ -30,6 +30,7 @@ public final class SharedAssets
     public static final ResourceLocation GUI__MC_EMPTY_FILE = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "mc_base_empty.png");
     public static final ResourceLocation GUI_MC_BASE = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "mc_base.png");
     public static final ResourceLocation GUI_COMPONENTS = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "gui_components.png");
+    public static final ResourceLocation GUI_COMPONENTS_BARS = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "gui_components.bars.png");
 
 
     private static boolean loaded = false;
