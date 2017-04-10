@@ -1,7 +1,9 @@
 package com.builtbroken.mc.lib.json.loading;
 
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import java.lang.annotation.Annotation;
@@ -127,25 +129,25 @@ public class JsonProcessorInjectionMap<O extends Object>
         }
     }
 
-    public boolean handle(O object, String keyValue, Object value)
+    public boolean handle(O objectToInjection, String keyValue, Object valueToInject)
     {
         final String key = keyValue.toLowerCase();
         if (injectionFields.containsKey(key) || injectionMethods.containsKey(key))
         {
-            if (value instanceof JsonElement)
+            if (valueToInject instanceof JsonElement)
             {
-                if (value instanceof JsonPrimitive)
+                if (valueToInject instanceof JsonPrimitive)
                 {
-                    if (((JsonPrimitive) value).isBoolean())
+                    if (((JsonPrimitive) valueToInject).isBoolean())
                     {
-                        Boolean bool = ((JsonPrimitive) value).getAsBoolean();
+                        Boolean bool = ((JsonPrimitive) valueToInject).getAsBoolean();
                         if (injectionFields.containsKey(key))
                         {
                             Field field = injectionFields.get(key);
                             try
                             {
                                 field.setAccessible(true);
-                                field.setBoolean(object, bool);
+                                field.setBoolean(objectToInjection, bool);
                                 return true;
                             }
                             catch (IllegalAccessException e)
@@ -163,7 +165,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                             try
                             {
                                 method.setAccessible(true);
-                                method.invoke(object, bool);
+                                method.invoke(objectToInjection, bool);
                                 return true;
                             }
                             catch (InvocationTargetException e)
@@ -180,7 +182,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                             }
                         }
                     }
-                    else if (((JsonPrimitive) value).isNumber())
+                    else if (((JsonPrimitive) valueToInject).isNumber())
                     {
                         if (injectionFields.containsKey(key))
                         {
@@ -193,27 +195,27 @@ public class JsonProcessorInjectionMap<O extends Object>
                                 {
                                     if (type.equals("int") || type.equals("integer"))
                                     {
-                                        field.setInt(object, ((JsonPrimitive) value).getAsInt());
+                                        field.setInt(objectToInjection, ((JsonPrimitive) valueToInject).getAsInt());
                                     }
                                     else if (type.equals("byte"))
                                     {
-                                        field.setByte(object, ((JsonPrimitive) value).getAsByte());
+                                        field.setByte(objectToInjection, ((JsonPrimitive) valueToInject).getAsByte());
                                     }
                                     else if (type.equals("short"))
                                     {
-                                        field.setShort(object, ((JsonPrimitive) value).getAsShort());
+                                        field.setShort(objectToInjection, ((JsonPrimitive) valueToInject).getAsShort());
                                     }
                                     else if (type.equals("double"))
                                     {
-                                        field.setDouble(object, ((JsonPrimitive) value).getAsDouble());
+                                        field.setDouble(objectToInjection, ((JsonPrimitive) valueToInject).getAsDouble());
                                     }
                                     else if (type.equals("float"))
                                     {
-                                        field.setFloat(object, ((JsonPrimitive) value).getAsFloat());
+                                        field.setFloat(objectToInjection, ((JsonPrimitive) valueToInject).getAsFloat());
                                     }
                                     else if (type.equals("long"))
                                     {
-                                        field.setLong(object, ((JsonPrimitive) value).getAsLong());
+                                        field.setLong(objectToInjection, ((JsonPrimitive) valueToInject).getAsLong());
                                     }
                                     else
                                     {
@@ -242,27 +244,27 @@ public class JsonProcessorInjectionMap<O extends Object>
                                 {
                                     if (type.equals("int") || type.equals("integer"))
                                     {
-                                        method.invoke(object, ((JsonPrimitive) value).getAsInt());
+                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsInt());
                                     }
                                     else if (type.equals("byte"))
                                     {
-                                        method.invoke(object, ((JsonPrimitive) value).getAsByte());
+                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsByte());
                                     }
                                     else if (type.equals("short"))
                                     {
-                                        method.invoke(object, ((JsonPrimitive) value).getAsShort());
+                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsShort());
                                     }
                                     else if (type.equals("double"))
                                     {
-                                        method.invoke(object, ((JsonPrimitive) value).getAsDouble());
+                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsDouble());
                                     }
                                     else if (type.equals("float"))
                                     {
-                                        method.invoke(object, ((JsonPrimitive) value).getAsFloat());
+                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsFloat());
                                     }
                                     else if (type.equals("long"))
                                     {
-                                        method.invoke(object, ((JsonPrimitive) value).getAsLong());
+                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsLong());
                                     }
                                     else
                                     {
@@ -277,7 +279,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                             }
                             catch (InvocationTargetException e)
                             {
-                                throw new RuntimeException("Failed to invoke method " + method + " with data " + value, e);
+                                throw new RuntimeException("Failed to invoke method " + method + " with data " + valueToInject, e);
                             }
                             catch (IllegalAccessException e)
                             {
@@ -285,10 +287,10 @@ public class JsonProcessorInjectionMap<O extends Object>
                             }
                         }
                     }
-                    else if (((JsonPrimitive) value).isString())
+                    else if (((JsonPrimitive) valueToInject).isString())
                     {
-                        String string = ((JsonPrimitive) value).getAsString();
-                        return handle(object, keyValue, string);
+                        String string = ((JsonPrimitive) valueToInject).getAsString();
+                        return handle(objectToInjection, keyValue, string);
                     }
                 }
                 else
@@ -296,10 +298,26 @@ public class JsonProcessorInjectionMap<O extends Object>
                     if (injectionFields.containsKey(key))
                     {
                         Field field = injectionFields.get(key);
+                        field.setAccessible(true);
                         try
                         {
-                            field.setAccessible(true);
-                            field.set(object, value);
+                            String type = injectionTypes.get(key);
+                            if ("pos".equalsIgnoreCase(type))
+                            {
+                                if (valueToInject instanceof JsonObject)
+                                {
+                                    Pos pos = Pos.fromJsonObject((JsonObject) valueToInject);
+                                    field.set(objectToInjection, pos);
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Field was marked as pos but could not be converted to pos " + field + ", data: " + objectToInjection);
+                                }
+                            }
+                            else
+                            {
+                                field.set(objectToInjection, valueToInject);
+                            }
                             return true;
                         }
                         catch (IllegalAccessException e)
@@ -308,7 +326,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                         }
                         catch (Exception e)
                         {
-                            throw new RuntimeException("Unexpected error setting " + field + " with " + value, e);
+                            throw new RuntimeException("Unexpected error setting " + field + " with " + valueToInject, e);
                         }
                     }
                     else
@@ -317,12 +335,28 @@ public class JsonProcessorInjectionMap<O extends Object>
                         try
                         {
                             method.setAccessible(true);
-                            method.invoke(object, value);
+                            String type = injectionTypes.get(key);
+                            if ("pos".equalsIgnoreCase(type))
+                            {
+                                if (valueToInject instanceof JsonObject)
+                                {
+                                    Pos pos = Pos.fromJsonObject((JsonObject) valueToInject);
+                                    method.invoke(objectToInjection, pos);
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Method was marked as pos but could not be converted to pos " + method + ", data: " + objectToInjection);
+                                }
+                            }
+                            else
+                            {
+                                method.invoke(objectToInjection, valueToInject);
+                            }
                             return true;
                         }
                         catch (InvocationTargetException e)
                         {
-                            throw new RuntimeException("Failed to invoke method " + method + " with data " + value, e);
+                            throw new RuntimeException("Failed to invoke method " + method + " with data " + valueToInject, e);
                         }
                         catch (IllegalAccessException e)
                         {
@@ -330,12 +364,12 @@ public class JsonProcessorInjectionMap<O extends Object>
                         }
                         catch (Exception e)
                         {
-                            throw new RuntimeException("Unexpected error invoking " + method + " with " + value, e);
+                            throw new RuntimeException("Unexpected error invoking " + method + " with " + valueToInject, e);
                         }
                     }
                 }
             }
-            else if (value instanceof String)
+            else if (valueToInject instanceof String)
             {
                 if (injectionFields.containsKey(key))
                 {
@@ -343,7 +377,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                     try
                     {
                         field.setAccessible(true);
-                        field.set(object, value);
+                        field.set(objectToInjection, valueToInject);
                         return true;
                     }
                     catch (IllegalAccessException e)
@@ -352,7 +386,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                     }
                     catch (Exception e)
                     {
-                        throw new RuntimeException("Unexpected error setting " + field + " with " + value, e);
+                        throw new RuntimeException("Unexpected error setting " + field + " with " + valueToInject, e);
                     }
                 }
                 else
@@ -361,12 +395,12 @@ public class JsonProcessorInjectionMap<O extends Object>
                     try
                     {
                         method.setAccessible(true);
-                        method.invoke(object, value);
+                        method.invoke(objectToInjection, valueToInject);
                         return true;
                     }
                     catch (InvocationTargetException e)
                     {
-                        throw new RuntimeException("Failed to invoke method " + method + " with data " + value, e);
+                        throw new RuntimeException("Failed to invoke method " + method + " with data " + valueToInject, e);
                     }
                     catch (IllegalAccessException e)
                     {
@@ -374,7 +408,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                     }
                     catch (Exception e)
                     {
-                        throw new RuntimeException("Unexpected error invoking " + method + " with " + value, e);
+                        throw new RuntimeException("Unexpected error invoking " + method + " with " + valueToInject, e);
                     }
                 }
             }
@@ -384,7 +418,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                 try
                 {
                     field.setAccessible(true);
-                    field.set(object, value);
+                    field.set(objectToInjection, valueToInject);
                     return true;
                 }
                 catch (IllegalAccessException e)
@@ -393,7 +427,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                 }
                 catch (Exception e)
                 {
-                    throw new RuntimeException("Unexpected error setting " + field + " with " + value, e);
+                    throw new RuntimeException("Unexpected error setting " + field + " with " + valueToInject, e);
                 }
             }
             else
@@ -402,12 +436,12 @@ public class JsonProcessorInjectionMap<O extends Object>
                 try
                 {
                     method.setAccessible(true);
-                    method.invoke(object, value);
+                    method.invoke(objectToInjection, valueToInject);
                     return true;
                 }
                 catch (InvocationTargetException e)
                 {
-                    throw new RuntimeException("Failed to invoke method " + method + " with data " + value, e);
+                    throw new RuntimeException("Failed to invoke method " + method + " with data " + valueToInject, e);
                 }
                 catch (IllegalAccessException e)
                 {
@@ -415,7 +449,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                 }
                 catch (Exception e)
                 {
-                    throw new RuntimeException("Unexpected error invoking " + method + " with " + value, e);
+                    throw new RuntimeException("Unexpected error invoking " + method + " with " + valueToInject, e);
                 }
             }
         }

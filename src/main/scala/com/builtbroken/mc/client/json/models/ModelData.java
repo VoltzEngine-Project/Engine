@@ -1,11 +1,15 @@
 package com.builtbroken.mc.client.json.models;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import com.builtbroken.mc.lib.render.RenderUtility;
 import com.builtbroken.mc.lib.render.model.loader.EngineModelLoader;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
+
+import java.awt.*;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -17,6 +21,10 @@ public class ModelData extends JsonGenData
     String domain;
     String name;
     IModelCustom model;
+
+    private boolean errorLock = false;
+    private int errors = 0;
+    private long lastError;
 
     public ModelData(IJsonProcessor processor, String key, String domain, String name)
     {
@@ -37,13 +45,43 @@ public class ModelData extends JsonGenData
 
     public void render(String... parts)
     {
-        if (parts != null)
+        if (!errorLock)
         {
-            model.renderOnly(parts);
+            try
+            {
+                if (parts != null)
+                {
+                    model.renderOnly(parts);
+                }
+                else
+                {
+                    model.renderAll();
+                }
+            }
+            catch (Exception e)
+            {
+                //TODO implement model reload to fix errors
+                Engine.logger().error("Failed to render model " + this);
+
+                //Tick to disable
+                long time = System.nanoTime();
+                if (time - lastError > 10000)
+                {
+                    lastError = time;
+                    if (errors++ >= 5)
+                    {
+                        errorLock = true;
+                    }
+                }
+                else
+                {
+                    errors = 0;
+                }
+            }
         }
-        else
+        else if(Engine.runningAsDev)
         {
-            model.renderAll();
+            RenderUtility.renderFloatingText("ErrorLocked: " + this, 0, 0, 0, Color.red.getRGB());
         }
     }
 
@@ -51,5 +89,11 @@ public class ModelData extends JsonGenData
     public void register()
     {
         ClientDataHandler.INSTANCE.addModel(key, this);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ModelData[" + key + " >> " + domain + ":" + name + " >> " + model + "]@" + hashCode();
     }
 }
