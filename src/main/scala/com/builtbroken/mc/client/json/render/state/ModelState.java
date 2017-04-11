@@ -111,18 +111,45 @@ public class ModelState extends TextureState implements IModelState
     @Override
     public Pos getScale()
     {
+        if (scale == null)
+        {
+            return parentState instanceof IModelState ? ((IModelState) parentState).getScale() : null;
+        }
+        else if (parentState instanceof IModelState)
+        {
+            //TODO add to parent rotation, or null out rotation
+            //TODO setup logic via configs to allow users to decide how rotation is used
+        }
         return scale;
     }
 
     @Override
     public Pos getOffset()
     {
+        if (offset == null)
+        {
+            return parentState instanceof IModelState ? ((IModelState) parentState).getOffset() : null;
+        }
+        else if (parentState instanceof IModelState)
+        {
+            //TODO add to parent rotation, or null out rotation
+            //TODO setup logic via configs to allow users to decide how rotation is used
+        }
         return offset;
     }
 
     @Override
     public EulerAngle getRotation()
     {
+        if (rotation == null)
+        {
+            return parentState instanceof IModelState ? ((IModelState) parentState).getRotation() : null;
+        }
+        else if (parentState instanceof IModelState)
+        {
+            //TODO add to parent rotation, or null out rotation
+            //TODO setup logic via configs to allow users to decide how rotation is used
+        }
         return rotation;
     }
 
