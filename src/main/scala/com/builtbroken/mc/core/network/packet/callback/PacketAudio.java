@@ -64,7 +64,7 @@ public class PacketAudio extends AbstractPacket
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        if (Minecraft.getMinecraft().theWorld.provider.dimensionId == dim)
+        if (Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.provider != null && Minecraft.getMinecraft().theWorld.provider.dimensionId == dim)
         {
             Engine.proxy.playJsonAudio(Minecraft.getMinecraft().theWorld, audioKey, x, y, z, pitch, volume);
         }
