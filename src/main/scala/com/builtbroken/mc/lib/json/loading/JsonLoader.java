@@ -1,5 +1,7 @@
 package com.builtbroken.mc.lib.json.loading;
 
+import com.builtbroken.mc.lib.json.conversion.JsonConverter;
+import com.builtbroken.mc.lib.json.conversion.JsonConverterPos;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -21,6 +23,14 @@ import java.util.Map;
  */
 public class JsonLoader
 {
+    /** Map of types to json data converts */
+    public static final HashMap<String, JsonConverter> conversionHandlers = new HashMap();
+
+    static
+    {
+        conversionHandlers.put("pos", new JsonConverterPos());
+    }
+
     /**
      * Loads a json file from the resource path
      *

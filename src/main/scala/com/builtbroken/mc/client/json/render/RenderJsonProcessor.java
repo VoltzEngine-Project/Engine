@@ -10,6 +10,7 @@ import com.builtbroken.mc.client.json.render.tile.TileState;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import com.builtbroken.mc.lib.json.conversion.JsonConverterPos;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -101,24 +102,20 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                 //Loads position offset
                 if (renderStateObject.has("offset"))
                 {
-                    offset = Pos.fromJsonObject(renderStateObject.get("offset").getAsJsonObject());
+                    offset = JsonConverterPos.fromJson(renderStateObject.get("offset"));
+                    if (scale == null)
+                    {
+                        throw new IllegalArgumentException("Unknown value type for offset " + renderStateObject.get("offset"));
+                    }
                 }
 
                 //Loads scale value
                 if (renderStateObject.has("scale"))
                 {
-                    JsonElement scaleElement = renderStateObject.get("scale");
-                    if (scaleElement.isJsonObject())
+                    scale = JsonConverterPos.fromJson(renderStateObject.get("scale"));
+                    if (scale == null)
                     {
-                        offset = Pos.fromJsonObject(renderStateObject.get("scale").getAsJsonObject());
-                    }
-                    else if (scaleElement.isJsonPrimitive())
-                    {
-                        scale = new Pos(scaleElement.getAsDouble());
-                    }
-                    else
-                    {
-                        throw new IllegalArgumentException("Unknown value type for scale " + scaleElement);
+                        throw new IllegalArgumentException("Unknown value type for scale " + renderStateObject.get("scale"));
                     }
                 }
 
@@ -130,17 +127,17 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                     double pitch = 0;
                     double roll = 0;
 
-                    if(rotationObject.has("yaw"))
+                    if (rotationObject.has("yaw"))
                     {
                         yaw = rotationObject.getAsJsonPrimitive("yaw").getAsDouble();
                     }
 
-                    if(rotationObject.has("pitch"))
+                    if (rotationObject.has("pitch"))
                     {
                         pitch = rotationObject.getAsJsonPrimitive("pitch").getAsDouble();
                     }
 
-                    if(rotationObject.has("roll"))
+                    if (rotationObject.has("roll"))
                     {
                         roll = rotationObject.getAsJsonPrimitive("roll").getAsDouble();
                     }

@@ -1,9 +1,8 @@
 package com.builtbroken.mc.lib.json.loading;
 
-import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
+import com.builtbroken.mc.lib.json.conversion.JsonConverter;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import java.lang.annotation.Annotation;
@@ -131,8 +130,8 @@ public class JsonProcessorInjectionMap<O extends Object>
 
     public boolean handle(O objectToInjection, String keyValue, Object valueToInject)
     {
-        final String key = keyValue.toLowerCase();
-        if (injectionFields.containsKey(key) || injectionMethods.containsKey(key))
+        final String injectionKeyID = keyValue.toLowerCase();
+        if (injectionFields.containsKey(injectionKeyID) || injectionMethods.containsKey(injectionKeyID))
         {
             if (valueToInject instanceof JsonElement)
             {
@@ -141,9 +140,9 @@ public class JsonProcessorInjectionMap<O extends Object>
                     if (((JsonPrimitive) valueToInject).isBoolean())
                     {
                         Boolean bool = ((JsonPrimitive) valueToInject).getAsBoolean();
-                        if (injectionFields.containsKey(key))
+                        if (injectionFields.containsKey(injectionKeyID))
                         {
-                            Field field = injectionFields.get(key);
+                            Field field = injectionFields.get(injectionKeyID);
                             try
                             {
                                 field.setAccessible(true);
@@ -161,7 +160,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                         }
                         else
                         {
-                            Method method = injectionMethods.get(key);
+                            Method method = injectionMethods.get(injectionKeyID);
                             try
                             {
                                 method.setAccessible(true);
@@ -184,13 +183,13 @@ public class JsonProcessorInjectionMap<O extends Object>
                     }
                     else if (((JsonPrimitive) valueToInject).isNumber())
                     {
-                        if (injectionFields.containsKey(key))
+                        if (injectionFields.containsKey(injectionKeyID))
                         {
-                            Field field = injectionFields.get(key);
+                            Field field = injectionFields.get(injectionKeyID);
                             try
                             {
                                 field.setAccessible(true);
-                                String type = injectionTypes.get(key);
+                                String type = injectionTypes.get(injectionKeyID);
                                 if (type != null)
                                 {
                                     if (type.equals("int") || type.equals("integer"))
@@ -235,11 +234,11 @@ public class JsonProcessorInjectionMap<O extends Object>
                         }
                         else
                         {
-                            Method method = injectionMethods.get(key);
+                            Method method = injectionMethods.get(injectionKeyID);
                             try
                             {
                                 method.setAccessible(true);
-                                String type = injectionTypes.get(key);
+                                String type = injectionTypes.get(injectionKeyID);
                                 if (type != null)
                                 {
                                     if (type.equals("int") || type.equals("integer"))
@@ -295,23 +294,31 @@ public class JsonProcessorInjectionMap<O extends Object>
                 }
                 else
                 {
-                    if (injectionFields.containsKey(key))
+                    if (injectionFields.containsKey(injectionKeyID))
                     {
-                        Field field = injectionFields.get(key);
+                        Field field = injectionFields.get(injectionKeyID);
                         field.setAccessible(true);
                         try
                         {
-                            String type = injectionTypes.get(key);
-                            if ("pos".equalsIgnoreCase(type))
+                            String type = injectionTypes.get(injectionKeyID);
+                            if (type != null && JsonLoader.conversionHandlers.containsKey(type.toLowerCase()))
                             {
-                                if (valueToInject instanceof JsonObject)
+                                JsonConverter converter = JsonLoader.conversionHandlers.get(type.toLowerCase());
+                                if (converter != null)
                                 {
-                                    Pos pos = Pos.fromJsonObject((JsonObject) valueToInject);
-                                    field.set(objectToInjection, pos);
+                                    Object conversion = converter.convert((JsonElement) valueToInject);
+                                    if (conversion != null)
+                                    {
+                                        field.set(objectToInjection, conversion);
+                                    }
+                                    else
+                                    {
+                                        throw new IllegalArgumentException("Field was marked as type[" + type + "] but could not be converted to inject into " + field + ", data: " + objectToInjection);
+                                    }
                                 }
                                 else
                                 {
-                                    throw new IllegalArgumentException("Field was marked as pos but could not be converted to pos " + field + ", data: " + objectToInjection);
+                                    throw new IllegalArgumentException("Field was marked as type[" + type + "] but a converter could not be found to use with " + field + ", data: " + objectToInjection);
                                 }
                             }
                             else
@@ -331,21 +338,29 @@ public class JsonProcessorInjectionMap<O extends Object>
                     }
                     else
                     {
-                        Method method = injectionMethods.get(key);
+                        Method method = injectionMethods.get(injectionKeyID);
                         try
                         {
                             method.setAccessible(true);
-                            String type = injectionTypes.get(key);
-                            if ("pos".equalsIgnoreCase(type))
+                            String type = injectionTypes.get(injectionKeyID);
+                            if (type != null && JsonLoader.conversionHandlers.containsKey(type.toLowerCase()))
                             {
-                                if (valueToInject instanceof JsonObject)
+                                JsonConverter converter = JsonLoader.conversionHandlers.get(type.toLowerCase());
+                                if (converter != null)
                                 {
-                                    Pos pos = Pos.fromJsonObject((JsonObject) valueToInject);
-                                    method.invoke(objectToInjection, pos);
+                                    Object conversion = converter.convert((JsonElement) valueToInject);
+                                    if (conversion != null)
+                                    {
+                                        method.invoke(objectToInjection, conversion);
+                                    }
+                                    else
+                                    {
+                                        throw new IllegalArgumentException("Method was marked as type[" + type + "] but could not be converted to inject into " + method + ", data: " + objectToInjection);
+                                    }
                                 }
                                 else
                                 {
-                                    throw new IllegalArgumentException("Method was marked as pos but could not be converted to pos " + method + ", data: " + objectToInjection);
+                                    throw new IllegalArgumentException("Method was marked as type[" + type + "] but a converter could not be found to use with " + method + ", data: " + objectToInjection);
                                 }
                             }
                             else
@@ -371,9 +386,9 @@ public class JsonProcessorInjectionMap<O extends Object>
             }
             else if (valueToInject instanceof String)
             {
-                if (injectionFields.containsKey(key))
+                if (injectionFields.containsKey(injectionKeyID))
                 {
-                    Field field = injectionFields.get(key);
+                    Field field = injectionFields.get(injectionKeyID);
                     try
                     {
                         field.setAccessible(true);
@@ -391,7 +406,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                 }
                 else
                 {
-                    Method method = injectionMethods.get(key);
+                    Method method = injectionMethods.get(injectionKeyID);
                     try
                     {
                         method.setAccessible(true);
@@ -412,9 +427,9 @@ public class JsonProcessorInjectionMap<O extends Object>
                     }
                 }
             }
-            else if (injectionFields.containsKey(key))
+            else if (injectionFields.containsKey(injectionKeyID))
             {
-                Field field = injectionFields.get(key);
+                Field field = injectionFields.get(injectionKeyID);
                 try
                 {
                     field.setAccessible(true);
@@ -432,7 +447,7 @@ public class JsonProcessorInjectionMap<O extends Object>
             }
             else
             {
-                Method method = injectionMethods.get(key);
+                Method method = injectionMethods.get(injectionKeyID);
                 try
                 {
                     method.setAccessible(true);
