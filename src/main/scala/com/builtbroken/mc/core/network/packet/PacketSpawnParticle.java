@@ -28,6 +28,8 @@ public class PacketSpawnParticle extends PacketType
     public double vz;
     public NBTTagCompound otherData;
 
+    public boolean endPoint = false;
+
     public PacketSpawnParticle()
     {
         //Needed for forge to construct the packet
@@ -56,6 +58,7 @@ public class PacketSpawnParticle extends PacketType
         buffer.writeDouble(vx);
         buffer.writeDouble(vy);
         buffer.writeDouble(vz);
+        buffer.writeBoolean(endPoint);
         buffer.writeBoolean(otherData != null);
         if (otherData != null)
         {
@@ -74,6 +77,7 @@ public class PacketSpawnParticle extends PacketType
         vx = buffer.readDouble();
         vy = buffer.readDouble();
         vz = buffer.readDouble();
+        endPoint = buffer.readBoolean();
         if (buffer.readBoolean())
         {
             otherData = ByteBufUtils.readTag(buffer);
@@ -93,7 +97,7 @@ public class PacketSpawnParticle extends PacketType
                     EffectData data = ClientDataHandler.INSTANCE.getEffect(key);
                     if (data != null)
                     {
-                        data.trigger(player.getEntityWorld(), x, y, z, vx, vy, vz, otherData != null ? otherData : new NBTTagCompound());
+                        data.trigger(player.getEntityWorld(), x, y, z, vx, vy, vz, endPoint, otherData != null ? otherData : new NBTTagCompound());
                     }
                     else if (Engine.runningAsDev)
                     {
@@ -106,7 +110,7 @@ public class PacketSpawnParticle extends PacketType
                     VisualEffectProvider provider = VisualEffectRegistry.main.get(key);
                     if (provider != null)
                     {
-                        provider.displayEffect(player.getEntityWorld(), x, y, z, vx, vy, vz, otherData != null ? otherData : new NBTTagCompound());
+                        provider.displayEffect(player.getEntityWorld(), x, y, z, vx, vy, vz, endPoint, otherData != null ? otherData : new NBTTagCompound());
                     }
                     else if (Engine.runningAsDev)
                     {

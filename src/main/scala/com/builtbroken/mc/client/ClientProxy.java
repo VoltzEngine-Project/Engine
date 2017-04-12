@@ -2,6 +2,7 @@ package com.builtbroken.mc.client;
 
 import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
 import com.builtbroken.mc.client.effects.VisualEffectRegistry;
+import com.builtbroken.mc.client.effects.providers.VEProviderLaserBeam;
 import com.builtbroken.mc.client.effects.providers.VEProviderShockWave;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
@@ -87,6 +88,7 @@ public class ClientProxy extends CommonProxy
         ExplosiveRegistryClient.registerIcon(new ItemStack(Blocks.tnt), References.PREFIX + "ex.icon.tnt");
 
         VisualEffectRegistry.addEffectProvider(new VEProviderShockWave());
+        VisualEffectRegistry.addEffectProvider(new VEProviderLaserBeam());
     }
 
     @Override
@@ -200,9 +202,9 @@ public class ClientProxy extends CommonProxy
     }
 
     @Override
-    public void playJsonEffect(World world, String key, double x, double y, double z, double mx, double my, double mz, NBTTagCompound nbt)
+    public void playJsonEffect(World world, String key, double x, double y, double z, double mx, double my, double mz, boolean endPoint, NBTTagCompound nbt)
     {
-        super.playJsonEffect(world, key, x, y, z, mx, my, mz, nbt);
+        super.playJsonEffect(world, key, x, y, z, mx, my, mz, endPoint, nbt);
         //Handled by packet
     }
 

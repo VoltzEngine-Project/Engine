@@ -1,5 +1,6 @@
 package com.builtbroken.mc.client.effects;
 
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -16,6 +17,22 @@ public abstract class VisualEffectProvider
     public VisualEffectProvider(String name)
     {
         this.name = name;
+    }
+
+    public void displayEffect(World world, double x, double y, double z, double mx, double my, double mz, boolean movementIsEndpoint, NBTTagCompound otherData)
+    {
+        if (movementIsEndpoint)
+        {
+            Pos pos = new Pos(mx, my, mz).sub(x, y, z).normalize();
+            if (otherData.hasKey("vel"))
+            {
+                pos = pos.multiply(otherData.getFloat("vel"));
+            }
+            mx = pos.x();
+            my = pos.y();
+            mz = pos.z();
+        }
+        displayEffect(world, x, y, z, mx, my, mz, otherData);
     }
 
     public void displayEffect(World world, double x, double y, double z, double mx, double my, double mz, NBTTagCompound otherData)

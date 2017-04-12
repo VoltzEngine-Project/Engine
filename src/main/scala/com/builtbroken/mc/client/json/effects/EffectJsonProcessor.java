@@ -41,6 +41,11 @@ public class EffectJsonProcessor extends JsonProcessor<EffectData>
         String effectID = object.get("effectID").getAsString();
         String key = object.get("key").getAsString().toLowerCase();
 
-        return new EffectData(this, key, effectID, new NBTTagCompound());
+        EffectData data = new EffectData(this, key, effectID, new NBTTagCompound());
+        if (object.has("useEndpoint"))
+        {
+            data.useEndPointForVelocity = object.get("useEndpoint").getAsBoolean();
+        }
+        return data;
     }
 }

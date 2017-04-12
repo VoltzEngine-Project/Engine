@@ -96,12 +96,13 @@ public class CommonProxy extends AbstractProxy
         }
     }
 
-    public void playJsonEffect(World world, String key, double x, double y, double z, double mx, double my, double mz, NBTTagCompound nbt)
+    public void playJsonEffect(World world, String key, double x, double y, double z, double mx, double my, double mz, boolean endPoint, NBTTagCompound nbt)
     {
         if (world != null && !world.isRemote)
         {
             PacketSpawnParticle packet = new PacketSpawnParticle("JSON_" + key, world.provider.dimensionId, x, y, z, mx, my, mz);
             packet.otherData = nbt;
+            packet.endPoint = endPoint;
             Engine.instance.packetHandler.sendToAllAround(packet, world, x, y, z, 100);
         }
     }

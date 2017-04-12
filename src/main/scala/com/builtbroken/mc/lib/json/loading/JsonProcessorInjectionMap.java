@@ -130,106 +130,216 @@ public class JsonProcessorInjectionMap<O extends Object>
 
     public boolean handle(O objectToInjection, String keyValue, Object valueToInject)
     {
-        final String injectionKeyID = keyValue.toLowerCase();
-        if (injectionFields.containsKey(injectionKeyID) || injectionMethods.containsKey(injectionKeyID))
+        try
         {
-            if (valueToInject instanceof JsonElement)
+            final String injectionKeyID = keyValue.toLowerCase();
+            if (injectionFields.containsKey(injectionKeyID) || injectionMethods.containsKey(injectionKeyID))
             {
-                if (valueToInject instanceof JsonPrimitive)
+                if (valueToInject instanceof JsonElement)
                 {
-                    if (((JsonPrimitive) valueToInject).isBoolean())
+                    if (valueToInject instanceof JsonPrimitive)
                     {
-                        Boolean bool = ((JsonPrimitive) valueToInject).getAsBoolean();
-                        if (injectionFields.containsKey(injectionKeyID))
+                        if (((JsonPrimitive) valueToInject).isBoolean())
                         {
-                            Field field = injectionFields.get(injectionKeyID);
-                            try
+                            Boolean bool = ((JsonPrimitive) valueToInject).getAsBoolean();
+                            if (injectionFields.containsKey(injectionKeyID))
                             {
-                                field.setAccessible(true);
-                                field.setBoolean(objectToInjection, bool);
-                                return true;
+                                Field field = injectionFields.get(injectionKeyID);
+                                try
+                                {
+                                    field.setAccessible(true);
+                                    field.setBoolean(objectToInjection, bool);
+                                    return true;
+                                }
+                                catch (IllegalAccessException e)
+                                {
+                                    throw new RuntimeException("Failed to access field " + field, e);
+                                }
+                                catch (Exception e)
+                                {
+                                    throw new RuntimeException("Unexpected error setting " + field + " with " + bool, e);
+                                }
                             }
-                            catch (IllegalAccessException e)
+                            else
                             {
-                                throw new RuntimeException("Failed to access field " + field, e);
-                            }
-                            catch (Exception e)
-                            {
-                                throw new RuntimeException("Unexpected error setting " + field + " with " + bool, e);
+                                Method method = injectionMethods.get(injectionKeyID);
+                                try
+                                {
+                                    method.setAccessible(true);
+                                    method.invoke(objectToInjection, bool);
+                                    return true;
+                                }
+                                catch (InvocationTargetException e)
+                                {
+                                    throw new RuntimeException("Failed to invoke method " + method + " with data " + bool, e);
+                                }
+                                catch (IllegalAccessException e)
+                                {
+                                    throw new RuntimeException("Failed to access method " + method, e);
+                                }
+                                catch (Exception e)
+                                {
+                                    throw new RuntimeException("Unexpected error invoking " + method + " with " + bool, e);
+                                }
                             }
                         }
-                        else
+                        else if (((JsonPrimitive) valueToInject).isNumber())
                         {
-                            Method method = injectionMethods.get(injectionKeyID);
-                            try
+                            if (injectionFields.containsKey(injectionKeyID))
                             {
-                                method.setAccessible(true);
-                                method.invoke(objectToInjection, bool);
-                                return true;
+                                Field field = injectionFields.get(injectionKeyID);
+                                try
+                                {
+                                    field.setAccessible(true);
+                                    String type = injectionTypes.get(injectionKeyID);
+                                    if (type != null)
+                                    {
+                                        if (type.equals("int") || type.equals("integer"))
+                                        {
+                                            field.setInt(objectToInjection, ((JsonPrimitive) valueToInject).getAsInt());
+                                        }
+                                        else if (type.equals("byte"))
+                                        {
+                                            field.setByte(objectToInjection, ((JsonPrimitive) valueToInject).getAsByte());
+                                        }
+                                        else if (type.equals("short"))
+                                        {
+                                            field.setShort(objectToInjection, ((JsonPrimitive) valueToInject).getAsShort());
+                                        }
+                                        else if (type.equals("double"))
+                                        {
+                                            field.setDouble(objectToInjection, ((JsonPrimitive) valueToInject).getAsDouble());
+                                        }
+                                        else if (type.equals("float"))
+                                        {
+                                            field.setFloat(objectToInjection, ((JsonPrimitive) valueToInject).getAsFloat());
+                                        }
+                                        else if (type.equals("long"))
+                                        {
+                                            field.setLong(objectToInjection, ((JsonPrimitive) valueToInject).getAsLong());
+                                        }
+                                        else
+                                        {
+                                            throw new RuntimeException("Unknown number type for " + field);
+                                        }
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        throw new RuntimeException("Failed to get number type for " + field);
+                                    }
+                                }
+                                catch (IllegalAccessException e)
+                                {
+                                    throw new RuntimeException("Failed to access field " + field, e);
+                                }
                             }
-                            catch (InvocationTargetException e)
+                            else
                             {
-                                throw new RuntimeException("Failed to invoke method " + method + " with data " + bool, e);
+                                Method method = injectionMethods.get(injectionKeyID);
+                                try
+                                {
+                                    method.setAccessible(true);
+                                    String type = injectionTypes.get(injectionKeyID);
+                                    if (type != null)
+                                    {
+                                        if (type.equals("int") || type.equals("integer"))
+                                        {
+                                            method.invoke(objectToInjection, (int) ((JsonPrimitive) valueToInject).getAsInt());
+                                        }
+                                        else if (type.equals("byte"))
+                                        {
+                                            method.invoke(objectToInjection, (byte) ((JsonPrimitive) valueToInject).getAsByte());
+                                        }
+                                        else if (type.equals("short"))
+                                        {
+                                            method.invoke(objectToInjection, (short) ((JsonPrimitive) valueToInject).getAsShort());
+                                        }
+                                        else if (type.equals("double"))
+                                        {
+                                            method.invoke(objectToInjection, (double) ((JsonPrimitive) valueToInject).getAsDouble());
+                                        }
+                                        else if (type.equals("float"))
+                                        {
+                                            method.invoke(objectToInjection, (float) ((JsonPrimitive) valueToInject).getAsFloat());
+                                        }
+                                        else if (type.equals("long"))
+                                        {
+                                            method.invoke(objectToInjection, (long) ((JsonPrimitive) valueToInject).getAsLong());
+                                        }
+                                        else
+                                        {
+                                            throw new RuntimeException("Unknown number type " + type);
+                                        }
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        throw new RuntimeException("Failed to get type");
+                                    }
+                                }
+                                catch (InvocationTargetException e)
+                                {
+                                    throw new RuntimeException("Failed to invoke method " + method + " with data " + valueToInject, e);
+                                }
+                                catch (IllegalAccessException e)
+                                {
+                                    throw new RuntimeException("Failed to access method " + method, e);
+                                }
+                                catch (Exception e)
+                                {
+                                    throw new RuntimeException("Error injecting " + valueToInject + " into method " + method, e);
+                                }
                             }
-                            catch (IllegalAccessException e)
-                            {
-                                throw new RuntimeException("Failed to access method " + method, e);
-                            }
-                            catch (Exception e)
-                            {
-                                throw new RuntimeException("Unexpected error invoking " + method + " with " + bool, e);
-                            }
+                        }
+                        else if (((JsonPrimitive) valueToInject).isString())
+                        {
+                            String string = ((JsonPrimitive) valueToInject).getAsString();
+                            return handle(objectToInjection, keyValue, string);
                         }
                     }
-                    else if (((JsonPrimitive) valueToInject).isNumber())
+                    else
                     {
                         if (injectionFields.containsKey(injectionKeyID))
                         {
                             Field field = injectionFields.get(injectionKeyID);
+                            field.setAccessible(true);
                             try
                             {
-                                field.setAccessible(true);
                                 String type = injectionTypes.get(injectionKeyID);
-                                if (type != null)
+                                if (type != null && JsonLoader.conversionHandlers.containsKey(type.toLowerCase()))
                                 {
-                                    if (type.equals("int") || type.equals("integer"))
+                                    JsonConverter converter = JsonLoader.conversionHandlers.get(type.toLowerCase());
+                                    if (converter != null)
                                     {
-                                        field.setInt(objectToInjection, ((JsonPrimitive) valueToInject).getAsInt());
-                                    }
-                                    else if (type.equals("byte"))
-                                    {
-                                        field.setByte(objectToInjection, ((JsonPrimitive) valueToInject).getAsByte());
-                                    }
-                                    else if (type.equals("short"))
-                                    {
-                                        field.setShort(objectToInjection, ((JsonPrimitive) valueToInject).getAsShort());
-                                    }
-                                    else if (type.equals("double"))
-                                    {
-                                        field.setDouble(objectToInjection, ((JsonPrimitive) valueToInject).getAsDouble());
-                                    }
-                                    else if (type.equals("float"))
-                                    {
-                                        field.setFloat(objectToInjection, ((JsonPrimitive) valueToInject).getAsFloat());
-                                    }
-                                    else if (type.equals("long"))
-                                    {
-                                        field.setLong(objectToInjection, ((JsonPrimitive) valueToInject).getAsLong());
+                                        Object conversion = converter.convert((JsonElement) valueToInject);
+                                        if (conversion != null)
+                                        {
+                                            field.set(objectToInjection, conversion);
+                                        }
+                                        else
+                                        {
+                                            throw new IllegalArgumentException("Field was marked as type[" + type + "] but could not be converted to inject into " + field + ", data: " + objectToInjection);
+                                        }
                                     }
                                     else
                                     {
-                                        throw new RuntimeException("Unknown number type for " + field);
+                                        throw new IllegalArgumentException("Field was marked as type[" + type + "] but a converter could not be found to use with " + field + ", data: " + objectToInjection);
                                     }
-                                    return true;
                                 }
                                 else
                                 {
-                                    throw new RuntimeException("Failed to get number type for " + field);
+                                    field.set(objectToInjection, valueToInject);
                                 }
+                                return true;
                             }
                             catch (IllegalAccessException e)
                             {
                                 throw new RuntimeException("Failed to access field " + field, e);
+                            }
+                            catch (Exception e)
+                            {
+                                throw new RuntimeException("Unexpected error setting " + field + " with " + valueToInject, e);
                             }
                         }
                         else
@@ -239,42 +349,31 @@ public class JsonProcessorInjectionMap<O extends Object>
                             {
                                 method.setAccessible(true);
                                 String type = injectionTypes.get(injectionKeyID);
-                                if (type != null)
+                                if (type != null && JsonLoader.conversionHandlers.containsKey(type.toLowerCase()))
                                 {
-                                    if (type.equals("int") || type.equals("integer"))
+                                    JsonConverter converter = JsonLoader.conversionHandlers.get(type.toLowerCase());
+                                    if (converter != null)
                                     {
-                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsInt());
-                                    }
-                                    else if (type.equals("byte"))
-                                    {
-                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsByte());
-                                    }
-                                    else if (type.equals("short"))
-                                    {
-                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsShort());
-                                    }
-                                    else if (type.equals("double"))
-                                    {
-                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsDouble());
-                                    }
-                                    else if (type.equals("float"))
-                                    {
-                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsFloat());
-                                    }
-                                    else if (type.equals("long"))
-                                    {
-                                        method.invoke(objectToInjection, ((JsonPrimitive) valueToInject).getAsLong());
+                                        Object conversion = converter.convert((JsonElement) valueToInject);
+                                        if (conversion != null)
+                                        {
+                                            method.invoke(objectToInjection, conversion);
+                                        }
+                                        else
+                                        {
+                                            throw new IllegalArgumentException("Method was marked as type[" + type + "] but could not be converted to inject into " + method + ", data: " + objectToInjection);
+                                        }
                                     }
                                     else
                                     {
-                                        throw new RuntimeException("Unknown number type for " + method);
+                                        throw new IllegalArgumentException("Method was marked as type[" + type + "] but a converter could not be found to use with " + method + ", data: " + objectToInjection);
                                     }
-                                    return true;
                                 }
                                 else
                                 {
-                                    throw new RuntimeException("Failed to get number type for " + method);
+                                    method.invoke(objectToInjection, valueToInject);
                                 }
+                                return true;
                             }
                             catch (InvocationTargetException e)
                             {
@@ -284,47 +383,22 @@ public class JsonProcessorInjectionMap<O extends Object>
                             {
                                 throw new RuntimeException("Failed to access method " + method, e);
                             }
+                            catch (Exception e)
+                            {
+                                throw new RuntimeException("Unexpected error invoking " + method + " with " + valueToInject, e);
+                            }
                         }
                     }
-                    else if (((JsonPrimitive) valueToInject).isString())
-                    {
-                        String string = ((JsonPrimitive) valueToInject).getAsString();
-                        return handle(objectToInjection, keyValue, string);
-                    }
                 }
-                else
+                else if (valueToInject instanceof String)
                 {
                     if (injectionFields.containsKey(injectionKeyID))
                     {
                         Field field = injectionFields.get(injectionKeyID);
-                        field.setAccessible(true);
                         try
                         {
-                            String type = injectionTypes.get(injectionKeyID);
-                            if (type != null && JsonLoader.conversionHandlers.containsKey(type.toLowerCase()))
-                            {
-                                JsonConverter converter = JsonLoader.conversionHandlers.get(type.toLowerCase());
-                                if (converter != null)
-                                {
-                                    Object conversion = converter.convert((JsonElement) valueToInject);
-                                    if (conversion != null)
-                                    {
-                                        field.set(objectToInjection, conversion);
-                                    }
-                                    else
-                                    {
-                                        throw new IllegalArgumentException("Field was marked as type[" + type + "] but could not be converted to inject into " + field + ", data: " + objectToInjection);
-                                    }
-                                }
-                                else
-                                {
-                                    throw new IllegalArgumentException("Field was marked as type[" + type + "] but a converter could not be found to use with " + field + ", data: " + objectToInjection);
-                                }
-                            }
-                            else
-                            {
-                                field.set(objectToInjection, valueToInject);
-                            }
+                            field.setAccessible(true);
+                            field.set(objectToInjection, valueToInject);
                             return true;
                         }
                         catch (IllegalAccessException e)
@@ -342,31 +416,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                         try
                         {
                             method.setAccessible(true);
-                            String type = injectionTypes.get(injectionKeyID);
-                            if (type != null && JsonLoader.conversionHandlers.containsKey(type.toLowerCase()))
-                            {
-                                JsonConverter converter = JsonLoader.conversionHandlers.get(type.toLowerCase());
-                                if (converter != null)
-                                {
-                                    Object conversion = converter.convert((JsonElement) valueToInject);
-                                    if (conversion != null)
-                                    {
-                                        method.invoke(objectToInjection, conversion);
-                                    }
-                                    else
-                                    {
-                                        throw new IllegalArgumentException("Method was marked as type[" + type + "] but could not be converted to inject into " + method + ", data: " + objectToInjection);
-                                    }
-                                }
-                                else
-                                {
-                                    throw new IllegalArgumentException("Method was marked as type[" + type + "] but a converter could not be found to use with " + method + ", data: " + objectToInjection);
-                                }
-                            }
-                            else
-                            {
-                                method.invoke(objectToInjection, valueToInject);
-                            }
+                            method.invoke(objectToInjection, valueToInject);
                             return true;
                         }
                         catch (InvocationTargetException e)
@@ -383,10 +433,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                         }
                     }
                 }
-            }
-            else if (valueToInject instanceof String)
-            {
-                if (injectionFields.containsKey(injectionKeyID))
+                else if (injectionFields.containsKey(injectionKeyID))
                 {
                     Field field = injectionFields.get(injectionKeyID);
                     try
@@ -427,46 +474,10 @@ public class JsonProcessorInjectionMap<O extends Object>
                     }
                 }
             }
-            else if (injectionFields.containsKey(injectionKeyID))
-            {
-                Field field = injectionFields.get(injectionKeyID);
-                try
-                {
-                    field.setAccessible(true);
-                    field.set(objectToInjection, valueToInject);
-                    return true;
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw new RuntimeException("Failed to access field " + field, e);
-                }
-                catch (Exception e)
-                {
-                    throw new RuntimeException("Unexpected error setting " + field + " with " + valueToInject, e);
-                }
-            }
-            else
-            {
-                Method method = injectionMethods.get(injectionKeyID);
-                try
-                {
-                    method.setAccessible(true);
-                    method.invoke(objectToInjection, valueToInject);
-                    return true;
-                }
-                catch (InvocationTargetException e)
-                {
-                    throw new RuntimeException("Failed to invoke method " + method + " with data " + valueToInject, e);
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw new RuntimeException("Failed to access method " + method, e);
-                }
-                catch (Exception e)
-                {
-                    throw new RuntimeException("Unexpected error invoking " + method + " with " + valueToInject, e);
-                }
-            }
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Failed to inject data " + valueToInject + " into " + objectToInjection, e);
         }
         return false;
     }

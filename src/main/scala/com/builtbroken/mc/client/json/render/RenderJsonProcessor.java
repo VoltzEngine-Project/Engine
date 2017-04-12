@@ -103,7 +103,7 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                 if (renderStateObject.has("offset"))
                 {
                     offset = JsonConverterPos.fromJson(renderStateObject.get("offset"));
-                    if (scale == null)
+                    if (offset == null)
                     {
                         throw new IllegalArgumentException("Unknown value type for offset " + renderStateObject.get("offset"));
                     }

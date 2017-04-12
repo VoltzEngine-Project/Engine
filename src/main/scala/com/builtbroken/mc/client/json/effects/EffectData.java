@@ -21,6 +21,8 @@ public class EffectData extends JsonGenData
     public final String effectKey;
     public final NBTTagCompound nbt;
 
+    public boolean useEndPointForVelocity = false;
+
     public EffectData(IJsonProcessor processor, String key, String effectKey, NBTTagCompound nbt)
     {
         super(processor);
@@ -35,12 +37,12 @@ public class EffectData extends JsonGenData
         ClientDataHandler.INSTANCE.addEffect(key, this);
     }
 
-    public void trigger(World world, double x, double y, double z, double mx, double my, double mz)
+    public void trigger(World world, double x, double y, double z, double mx, double my, double mz, boolean endPoint)
     {
-        trigger(world, x, y, z, mx, my, mz, nbt);
+        trigger(world, x, y, z, mx, my, mz, endPoint, nbt);
     }
 
-    public void trigger(World world, double x, double y, double z, double mx, double my, double mz, NBTTagCompound nbt)
+    public void trigger(World world, double x, double y, double z, double mx, double my, double mz, boolean endPoint, NBTTagCompound nbt)
     {
         VisualEffectProvider provider = VisualEffectRegistry.main.get(effectKey);
         if (provider != null)
@@ -58,7 +60,7 @@ public class EffectData extends JsonGenData
             {
                 usedNBT = new NBTTagCompound();
             }
-            provider.displayEffect(world, x, y, z, mx, my, mz, usedNBT);
+            provider.displayEffect(world, x, y, z, mx, my, mz, endPoint, usedNBT);
         }
         else
         {
