@@ -4,7 +4,7 @@ package com.builtbroken.mc.core.network.packet;
 import com.builtbroken.mc.client.effects.VisualEffectProvider;
 import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.json.ClientDataHandler;
-import com.builtbroken.mc.client.json.effects.EffectData;
+import com.builtbroken.mc.client.json.imp.IEffectData;
 import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
@@ -94,7 +94,7 @@ public class PacketSpawnParticle extends PacketType
                 if (name.startsWith("JSON_"))
                 {
                     String key = name.substring(5, name.length()).toLowerCase();
-                    EffectData data = ClientDataHandler.INSTANCE.getEffect(key);
+                    IEffectData data = ClientDataHandler.INSTANCE.getEffect(key);
                     if (data != null)
                     {
                         data.trigger(player.getEntityWorld(), x, y, z, vx, vy, vz, endPoint, otherData != null ? otherData : new NBTTagCompound());

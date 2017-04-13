@@ -94,7 +94,7 @@ public class JsonConverterPos extends JsonConverter<Pos>
                 throw new IllegalStateException("Loading json array using strings is not supported yet for pos conversion. Data: " + offsetObject);
             }
         }
-        JsonElement two = offsetObject.get(0);
+        JsonElement two = offsetObject.get(1);
         if (two.isJsonPrimitive())
         {
             JsonPrimitive p = two.getAsJsonPrimitive();
@@ -108,13 +108,13 @@ public class JsonConverterPos extends JsonConverter<Pos>
                 throw new IllegalStateException("Loading json array using strings is not supported yet for pos conversion. Data: " + offsetObject);
             }
         }
-        JsonElement there = offsetObject.get(0);
+        JsonElement there = offsetObject.get(2);
         if (there.isJsonPrimitive())
         {
             JsonPrimitive p = there.getAsJsonPrimitive();
             if (p.isNumber())
             {
-                x = two.getAsDouble();
+                x = there.getAsDouble();
             }
             else if (p.isString())
             {

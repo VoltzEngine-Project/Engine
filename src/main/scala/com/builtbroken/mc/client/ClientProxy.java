@@ -9,6 +9,7 @@ import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.audio.AudioData;
 import com.builtbroken.mc.client.json.audio.AudioJsonProcessor;
 import com.builtbroken.mc.client.json.effects.EffectJsonProcessor;
+import com.builtbroken.mc.client.json.effects.EffectListJsonProcessor;
 import com.builtbroken.mc.client.json.models.ModelJsonProcessor;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.RenderJsonProcessor;
@@ -76,7 +77,8 @@ public class ClientProxy extends CommonProxy
         JsonContentLoader.INSTANCE.add(new ModelJsonProcessor());
         JsonContentLoader.INSTANCE.add(new RenderJsonProcessor());
         JsonContentLoader.INSTANCE.add(new AudioJsonProcessor());
-        JsonContentLoader.INSTANCE.add(new EffectJsonProcessor());
+        JsonContentLoader.INSTANCE.add(EffectJsonProcessor.INSTANCE);
+        JsonContentLoader.INSTANCE.add(new EffectListJsonProcessor());
 
         //Textures have to be loaded in pre-init or will fail
         JsonContentLoader.INSTANCE.process("texture");

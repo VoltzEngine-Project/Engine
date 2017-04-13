@@ -1,13 +1,11 @@
 package com.builtbroken.mc.lib.json.processors.block;
 
-import com.builtbroken.jlib.lang.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.block.BlockPropertyData;
 import com.builtbroken.mc.framework.block.meta.BlockMeta;
 import com.builtbroken.mc.framework.block.meta.MetaData;
-import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.loading.JsonProcessorInjectionMap;
@@ -16,7 +14,6 @@ import com.builtbroken.mc.lib.mod.loadable.ILoadable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,14 +35,12 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
     /** Keeps track of json fields that are used for block data directly and can not be used by sub processors */
     public final List<String> blockFields = new ArrayList();
 
-    protected final JsonProcessorInjectionMap keyHandler;
-
-    protected final DebugPrinter debugPrinter;
+    protected final JsonProcessorInjectionMap blockPropDataHandler;
 
     public JsonBlockProcessor()
     {
-        keyHandler = new JsonProcessorInjectionMap(BlockPropertyData.class);
-        debugPrinter = JsonContentLoader.INSTANCE != null ? JsonContentLoader.INSTANCE.debug : new DebugPrinter(LogManager.getLogger());
+        super();
+        blockPropDataHandler = new JsonProcessorInjectionMap(BlockPropertyData.class);
         //Field entries to prevent sub processors firing
         // each entry need to be lower cased to work
         blockFields.add("id");
@@ -108,10 +103,21 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
             block = new BlockBase(blockPropertyData);
         }
 
+        processAdditionalKeys(blockPropertyData, blockData, block, objectList);
+
+        //Add block to object list
+        objectList.add(block);
+
+        debugPrinter.end("Done...");
+        return true;
+    }
+
+    protected void processAdditionalKeys(Object blockPropertyData, JsonObject blockData, BlockBase block, List<IJsonGenObject> objectList)
+    {
         //Call to process extra tags from file
         for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
         {
-            if (keyHandler.handle(blockPropertyData, entry.getKey().toLowerCase(), entry.getValue()))
+            if (blockPropDataHandler.handle(blockPropertyData, entry.getKey().toLowerCase(), entry.getValue()))
             {
                 if (Engine.runningAsDev)
                 {
@@ -123,12 +129,6 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
                 processUnknownEntry(entry.getKey(), entry.getValue(), block, null, objectList);
             }
         }
-
-        //Add block to object list
-        objectList.add(block);
-
-        debugPrinter.end("Done...");
-        return true;
     }
 
     /**

@@ -1,13 +1,18 @@
 package com.builtbroken.mc.lib.json.processors;
 
+import com.builtbroken.jlib.lang.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
+import com.builtbroken.mc.lib.json.loading.JsonProcessorInjectionMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import cpw.mods.fml.common.Loader;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Default implementation for processor
@@ -17,6 +22,20 @@ import java.util.List;
  */
 public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonProcessor
 {
+    protected JsonProcessorInjectionMap keyHandler;
+    protected DebugPrinter debugPrinter;
+
+    public JsonProcessor()
+    {
+        debugPrinter = JsonContentLoader.INSTANCE != null ? JsonContentLoader.INSTANCE.debug : new DebugPrinter(LogManager.getLogger());
+    }
+
+    public JsonProcessor(Class<D> clazz)
+    {
+        this();
+        keyHandler = new JsonProcessorInjectionMap(clazz);
+    }
+
     @Override
     public boolean canProcess(String key, JsonElement element)
     {
@@ -37,6 +56,21 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
     public D process(JsonElement element)
     {
         return null;
+    }
+
+    protected void processAdditionalKeys(D objectToInject, JsonObject jsonData)
+    {
+        //Call to process extra tags from file
+        for (Map.Entry<String, JsonElement> entry : jsonData.entrySet())
+        {
+            if (keyHandler.handle(objectToInject, entry.getKey().toLowerCase(), entry.getValue()))
+            {
+                if (Engine.runningAsDev)
+                {
+                    debugPrinter.log("Injected Key: " + entry.getKey());
+                }
+            }
+        }
     }
 
     /**

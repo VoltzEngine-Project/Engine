@@ -1,7 +1,7 @@
 package com.builtbroken.mc.client.json;
 
 import com.builtbroken.mc.client.json.audio.AudioData;
-import com.builtbroken.mc.client.json.effects.EffectData;
+import com.builtbroken.mc.client.json.imp.IEffectData;
 import com.builtbroken.mc.client.json.models.ModelData;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.texture.TextureData;
@@ -28,7 +28,7 @@ public class ClientDataHandler
     /** Audio key to audio data */
     public HashMap<String, AudioData> audioData = new HashMap();
     /** Effect key to effect data */
-    public HashMap<String, EffectData> effectData = new HashMap();
+    public HashMap<String, IEffectData> effectData = new HashMap();
 
     /** Global client data handler for Voltz Engine */
     public static final ClientDataHandler INSTANCE = new ClientDataHandler();
@@ -70,7 +70,7 @@ public class ClientDataHandler
     }
 
 
-    public void addEffect(String key, EffectData data)
+    public void addEffect(String key, IEffectData data)
     {
         if (effectData.containsKey(key))
         {
@@ -115,7 +115,7 @@ public class ClientDataHandler
         return audioData.get(key);
     }
 
-    public EffectData getEffect(String key)
+    public IEffectData getEffect(String key)
     {
         if (key == null || key.isEmpty())
         {

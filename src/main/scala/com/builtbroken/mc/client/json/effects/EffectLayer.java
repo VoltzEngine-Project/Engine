@@ -3,9 +3,13 @@ package com.builtbroken.mc.client.json.effects;
 import com.builtbroken.mc.client.effects.VisualEffectProvider;
 import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.imp.IEffectData;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
+import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -15,20 +19,19 @@ import net.minecraft.world.World;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/7/2017.
  */
-public class EffectData extends JsonGenData
+public class EffectLayer extends JsonGenData implements IEffectData
 {
     public final String key;
     public final String effectKey;
-    public final NBTTagCompound nbt;
 
-    public boolean useEndPointForVelocity = false;
+    private NBTTagCompound nbt;
+    private Pos renderOffset = Pos.zero;
 
-    public EffectData(IJsonProcessor processor, String key, String effectKey, NBTTagCompound nbt)
+    public EffectLayer(IJsonProcessor processor, String key, String effectKey)
     {
         super(processor);
         this.key = key.toLowerCase();
         this.effectKey = effectKey.toLowerCase();
-        this.nbt = nbt;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class EffectData extends JsonGenData
 
     public void trigger(World world, double x, double y, double z, double mx, double my, double mz, boolean endPoint)
     {
-        trigger(world, x, y, z, mx, my, mz, endPoint, nbt);
+        trigger(world, x, y, z, mx, my, mz, endPoint, getNbt());
     }
 
     public void trigger(World world, double x, double y, double z, double mx, double my, double mz, boolean endPoint, NBTTagCompound nbt)
@@ -50,9 +53,25 @@ public class EffectData extends JsonGenData
             NBTTagCompound usedNBT;
             if (nbt != null && !nbt.hasNoTags())
             {
-                usedNBT = nbt;
+                usedNBT = (NBTTagCompound) nbt.copy();
+                //Merges base NBT with server nbt
+                if (this.getNbt() != null)
+                {
+                    for (Object o : getNbt().func_150296_c())
+                    {
+                        if (o instanceof String)
+                        {
+                            String key = (String) o;
+                            NBTBase tag = getNbt().getTag(key);
+                            if (tag != null)
+                            {
+                                usedNBT.setTag(key, tag);
+                            }
+                        }
+                    }
+                }
             }
-            else if (this.nbt != null)
+            else if (this.getNbt() != null)
             {
                 usedNBT = nbt;
             }
@@ -60,12 +79,34 @@ public class EffectData extends JsonGenData
             {
                 usedNBT = new NBTTagCompound();
             }
-            provider.displayEffect(world, x, y, z, mx, my, mz, endPoint, usedNBT);
+            provider.displayEffect(world, x + renderOffset.x(), y + renderOffset.y(), z + renderOffset.z(), mx, my, mz, endPoint, usedNBT);
         }
         else
         {
             Engine.logger().error("Failed to find a visual effect provider for key '" + effectKey + "'");
         }
+    }
+
+    public NBTTagCompound getNbt()
+    {
+        return nbt;
+    }
+
+    @JsonProcessorData(value = "additionalEffectData", type = "nbt")
+    public void setNbt(NBTTagCompound nbt)
+    {
+        this.nbt = nbt;
+    }
+
+    public Pos getRenderOffset()
+    {
+        return renderOffset;
+    }
+
+    @JsonProcessorData(value = "renderOffset", type = "pos")
+    public void setRenderOffset(Pos renderOffset)
+    {
+        this.renderOffset = renderOffset;
     }
 
     @Override

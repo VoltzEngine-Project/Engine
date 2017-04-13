@@ -33,6 +33,13 @@ public class VEProviderLaserBeam extends VisualEffectProvider
         int lifeTicks = 2;
         if (otherData != null)
         {
+            //load life timer for particle
+            if (otherData.hasKey("lifeTime"))
+            {
+                lifeTicks = otherData.getInteger("lifeTime");
+            }
+
+            //Load color
             if (otherData.hasKey("red"))
             {
                 color = new Color(otherData.getInteger("red"), otherData.getInteger("green"), otherData.getInteger("blue"));
@@ -42,7 +49,7 @@ public class VEProviderLaserBeam extends VisualEffectProvider
                 color = new Color(otherData.getInteger("color"));
             }
         }
-        FxBeam laser = new FxBeam(SharedAssets.GREY_TEXTURE, world, new Pos(x, y, z), new Pos(mx, my, mz), 1, 0, 0, lifeTicks);
+        FxBeam laser = new FxBeam(SharedAssets.GREY_TEXTURE, world, new Pos(x, y, z), new Pos(mx, my, mz), color, lifeTicks);
         FMLClientHandler.instance().getClient().effectRenderer.addEffect(laser);
     }
 }

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.json.loading;
 
 import com.builtbroken.mc.lib.json.conversion.JsonConverter;
+import com.builtbroken.mc.lib.json.conversion.JsonConverterNBT;
 import com.builtbroken.mc.lib.json.conversion.JsonConverterPos;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,6 +30,7 @@ public class JsonLoader
     static
     {
         conversionHandlers.put("pos", new JsonConverterPos());
+        conversionHandlers.put("nbt", new JsonConverterNBT());
     }
 
     /**
