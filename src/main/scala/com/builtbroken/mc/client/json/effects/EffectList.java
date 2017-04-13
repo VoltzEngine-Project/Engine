@@ -2,6 +2,7 @@ package com.builtbroken.mc.client.json.effects;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IEffectData;
+import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
@@ -25,6 +26,9 @@ public class EffectList extends JsonGenData implements IEffectData
     private Pos renderOffset = Pos.zero;
 
     public List<IEffectData> layers = new ArrayList();
+
+    //Cache object used for calculations but keep to save memory and GC time
+    private static EulerAngle angle = new EulerAngle(0, 0);
 
     public EffectList(IJsonProcessor processor, String key)
     {
@@ -71,6 +75,14 @@ public class EffectList extends JsonGenData implements IEffectData
             else
             {
                 usedNBT = new NBTTagCompound();
+            }
+            Pos renderOffset = this.renderOffset;
+            if (renderOffset != Pos.zero && (usedNBT.hasKey("yaw") || usedNBT.hasKey("pitch")))
+            {
+                float yaw = usedNBT.getFloat("yaw");
+                float pitch = usedNBT.getFloat("pitch");
+                angle.set(yaw, pitch, 0);
+                renderOffset = (Pos) angle.transform(renderOffset);
             }
             layer.trigger(world, x + renderOffset.x(), y + renderOffset.y(), z + renderOffset.z(), mx, my, mz, endPoint, usedNBT);
         }
