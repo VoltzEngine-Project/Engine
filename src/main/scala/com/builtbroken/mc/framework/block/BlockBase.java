@@ -89,6 +89,12 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     }
 
     @Override
+    public String getContentID()
+    {
+        return data.registryKey;
+    }
+
+    @Override
     public void register(IJsonGenMod mod, ModManager manager)
     {
         if (!registered)

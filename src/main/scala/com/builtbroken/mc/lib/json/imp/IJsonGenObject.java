@@ -57,4 +57,11 @@ public interface IJsonGenObject
      * @return mod domain ID
      */
     String getMod();
+
+    /**
+     * Unique ID for this content
+     *
+     * @return
+     */
+    String getContentID();
 }

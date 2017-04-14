@@ -36,4 +36,10 @@ public class JsonOreNameData extends JsonGenData implements IPostInit
             Engine.error("JsonOreNameData: Failed to parse item, this will prevent the ore name '" + name + "' from being registered to " + item);
         }
     }
+
+    @Override
+    public String getContentID()
+    {
+        return null;
+    }
 }

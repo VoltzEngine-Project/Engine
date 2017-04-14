@@ -48,4 +48,10 @@ public class JsonWorldOreGenData extends JsonGenData implements IPostInit
             }
         }
     }
+
+    @Override
+    public String getContentID()
+    {
+        return null;
+    }
 }

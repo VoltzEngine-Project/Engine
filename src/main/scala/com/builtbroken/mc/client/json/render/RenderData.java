@@ -72,6 +72,12 @@ public class RenderData extends JsonGenData
         ClientDataHandler.INSTANCE.addRenderData(contentID, this);
     }
 
+    @Override
+    public String getContentID()
+    {
+        return contentID;
+    }
+
     public boolean render(IItemRenderer.ItemRenderType type, String stateKey, Object item)
     {
         return render(getRenderKeyForState(type, stateKey, item));

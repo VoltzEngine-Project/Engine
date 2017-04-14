@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.json;
 import com.builtbroken.jlib.lang.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.registry.implement.ILoadComplete;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
@@ -12,6 +13,7 @@ import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.loading.JsonEntry;
 import com.builtbroken.mc.lib.json.loading.JsonLoader;
 import com.builtbroken.mc.lib.json.loading.ProcessorKeySorter;
+import com.builtbroken.mc.lib.json.override.JsonOverrideProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockTileProcessor;
@@ -155,6 +157,7 @@ public final class JsonContentLoader extends AbstractLoadable
         add(craftingRecipeProcessor);
         add(furnaceRecipeProcessor);
         add(new JsonRecipeReplacementProcessor());
+        add(new JsonOverrideProcessor());
         //TODO add machine recipes
 
         debug.end("Done...");
@@ -210,6 +213,29 @@ public final class JsonContentLoader extends AbstractLoadable
         }
         debug.end("Done...");
 
+        debug.end("Done...");
+    }
+
+    @Override
+    public void loadComplete()
+    {
+        debug.start("Phase: Load-Complete");
+        final List<String> sortingProcessorList = getSortedProcessorList();
+        for (String proccessorKey : sortingProcessorList)
+        {
+            if (generatedObjects.get(proccessorKey) != null && !generatedObjects.get(proccessorKey).isEmpty())
+            {
+                for (IJsonGenObject obj : generatedObjects.get(proccessorKey))
+                {
+                    if (obj instanceof ILoadComplete)
+                    {
+                        ((ILoadComplete) obj).onLoadCompleted();
+                    }
+                }
+            }
+        }
+        debug.log("Clearing data");
+        clear();
         debug.end("Done...");
     }
 

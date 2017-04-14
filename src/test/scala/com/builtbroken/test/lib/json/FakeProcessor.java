@@ -71,5 +71,11 @@ public class FakeProcessor extends JsonProcessor
         {
             return null;
         }
+
+        @Override
+        public String getContentID()
+        {
+            return null;
+        }
     }
 }

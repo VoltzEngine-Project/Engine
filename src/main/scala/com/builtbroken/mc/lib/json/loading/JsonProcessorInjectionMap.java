@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.json.loading;
 
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.lib.json.conversion.JsonConverter;
+import com.builtbroken.mc.lib.json.override.JsonOverride;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
@@ -130,10 +131,58 @@ public class JsonProcessorInjectionMap<O extends Object>
 
     public boolean handle(O objectToInjection, String keyValue, Object valueToInject)
     {
+        return handle(objectToInjection, keyValue, valueToInject, false, "");
+    }
+
+    public boolean supports(String keyValue, boolean override, String overrideType)
+    {
+        if(injectionFields.containsKey(keyValue) || injectionMethods.containsKey(keyValue))
+        {
+            if(override)
+            {
+                if(injectionFields.containsKey(keyValue))
+                {
+                    Field field = injectionFields.get(keyValue);
+                    Annotation[] annotations = field.getDeclaredAnnotations();
+                    if (annotations != null && annotations.length > 0)
+                    {
+                        for (Annotation annotation : annotations)
+                        {
+                            if(annotation instanceof JsonOverride)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                if(injectionMethods.containsKey(keyValue))
+                {
+                    Method method = injectionMethods.get(keyValue);
+                    Annotation[] annotations = method.getDeclaredAnnotations();
+                    if (annotations != null && annotations.length > 0)
+                    {
+                        for (Annotation annotation : annotations)
+                        {
+                            if(annotation instanceof JsonOverride)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean handle(O objectToInjection, String keyValue, Object valueToInject, boolean override, String overrideType)
+    {
         try
         {
             final String injectionKeyID = keyValue.toLowerCase();
-            if (injectionFields.containsKey(injectionKeyID) || injectionMethods.containsKey(injectionKeyID))
+            if (supports(injectionKeyID, override, overrideType))
             {
                 if (valueToInject instanceof JsonElement)
                 {

@@ -92,6 +92,12 @@ public class ModelData extends JsonGenData
     }
 
     @Override
+    public String getContentID()
+    {
+        return key;
+    }
+
+    @Override
     public String toString()
     {
         return "ModelData[" + key + " >> " + domain + ":" + name + " >> " + model + "]@" + hashCode();

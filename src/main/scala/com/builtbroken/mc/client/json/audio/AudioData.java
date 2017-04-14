@@ -46,6 +46,12 @@ public class AudioData extends JsonGenData
     }
 
     @Override
+    public String getContentID()
+    {
+        return null;
+    }
+
+    @Override
     public String toString()
     {
         return "AudioData[ " + key + ", " + soundLocation + "]@" + hashCode();

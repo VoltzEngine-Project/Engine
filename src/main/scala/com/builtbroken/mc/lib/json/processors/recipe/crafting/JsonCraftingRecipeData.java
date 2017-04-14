@@ -171,4 +171,10 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
     {
         return "JsonRecipeData[ out = " + output + ", shaped = " + shaped + ", data = " + data + "]";
     }
+
+    @Override
+    public String getContentID()
+    {
+        return null;
+    }
 }

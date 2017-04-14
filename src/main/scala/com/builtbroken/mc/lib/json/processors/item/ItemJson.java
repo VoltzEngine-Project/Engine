@@ -54,6 +54,12 @@ public class ItemJson extends ItemBase implements IJsonGenObject
     }
 
     @Override
+    public String getContentID()
+    {
+        return ID;
+    }
+
+    @Override
     public String getRenderContentID(int meta)
     {
         return "item." + owner + ":" + ID;

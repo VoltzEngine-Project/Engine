@@ -56,4 +56,10 @@ public class JsonFurnaceRecipeData extends JsonRecipeData implements IJsonGenObj
     {
         return "JsonFurnaceRecipe[" + input + " -> " + output + "]";
     }
+
+    @Override
+    public String getContentID()
+    {
+        return null;
+    }
 }

@@ -72,4 +72,10 @@ public class JsonRecipeReplacementData extends JsonGenData
         }
         return false;
     }
+
+    @Override
+    public String getContentID()
+    {
+        return null;
+    }
 }

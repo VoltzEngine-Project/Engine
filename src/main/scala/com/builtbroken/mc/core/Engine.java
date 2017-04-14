@@ -724,9 +724,6 @@ public class Engine implements IJsonGenMod
     {
         //Clean up resources to free up ram
         loader.loadComplete();
-
-        JsonContentLoader.INSTANCE.clear();
-        //TODO clear load handler
     }
 
     public AbstractProxy getProxy()

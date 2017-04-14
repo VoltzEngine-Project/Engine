@@ -43,6 +43,12 @@ public class EffectList extends JsonGenData implements IEffectData
     }
 
     @Override
+    public String getContentID()
+    {
+        return null;
+    }
+
+    @Override
     public void trigger(World world, double x, double y, double z, double mx, double my, double mz, boolean endPoint, NBTTagCompound nbt)
     {
         for (IEffectData layer : layers)

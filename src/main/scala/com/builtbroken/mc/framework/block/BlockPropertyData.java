@@ -55,6 +55,12 @@ public class BlockPropertyData extends JsonGenData
         return MOD;
     }
 
+    @Override
+    public String getContentID()
+    {
+        return registryKey;
+    }
+
     public Material getMaterial()
     {
         return material;

@@ -55,6 +55,12 @@ public class TextureData extends JsonGenData
         ClientDataHandler.INSTANCE.addTexture(key, this);
     }
 
+    @Override
+    public String getContentID()
+    {
+        return null;
+    }
+
     public enum Type
     {
         BLOCK("blocks"),

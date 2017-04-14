@@ -44,6 +44,12 @@ public class EffectLayer extends JsonGenData implements IEffectData
         ClientDataHandler.INSTANCE.addEffect(key, this);
     }
 
+    @Override
+    public String getContentID()
+    {
+        return null;
+    }
+
     public void trigger(World world, double x, double y, double z, double mx, double my, double mz, boolean endPoint)
     {
         trigger(world, x, y, z, mx, my, mz, endPoint, getNbt());
