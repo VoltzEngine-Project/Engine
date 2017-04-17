@@ -3,8 +3,8 @@ package com.builtbroken.mc.codegen.tests;
 import com.builtbroken.mc.api.energy.IEnergyBuffer;
 import com.builtbroken.mc.api.energy.IEnergyBufferProvider;
 import com.builtbroken.mc.framework.logic.TileNode;
-import com.builtbroken.mc.framework.logic.annotations.EnergyWrapped;
-import com.builtbroken.mc.framework.logic.annotations.TileWrapped;
+import com.builtbroken.mc.codegen.annotations.EnergyWrapped;
+import com.builtbroken.mc.codegen.annotations.TileWrapped;
 import com.builtbroken.mc.prefab.energy.EnergyBuffer;
 import net.minecraftforge.common.util.ForgeDirection;
 

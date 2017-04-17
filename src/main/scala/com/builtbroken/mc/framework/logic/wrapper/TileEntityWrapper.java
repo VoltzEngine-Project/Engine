@@ -1,6 +1,5 @@
 package com.builtbroken.mc.framework.logic.wrapper;
 
-import com.builtbroken.mc.api.ISave;
 import com.builtbroken.mc.api.event.tile.TileEvent;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.logic.ITileNode;
@@ -137,20 +136,14 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
-        if (tile instanceof ISave)
-        {
-            ((ISave) tile).load(nbt);
-        }
+        tile.load(nbt.hasKey("tileData") ? nbt.getCompoundTag("tileData") : nbt);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
-        if (tile instanceof ISave)
-        {
-            ((ISave) tile).save(nbt);
-        }
+        nbt.setTag("tileData", tile.save(new NBTTagCompound()));
     }
 
     @Override
@@ -196,7 +189,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost
      */
     protected void toStringData(StringBuilder builder)
     {
-        if(world() != null)
+        if (world() != null)
         {
             //Out client or server
             if (world().isRemote)

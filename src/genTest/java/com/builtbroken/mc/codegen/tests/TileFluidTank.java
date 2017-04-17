@@ -2,8 +2,8 @@ package com.builtbroken.mc.codegen.tests;
 
 import com.builtbroken.mc.api.tile.provider.ITankProvider;
 import com.builtbroken.mc.framework.logic.TileNode;
-import com.builtbroken.mc.framework.logic.annotations.TankProviderWrapped;
-import com.builtbroken.mc.framework.logic.annotations.TileWrapped;
+import com.builtbroken.mc.codegen.annotations.TankProviderWrapped;
+import com.builtbroken.mc.codegen.annotations.TileWrapped;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;

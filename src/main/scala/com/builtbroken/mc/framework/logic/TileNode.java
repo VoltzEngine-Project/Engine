@@ -3,6 +3,7 @@ package com.builtbroken.mc.framework.logic;
 import com.builtbroken.mc.framework.logic.imp.ITileNodeHost;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -77,5 +78,21 @@ public class TileNode implements ITileNode
     protected final Location toLocation()
     {
         return new Location(world(), x(), y(), z());
+    }
+
+    //=============================================
+    //========== Save Code     ====================
+    //=============================================
+
+    @Override
+    public void load(NBTTagCompound nbt)
+    {
+
+    }
+
+    @Override
+    public NBTTagCompound save(NBTTagCompound nbt)
+    {
+        return nbt;
     }
 }

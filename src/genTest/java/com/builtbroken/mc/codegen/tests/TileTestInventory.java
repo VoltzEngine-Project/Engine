@@ -2,8 +2,8 @@ package com.builtbroken.mc.codegen.tests;
 
 import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
 import com.builtbroken.mc.framework.logic.TileNode;
-import com.builtbroken.mc.framework.logic.annotations.ExternalInventoryWrapped;
-import com.builtbroken.mc.framework.logic.annotations.TileWrapped;
+import com.builtbroken.mc.codegen.annotations.ExternalInventoryWrapped;
+import com.builtbroken.mc.codegen.annotations.TileWrapped;
 import com.builtbroken.mc.prefab.inventory.ExternalInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;

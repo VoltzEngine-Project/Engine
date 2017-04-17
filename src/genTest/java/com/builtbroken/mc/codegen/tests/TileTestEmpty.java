@@ -1,7 +1,7 @@
 package com.builtbroken.mc.codegen.tests;
 
 import com.builtbroken.mc.framework.logic.TileNode;
-import com.builtbroken.mc.framework.logic.annotations.TileWrapped;
+import com.builtbroken.mc.codegen.annotations.TileWrapped;
 
 /**
  * Test tile to see if {@link com.builtbroken.mc.codegen.Main} functions correctly for tile processing

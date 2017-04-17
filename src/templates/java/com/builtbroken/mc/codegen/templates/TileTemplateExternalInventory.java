@@ -3,7 +3,7 @@ package com.builtbroken.mc.codegen.templates;
 import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
 import com.builtbroken.mc.codegen.template.TileWrappedTemplate;
 import com.builtbroken.mc.framework.logic.ITileNode;
-import com.builtbroken.mc.framework.logic.annotations.ExternalInventoryWrapped;
+import com.builtbroken.mc.codegen.annotations.ExternalInventoryWrapped;
 import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
