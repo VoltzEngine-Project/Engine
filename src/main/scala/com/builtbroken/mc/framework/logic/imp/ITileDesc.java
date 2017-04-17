@@ -1,7 +1,8 @@
 package com.builtbroken.mc.framework.logic.imp;
 
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
-import com.builtbroken.mc.core.network.packet.AbstractPacket;
+import com.builtbroken.mc.core.network.packet.PacketType;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -9,7 +10,10 @@ import com.builtbroken.mc.core.network.packet.AbstractPacket;
  */
 public interface ITileDesc extends IPacketIDReceiver
 {
-    AbstractPacket getDescPacket();
+    IPacket getDescPacket();
 
-    boolean canHandlePackets();
+    default boolean canHandlePackets()
+    {
+        return true;
+    }
 }

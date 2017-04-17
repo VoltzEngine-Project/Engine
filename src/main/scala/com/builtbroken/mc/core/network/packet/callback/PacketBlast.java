@@ -3,7 +3,7 @@ package com.builtbroken.mc.core.network.packet.callback;
 import com.builtbroken.mc.api.event.TriggerCauseRegistry;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.network.packet.AbstractPacket;
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.prefab.explosive.blast.Blast;
@@ -20,7 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 12/15/2016.
  */
-public class PacketBlast extends AbstractPacket
+public class PacketBlast implements IPacket
 {
     public Blast blast;
     public BlastPacketType type;

@@ -2,9 +2,10 @@ package com.builtbroken.mc.framework.logic.wrapper;
 
 import com.builtbroken.mc.api.event.tile.TileEvent;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.framework.logic.ITileNode;
+import com.builtbroken.mc.core.network.packet.PacketTile;
+import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
-import com.builtbroken.mc.framework.logic.imp.ITileNodeHost;
+import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
@@ -150,6 +151,12 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost
     public ITileNode getTileNode()
     {
         return tile;
+    }
+
+    @Override
+    public PacketTile getPacketForData(Object... data)
+    {
+        return new PacketTile(this, data);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.codegen.annotations;
 
-import com.builtbroken.mc.framework.logic.ITileNode;
+import com.builtbroken.mc.api.tile.node.ITileNode;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

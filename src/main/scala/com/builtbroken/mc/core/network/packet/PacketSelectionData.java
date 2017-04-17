@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.network.packet;
 
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import io.netty.buffer.ByteBuf;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by robert on 2/15/2015.
  */
-public class PacketSelectionData extends AbstractPacket
+public class PacketSelectionData implements IPacket
 {
     List<Cube> cubes;
     List<Cube> regions;

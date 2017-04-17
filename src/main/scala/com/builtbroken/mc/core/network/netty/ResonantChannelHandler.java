@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.network.netty;
 
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.*;
 import com.builtbroken.mc.core.network.packet.callback.PacketAudio;
@@ -14,7 +15,7 @@ import io.netty.channel.ChannelHandlerContext;
  * @author tgame14
  * @since 31/05/14
  */
-public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPacket>
+public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<IPacket>
 {
     public boolean silenceStackTrace = false; //TODO add command and config
 
@@ -36,7 +37,7 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<Abst
     }
 
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, AbstractPacket packet, ByteBuf target) throws Exception
+    public void encodeInto(ChannelHandlerContext ctx, IPacket packet, ByteBuf target) throws Exception
     {
         try
         {
@@ -52,7 +53,7 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<Abst
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, AbstractPacket packet)
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, IPacket packet)
     {
         try
         {

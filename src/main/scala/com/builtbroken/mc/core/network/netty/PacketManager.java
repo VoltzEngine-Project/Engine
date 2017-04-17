@@ -3,7 +3,7 @@ package com.builtbroken.mc.core.network.netty;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.network.packet.AbstractPacket;
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.core.network.packet.PacketEntity;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
@@ -59,7 +59,7 @@ public class PacketManager extends AbstractLoadable
         return null;
     }
 
-    public Packet toMCPacket(AbstractPacket packet)
+    public Packet toMCPacket(IPacket packet)
     {
         return channelEnumMap.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
     }
@@ -86,7 +86,7 @@ public class PacketManager extends AbstractLoadable
      * @param packet the packet to send to the player
      * @param player the player MP object
      */
-    public void sendToPlayer(AbstractPacket packet, EntityPlayerMP player)
+    public void sendToPlayer(IPacket packet, EntityPlayerMP player)
     {
         //Null check is for JUnit
         if (channelEnumMap != null)
@@ -105,7 +105,7 @@ public class PacketManager extends AbstractLoadable
      * @param packet the packet to send to the players in the dimension
      * @param dimId  the dimension ID to send to.
      */
-    public void sendToAllInDimension(AbstractPacket packet, int dimId)
+    public void sendToAllInDimension(IPacket packet, int dimId)
     {
         //Null check is for JUnit
         if (channelEnumMap != null)
@@ -120,7 +120,7 @@ public class PacketManager extends AbstractLoadable
         }
     }
 
-    public void sendToAllInDimension(AbstractPacket packet, World world)
+    public void sendToAllInDimension(IPacket packet, World world)
     {
         sendToAllInDimension(packet, world.provider.dimensionId);
     }
@@ -130,7 +130,7 @@ public class PacketManager extends AbstractLoadable
      *
      * @param packet the packet to send.
      */
-    public void sendToAll(AbstractPacket packet)
+    public void sendToAll(IPacket packet)
     {
         //Null check is for JUnit
         if (channelEnumMap != null)
@@ -144,7 +144,7 @@ public class PacketManager extends AbstractLoadable
         }
     }
 
-    public void sendToAllAround(AbstractPacket message, NetworkRegistry.TargetPoint point)
+    public void sendToAllAround(IPacket message, NetworkRegistry.TargetPoint point)
     {
         //Null check is for JUnit
         if (channelEnumMap != null)
@@ -159,34 +159,34 @@ public class PacketManager extends AbstractLoadable
         }
     }
 
-    public void sendToAllAround(AbstractPacket message, IWorldPosition point, double range)
+    public void sendToAllAround(IPacket message, IWorldPosition point, double range)
     {
         sendToAllAround(message, point.world(), point.x(), point.y(), point.z(), range);
     }
 
-    public void sendToAllAround(AbstractPacket message, World world, IPos3D point, double range)
+    public void sendToAllAround(IPacket message, World world, IPos3D point, double range)
     {
         sendToAllAround(message, world, point.x(), point.y(), point.z(), range);
     }
 
-    public void sendToAllAround(AbstractPacket message, TileEntity tile)
+    public void sendToAllAround(IPacket message, TileEntity tile)
     {
         sendToAllAround(message, tile, 64);
     }
 
-    public void sendToAllAround(AbstractPacket message, TileEntity tile, double range)
+    public void sendToAllAround(IPacket message, TileEntity tile, double range)
     {
         sendToAllAround(message, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord, range);
     }
 
-    public void sendToAllAround(AbstractPacket message, World world, double x, double y, double z, double range)
+    public void sendToAllAround(IPacket message, World world, double x, double y, double z, double range)
     {
         if (world != null)
             sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, range));
     }
 
     @SideOnly(Side.CLIENT)
-    public void sendToServer(AbstractPacket packet)
+    public void sendToServer(IPacket packet)
     {
         //Null check is for JUnit
         if (channelEnumMap != null)
