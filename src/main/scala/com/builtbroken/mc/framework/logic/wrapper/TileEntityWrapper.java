@@ -1,11 +1,12 @@
 package com.builtbroken.mc.framework.logic.wrapper;
 
 import com.builtbroken.mc.api.event.tile.TileEvent;
+import com.builtbroken.mc.api.tile.node.ITileNode;
+import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketTile;
-import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
-import com.builtbroken.mc.api.tile.node.ITileNodeHost;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
@@ -122,6 +123,9 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost
         }
     }
 
+    //=============================================
+    //================= data ======================
+    //=============================================
 
     @Override
     public Packet getDescriptionPacket()
@@ -148,16 +152,42 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost
     }
 
     @Override
+    public PacketTile getPacketForData(Object... data)
+    {
+        return new PacketTile(this, data);
+    }
+
+    //=============================================
+    //============== wrapper calls ================
+    //=============================================
+
+    @Override
     public ITileNode getTileNode()
     {
         return tile;
     }
 
     @Override
-    public PacketTile getPacketForData(Object... data)
+    public Block getHostBlock()
     {
-        return new PacketTile(this, data);
+        return getBlockType();
     }
+
+    @Override
+    public int getHostMeta()
+    {
+        return getBlockMetadata();
+    }
+
+    @Override
+    public boolean canAccessWorld()
+    {
+        return true;
+    }
+
+    //=============================================
+    //============== to string ====================
+    //=============================================
 
     @Override
     public String toString()
