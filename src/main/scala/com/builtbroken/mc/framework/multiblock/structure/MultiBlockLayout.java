@@ -23,7 +23,7 @@ public class MultiBlockLayout extends JsonGenData
 
     public void addTile(IPos3D pos, String data)
     {
-
+        tiles.put(pos, data);
     }
 
     @Override
