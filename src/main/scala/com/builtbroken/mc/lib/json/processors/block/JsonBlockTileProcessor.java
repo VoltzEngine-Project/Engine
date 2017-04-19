@@ -62,7 +62,7 @@ public class JsonBlockTileProcessor extends JsonProcessor<ITileProvider> impleme
     @Override
     public String getJsonKey()
     {
-        return "tile";
+        return KEY;
     }
 
     @Override

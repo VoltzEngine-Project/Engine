@@ -1,10 +1,15 @@
 package com.builtbroken.mc.framework.logic.wrapper;
 
 import com.builtbroken.mc.api.event.tile.TileEvent;
+import com.builtbroken.mc.api.tile.listeners.IBlockListener;
+import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
+import com.builtbroken.mc.api.tile.listeners.ITileWithListeners;
+import com.builtbroken.mc.api.tile.listeners.IUpdateListener;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketTile;
+import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,8 +18,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Wrapper class for {@link ITileNode}
@@ -29,7 +33,7 @@ import java.util.Set;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/30/2017.
  */
-public class TileEntityWrapper extends TileEntity implements ITileNodeHost
+public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITileWithListeners
 {
     /** Object that controls all logic for the tile and some logic of the block */
     protected final ITileNode tile;
@@ -41,6 +45,8 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost
 
     /** TILE, Set of player's with this tile's interface open, mainly used for GUI packet updates */
     protected final Set<EntityPlayer> playersUsing = new HashSet();
+
+    protected final HashMap<String, List<ITileEventListener>> listeners = new HashMap();
 
     /**
      * @param controller - tile, passed in by child class wrapper
@@ -59,6 +65,33 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost
     @Override
     public final void updateEntity()
     {
+        //Ticks listeners that require updates
+        for (List<ITileEventListener> list : new List[]{getListeners("multiblock"), ((BlockBase) getBlockType()).listeners.get("multiblock")})
+        {
+            if (list != null && !list.isEmpty())
+            {
+                for (ITileEventListener listener : list)
+                {
+                    if (listener instanceof IUpdateListener)
+                    {
+                        try
+                        {
+                            if (listener instanceof IBlockListener)
+                            {
+                                ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                            }
+                            ((IUpdateListener)listener).update(ticks);
+                        }
+                        catch (Exception e)
+                        {
+                            Engine.logger().error("Unexpected exception while calling first tick on " + tile + "\nWrapper:" + this, e);
+                        }
+                    }
+                }
+            }
+        }
+
+        //Ticks node
         if (ticks == 0)
         {
             try
@@ -183,6 +216,39 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost
     public boolean canAccessWorld()
     {
         return true;
+    }
+
+    @Override
+    public List<ITileEventListener> getListeners(String key)
+    {
+        if (listeners.containsKey(key))
+        {
+            return listeners.get(key);
+        }
+        return null;
+    }
+
+    /**
+     * Called to add a listener
+     *
+     * @param listener
+     */
+    public void addListener(ITileEventListener listener)
+    {
+        List<String> keys = listener.getListenerKeys();
+        if (keys != null && !keys.isEmpty())
+        {
+            for (String key : keys)
+            {
+                List<ITileEventListener> list = listeners.get(key);
+                if (list == null)
+                {
+                    list = new ArrayList();
+                }
+                list.add(listener);
+                listeners.put(key, list);
+            }
+        }
     }
 
     //=============================================

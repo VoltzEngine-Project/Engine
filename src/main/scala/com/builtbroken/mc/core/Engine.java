@@ -37,6 +37,7 @@ import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.multiblock.BlockMultiblock;
 import com.builtbroken.mc.framework.multiblock.EnumMultiblock;
 import com.builtbroken.mc.framework.multiblock.ItemBlockMulti;
+import com.builtbroken.mc.framework.multiblock.listeners.MultiBlockListener;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
@@ -538,6 +539,7 @@ public class Engine implements IJsonGenMod
     protected void registerListeners()
     {
         JsonBlockListenerProcessor.addBuilder(new RotatableListener.Builder());
+        JsonBlockListenerProcessor.addBuilder(new MultiBlockListener.Builder());
         proxy.registerListeners();
     }
 

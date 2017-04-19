@@ -9,7 +9,9 @@ import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.framework.multiblock.MultiBlockHelper;
 import com.builtbroken.mc.framework.multiblock.structure.MultiBlockLayoutHandler;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
 import com.builtbroken.mc.prefab.tile.listeners.TileListener;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -25,13 +27,8 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
 {
     private boolean _destroyingStructure = false;
 
+    @JsonProcessorData("layoutKey")
     protected String layoutKey;
-
-
-    public MultiBlockListener(String key)
-    {
-        this.layoutKey = key;
-    }
 
     @Override
     public List<String> getListenerKeys()
@@ -41,11 +38,12 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         list.add("break");
         list.add("break");
         list.add("update");
+        list.add("multiblock");
         return list;
     }
 
     @Override
-    public void update(int ticks)
+    public void update(long ticks)
     {
         if (ticks == 0)
         {
@@ -156,5 +154,20 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
             }
         }
         return true;
+    }
+
+    public static class Builder implements ITileEventListenerBuilder
+    {
+        @Override
+        public ITileEventListener createListener(Block block)
+        {
+            return new MultiBlockListener();
+        }
+
+        @Override
+        public String getListenerKey()
+        {
+            return "multiblock";
+        }
     }
 }

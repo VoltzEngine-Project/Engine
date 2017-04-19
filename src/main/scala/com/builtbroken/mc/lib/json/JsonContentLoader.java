@@ -19,7 +19,7 @@ import com.builtbroken.mc.lib.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockTileProcessor;
 import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.lib.json.processors.item.processor.JsonItemProcessor;
-import com.builtbroken.mc.lib.json.processors.multiblock.JsonMultiblockProcessor;
+import com.builtbroken.mc.lib.json.processors.multiblock.JsonMultiBlockLayoutProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.crafting.JsonCraftingRecipeProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.replace.JsonRecipeReplacementProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.smelting.JsonFurnaceRecipeProcessor;
@@ -159,7 +159,7 @@ public final class JsonContentLoader extends AbstractLoadable
         add(furnaceRecipeProcessor);
         add(new JsonRecipeReplacementProcessor());
         add(new JsonOverrideProcessor());
-        add(new JsonMultiblockProcessor());
+        add(new JsonMultiBlockLayoutProcessor());
         //TODO add machine recipes
 
         debug.end("Done...");
