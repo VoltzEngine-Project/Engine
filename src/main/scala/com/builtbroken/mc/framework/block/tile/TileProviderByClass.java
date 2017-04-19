@@ -4,6 +4,8 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
+import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
+import com.builtbroken.mc.lib.json.processors.JsonGenData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -11,13 +13,14 @@ import net.minecraft.world.World;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/3/2017.
  */
-public class TileProviderByClass implements ITileProvider
+public class TileProviderByClass extends JsonGenData implements ITileProvider
 {
     public final String id;
     public final Class<? extends TileEntity> clazz;
 
-    public TileProviderByClass(String id, String clazz) throws ClassNotFoundException
+    public TileProviderByClass(IJsonProcessor processor, String id, String clazz) throws ClassNotFoundException
     {
+        super(processor);
         this.id = id;
         this.clazz = (Class<? extends TileEntity>) Class.forName(clazz);
     }
@@ -49,5 +52,11 @@ public class TileProviderByClass implements ITileProvider
     public void register(BlockBase block, IJsonGenMod mod, ModManager manager)
     {
         manager.registerTileEntity(id, block, create(clazz));
+    }
+
+    @Override
+    public String getContentID()
+    {
+        return id;
     }
 }

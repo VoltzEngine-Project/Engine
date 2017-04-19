@@ -5,6 +5,7 @@ import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.block.meta.BlockMeta;
 import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
+import com.builtbroken.mc.lib.json.processors.JsonGenData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -12,9 +13,14 @@ import net.minecraft.world.World;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/3/2017.
  */
-public class TileProviderMeta implements ITileProvider
+public class TileProviderMeta extends JsonGenData implements ITileProvider
 {
     public ITileProvider backupProvider;
+
+    public TileProviderMeta()
+    {
+        super(null);
+    }
 
     @Override
     public TileEntity createNewTileEntity(BlockBase block, World world, int meta)
@@ -43,5 +49,11 @@ public class TileProviderMeta implements ITileProvider
         {
             backupProvider.register(block, mod, manager);
         }
+    }
+
+    @Override
+    public String getContentID()
+    {
+        return null;
     }
 }
