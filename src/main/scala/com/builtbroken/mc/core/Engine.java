@@ -483,8 +483,6 @@ public class Engine implements IJsonGenMod
         ToolMode.REGISTRY.add(new ToolModeGeneral());
         ToolMode.REGISTRY.add(new ToolModeRotation());
 
-        registerListeners();
-
         /**
          * Multiblock Handling
          */
@@ -536,11 +534,12 @@ public class Engine implements IJsonGenMod
         }
     }
 
-    protected void registerListeners()
+    @Override
+    public void loadJsonContentHandlers()
     {
         JsonBlockListenerProcessor.addBuilder(new RotatableListener.Builder());
         JsonBlockListenerProcessor.addBuilder(new MultiBlockListener.Builder());
-        proxy.registerListeners();
+        proxy.loadJsonContentHandlers();
     }
 
     @EventHandler

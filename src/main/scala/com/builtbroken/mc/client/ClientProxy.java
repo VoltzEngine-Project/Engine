@@ -94,9 +94,9 @@ public class ClientProxy extends CommonProxy
     }
 
     @Override
-    public void registerListeners()
+    public void loadJsonContentHandlers()
     {
-        super.registerListeners();
+        super.loadJsonContentHandlers();
         JsonBlockListenerProcessor.addBuilder(new RotatableIconListener.Builder());
     }
 

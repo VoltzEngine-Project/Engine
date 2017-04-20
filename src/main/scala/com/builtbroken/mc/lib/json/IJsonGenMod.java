@@ -16,6 +16,22 @@ import net.minecraftforge.common.config.Configuration;
 public interface IJsonGenMod extends IMod
 {
     /**
+     * Called by Voltz Engine's content loading system
+     * to ensure that as many json handlers are loaded
+     * as possible.
+     * <p>
+     * Not all handlers need to be registered inside this
+     * method but it does improve performance. As well
+     * fixes issues with nested loaders such as
+     * {@link com.builtbroken.mc.api.tile.listeners.ITileEventListener} loading which is only run
+     * once.
+     */
+    default void loadJsonContentHandlers()
+    {
+
+    }
+
+    /**
      * Gets the manager that is used to
      * register content for the mod.
      *

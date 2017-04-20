@@ -17,7 +17,7 @@ public class MultiBlockLayoutHandler
     static
     {
         //Empty layout, used as a null or default value
-        layouts.put("1x1", new MultiBlockLayout(null, "1x1"));
+        register(new MultiBlockLayout(null, "1x1"));
     }
 
     public static HashMap<IPos3D, String> get(String key)
@@ -28,5 +28,10 @@ public class MultiBlockLayoutHandler
             return layout.tiles;
         }
         return null;
+    }
+
+    public static void register(MultiBlockLayout multiBlockLayout)
+    {
+        layouts.put(multiBlockLayout.key, multiBlockLayout);
     }
 }

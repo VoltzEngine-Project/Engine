@@ -65,6 +65,12 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
         this.configPath = configName + ".cfg";
     }
 
+    @Override
+    public void loadJsonContentHandlers()
+    {
+        getProxy().loadJsonContentHandlers();
+    }
+
     public void preInit(FMLPreInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, getProxy());
@@ -174,6 +180,7 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
      * on the item or block class, as well {@link com.builtbroken.mc.lib.mod.loadable.ILoadable}
      * to handle recipes instead. As this provides a much more organized and cleaner solution
      * to managing content.
+     *
      * @param manager
      */
     public void loadRecipes(ModManager manager)

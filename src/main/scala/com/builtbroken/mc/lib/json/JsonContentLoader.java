@@ -164,6 +164,18 @@ public final class JsonContentLoader extends AbstractLoadable
 
         debug.end("Done...");
         //===========================================================================
+        debug.start("Registering mod processors");
+        for (ModContainer container : Loader.instance().getModList())
+        {
+            Object mod = container.getMod();
+            if (mod instanceof IJsonGenMod)
+            {
+                debug.log("Mod: " + container.getName() + "  " + container.getDisplayVersion());
+                ((IJsonGenMod) mod).loadJsonContentHandlers();
+            }
+        }
+        debug.end("Done...");
+        //===========================================================================
 
         debug.start("Loading files");
         //Resources are loaded before they can be processed to allow early processing

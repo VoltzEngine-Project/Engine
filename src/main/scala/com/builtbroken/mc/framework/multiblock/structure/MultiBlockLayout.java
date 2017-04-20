@@ -27,6 +27,12 @@ public class MultiBlockLayout extends JsonGenData
     }
 
     @Override
+    public void register()
+    {
+        MultiBlockLayoutHandler.register(this);
+    }
+
+    @Override
     public String getContentID()
     {
         return key;
