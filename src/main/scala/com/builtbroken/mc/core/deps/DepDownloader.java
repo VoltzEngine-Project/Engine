@@ -1,6 +1,5 @@
 package com.builtbroken.mc.core.deps;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.FMLInjectionData;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
@@ -32,7 +31,9 @@ public class DepDownloader
         modsDir = new File(mc_directory, "mods");
         v_modsDir = new File(mc_directory, "mods/" + mc_version);
         if (!v_modsDir.exists())
+        {
             v_modsDir.mkdirs();
+        }
     }
 
     public void start()
@@ -69,7 +70,8 @@ public class DepDownloader
                             nextFile.delete();
                         }
                     }
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     throw new RuntimeException("Failed to parse file " + nextFile.getName() + ". Crashing game to prevent more issues, try deleting the file manually and restarting the game", e);
                 }
@@ -83,8 +85,7 @@ public class DepDownloader
                     int reply = JOptionPane.showConfirmDialog(null, "Missing required version of " + dep.getGenericFileName() + " for Voltz Engine. Do you want to download?\nIf you click no the game will close as it will crash without this file.", "Missing dependency", JOptionPane.YES_OPTION);
                     if (reply != JOptionPane.YES_OPTION)
                     {
-                        FMLCommonHandler.instance().exitJava(1, false);
-                        return;
+                        throw new RuntimeException("User said no to downloading a critical library, crashing to prevent errors");
                     }
                 }
                 FileDownloader.downloadDep(dep);
@@ -98,7 +99,8 @@ public class DepDownloader
         try
         {
             loader.addURL(file.toURI().toURL());
-        } catch (MalformedURLException e)
+        }
+        catch (MalformedURLException e)
         {
             throw new RuntimeException(e);
         }

@@ -47,6 +47,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     {
         if (ticks == 0)
         {
+            layoutKey = layoutKey != null ? layoutKey.toLowerCase() : "";
             MultiBlockHelper.buildMultiBlock(world(), getMultiTileHost(), true, true);
         }
     }
@@ -91,7 +92,8 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
 
             if (getLayoutOfMultiBlock().containsKey(pos))
             {
-                MultiBlockHelper.destroyMultiBlockStructure(this, harvest, true, true);
+                MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost(), harvest, true, true);
+                _destroyingStructure = false;
                 return true;
             }
         }
@@ -129,6 +131,19 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     public HashMap<IPos3D, String> getLayoutOfMultiBlock()
     {
         return MultiBlockLayoutHandler.get(layoutKey);
+    }
+
+    @Override
+    public void breakBlock(Block block, int meta)
+    {
+        MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost(), true, true, false);
+    }
+
+    @Override
+    public boolean removedByPlayer(EntityPlayer player, boolean willHarvest)
+    {
+        MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost(), willHarvest, true, true);
+        return true;
     }
 
     @Override

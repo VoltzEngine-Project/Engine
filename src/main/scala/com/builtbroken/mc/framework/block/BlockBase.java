@@ -396,10 +396,19 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
                 }
                 return activated;
             }
+            //TODO move to listener to prevent usage of IGuiTile in special cases
             else if (tile instanceof IGuiTile && ((IGuiTile) tile).shouldOpenOnRightClick(player))
             {
-                player.openGui(mod, ((IGuiTile) tile).getDefaultGuiID(player), world, x, y, z);
-                return true;
+                int id = ((IGuiTile) tile).getDefaultGuiID(player);
+                if(id >= 0)
+                {
+                    Object o = ((IGuiTile) tile).getServerGuiElement(id, player);
+                    if(o != null)
+                    {
+                        player.openGui(mod, id, world, x, y, z);
+                        return true;
+                    }
+                }
             }
 
             boolean activated = false;

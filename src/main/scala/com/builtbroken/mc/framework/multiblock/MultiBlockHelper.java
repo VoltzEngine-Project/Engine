@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.multiblock;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
@@ -283,48 +284,54 @@ public class MultiBlockHelper
      */
     public static void destroyMultiBlockStructure(IMultiTileHost host, boolean doDrops, boolean offset, boolean killHost)
     {
-        if (host instanceof TileEntity)
+        if (host != null)
         {
             HashMap<IPos3D, String> map = host.getLayoutOfMultiBlock();
             if (map != null && !map.isEmpty())
             {
-                World world = ((TileEntity) host).getWorldObj();
-                int x = ((TileEntity) host).xCoord;
-                int y = ((TileEntity) host).yCoord;
-                int z = ((TileEntity) host).zCoord;
-                Pos center = new Pos(x, y, z);
+                IWorldPosition center;
+
+                if (host instanceof TileEntity)
+                {
+                    center = new Location((TileEntity) host);
+                }
+                else if (host instanceof IWorldPosition)
+                {
+                    center = (IWorldPosition) host;
+                }
+                else
+                {
+                    logger.error("MultiBlockHelper >> Tile[" + host + "]'s is not a TileEntity or IWorldPosition instance, thus we can not get a position to break down the structure.");
+                    return;
+                }
 
                 for (Map.Entry<IPos3D, String> entry : map.entrySet())
                 {
-                    Pos pos = new Pos(entry.getKey());
+                    Pos pos = entry.getKey() instanceof Pos ? (Pos) entry.getKey() : new Pos(entry.getKey());
                     if (offset)
                     {
                         pos = pos.add(center);
                     }
-                    TileEntity tile = pos.getTileEntity(world);
+                    TileEntity tile = pos.getTileEntity(center.world());
                     if (tile instanceof IMultiTile)
                     {
                         ((IMultiTile) tile).setHost(null);
-                        pos.setBlockToAir(world);
+                        pos.setBlockToAir(center.world());
                     }
                 }
                 if (doDrops)
                 {
-                    InventoryUtility.dropBlockAsItem(world, x, y, z, killHost);
+                    InventoryUtility.dropBlockAsItem(center, killHost);
                 }
                 else if (killHost)
                 {
-                    world.setBlockToAir(x, y, z);
+                    center.world().setBlockToAir(center.xi(), center.yi(), center.zi());
                 }
             }
             else
             {
-                logger.error("Tile[" + host + "]'s structure map is empty");
+                logger.error("MultiBlockHelper >> Tile[" + host + "]'s structure map is empty");
             }
-        }
-        else
-        {
-            logger.error("Tile[" + host + "] is not an instanceof TileEntity");
         }
     }
 
