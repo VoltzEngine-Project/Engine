@@ -8,9 +8,12 @@ import com.builtbroken.mc.api.tile.listeners.IUpdateListener;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
+import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,7 +36,7 @@ import java.util.*;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/30/2017.
  */
-public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITileWithListeners
+public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITileWithListeners, IPacketIDReceiver
 {
     /** Object that controls all logic for the tile and some logic of the block */
     protected final ITileNode tile;
@@ -80,7 +83,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
                             {
                                 ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
                             }
-                            ((IUpdateListener)listener).update(ticks);
+                            ((IUpdateListener) listener).update(ticks);
                         }
                         catch (Exception e)
                         {
@@ -159,6 +162,16 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     //=============================================
     //================= data ======================
     //=============================================
+
+    @Override
+    public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type)
+    {
+        if (getTileNode() instanceof IPacketIDReceiver)
+        {
+            return ((IPacketIDReceiver) getTileNode()).read(buf, id, player, type);
+        }
+        return false;
+    }
 
     @Override
     public Packet getDescriptionPacket()

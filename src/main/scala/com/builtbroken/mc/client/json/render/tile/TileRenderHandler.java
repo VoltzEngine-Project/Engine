@@ -1,9 +1,13 @@
 package com.builtbroken.mc.client.json.render.tile;
 
+import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
+import com.builtbroken.mc.api.tile.listeners.client.ITileRenderListener;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
+import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.prefab.tile.listeners.ListenerIterator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
@@ -67,6 +71,20 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
             }
         }
         GL11.glPopMatrix();
+
+        //If block base iterate listeners
+        if (tile.getBlockType() instanceof BlockBase)
+        {
+            ListenerIterator it = new ListenerIterator(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord, (BlockBase) tile.getBlockType(), "tilerender");
+            while (it.hasNext())
+            {
+                ITileEventListener next = it.next();
+                if (next instanceof ITileRenderListener)
+                {
+                    ((ITileRenderListener) next).renderDynamic(tile, x, y, z, f);
+                }
+            }
+        }
     }
 
     protected RenderData getRenderData(TileEntity tile)
