@@ -15,6 +15,7 @@ import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.builtbroken.mc.prefab.items.ItemBlockAbstract;
 import com.builtbroken.mc.prefab.tile.listeners.ListenerIterator;
 import cpw.mods.fml.relauncher.Side;
@@ -437,19 +438,44 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public void updateTick(World world, int x, int y, int z, Random par5Random)
     {
-        //TODO implement
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "update");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IUpdateListener)
+            {
+                ((IUpdateListener) next).updateTick(par5Random);
+            }
+        }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random par5Random)
     {
-        //TODO implement
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "update");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IUpdateListener)
+            {
+                ((IUpdateListener) next).randomDisplayTick(par5Random);
+            }
+        }
     }
 
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
     {
-        //TODO implement
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "update");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof ICollisionListener)
+            {
+                ((ICollisionListener) next).onEntityCollidedWithBlock(entity);
+            }
+        }
     }
 
     @Override
@@ -457,20 +483,62 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)
     {
         super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity);
+
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "bounds");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IBoundListener)
+            {
+                List collect = new ArrayList();
+                ((IBoundListener) next).addCollisionBoxesToList(aabb, collect, entity);
+                for (Object object : list)
+                {
+                    if (object instanceof AxisAlignedBB && aabb.intersectsWith((AxisAlignedBB) object))
+                    {
+                        list.add(object);
+                    }
+                }
+            }
+        }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
     {
-        //TODO implement
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "bounds");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IBoundListener)
+            {
+                AxisAlignedBB bound = ((IBoundListener) next).getSelectedBounds();
+                if (bound != null)
+                {
+                    return bound; //TODO change to largest box wins
+                }
+            }
+        }
         return super.getSelectedBoundingBoxFromPool(world, x, y, z);
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
     {
-        //TODO implement
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "bounds");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IBoundListener)
+            {
+                AxisAlignedBB bound = ((IBoundListener) next).getCollisionBounds();
+                if (bound != null)
+                {
+                    return bound; //TODO change to largest box wins
+                }
+            }
+        }
         return super.getCollisionBoundingBoxFromPool(world, x, y, z);
     }
 
@@ -502,8 +570,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public boolean hasComparatorInputOverride()
     {
-        //TODO implement
-        return false;
+        return data != null ? data.hasComparatorInputOverride() : false;
     }
 
     @Override
@@ -515,8 +582,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public boolean renderAsNormalBlock()
     {
-        //TODO implement
-        return super.renderAsNormalBlock();
+        return data != null ? data.renderAsNormalBlock() : true;
     }
 
     @SideOnly(Side.CLIENT)
@@ -531,53 +597,19 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
         final int meta = world.getBlockMetadata(x, y, z);
-        if (listeners.containsKey("icon"))
-        {
-            for (ITileEventListener listener : listeners.get("icon"))
-            {
-                if (listener instanceof IIconListener && listener instanceof IBlockListener)
-                {
-                    ((IBlockListener) listener).inject(world, x, y, z);
-                    IIcon icon = ((IIconListener) listener).getTileIcon(side, meta);
-                    if (icon != null)
-                    {
-                        ((IBlockListener) listener).eject();
-                        return icon;
-                    }
-                    ((IBlockListener) listener).eject();
-                }
-            }
-        }
-        //Check tile
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof IIconListener)
-        {
-            ((IIconListener) tile).getTileIcon(side, meta);
-        }
-        //Do calls for tile listeners
-        if (tile instanceof ITileWithListeners)
-        {
-            for (ITileEventListener listener : ((ITileWithListeners) tile).getListeners("break"))
-            {
-                if (listener instanceof IIconListener)
-                {
-                    IIcon icon = ((IIconListener) listener).getTileIcon(side, meta);
-                    if (icon != null)
-                    {
-                        return icon;
-                    }
-                }
-            }
-        }
-        //Check node
-        if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() instanceof IIconListener)
-        {
-            IIcon icon = ((IIconListener) ((ITileNodeHost) tile).getTileNode()).getTileIcon(side, meta);
-            if (icon != null)
-            {
-                return icon;
-            }
 
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "icon");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IIconListener)
+            {
+                IIcon icon = ((IIconListener) next).getTileIcon(side, meta);
+                if (icon != null)
+                {
+                    return icon;
+                }
+            }
         }
         return getIcon(side, meta);
     }
@@ -673,22 +705,53 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)
     {
-        //TODO implement
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "blockStack");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IBlockStackListener)
+            {
+                ItemStack stack = ((IBlockStackListener) next).getPickBlock(target, player);
+                if (stack != null && stack.getItem() != null)
+                {
+                    return stack;
+                }
+            }
+        }
         return super.getPickBlock(target, world, x, y, z, player);
     }
 
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
     {
-        //TODO implement
-        return super.getDrops(world, x, y, z, metadata, fortune);
+        ArrayList<ItemStack> items = super.getDrops(world, x, y, z, metadata, fortune);
+
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "blockStack");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IBlockStackListener)
+            {
+                ((IBlockStackListener) next).collectDrops(items, metadata, fortune);
+            }
+        }
+        return items;
     }
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs creativeTabs, List list)
     {
         super.getSubBlocks(item, creativeTabs, list);
-        //TODO implement
+        if (listeners.containsKey("blockStack"))
+        {
+            for (ITileEventListener listener : listeners.get("blockStack"))
+            {
+                if (listener instanceof IBlockStackListener)
+                {
+                    ((IBlockStackListener) listener).getSubBlocks(item, creativeTabs, list);
+                }
+            }
+        }
     }
 
     /**
@@ -717,20 +780,48 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess access, int x, int y, int z)
     {
-        //TODO implement
+        ListenerIterator it = new ListenerIterator(access, x, y, z, this, "bounds");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IBoundListener)
+            {
+                ((IBoundListener) next).setBlockBoundsBasedOnState();
+            }
+        }
     }
 
     @Override
     public void setBlockBoundsForItemRender()
     {
-        //TODO implement
+        if (listeners.containsKey("bounds"))
+        {
+            for (ITileEventListener listener : listeners.get("bounds"))
+            {
+                if (listener instanceof IBoundListener)
+                {
+                    ((IBoundListener) listener).setBlockBoundsForItemRender();
+                }
+            }
+        }
     }
 
     @Override
     protected void dropBlockAsItem(World world, int x, int y, int z, ItemStack itemStack)
     {
-        super.dropBlockAsItem(world, x, y, z, itemStack);
-        //TODO implement
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "blockStack");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IBlockStackListener)
+            {
+                ((IBlockStackListener) next).dropBlockAsItem(itemStack);
+            }
+        }
+        if (itemStack != null && itemStack.getItem() != null)
+        {
+            InventoryUtility.dropItemStack(world, x, y, z, itemStack, 0, 0);
+        }
     }
 
     @Override
@@ -742,8 +833,20 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public int tickRate(World world)
     {
-        //TODO implement
-        return super.tickRate(world);
+        int tickRate = super.tickRate(world);
+        for (ITileEventListener next : listeners.get("update"))
+        {
+            if (next instanceof IUpdateListener)
+            {
+                int r = ((IUpdateListener) next).tickRate(world);
+                if (r > 0 && r < tickRate)
+                {
+                    tickRate = r;
+                }
+            }
+        }
+        return tickRate;
+
     }
 
     /**
