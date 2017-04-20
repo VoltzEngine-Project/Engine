@@ -32,7 +32,9 @@ public class BlockPropertyData extends JsonGenData
     //Block data
     private Material material = Material.clay;
     private boolean isOpaqueCube;
+    private boolean renderAsNormalBlock = true;
     private boolean supportsRedstone = false;
+    private boolean hasComparatorInputOverride = false;
     private boolean isAlpha = false;
     private float hardness = 5;
     private float resistance = 5;
@@ -158,5 +160,27 @@ public class BlockPropertyData extends JsonGenData
     public void setLightValue(int lightValue)
     {
         this.lightValue = lightValue;
+    }
+
+    @JsonProcessorData(value = "renderAsNormalBlock")
+    public void setRenderAsNormalBlock(boolean b)
+    {
+        this.renderAsNormalBlock = b;
+    }
+
+    public boolean renderAsNormalBlock()
+    {
+        return renderAsNormalBlock;
+    }
+
+    @JsonProcessorData(value = "hasComparatorInputOverride")
+    public void setHasComparatorInputOverride(boolean b)
+    {
+        this.hasComparatorInputOverride = b;
+    }
+
+    public boolean hasComparatorInputOverride()
+    {
+        return hasComparatorInputOverride;
     }
 }
