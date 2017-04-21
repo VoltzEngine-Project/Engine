@@ -25,6 +25,13 @@ public interface IModelState extends IRenderState
     /** Model to use */
     ModelData getModel();
 
+    /**
+     * Gets the parts to render
+     *
+     * @return
+     */
+    String[] getPartsToRender();
+
     /** Texture to use */
     default TextureData getTexture()
     {

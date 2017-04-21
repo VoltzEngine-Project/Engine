@@ -88,6 +88,11 @@ public class ModelState extends TextureState implements IModelState
                 GL11.glRotated(((IModelState) parentState).getRotation().roll(), 0, 0, 1);
             }
 
+            if(id.equalsIgnoreCase("item.equipped"))
+            {
+                //GL11.glTranslated(0.5, 0.5, 0.5);
+            }
+
             //Moves the object
             if (offset != null)
             {
@@ -98,8 +103,9 @@ public class ModelState extends TextureState implements IModelState
                 GL11.glTranslated(((IModelState) parentState).getOffset().x(), ((IModelState) parentState).getOffset().y(), ((IModelState) parentState).getOffset().z());
             }
 
+
             //Renders parts selected
-            data.render(parts);
+            data.render(getPartsToRender());
 
             //Ends render by restoring previous matrix(rotation, position, etc)
             GL11.glPopMatrix();
@@ -161,6 +167,16 @@ public class ModelState extends TextureState implements IModelState
             return ((IModelState) parentState).getModel();
         }
         return ClientDataHandler.INSTANCE.getModel(modelID);
+    }
+
+    @Override
+    public String[] getPartsToRender()
+    {
+        if (parentState instanceof IModelState && (parts == null || parts.length == 0))
+        {
+            return ((IModelState) parentState).getPartsToRender();
+        }
+        return parts;
     }
 
     @Override
