@@ -1,6 +1,6 @@
 {
   "render": {
-    "type":"VE-Item",
+    "type":"item",
     "contentID": "item.voltzenginetest:testVeItem",
     "states": [
       {

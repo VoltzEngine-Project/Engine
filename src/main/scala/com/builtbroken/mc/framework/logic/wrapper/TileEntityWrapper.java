@@ -159,6 +159,13 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
         }
     }
 
+    @Override
+    public boolean isHostValid()
+    {
+        return !isInvalid();
+    }
+
+
     //=============================================
     //================= data ======================
     //=============================================

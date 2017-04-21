@@ -124,7 +124,7 @@ public class ClientProxy extends CommonProxy
     {
         super.postInit();
         //Item that uses a model for all states
-        registerItemJsonRenders("VE-Item", new ItemJsonRenderer());
+        registerItemJsonRenders(new ItemJsonRenderer(), "VE-Item", "item", "tile", "block");
 
         List<IJsonGenObject> objects = JsonContentLoader.INSTANCE.generatedObjects.get(JsonBlockProcessor.KEY);
         if (objects != null && !objects.isEmpty())
@@ -154,10 +154,10 @@ public class ClientProxy extends CommonProxy
      * Called to loop through all registered json content to register
      * items to item renders.
      *
-     * @param key      - key for the render type
+     * @param keys     - keys for the render type supported
      * @param renderer - render handler
      */
-    public static void registerItemJsonRenders(String key, IItemRenderer renderer)
+    public static void registerItemJsonRenders(IItemRenderer renderer, String... keys)
     {
         for (List<IJsonGenObject> list : JsonContentLoader.INSTANCE.generatedObjects.values())
         {
@@ -171,9 +171,16 @@ public class ClientProxy extends CommonProxy
                         for (String id : ids)
                         {
                             RenderData data = ClientDataHandler.INSTANCE.getRenderData(id);
-                            if (data != null && data.renderType.equalsIgnoreCase(key))
+                            if (data != null)
                             {
-                                MinecraftForgeClient.registerItemRenderer((Item) object, renderer);
+                                for (String key : keys)
+                                {
+                                    if (data.renderType.equalsIgnoreCase(key))
+                                    {
+                                        MinecraftForgeClient.registerItemRenderer((Item) object, renderer);
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
