@@ -420,6 +420,7 @@ link.error.tile.already.added.name=Tile already linked
 link.cleared.name=Link data cleared
 link.pos.set.name=Link data set
 link.completed.name=Link Created
+link.updated.name=Link Updated
 
 # Items
 item.voltzengine:screwdriver.name=Screwdriver
@@ -444,6 +445,10 @@ info.voltzengine:explosive.name=Explosive
 info.voltzengine:explosive.size.name=Size
 info.voltzengine:explosive.yield.name=Yield: %.2fm radius
 info.voltzengine:explosive.item.name=ExItem
+
+info.voltzengine:tile.error.gui.none=No gui found to open
+info.voltzengine:tile.error.missing.data=Tile is missing data for this action
+info.voltzengine:tile.error.missing=Tile could not be found
 
 ## Permissions
 root.machine=Manage Machine
