@@ -21,7 +21,7 @@ public class BlockPropertyData extends JsonGenData
     public final String name;
 
     /** Localization of the block */
-    public String localization = "tile.${name}";
+    public String localization = "${mod}:${name}";
     /** Global ore dict name of the block */
     public String oreName;
 

@@ -39,6 +39,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
@@ -163,11 +164,20 @@ public class ClientProxy extends CommonProxy
         {
             if (list != null && !list.isEmpty())
             {
-                for (IJsonGenObject object : list)
+                for (IJsonGenObject obj : list)
                 {
-                    if (object instanceof Item && object instanceof IJsonRenderStateProvider)
+                    Item item = null;
+                    if (obj instanceof Item && obj instanceof IJsonRenderStateProvider)
                     {
-                        List<String> ids = ((IJsonRenderStateProvider) object).getRenderContentIDs();
+                        item = (Item) obj;
+                    }
+                    else if (obj instanceof Block)
+                    {
+                        item = Item.getItemFromBlock((Block) obj);
+                    }
+                    if (item != null)
+                    {
+                        List<String> ids = ((IJsonRenderStateProvider) item).getRenderContentIDs();
                         for (String id : ids)
                         {
                             RenderData data = ClientDataHandler.INSTANCE.getRenderData(id);
@@ -177,7 +187,7 @@ public class ClientProxy extends CommonProxy
                                 {
                                     if (data.renderType.equalsIgnoreCase(key))
                                     {
-                                        MinecraftForgeClient.registerItemRenderer((Item) object, renderer);
+                                        MinecraftForgeClient.registerItemRenderer(item, renderer);
                                         break;
                                     }
                                 }

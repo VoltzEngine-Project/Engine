@@ -16,7 +16,6 @@ import com.builtbroken.mc.lib.helper.WrenchUtility;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import com.builtbroken.mc.prefab.items.ItemBlockAbstract;
 import com.builtbroken.mc.prefab.tile.listeners.ListenerIterator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -69,7 +68,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     {
         super(data.getMaterial());
         this.data = data;
-        this.setBlockName(data.localization.replace("${name}", data.name));
+        this.setBlockName(data.localization.replace("${name}", data.name).replace("${mod}", data.getMod()));
         this.setResistance(data.getResistance());
         this.setHardness(data.getHardness());
 
@@ -103,7 +102,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
         {
             this.mod = mod;
             registered = true;
-            manager.newBlock(data.registryKey, this, ItemBlockAbstract.class);
+            manager.newBlock(data.registryKey, this, ItemBlockBase.class);
             if (data.tileEntityProvider != null)
             {
                 data.tileEntityProvider.register(this, mod, manager);
@@ -400,10 +399,10 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             else if (tile instanceof IGuiTile && ((IGuiTile) tile).shouldOpenOnRightClick(player))
             {
                 int id = ((IGuiTile) tile).getDefaultGuiID(player);
-                if(id >= 0)
+                if (id >= 0)
                 {
                     Object o = ((IGuiTile) tile).getServerGuiElement(id, player);
-                    if(o != null)
+                    if (o != null)
                     {
                         player.openGui(mod, id, world, x, y, z);
                         return true;
