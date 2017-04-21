@@ -88,11 +88,6 @@ public class ModelState extends TextureState implements IModelState
                 GL11.glRotated(((IModelState) parentState).getRotation().roll(), 0, 0, 1);
             }
 
-            if(id.equalsIgnoreCase("item.equipped"))
-            {
-                //GL11.glTranslated(0.5, 0.5, 0.5);
-            }
-
             //Moves the object
             if (offset != null)
             {
