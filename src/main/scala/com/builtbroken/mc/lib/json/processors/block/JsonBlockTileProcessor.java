@@ -26,10 +26,19 @@ public class JsonBlockTileProcessor extends JsonProcessor<ITileProvider> impleme
     @Override
     public ITileProvider process(JsonElement element)
     {
+        return process(element, "");
+    }
+
+    public ITileProvider process(JsonElement element, String pack)
+    {
         JsonObject data = element.getAsJsonObject();
         JsonProcessor.ensureValuesExist(data, "id", "class");
 
         String className = data.get("class").getAsString();
+        if (!className.contains(".") || className.startsWith("."))
+        {
+            className = pack + className;
+        }
         String id = data.get("id").getAsString();
         try
         {
@@ -44,13 +53,17 @@ public class JsonBlockTileProcessor extends JsonProcessor<ITileProvider> impleme
     @Override
     public void process(BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
-        block.data.tileEntityProvider = process(element);
+        String pack = block.getClass().getName().replace("class", "");
+        pack = pack.substring(0, pack.lastIndexOf("."));
+        block.data.tileEntityProvider = process(element, pack);
     }
 
     @Override
     public void process(MetaData meta, BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
-        meta.tileEntityProvider = process(element);
+        String pack = block.getClass().getName().replace("class", "");
+        pack = pack.substring(0, pack.lastIndexOf("."));
+        meta.tileEntityProvider = process(element, pack);
     }
 
     @Override

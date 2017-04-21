@@ -1,7 +1,10 @@
 package com.builtbroken.mc.client.json.render.tile;
 
+import com.builtbroken.mc.api.tile.access.IRotation;
 import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
 import com.builtbroken.mc.api.tile.listeners.client.ITileRenderListener;
+import com.builtbroken.mc.api.tile.node.ITileNode;
+import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
@@ -10,6 +13,7 @@ import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.prefab.tile.listeners.ListenerIterator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
@@ -33,46 +37,25 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
         RenderData data = getRenderData(tile);
         if (data != null && data.renderType.equalsIgnoreCase("tile"))
         {
-            IRenderState state = null;
-
             //Try to get tile specific state
             String key = getRenderStateKey(tile);
-            if (key != null)
-            {
-                state = data.getState(key);
-                if (!(state instanceof IModelState) || ((IModelState) state).getModel() == null)
-                {
-                    state = null;
-                }
-            }
 
-            //Get default(s)
-            if (state == null)
+            //Loop default keys
+            for (String de : new String[]{key, "tile", "entity", "item.entity"})
             {
-                for (String de : new String[]{"tile", "entity", "item.entity"})
+                if (de != null)
                 {
-                    state = data.getState(de);
-                    if (!(state instanceof IModelState) || ((IModelState) state).getModel() == null)
-                    {
-                        state = null;
-                    }
-                    else
+                    IRenderState state = data.getState(de);
+                    if (state instanceof IModelState && ((IModelState) state).render())
                     {
                         break;
                     }
                 }
             }
-
-            if (state instanceof IModelState)
-            {
-                //float scale = 100; //0.0254f;//0.0255f;
-                //GL11.glScalef(scale, scale, scale);
-                ((IModelState) state).render();
-            }
         }
         GL11.glPopMatrix();
 
-        //If block base iterate listeners
+        //If BlockBase, iterate listeners
         if (tile.getBlockType() instanceof BlockBase)
         {
             ListenerIterator it = new ListenerIterator(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord, (BlockBase) tile.getBlockType(), "tilerender");
@@ -120,6 +103,18 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
 
     protected String getRenderStateKey(TileEntity tile)
     {
+        if (tile instanceof IRotation && ((IRotation) tile).getDirection() != ForgeDirection.UNKNOWN && ((IRotation) tile).getDirection() != null)
+        {
+            return "tile." + ((IRotation) tile).getDirection().name().toLowerCase();
+        }
+        else if (tile instanceof ITileNodeHost)
+        {
+            ITileNode node = ((ITileNodeHost) tile).getTileNode();
+            if (node instanceof IRotation && ((IRotation) node).getDirection() != ForgeDirection.UNKNOWN && ((IRotation) node).getDirection() != null)
+            {
+                return "tile." + ((IRotation) node).getDirection().name().toLowerCase();
+            }
+        }
         return "tile." + tile.getBlockMetadata();
     }
 }
