@@ -29,7 +29,7 @@ public class JsonBlockListenerProcessor extends JsonBlockSubProcessor
 
     public static void addBuilder(ITileEventListenerBuilder builder)
     {
-        builders.put(builder.getListenerKey(), builder);
+        builders.put(builder.getListenerKey().toLowerCase(), builder);
     }
 
     @Override
