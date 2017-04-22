@@ -110,7 +110,7 @@ public class DepDownloader
     public static void load()
     {
         DepDownloader downloader = new DepDownloader();
-        downloader.depsToLoad.add(new MavenDep("@bbm_url@", "@CL@", "@CL-name@", "@CL_maj@", "@CL_min@", "@CL_rev@", "@CL_bu@", "universal"));
+        downloader.depsToLoad.add(new MavenDep("@bbm_url@", "@CL@", "@CL-name@", "@CL_maj@", "@CL_min@", "@CL_rev@", "@CL_bu@"));
         //downloader.depsToLoad.add(new MavenDep("http://repo1.maven.org/maven2/", "com.dmurph", "JGoogleAnalyticsTracker", 1, 2, 0, -1));
         //http://search.maven.org/remotecontent?filepath=com/dmurph/JGoogleAnalyticsTracker/1.2.0/JGoogleAnalyticsTracker-1.2.0.jar
         //downloader.depsToLoad.add(new MavenDep("http://api.dmodoomsirius.me/", "com/builtbroken/codinglib", "CodingLib", "0", "0", "2", "26", "universal"));
