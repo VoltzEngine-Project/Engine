@@ -48,5 +48,5 @@ public interface IModelState extends IRenderState
      *
      * @return true if rendered
      */
-    boolean render();
+    boolean render(boolean subRender);
 }

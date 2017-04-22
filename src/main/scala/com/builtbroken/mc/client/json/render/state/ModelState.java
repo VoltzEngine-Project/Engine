@@ -28,6 +28,9 @@ public class ModelState extends TextureState implements IModelState
     public String parent;
     public IRenderState parentState;
 
+    public boolean renderParent = false;
+    public boolean renderOnlyParts = true;
+
     public ModelState(String ID)
     {
         super(ID);
@@ -43,7 +46,7 @@ public class ModelState extends TextureState implements IModelState
     }
 
     @Override
-    public boolean render()
+    public boolean render(boolean subRender)
     {
         TextureData textureData = getTexture();
         ModelData data = getModel();
@@ -51,6 +54,62 @@ public class ModelState extends TextureState implements IModelState
         {
             //Starts rendering by storing previous matrix
             GL11.glPushMatrix();
+
+            if(!subRender)
+            {
+                //TODO handle parent additions, in which parent and child data are combined
+                //Scales object by value
+                if (scale != null)
+                {
+                    GL11.glScaled(scale.x(), scale.y(), scale.z());
+                }
+                else if (parentState instanceof IModelState && ((IModelState) parentState).getScale() != null)
+                {
+                    GL11.glScaled(((IModelState) parentState).getScale().x(), ((IModelState) parentState).getScale().y(), ((IModelState) parentState).getScale().z());
+                }
+
+                //Rotates object, needs to be handled after scaling
+                if (rotation != null)
+                {
+                    GL11.glRotated(rotation.pitch(), 1, 0, 0);
+                    GL11.glRotated(rotation.yaw(), 0, 1, 0);
+                    GL11.glRotated(rotation.roll(), 0, 0, 1);
+                }
+                else if (parentState instanceof IModelState && ((IModelState) parentState).getRotation() != null)
+                {
+                    GL11.glRotated(((IModelState) parentState).getRotation().pitch(), 1, 0, 0);
+                    GL11.glRotated(((IModelState) parentState).getRotation().yaw(), 0, 1, 0);
+                    GL11.glRotated(((IModelState) parentState).getRotation().roll(), 0, 0, 1);
+                }
+
+                //Moves the object
+                if (offset != null)
+                {
+                    GL11.glTranslated(offset.x(), offset.y(), offset.z());
+                }
+                else if (parentState instanceof IModelState && ((IModelState) parentState).getOffset() != null)
+                {
+                    GL11.glTranslated(((IModelState) parentState).getOffset().x(), ((IModelState) parentState).getOffset().y(), ((IModelState) parentState).getOffset().z());
+                }
+            }
+
+            //Render parent
+            GL11.glPushMatrix();
+            if (parentState instanceof IModelState)
+            {
+                if (renderParent)
+                {
+                    ((IModelState) parentState).render(true);
+                }
+                else if (parts == null && parentState instanceof ModelState && ((ModelState) parentState).renderParent)
+                {
+                    if (((ModelState) parentState).parentState instanceof IModelState)
+                    {
+                        ((IModelState) ((ModelState) parentState).parentState).render(true);
+                    }
+                }
+            }
+            GL11.glPopMatrix();
 
             //Binds texture
             if (textureData != null)
@@ -63,44 +122,8 @@ public class ModelState extends TextureState implements IModelState
                 FMLClientHandler.instance().getClient().renderEngine.bindTexture(SharedAssets.GREY_TEXTURE);
             }
 
-            //TODO handle parent additions, in which parent and child data are combined
-            //Scales object by value
-            if (scale != null)
-            {
-                GL11.glScaled(scale.x(), scale.y(), scale.z());
-            }
-            else if (parentState instanceof IModelState && ((IModelState) parentState).getScale() != null)
-            {
-                GL11.glScaled(((IModelState) parentState).getScale().x(), ((IModelState) parentState).getScale().y(), ((IModelState) parentState).getScale().z());
-            }
-
-            //Rotates object, needs to be handled after scaling
-            if (rotation != null)
-            {
-                GL11.glRotated(rotation.pitch(), 1, 0, 0);
-                GL11.glRotated(rotation.yaw(), 0, 1, 0);
-                GL11.glRotated(rotation.roll(), 0, 0, 1);
-            }
-            else if (parentState instanceof IModelState && ((IModelState) parentState).getRotation() != null)
-            {
-                GL11.glRotated(((IModelState) parentState).getRotation().pitch(), 1, 0, 0);
-                GL11.glRotated(((IModelState) parentState).getRotation().yaw(), 0, 1, 0);
-                GL11.glRotated(((IModelState) parentState).getRotation().roll(), 0, 0, 1);
-            }
-
-            //Moves the object
-            if (offset != null)
-            {
-                GL11.glTranslated(offset.x(), offset.y(), offset.z());
-            }
-            else if (parentState instanceof IModelState && ((IModelState) parentState).getOffset() != null)
-            {
-                GL11.glTranslated(((IModelState) parentState).getOffset().x(), ((IModelState) parentState).getOffset().y(), ((IModelState) parentState).getOffset().z());
-            }
-
-
-            //Renders parts selected
-            data.render(getPartsToRender());
+            //Render model
+            data.render(renderOnlyParts, getPartsToRender());
 
             //Ends render by restoring previous matrix(rotation, position, etc)
             GL11.glPopMatrix();

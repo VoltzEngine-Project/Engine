@@ -155,6 +155,17 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                     renderState = new ModelState(stateID, modelID, offset, scale, rotation);
                 }
 
+
+                if (renderStateObject.has("renderOnlyParts"))
+                {
+                    ((ModelState) renderState).renderOnlyParts = renderStateObject.get("renderOnlyParts").getAsBoolean();
+                }
+
+                if (renderStateObject.has("renderParent"))
+                {
+                    ((ModelState) renderState).renderParent = renderStateObject.get("renderParent").getAsBoolean();
+                }
+
                 //Loads parts to render if all is not selected
                 if (renderStateObject.has("parts"))
                 {

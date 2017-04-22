@@ -63,7 +63,7 @@ public class RenderData extends JsonGenData
      */
     public boolean render(String state)
     {
-        return canRenderState(state) && ((IModelState)getState(state)).render();
+        return canRenderState(state) && ((IModelState)getState(state)).render(false);
     }
 
     @Override

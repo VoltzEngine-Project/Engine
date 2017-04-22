@@ -43,7 +43,7 @@ public class ModelData extends JsonGenData
         return model;
     }
 
-    public void render(String... parts)
+    public void render(boolean renderOnlyParts, String... parts)
     {
         if (!errorLock)
         {
@@ -51,7 +51,14 @@ public class ModelData extends JsonGenData
             {
                 if (parts != null)
                 {
-                    model.renderOnly(parts);
+                    if (renderOnlyParts)
+                    {
+                        model.renderOnly(parts);
+                    }
+                    else
+                    {
+                        model.renderAllExcept(parts);
+                    }
                 }
                 else
                 {
@@ -79,7 +86,7 @@ public class ModelData extends JsonGenData
                 }
             }
         }
-        else if(Engine.runningAsDev)
+        else if (Engine.runningAsDev)
         {
             RenderUtility.renderFloatingText("ErrorLocked: " + this, 0, 0, 0, Color.red.getRGB());
         }

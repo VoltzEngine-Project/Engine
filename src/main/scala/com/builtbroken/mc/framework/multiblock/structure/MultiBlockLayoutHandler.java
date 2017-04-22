@@ -22,7 +22,7 @@ public class MultiBlockLayoutHandler
 
     public static HashMap<IPos3D, String> get(String key)
     {
-        MultiBlockLayout layout = layouts.get(key);
+        MultiBlockLayout layout = layouts.get(key.toLowerCase());
         if (layout != null)
         {
             return layout.tiles;

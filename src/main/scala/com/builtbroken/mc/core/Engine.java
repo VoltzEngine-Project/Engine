@@ -44,6 +44,7 @@ import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
+import com.builtbroken.mc.lib.json.processors.event.JsonMissingMapEventProcessor;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
 import com.builtbroken.mc.lib.mod.Mods;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
@@ -866,14 +867,24 @@ public class Engine implements IJsonGenMod
         for (FMLMissingMappingsEvent.MissingMapping missingMapping : event.getAll())
         {
             final String name = missingMapping.name;
+            String key = null;
             if (name.startsWith("VoltzEngine:"))
             {
-                String registryKey = name.split(":")[1];
-                Object object = missingMapping.type.getRegistry().getObject("voltzengine:" + registryKey);
+                key = "voltzengine:" + name.split(":")[1];
+                key = key.replace("VoltzEngine", "ve");
+            }
+            else if (JsonMissingMapEventProcessor.mappings.containsKey(name))
+            {
+                key = JsonMissingMapEventProcessor.mappings.get(name);
+            }
+
+            if (key != null && !key.isEmpty())
+            {
+                logger().info("Fixing missing mapping for '" + name + "' replacing with '" + key + "'");
+                Object object = missingMapping.type.getRegistry().getObject(key);
                 if (object == Blocks.air || object == null)
                 {
-                    registryKey = registryKey.replace("VoltzEngine", "ve");
-                    object = missingMapping.type.getRegistry().getObject("voltzengine:" + registryKey);
+                    object = missingMapping.type.getRegistry().getObject(key);
                 }
 
                 if (object != Blocks.air && object != null)

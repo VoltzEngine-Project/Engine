@@ -46,7 +46,7 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
                 if (de != null)
                 {
                     IRenderState state = data.getState(de);
-                    if (state instanceof IModelState && ((IModelState) state).render())
+                    if (state instanceof IModelState && ((IModelState) state).render(false))
                     {
                         break;
                     }

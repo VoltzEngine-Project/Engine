@@ -17,6 +17,7 @@ import com.builtbroken.mc.lib.json.override.JsonOverrideProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockTileProcessor;
+import com.builtbroken.mc.lib.json.processors.event.JsonMissingMapEventProcessor;
 import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.lib.json.processors.item.processor.JsonItemProcessor;
 import com.builtbroken.mc.lib.json.processors.multiblock.JsonMultiBlockLayoutProcessor;
@@ -160,6 +161,7 @@ public final class JsonContentLoader extends AbstractLoadable
         add(new JsonRecipeReplacementProcessor());
         add(new JsonOverrideProcessor());
         add(new JsonMultiBlockLayoutProcessor());
+        add(new JsonMissingMapEventProcessor());
         //TODO add machine recipes
 
         debug.end("Done...");

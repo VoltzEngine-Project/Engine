@@ -37,6 +37,9 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @JsonProcessorData("doRotation")
     protected boolean doRotation = false;
 
+    @JsonProcessorData("buildFirstTick")
+    protected boolean buildFirstTick = true;
+
     @Override
     public List<String> getListenerKeys()
     {
@@ -52,12 +55,12 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public void update(long ticks)
     {
-        if (ticks == 0)
+        if (ticks == 0 && buildFirstTick)
         {
             layoutKey = layoutKey != null ? layoutKey.toLowerCase() : "";
             if (MultiBlockHelper.canBuild(world(), getMultiTileHost(), true))
             {
-                MultiBlockHelper.buildMultiBlock(world(), getMultiTileHost(), true, true);
+                MultiBlockHelper.buildMultiBlock(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
             }
             else
             {
@@ -106,7 +109,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
 
             if (getLayoutOfMultiBlock().containsKey(pos))
             {
-                MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost(), harvest, true, true);
+                MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost() != null ? getMultiTileHost() : this, harvest, true, true);
                 _destroyingStructure = false;
                 return true;
             }
@@ -168,20 +171,20 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public void breakBlock(Block block, int meta)
     {
-        MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost(), true, true, false);
+        MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost() != null ? getMultiTileHost() : this, true, true, false);
     }
 
     @Override
     public boolean removedByPlayer(EntityPlayer player, boolean willHarvest)
     {
-        MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost(), willHarvest, true, true);
+        MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost() != null ? getMultiTileHost() : this, willHarvest, true, true);
         return true;
     }
 
     @Override
     public boolean canPlaceAt()
     {
-        return MultiBlockHelper.canBuild(world(), getMultiTileHost(), true);
+        return MultiBlockHelper.canBuild(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true);
     }
 
     public static class Builder implements ITileEventListenerBuilder

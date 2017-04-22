@@ -122,7 +122,7 @@ public class MultiBlockHelper
                         //Moves the position based on the location of the host
                         if (offset)
                         {
-                            location = new Location((TileEntity) tile).add(location);
+                            location = new Location((IWorldPosition) tile).add(location);
                         }
                         TileEntity ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
                         if (!validate || ent == null || enumType.clazz != ent.getClass())
@@ -195,7 +195,7 @@ public class MultiBlockHelper
                         //Moves the position based on the location of the host
                         if (offset)
                         {
-                            location = new Location((TileEntity) tile).add(location);
+                            location = new Location((IWorldPosition) tile).add(location);
                         }
                         Block block = world.getBlock(location.xi(), location.yi(), location.zi());
                         if (!block.isAir(world, location.xi(), location.yi(), location.zi()) && !block.isReplaceable(world, location.xi(), location.yi(), location.zi()))
