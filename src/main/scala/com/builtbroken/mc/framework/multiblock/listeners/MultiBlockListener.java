@@ -1,19 +1,23 @@
 package com.builtbroken.mc.framework.multiblock.listeners;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.tile.access.IRotation;
 import com.builtbroken.mc.api.tile.listeners.*;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.multiblock.MultiBlockHelper;
 import com.builtbroken.mc.framework.multiblock.structure.MultiBlockLayoutHandler;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
 import com.builtbroken.mc.prefab.tile.listeners.TileListener;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +33,9 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
 
     @JsonProcessorData("layoutKey")
     protected String layoutKey;
+
+    @JsonProcessorData("doRotation")
+    protected boolean doRotation = false;
 
     @Override
     public List<String> getListenerKeys()
@@ -48,7 +55,14 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         if (ticks == 0)
         {
             layoutKey = layoutKey != null ? layoutKey.toLowerCase() : "";
-            MultiBlockHelper.buildMultiBlock(world(), getMultiTileHost(), true, true);
+            if (MultiBlockHelper.canBuild(world(), getMultiTileHost(), true))
+            {
+                MultiBlockHelper.buildMultiBlock(world(), getMultiTileHost(), true, true);
+            }
+            else
+            {
+                Engine.logger().error("Can not build multiblock structure at location " + new Location(this) + " for " + getMultiTileHost());
+            }
         }
     }
 
@@ -130,6 +144,24 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public HashMap<IPos3D, String> getLayoutOfMultiBlock()
     {
+        if (doRotation)
+        {
+            TileEntity tileEntity = getTileEntity();
+            ForgeDirection dir = null;
+            if (tileEntity instanceof IRotation)
+            {
+                dir = ((IRotation) tileEntity).getDirection();
+            }
+            else if (tileEntity instanceof ITileNodeHost && ((ITileNodeHost) tileEntity).getTileNode() instanceof IRotation)
+            {
+                dir = ((IRotation) ((ITileNodeHost) tileEntity).getTileNode()).getDirection();
+            }
+
+            if (dir != null && dir != ForgeDirection.UNKNOWN)
+            {
+                return MultiBlockLayoutHandler.get(layoutKey + "." + dir.name().toLowerCase());
+            }
+        }
         return MultiBlockLayoutHandler.get(layoutKey);
     }
 
@@ -149,26 +181,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public boolean canPlaceAt()
     {
-        HashMap<IPos3D, String> tiles = getLayoutOfMultiBlock();
-        Pos center = new Pos(this);
-        if (tiles != null && !tiles.isEmpty())
-        {
-            for (IPos3D p : tiles.keySet())
-            {
-                if (p != null)
-                {
-                    Pos pos = center.add(p);
-                    if (pos.isInsideMap())
-                    {
-                        if (!pos.isReplaceable(world()))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        return true;
+        return MultiBlockHelper.canBuild(world(), getMultiTileHost(), true);
     }
 
     public static class Builder implements ITileEventListenerBuilder

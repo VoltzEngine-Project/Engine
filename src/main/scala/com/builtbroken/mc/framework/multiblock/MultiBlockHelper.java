@@ -9,6 +9,7 @@ import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -160,6 +161,61 @@ public class MultiBlockHelper
             logger.error("MultiBlock was never registered, this is a critical error and can have negative effects on gameplay. " +
                     "Make sure the block was not disabled in the configs and contact support to ensure nothing is broken", new RuntimeException());
         }
+    }
+
+    public static boolean canBuild(World world, IMultiTileHost tile, boolean offset)
+    {
+        if (world != null && tile != null && Engine.multiBlock != null)
+        {
+            //Get layout of multi-block for it's current state
+            Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
+            //Ensure the map is not null or empty in case there is no structure to generate
+            if (map != null && !map.isEmpty())
+            {
+                //Loop all blocks and start placement
+                for (Map.Entry<IPos3D, String> entry : map.entrySet())
+                {
+                    IPos3D location = entry.getKey();
+                    String type = entry.getValue();
+                    String dataString = null;
+                    if (location == null || type == null || type.isEmpty())
+                    {
+                        return false;
+                    }
+
+                    if (type.contains("#"))
+                    {
+                        dataString = type.substring(type.indexOf("#") + 1, type.length());
+                        type = type.substring(0, type.indexOf("#"));
+                    }
+
+                    EnumMultiblock enumType = EnumMultiblock.get(type);
+                    if (enumType != null)
+                    {
+                        //Moves the position based on the location of the host
+                        if (offset)
+                        {
+                            location = new Location((TileEntity) tile).add(location);
+                        }
+                        Block block = world.getBlock(location.xi(), location.yi(), location.zi());
+                        if (!block.isAir(world, location.xi(), location.yi(), location.zi()) && !block.isReplaceable(world, location.xi(), location.yi(), location.zi()))
+                        {
+                            return false;
+                        }
+                        else if (block == Engine.multiBlock)
+                        {
+                            TileEntity tileEntity = world.getTileEntity(location.xi(), location.yi(), location.zi());
+                            if (tileEntity instanceof IMultiTile && ((IMultiTile) tileEntity).getHost() != null)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void setData(String dataString, IMultiTile ent)

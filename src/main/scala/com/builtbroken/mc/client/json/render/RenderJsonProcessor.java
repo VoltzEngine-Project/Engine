@@ -170,7 +170,7 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
             //Texture state, basally for icons
             else
             {
-                if (renderType.equalsIgnoreCase("block"))
+                if (renderType.equalsIgnoreCase("block") || renderType.equalsIgnoreCase("tile"))
                 {
                     renderState = new BlockState(stateID);
 
