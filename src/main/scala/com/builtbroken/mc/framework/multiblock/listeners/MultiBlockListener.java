@@ -55,6 +55,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public void update(long ticks)
     {
+        long offsetTick = (ticks + (Math.abs(this.xi() + this.yi() + this.zi())));
         if (ticks == 0 && buildFirstTick)
         {
             layoutKey = layoutKey != null ? layoutKey.toLowerCase() : "";
@@ -66,6 +67,10 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
             {
                 Engine.logger().error("Can not build multiblock structure at location " + new Location(this) + " for " + getMultiTileHost());
             }
+        }
+        else if (offsetTick % 200 == 0)
+        {
+            MultiBlockHelper.buildMultiBlock(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
         }
     }
 

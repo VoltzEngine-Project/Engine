@@ -1,8 +1,10 @@
 package com.builtbroken.mc.lib.json.loading;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.json.conversion.JsonConverter;
 import com.builtbroken.mc.lib.json.conversion.JsonConverterNBT;
 import com.builtbroken.mc.lib.json.conversion.JsonConverterPos;
+import com.builtbroken.mc.lib.json.conversion.JsonConverterStringArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -29,8 +31,18 @@ public class JsonLoader
 
     static
     {
-        conversionHandlers.put("pos", new JsonConverterPos());
-        conversionHandlers.put("nbt", new JsonConverterNBT());
+        addConverter(new JsonConverterPos());
+        addConverter(new JsonConverterNBT());
+        addConverter(new JsonConverterStringArray());
+    }
+
+    public static void addConverter(JsonConverter converter)
+    {
+        if (conversionHandlers.containsKey(converter.key))
+        {
+            Engine.logger().error("Overriding converter '" + converter.key + "' with " + converter + ", previous value " + conversionHandlers.get(converter.key));
+        }
+        conversionHandlers.put(converter.key, converter);
     }
 
     /**
