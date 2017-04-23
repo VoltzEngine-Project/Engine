@@ -6,6 +6,7 @@ import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
 import com.builtbroken.mc.api.tile.ITile;
+import com.builtbroken.mc.api.tile.listeners.IPlacementListener;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
@@ -15,18 +16,25 @@ import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.FMLCommonHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+
+import java.util.UUID;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2017.
  */
-public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, ITile
+public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, ITile, IPlacementListener
 {
     protected static int DESCRIPTION_PACKET_ID = -1;
 
@@ -34,6 +42,8 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, ITile
 
     protected final String id;
     protected final String mod;
+    protected String username;
+    protected UUID owner;
 
     public TileNode(String id, String mod)
     {
@@ -125,12 +135,28 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, ITile
     @Override
     public void load(NBTTagCompound nbt)
     {
-
+        if (nbt.hasKey("tileOwnerMostSigBit") && nbt.hasKey("tileOwnerLeastSigBit"))
+        {
+            this.owner = new UUID(nbt.getLong("tileOwnerMostSigBit"), nbt.getLong("tileOwnerLeastSigBit"));
+        }
+        if (nbt.hasKey("tileOwnerUsername"))
+        {
+            this.username = nbt.getString("tileOwnerUsername");
+        }
     }
 
     @Override
     public NBTTagCompound save(NBTTagCompound nbt)
     {
+        if (owner != null)
+        {
+            nbt.setLong("tileOwnerMostSigBit", this.owner.getMostSignificantBits());
+            nbt.setLong("tileOwnerLeastSigBit", this.owner.getLeastSignificantBits());
+        }
+        if (username != null && !username.isEmpty())
+        {
+            nbt.setString("tileOwnerUsername", this.username);
+        }
         return nbt;
     }
 
@@ -224,6 +250,66 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, ITile
         return Math.sqrt(xx * xx + yy * yy + zz * zz);
     }
 
+    //==========================
+    //== Owner Helper Methods ==
+    //==========================
+
+    @Override
+    public void onPlacedBy(EntityLivingBase entityLivingBase, ItemStack stack)
+    {
+        if (entityLivingBase instanceof EntityPlayer)
+        {
+            setOwner((EntityPlayer) entityLivingBase);
+        }
+    }
+
+    public UUID getOwnerID()
+    {
+        return owner;
+    }
+
+    public String getOwnerName()
+    {
+        GameProfile profile = getOwnerProfile();
+        if (profile != null)
+        {
+            return profile.getName();
+        }
+        return null;
+    }
+
+    public GameProfile getOwnerProfile()
+    {
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient())
+        {
+            return null;
+        }
+        return MinecraftServer.getServer().func_152358_ax().func_152652_a(owner);
+    }
+
+    public void setOwnerID(UUID id)
+    {
+        this.owner = id;
+    }
+
+    public void setOwner(EntityPlayer player)
+    {
+        if (player != null)
+        {
+            setOwnerID(player.getGameProfile().getId());
+            this.username = player.getCommandSenderName();
+        }
+        else
+        {
+            setOwnerID(null);
+            this.username = null;
+        }
+    }
+
+    //==========================
+    //== Packet Helper ==
+    //==========================
+
     /**
      * Sends the desc packet to all players around this tile
      */
@@ -283,6 +369,10 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, ITile
             }
         }
     }
+
+    //==========================
+    //== Wrapper calls ==
+    //==========================
 
     public boolean isInvalid()
     {
