@@ -39,7 +39,6 @@ public class PacketTile extends PacketType
     public PacketTile(int x, int y, int z, Object... args)
     {
         super(args);
-
         this.x = x;
         this.y = y;
         this.z = z;
