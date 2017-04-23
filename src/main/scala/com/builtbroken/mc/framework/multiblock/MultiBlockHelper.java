@@ -124,14 +124,14 @@ public class MultiBlockHelper
                         {
                             location = new Location((IWorldPosition) tile).add(location);
                         }
-                        TileEntity ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
+                        TileEntity ent = world.getTileEntity(location.xi(), location.yi(), location.zi());
                         if (!validate || ent == null || enumType.clazz != ent.getClass())
                         {
-                            if (!world.setBlock((int) location.x(), (int) location.y(), (int) location.z(), Engine.multiBlock, enumType.ordinal(), 3))
+                            if (!world.setBlock(location.xi(), location.yi(), location.zi(), Engine.multiBlock, enumType.ordinal(), 3))
                             {
                                 logger.error("MultiBlockHelper: type[" + i + ", " + type + "] error block was not placed ");
                             }
-                            ent = world.getTileEntity((int) location.x(), (int) location.y(), (int) location.z());
+                            ent = world.getTileEntity(location.xi(), location.yi(), location.zi());
                         }
 
                         if (ent instanceof IMultiTile)
