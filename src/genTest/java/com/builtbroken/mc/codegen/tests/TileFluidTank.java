@@ -18,6 +18,11 @@ public class TileFluidTank extends TileNode implements ITankProvider
 {
     protected FluidTank tank;
 
+    public TileFluidTank()
+    {
+        super("tile.test.fluid", "null");
+    }
+
     @Override
     public IFluidTank getTankForFluid(Fluid fluid)
     {

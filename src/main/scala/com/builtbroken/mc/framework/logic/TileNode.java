@@ -5,6 +5,7 @@ import com.builtbroken.jlib.data.vector.Pos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
+import com.builtbroken.mc.api.tile.ITile;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
@@ -25,11 +26,20 @@ import net.minecraft.tileentity.TileEntity;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2017.
  */
-public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc
+public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, ITile
 {
     protected static int DESCRIPTION_PACKET_ID = -1;
 
     protected ITileNodeHost host;
+
+    protected final String id;
+    protected final String mod;
+
+    public TileNode(String id, String mod)
+    {
+        this.id = id;
+        this.mod = mod;
+    }
 
     @Override
     public void setHost(ITileNodeHost host)
@@ -290,5 +300,23 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc
     public final String getListenerKey()
     {
         return "";
+    }
+
+    @Override
+    public String uniqueContentID()
+    {
+        return id;
+    }
+
+    @Override
+    public String contentType()
+    {
+        return "node";
+    }
+
+    @Override
+    public String modID()
+    {
+        return mod;
     }
 }

@@ -12,5 +12,8 @@ import com.builtbroken.mc.codegen.annotations.TileWrapped;
 @TileWrapped(className = ".tile.TileEntityWrapperTestEmpty")
 public final class TileTestEmpty extends TileNode
 {
-
+    public TileTestEmpty()
+    {
+        super("tile.test", "null");
+    }
 }

@@ -20,6 +20,11 @@ public final class TileTestInventory extends TileNode implements IInventoryProvi
 {
     public ExternalInventory inventory;
 
+    public TileTestInventory()
+    {
+        super("tile.test.inventory", "null");
+    }
+
     @Override
     public ExternalInventory getInventory()
     {

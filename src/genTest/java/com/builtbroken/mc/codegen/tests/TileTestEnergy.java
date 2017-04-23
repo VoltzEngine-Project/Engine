@@ -20,6 +20,11 @@ public final class TileTestEnergy extends TileNode implements IEnergyBufferProvi
 {
     protected EnergyBuffer buffer;
 
+    public TileTestEnergy()
+    {
+        super("tile.test.energy", "null");
+    }
+
     @Override
     public IEnergyBuffer getEnergyBuffer(ForgeDirection side)
     {

@@ -26,6 +26,11 @@ public final class TileTestEnergyInventory extends TileNode implements IEnergyBu
 
     public ExternalInventory inventory;
 
+    public TileTestEnergyInventory()
+    {
+        super("tile.test.energyInv", "null");
+    }
+
     @Override
     public ExternalInventory getInventory()
     {
