@@ -124,14 +124,14 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     }
 
     @Override
-    public boolean onMultiTileActivated(IMultiTile tile, EntityPlayer player, int side, IPos3D hit)
+    public boolean onMultiTileActivated(IMultiTile tile, EntityPlayer player, int side, float xHit, float yHit, float zHit)
     {
         Object tileEntity = getMultiTileHost();
         if (tileEntity instanceof IActivationListener)
         {
-            return ((IActivationListener) tileEntity).onPlayerActivated(player, side, hit.xf(), hit.yf(), hit.zf());
+            return ((IActivationListener) tileEntity).onPlayerActivated(player, side, xHit, yHit, zHit);
         }
-        return false;
+        return getBlock().onBlockActivated(world(), xi(), yi(), zi(), player, side, xHit, yHit, zHit);
     }
 
     @Override

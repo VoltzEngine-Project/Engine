@@ -3,7 +3,6 @@ package com.builtbroken.mc.framework.multiblock;
 import com.builtbroken.mc.api.tile.client.IIconCallBack;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.imp.transform.region.Cube;
-import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -236,7 +235,7 @@ public class BlockMultiblock extends BlockContainer
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xHit, float yHit, float zHit)
     {
         IMultiTile tile = getTile(world, x, y, z);
-        return tile != null && tile.getHost() != null && tile.getHost().onMultiTileActivated(tile, player, side, new Pos(xHit, yHit, zHit));
+        return tile != null && tile.getHost() != null && tile.getHost().onMultiTileActivated(tile, player, side, xHit, yHit, zHit);
     }
 
     @Override

@@ -114,12 +114,12 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
     }
 
     @Override
-    public boolean onMultiTileActivated(IMultiTile tile, EntityPlayer player, int side, IPos3D hit)
+    public boolean onMultiTileActivated(IMultiTile tile, EntityPlayer player, int side, float xHit, float yHit, float zHit)
     {
         boolean b = false;
         if (getTileNode() instanceof IMultiTileHost)
         {
-            b = ((IMultiTileHost) getTileNode()).onMultiTileActivated(tile, player, side, hit);
+            b = ((IMultiTileHost) getTileNode()).onMultiTileActivated(tile, player, side, xHit, yHit, zHit);
         }
         for (List<ITileEventListener> list : new List[]{getListeners("multiblock"), ((BlockBase) getBlockType()).listeners.get("multiblock")})
         {
@@ -129,7 +129,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                 {
                     if (listener instanceof IMultiTileHost)
                     {
-                        if (((IMultiTileHost) listener).onMultiTileActivated(tile, player, side, hit))
+                        if (((IMultiTileHost) listener).onMultiTileActivated(tile, player, side, xHit, yHit, zHit))
                         {
                             if(listener instanceof IBlockListener)
                             {
