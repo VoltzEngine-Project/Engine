@@ -47,25 +47,24 @@ public class Render2DHelper
         drawTexturedModalRect(x, y, u, v, width, capTopHeight);
 
         //Render middle
-        int totalSize = capTopHeight + capBotHeight + midHeight;
         int sizeRender = 0;
-        int sectionSize = (height - capBotHeight - capTopHeight) / 2;
-        int sections = (int) Math.ceil(totalSize / (float) sectionSize);
+        int sectionSize =(int)Math.floor((height - capBotHeight - capTopHeight) / 2f);
+        int sections = (int) Math.ceil(midHeight / (float) sectionSize);
         for (int s = 0; s < sections; s++)
         {
             if (s == sections - 1)
             {
                 int remain = midHeight - sizeRender;
-                drawTexturedModalRect(x, y + capTopHeight + sizeRender, u, v, width, remain);
+                drawTexturedModalRect(x, y + capTopHeight + sizeRender, u, v + capTopHeight, width, remain);
             }
             else
             {
-                drawTexturedModalRect(x, y + capTopHeight + sizeRender, u, v, width, sectionSize);
+                drawTexturedModalRect(x, y + capTopHeight + sizeRender, u, v + capTopHeight, width, sectionSize);
                 sizeRender += sectionSize;
             }
         }
         //Render bottom
-        drawTexturedModalRect(x, y + capTopHeight + midHeight, u, v - capBotHeight, width, capBotHeight);
+        drawTexturedModalRect(x, y + capTopHeight + midHeight, u, v + height - capBotHeight, width, capBotHeight);
     }
 
     public static void drawHorizontalLine(int p_73730_1_, int p_73730_2_, int p_73730_3_, int p_73730_4_)
