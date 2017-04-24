@@ -25,6 +25,7 @@ import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
+import com.builtbroken.mc.framework.access.gui.GuiAccessSystem;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.multiblock.MultiBlockRenderHelper;
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -39,6 +40,8 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -54,6 +57,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.List;
@@ -92,6 +96,8 @@ public class ClientProxy extends CommonProxy
 
         VisualEffectRegistry.addEffectProvider(new VEProviderShockWave());
         VisualEffectRegistry.addEffectProvider(new VEProviderLaserBeam());
+
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -198,6 +204,28 @@ public class ClientProxy extends CommonProxy
             }
         }
     }
+
+    @SubscribeEvent
+    public void keyHandler(InputEvent.KeyInputEvent e)
+    {
+        final int key = Keyboard.getEventKey();
+
+
+        //TODO add config for key binding
+        if (key == Keyboard.KEY_GRAVE && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                && Minecraft.getMinecraft() != null
+                && Minecraft.getMinecraft().theWorld != null
+                && Minecraft.getMinecraft().thePlayer != null) //Prevent key bind from working on loading screen and main menu
+        {
+            if (!(Minecraft.getMinecraft().currentScreen instanceof GuiAccessSystem)) //TODO check previous GUI to prevent bugs (e.g. prevent opening on death screen)
+            {
+                Minecraft.getMinecraft().currentScreen.onGuiClosed();
+                Minecraft.getMinecraft().displayGuiScreen(new GuiAccessSystem());
+                //TODO cache previous open GUI to restore that GUI
+            }
+        }
+    }
+
 
     @Override
     public void playJsonAudio(World world, String audioKey, double x, double y, double z, float pitch, float volume)
