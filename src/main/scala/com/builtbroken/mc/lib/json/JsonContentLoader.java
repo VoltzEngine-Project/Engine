@@ -329,6 +329,9 @@ public final class JsonContentLoader extends AbstractLoadable
                                 list.add(data);
                                 generatedObjects.put(processorKey, list);
 
+                                //validate data, can crash
+                                data.validate();
+
                                 //Call registry methods
                                 data.register();
                                 if (data instanceof IRegistryInit)

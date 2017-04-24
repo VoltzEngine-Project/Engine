@@ -38,6 +38,20 @@ public interface IJsonGenObject
     {
     }
 
+    /**
+     * Called after a gen object is created
+     * to ensure values read in are good.
+     * <p>
+     * This should only be used to ensure
+     * combinations of values are usable.
+     * As individual values should be checked
+     * when processed.
+     */
+    default void validate()
+    {
+
+    }
+
     default void setAuthor(String name)
     {
 
