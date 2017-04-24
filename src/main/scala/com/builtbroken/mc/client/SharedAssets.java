@@ -14,6 +14,7 @@ import net.minecraftforge.client.model.ModelFormatException;
  */
 public final class SharedAssets
 {
+
     /** Model for the tool table */
     public static IModelCustom TOOL_TABLE;
     /** Texture for the tool table */
@@ -29,8 +30,11 @@ public final class SharedAssets
     public static final ResourceLocation GUI_BASE = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "gui_base.png");
     public static final ResourceLocation GUI__MC_EMPTY_FILE = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "mc_base_empty.png");
     public static final ResourceLocation GUI_MC_BASE = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "mc_base.png");
+
     public static final ResourceLocation GUI_COMPONENTS = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "gui_components.png");
     public static final ResourceLocation GUI_COMPONENTS_BARS = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "gui_components.bars.png");
+    public static final ResourceLocation GUI_BUTTON_9PX = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "9px_buttons.png");
+    public static final ResourceLocation GUI_SLOTS = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "gui_slots.png");
 
 
     private static boolean loaded = false;
