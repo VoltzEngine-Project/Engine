@@ -219,7 +219,10 @@ public class ClientProxy extends CommonProxy
         {
             if (!(Minecraft.getMinecraft().currentScreen instanceof GuiAccessSystem)) //TODO check previous GUI to prevent bugs (e.g. prevent opening on death screen)
             {
-                Minecraft.getMinecraft().currentScreen.onGuiClosed();
+                if(Minecraft.getMinecraft().currentScreen != null)
+                {
+                    Minecraft.getMinecraft().currentScreen.onGuiClosed();
+                }
                 Minecraft.getMinecraft().displayGuiScreen(new GuiAccessSystem());
                 //TODO cache previous open GUI to restore that GUI
             }
