@@ -21,6 +21,8 @@ import java.util.UUID;
  */
 public class NBTUtility
 {
+    public static final String BBM_FOLDER = "bbm/";
+
     /**
      * Saves NBT data in the world folder.
      *
@@ -99,7 +101,7 @@ public class NBTUtility
      */
     public static NBTTagCompound loadData(File saveDirectory, String filename)
     {
-        return loadData(new File(saveDirectory, filename + ".dat"));
+        return loadData(new File(saveDirectory, filename + (filename.endsWith(".dat") ? "" : ".dat")));
     }
 
     public static NBTTagCompound loadData(String filename)
