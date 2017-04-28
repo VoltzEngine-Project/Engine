@@ -34,6 +34,7 @@ import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.core.registry.MassRegistry;
 import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.framework.access.GlobalAccessSystem;
 import com.builtbroken.mc.framework.multiblock.BlockMultiblock;
 import com.builtbroken.mc.framework.multiblock.EnumMultiblock;
 import com.builtbroken.mc.framework.multiblock.ItemBlockMulti;
@@ -403,6 +404,7 @@ public class Engine implements IJsonGenMod
         loader.applyModule(getProxy());
         loader.applyModule(packetHandler);
         loader.applyModule(GroupProfileHandler.GLOBAL);
+        loader.applyModule(GlobalAccessSystem.instance);
         //Recipes
         loader.applyModule(SmeltingRecipeLoad.class);
         loader.applyModule(CrusherRecipeLoad.class);

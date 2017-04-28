@@ -268,6 +268,7 @@ public class SaveManager
                             NBTTagCompound tag = new NBTTagCompound();
                             object.save(tag);
                             tag.setString("id", getID(object.getClass()));
+                            tag.setString("ve_version", References.VERSION);
 
                             /* Save data using NBTUtility */
                             NBTUtility.saveData(file, tag);

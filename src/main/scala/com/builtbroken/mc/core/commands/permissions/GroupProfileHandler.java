@@ -1,7 +1,6 @@
 package com.builtbroken.mc.core.commands.permissions;
 
 import com.builtbroken.mc.api.IVirtualObject;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import com.builtbroken.mc.framework.access.AccessProfile;
@@ -84,7 +83,7 @@ public class GroupProfileHandler extends AbstractLoadable implements IVirtualObj
     public NBTTagCompound save(NBTTagCompound nbt)
     {
         //Save Version and Build number in case we change how save/loading works between versions
-        nbt.setString("ve_version", References.VERSION + "b" + References.BUILD_VERSION);
+
 
         //Save Profile
         if (profile != null)
