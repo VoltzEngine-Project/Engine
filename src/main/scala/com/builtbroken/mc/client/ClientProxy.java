@@ -209,22 +209,20 @@ public class ClientProxy extends CommonProxy
     public void keyHandler(InputEvent.KeyInputEvent e)
     {
         final int key = Keyboard.getEventKey();
-
-
-        //TODO add config for key binding
-        if (key == Keyboard.KEY_GRAVE && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
-                && Minecraft.getMinecraft() != null
-                && Minecraft.getMinecraft().theWorld != null
-                && Minecraft.getMinecraft().thePlayer != null) //Prevent key bind from working on loading screen and main menu
+        if (Minecraft.getMinecraft() != null && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().thePlayer != null) //Prevent key bind from working on loading screen and main menu
         {
-            if (!(Minecraft.getMinecraft().currentScreen instanceof GuiAccessSystem)) //TODO check previous GUI to prevent bugs (e.g. prevent opening on death screen)
+            //TODO add config for key binding
+            if (key == Keyboard.KEY_GRAVE && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
             {
-                if(Minecraft.getMinecraft().currentScreen != null)
+                if (!(Minecraft.getMinecraft().currentScreen instanceof GuiAccessSystem)) //TODO check previous GUI to prevent bugs (e.g. prevent opening on death screen)
                 {
-                    Minecraft.getMinecraft().currentScreen.onGuiClosed();
+                    if (Minecraft.getMinecraft().currentScreen != null)
+                    {
+                        Minecraft.getMinecraft().currentScreen.onGuiClosed();
+                    }
+                    Minecraft.getMinecraft().displayGuiScreen(new GuiAccessSystem());
+                    //TODO cache previous open GUI to restore that GUI
                 }
-                Minecraft.getMinecraft().displayGuiScreen(new GuiAccessSystem());
-                //TODO cache previous open GUI to restore that GUI
             }
         }
     }
