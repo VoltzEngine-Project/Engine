@@ -5,7 +5,7 @@ import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import com.builtbroken.mc.framework.access.AccessProfile;
 import com.builtbroken.mc.framework.access.AccessUser;
-import com.builtbroken.mc.framework.access.IProfileContainer;
+import com.builtbroken.mc.framework.access.api.IProfileContainer;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
 import cpw.mods.fml.common.FMLCommonHandler;

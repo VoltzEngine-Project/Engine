@@ -8,7 +8,7 @@ import com.builtbroken.mc.core.network.packet.callback.PacketBlast;
 import com.builtbroken.mc.core.network.packet.callback.PacketOpenGUI;
 import com.builtbroken.mc.core.network.packet.user.PacketMouseClick;
 import com.builtbroken.mc.core.network.packet.user.PacketPlayerItemMode;
-import com.builtbroken.mc.framework.access.gui.packets.PacketAccessGui;
+import com.builtbroken.mc.framework.access.global.packets.PacketAccessGui;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

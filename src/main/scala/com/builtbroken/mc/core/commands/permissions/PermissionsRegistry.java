@@ -2,7 +2,7 @@ package com.builtbroken.mc.core.commands.permissions;
 
 import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.framework.access.Permission;
+import com.builtbroken.mc.framework.access.perm.Permission;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import net.minecraft.command.ICommand;
 import org.apache.logging.log4j.LogManager;
