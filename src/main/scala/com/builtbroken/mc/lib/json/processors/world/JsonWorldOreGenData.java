@@ -5,8 +5,10 @@ import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
-import com.builtbroken.mc.lib.world.generator.OreGenReplaceStone;
+import com.builtbroken.mc.lib.world.generator.OreGenReplace;
+import com.builtbroken.mc.lib.world.generator.OreGeneratorSettings;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -40,11 +42,11 @@ public class JsonWorldOreGenData extends JsonGenData implements IPostInit
     public void onPostInit()
     {
         ItemStack stack = toStack(block);
-        if (stack != null)
+        if (stack != null && stack.getItem() instanceof ItemBlock)
         {
             if (Engine.instance.getConfig().getBoolean("" + LanguageUtility.capitalizeFirst(oreName) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
             {
-                GameRegistry.registerWorldGenerator(new OreGenReplaceStone(oreName, stack, min_y, max_y, chunkLimit, branchSize, "pickaxe", 1), 1);
+                GameRegistry.registerWorldGenerator(new OreGenReplace(oreName, ((ItemBlock) stack.getItem()).field_150939_a, stack.getItemDamage(), new OreGeneratorSettings(min_y, max_y, chunkLimit, branchSize), "pickaxe", 1), 1);
             }
         }
     }

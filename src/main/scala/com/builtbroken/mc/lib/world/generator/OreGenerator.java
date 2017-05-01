@@ -2,8 +2,6 @@ package com.builtbroken.mc.lib.world.generator;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -36,14 +34,6 @@ public abstract class OreGenerator implements IWorldGenerator
 	 * tools.
 	 */
 	public String harvestTool;
-
-	/**
-	 * @param name - The name of the ore for display
-	 */
-	public OreGenerator(String name, ItemStack stack, String harvestTool, int harvestLevel)
-	{
-		this(name, ((ItemBlock) stack.getItem()).field_150939_a, stack.getItemDamage(), harvestTool, harvestLevel);
-	}
 
 	public OreGenerator(String name, Block block, int meta, String harvestTool, int harvestLevel)
 	{

@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content.resources;
+package com.builtbroken.mc.core.content.resources.ore;
 
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import net.minecraft.block.Block;

@@ -1,19 +1,18 @@
 package com.builtbroken.mc.core.content.resources.gems;
 
 import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.world.generator.OreGenReplaceStone;
-
+import com.builtbroken.mc.lib.world.generator.OreGenReplace;
+import com.builtbroken.mc.lib.world.generator.OreGeneratorSettings;
 import cpw.mods.fml.common.registry.GameRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * A list of gem ores that can be requested in Voltz Engine.
+ *
  * @author - Kolatra
  */
 public enum GemOres
@@ -27,10 +26,7 @@ public enum GemOres
     GarnetRed(Gems.GARNET_RED, 10, 50, 3, 18),
     GarnetYellow(Gems.GARNET_YELLOW, 10, 50, 3, 18);
 
-    private int minY = 1;
-    private int maxY = 100;
-    private int amountPerChunk = 16;
-    private int amountPerBranch = 5;
+    public final OreGeneratorSettings oreGenSettings;
 
     private Block block;
     private String oreDictName;
@@ -40,10 +36,7 @@ public enum GemOres
     GemOres(Gems gem, int min, int max, int amountPerBranch, int amountPerChunk)
     {
         this.gem = gem;
-        this.minY = min;
-        this.maxY = max;
-        this.amountPerBranch = amountPerBranch;
-        this.amountPerChunk = amountPerChunk;
+        oreGenSettings = new OreGeneratorSettings(min, max, amountPerBranch, amountPerChunk);
     }
 
     public ItemStack stack()
@@ -58,7 +51,7 @@ public enum GemOres
 
     public static void registerSet(Block block, Configuration config)
     {
-        if(block != null)
+        if (block != null)
         {
             //TODO implement defined ore gen, for example have gems spawn only near lava, only in sand, only in dirt, etc
             for (GemOres ore : GemOres.values())
@@ -68,7 +61,7 @@ public enum GemOres
                     ore.block = block;
                     ore.oreDictName = "ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase());
                     ItemStack stack = ore.stack();
-                    GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.oreDictName, stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                    GameRegistry.registerWorldGenerator(new OreGenReplace(ore.oreDictName, block, ore.ordinal(), ore.oreGenSettings, "pickaxe", 1), 1);
                     OreDictionary.registerOre(ore.oreDictName, stack);
                 }
             }

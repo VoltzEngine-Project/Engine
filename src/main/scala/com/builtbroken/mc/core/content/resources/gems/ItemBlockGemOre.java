@@ -1,10 +1,8 @@
-package com.builtbroken.mc.core.content.resources;
+package com.builtbroken.mc.core.content.resources.gems;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.core.content.resources.gems.GemOres;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 

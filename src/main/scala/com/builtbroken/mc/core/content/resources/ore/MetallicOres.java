@@ -1,9 +1,10 @@
-package com.builtbroken.mc.core.content.resources;
+package com.builtbroken.mc.core.content.resources.ore;
 
 import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.world.generator.OreGenReplaceStone;
+import com.builtbroken.mc.lib.world.generator.OreGenReplace;
+import com.builtbroken.mc.lib.world.generator.OreGeneratorSettings;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
+import net.minecraft.block.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
@@ -14,8 +15,8 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public enum MetallicOres
 {
-    TIN(15, 60, 5, 15),
-    COPPER(15, 60, 5, 20),
+    TIN(15, 120, 7, 40),
+    COPPER(15, 120, 7, 60),
     SILVER(15, 60, 5, 4),
     LEAD(15, 30, 5, 4),
     ZINC(20, 40, 5, 20),
@@ -25,10 +26,7 @@ public enum MetallicOres
     URANIUM(5, 30, 2, 4),
     PLATINUM(15, 60, 3, 10);
 
-    private int minY = 1;
-    private int maxY = 100;
-    private int amountPerChunk = 16;
-    private int amountPerBranch = 5;
+    public final OreGeneratorSettings oreGenSettings;
 
     private Block block;
     private String oreDictName;
@@ -41,10 +39,7 @@ public enum MetallicOres
 
     MetallicOres(int min, int max, int amountPerBranch, int amountPerChunk)
     {
-        this.minY = min;
-        this.maxY = max;
-        this.amountPerBranch = amountPerBranch;
-        this.amountPerChunk = amountPerChunk;
+        oreGenSettings = new OreGeneratorSettings(min, max, amountPerBranch, amountPerChunk);
     }
 
     public ItemStack stack()
@@ -59,7 +54,7 @@ public enum MetallicOres
 
     public static void registerSet(Block block, Configuration config)
     {
-        if(block != null)
+        if (block != null)
         {
             for (MetallicOres ore : MetallicOres.values())
             {
@@ -67,7 +62,7 @@ public enum MetallicOres
                 {
                     ore.block = block;
                     ItemStack stack = ore.stack();
-                    GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.getOreName(), stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                    GameRegistry.registerWorldGenerator(new OreGenReplace(ore.getOreName(), block, ore.ordinal(), ore.oreGenSettings, "pickaxe", 1), ore.ordinal());
                     OreDictionary.registerOre(ore.oreDictName, stack);
                 }
             }
@@ -76,7 +71,7 @@ public enum MetallicOres
 
     public String getOreName()
     {
-        if(oreDictName == null)
+        if (oreDictName == null)
         {
             oreDictName = "ore" + LanguageUtility.capitalizeFirst(name().toLowerCase());
         }
