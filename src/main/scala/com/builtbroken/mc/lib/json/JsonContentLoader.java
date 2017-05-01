@@ -701,18 +701,7 @@ public final class JsonContentLoader extends AbstractLoadable
             if (url != null)
             {
                 URI uri = url.toURI();
-                if ("jar".equals(uri.getScheme()))
-                {
-                    debug.error("Jar detected, using secondary method to load resources.");
-                    try (FileSystem fs = getFileSystem(uri))
-                    {
-                        walkPaths(fs.getPath(folder));
-                    }
-                }
-                else
-                {
-                    walkPaths(Paths.get(uri));
-                }
+                loadResourcesFromPackage(uri, folder);
             }
             else
             {
@@ -722,6 +711,33 @@ public final class JsonContentLoader extends AbstractLoadable
         catch (Exception e)
         {
             debug.error("Failed to load resources from class path.", e);
+        }
+    }
+
+    /**
+     * Loads package
+     *
+     * @param folder - package your looking to load data from
+     */
+    public void loadResourcesFromPackage(URI uri, String folder) throws Exception
+    {
+        if ("jar".equals(uri.getScheme()))
+        {
+            debug.error("Jar detected, using secondary method to load resources.");
+
+            URI jar = new URI("jar", uri.getSchemeSpecificPart().replace("%20", " "), null);
+
+            Map<String, Object> env = new HashMap<>();
+            env.put("create", "true");
+
+            try (FileSystem fs = FileSystems.newFileSystem(jar, env))
+            {
+                walkPaths(fs.getPath(folder));
+            }
+        }
+        else
+        {
+            walkPaths(Paths.get(uri));
         }
     }
 
@@ -739,7 +755,7 @@ public final class JsonContentLoader extends AbstractLoadable
                 if (extensionsToLoad.contains(extension))
                 {
                     debug.log("Found " + name);
-                    classPathResources.add(nextPath.toUri().toURL());
+                    JsonLoader.loadJson(filePath.toAbsolutePath().toString(), Files.newBufferedReader(nextPath), jsonEntries);
                 }
             }
         }

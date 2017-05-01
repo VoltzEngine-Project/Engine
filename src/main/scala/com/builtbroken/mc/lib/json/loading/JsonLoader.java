@@ -12,7 +12,6 @@ import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,9 +56,7 @@ public class JsonLoader
     {
         if (resource != null)
         {
-            URI uri = new URI(resource.getPath());
-            FileInputStream fis = new FileInputStream(uri.getPath());
-            loadJson(resource.getFile(), new InputStreamReader(fis), entries);
+            loadJson(resource.getFile(), new InputStreamReader(resource.openStream()), entries);
         }
     }
 

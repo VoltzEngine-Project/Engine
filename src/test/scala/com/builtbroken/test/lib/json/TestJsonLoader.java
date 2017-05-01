@@ -104,7 +104,6 @@ public class TestJsonLoader extends AbstractTest
         assertEquals(3, loader.generatedObjects.get("clip").size());
         assertEquals(0, loader.jsonEntries.size());
         assertEquals(0, loader.externalFiles.size());
-        assertEquals(0, loader.classPathResources.size());
         assertEquals(0, loader.externalJarFiles.size());
 
         //Post init does nothing but is still called
