@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.content.resources;
 
+import com.builtbroken.mc.core.References;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -9,7 +10,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import com.builtbroken.mc.core.References;
 
 import java.util.List;
 
@@ -27,6 +27,9 @@ public class BlockOre extends Block
     public BlockOre(String type)
     {
         super(Material.rock);
+        setHardness(1.5F);
+        setResistance(10.0F);
+        setStepSound(soundTypePiston);
         this.type = type;
         setCreativeTab(CreativeTabs.tabBlock);
     }

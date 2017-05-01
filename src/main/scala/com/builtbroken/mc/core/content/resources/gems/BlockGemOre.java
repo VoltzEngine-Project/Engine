@@ -28,6 +28,9 @@ public class BlockGemOre extends Block
     public BlockGemOre(String type)
     {
         super(Material.rock);
+        setHardness(1.5F);
+        setResistance(10.0F);
+        setStepSound(soundTypePiston);
         this.type = type;
         setCreativeTab(CreativeTabs.tabBlock);
     }

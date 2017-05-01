@@ -59,14 +59,17 @@ public enum MetallicOres
 
     public static void registerSet(Block block, Configuration config)
     {
-        for (MetallicOres ore : MetallicOres.values())
+        if(block != null)
         {
-            if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
+            for (MetallicOres ore : MetallicOres.values())
             {
-                ore.block = block;
-                ItemStack stack = ore.stack();
-                GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.getOreName(), stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
-                OreDictionary.registerOre(ore.oreDictName, stack);
+                if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
+                {
+                    ore.block = block;
+                    ItemStack stack = ore.stack();
+                    GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.getOreName(), stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                    OreDictionary.registerOre(ore.oreDictName, stack);
+                }
             }
         }
     }

@@ -58,16 +58,19 @@ public enum GemOres
 
     public static void registerSet(Block block, Configuration config)
     {
-        //TODO implement defined ore gen, for example have gems spawn only near lava, only in sand, only in dirt, etc
-        for (GemOres ore : GemOres.values())
+        if(block != null)
         {
-            if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
+            //TODO implement defined ore gen, for example have gems spawn only near lava, only in sand, only in dirt, etc
+            for (GemOres ore : GemOres.values())
             {
-                ore.block = block;
-                ore.oreDictName = "ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase());
-                ItemStack stack = ore.stack();
-                GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.oreDictName, stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
-                OreDictionary.registerOre(ore.oreDictName, stack);
+                if (config.getBoolean("" + LanguageUtility.capitalizeFirst(ore.name()) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
+                {
+                    ore.block = block;
+                    ore.oreDictName = "ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase());
+                    ItemStack stack = ore.stack();
+                    GameRegistry.registerWorldGenerator(new OreGenReplaceStone(ore.oreDictName, stack, ore.minY, ore.maxY, ore.amountPerChunk, ore.amountPerBranch, "pickaxe", 1), 1);
+                    OreDictionary.registerOre(ore.oreDictName, stack);
+                }
             }
         }
     }
