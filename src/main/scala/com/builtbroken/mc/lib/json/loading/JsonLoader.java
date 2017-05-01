@@ -12,6 +12,7 @@ import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 
 import java.io.*;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,12 +53,13 @@ public class JsonLoader
      * @return json file as a json element object
      * @throws IOException
      */
-    public static void loadJsonFileFromResources(URL resource, HashMap<String, List<JsonEntry>> entries) throws IOException
+    public static void loadJsonFileFromResources(URL resource, HashMap<String, List<JsonEntry>> entries) throws Exception
     {
         if (resource != null)
         {
-            InputStream stream = resource.openStream();
-            loadJson(resource.getFile(), new InputStreamReader(stream), entries);
+            URI uri = new URI(resource.getPath());
+            FileInputStream fis = new FileInputStream(uri.getPath());
+            loadJson(resource.getFile(), new InputStreamReader(fis), entries);
         }
     }
 

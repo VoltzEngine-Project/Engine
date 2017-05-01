@@ -464,7 +464,7 @@ public final class JsonContentLoader extends AbstractLoadable
                 debug.log("Loading resource: " + resource);
                 JsonLoader.loadJsonFileFromResources(resource, jsonEntries);
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 //Crash as the file may be important
                 throw new RuntimeException("Failed to load classpath resource " + resource, e);
