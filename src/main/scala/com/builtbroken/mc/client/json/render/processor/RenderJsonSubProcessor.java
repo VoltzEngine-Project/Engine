@@ -3,6 +3,7 @@ package com.builtbroken.mc.client.json.render.processor;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.state.RenderState;
+import com.builtbroken.mc.client.json.render.state.TextureState;
 import com.google.gson.JsonObject;
 
 /**
@@ -27,6 +28,14 @@ public abstract class RenderJsonSubProcessor
             if (renderStateObject.has("parent"))
             {
                 ((RenderState) state).parent = renderStateObject.get("parent").getAsString();
+            }
+
+            if (state instanceof TextureState)
+            {
+                if (renderStateObject.has("textureID"))
+                {
+                    ((TextureState) state).textureID = renderStateObject.get("textureID").getAsString();
+                }
             }
         }
     }

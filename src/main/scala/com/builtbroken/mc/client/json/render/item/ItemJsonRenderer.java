@@ -115,6 +115,9 @@ public class ItemJsonRenderer implements IItemRenderer
         switch (type)
         {
             //TODO move this to render data to allow for overrides
+            case INVENTORY:
+                GL11.glTranslatef(0, -0.1f, 0);
+                break;
             case ENTITY:
                 GL11.glTranslatef(0, 0.3f, 0);
                 break;

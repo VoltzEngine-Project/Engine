@@ -2,7 +2,6 @@ package com.builtbroken.mc.client.json.render.processor;
 
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
-import com.builtbroken.mc.client.json.render.state.RenderState;
 import com.builtbroken.mc.client.json.render.state.TextureState;
 import com.builtbroken.mc.client.json.render.tile.TileRenderData;
 import com.builtbroken.mc.core.References;
@@ -14,7 +13,6 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +24,13 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
 {
     public static final List<RenderJsonSubProcessor> stateProcessors = new ArrayList();
 
-    private final HashMap<RenderState, RenderJsonSubProcessor> stateToProcessor = new HashMap();
+    static
+    {
+        stateProcessors.add(new BlockStateJsonProcessor());
+        stateProcessors.add(new ModelStateJsonProcessor());
+    }
+
+    private final HashMap<IRenderState, RenderJsonSubProcessor> stateToProcessor = new HashMap();
 
     @Override
     public String getMod()
@@ -104,6 +108,8 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                     renderState = processor.process(renderStateObject, stateID, overAllRenderType, subType);
                     if (renderState != null)
                     {
+                        stateToProcessor.put(renderState, processor);
+                        processor.process(renderState, renderStateObject);
                         break;
                     }
                 }
@@ -123,20 +129,18 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
             //Add state to map
             data.add(stateID, renderState);
         }
-        //Set parent object
-        for (Collection<IRenderState> l : new Collection[]{data.renderStatesByName.values()})
+
+        //Handle post calls
+        for (IRenderState renderState : data.renderStatesByName.values())
         {
-            for (IRenderState renderState : l)
+            if (stateToProcessor.containsKey(renderState))
             {
-                if (stateToProcessor.containsKey(renderState))
-                {
-                    stateToProcessor.get(renderState).postHandle(renderState, data);
-                }
+                stateToProcessor.get(renderState).postHandle(renderState, data);
             }
         }
 
         //Clear run data
-        stateProcessors.clear();
+        stateToProcessor.clear();
 
         //TODO validate states to ensure they fill function
         //TODO ensure modelID exists if model state

@@ -77,7 +77,7 @@ public class ModelStateJsonProcessor extends RenderJsonSubProcessor
         }
 
         //Creates state object
-        if (subRenderType.equalsIgnoreCase("tile"))
+        if (globalRenderType.equalsIgnoreCase("tile"))
         {
             renderState = new TileState(stateID, modelID, offset, scale, rotation);
         }
