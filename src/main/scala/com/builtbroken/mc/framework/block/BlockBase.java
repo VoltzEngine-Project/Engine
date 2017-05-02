@@ -376,10 +376,12 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     {
         try
         {
+            boolean activated = false;
+
             Object tile = getTile(world, x, y, z);
             if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem(), x, y, z))
             {
-                boolean activated = false;
+
                 ListenerIterator it = new ListenerIterator(world, x, y, z, this, "activation");
                 while (it.hasNext())
                 {
@@ -393,10 +395,14 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
                 {
                     WrenchUtility.damageWrench(player, player.inventory.getCurrentItem(), x, y, z);
                 }
-                return activated;
+                if (activated)
+                {
+                    return true;
+                }
             }
+
             //TODO move to listener to prevent usage of IGuiTile in special cases
-            else if (tile instanceof IGuiTile && ((IGuiTile) tile).shouldOpenOnRightClick(player))
+            if (tile instanceof IGuiTile && ((IGuiTile) tile).shouldOpenOnRightClick(player))
             {
                 int id = ((IGuiTile) tile).getDefaultGuiID(player);
                 if (id >= 0)
@@ -410,7 +416,6 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
                 }
             }
 
-            boolean activated = false;
             ListenerIterator it = new ListenerIterator(world, x, y, z, this, "activation");
             while (it.hasNext())
             {

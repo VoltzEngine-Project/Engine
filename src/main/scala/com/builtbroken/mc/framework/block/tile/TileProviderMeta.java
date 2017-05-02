@@ -25,9 +25,9 @@ public class TileProviderMeta extends JsonGenData implements ITileProvider
     @Override
     public TileEntity createNewTileEntity(BlockBase block, World world, int meta)
     {
-        if (block instanceof BlockMeta && ((BlockMeta) block).meta[meta] != null && ((BlockMeta) block).meta[meta].tileEntityProvider != null)
+        if (block instanceof BlockMeta && ((BlockMeta) block).metaDataValues[meta] != null && ((BlockMeta) block).metaDataValues[meta].tileEntityProvider != null)
         {
-            return ((BlockMeta) block).meta[meta].tileEntityProvider.createNewTileEntity(block, world, meta);
+            return ((BlockMeta) block).metaDataValues[meta].tileEntityProvider.createNewTileEntity(block, world, meta);
         }
         return backupProvider != null ? backupProvider.createNewTileEntity(block, world, meta) : null;
     }
@@ -37,7 +37,7 @@ public class TileProviderMeta extends JsonGenData implements ITileProvider
     {
         if (block instanceof BlockMeta)
         {
-            for (MetaData data : ((BlockMeta) block).meta)
+            for (MetaData data : ((BlockMeta) block).metaDataValues)
             {
                 if (data != null && data.tileEntityProvider != null)
                 {

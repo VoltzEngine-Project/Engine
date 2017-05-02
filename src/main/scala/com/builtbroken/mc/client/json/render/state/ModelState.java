@@ -3,7 +3,6 @@ package com.builtbroken.mc.client.json.render.state;
 import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IModelState;
-import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.models.ModelData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
@@ -24,9 +23,6 @@ public class ModelState extends TextureState implements IModelState
     public Pos offset;
     public Pos scale;
     public EulerAngle rotation;
-
-    public String parent;
-    public IRenderState parentState;
 
     public boolean renderParent = false;
     public boolean renderOnlyParts = true;

@@ -37,11 +37,11 @@ public class ItemBlockMeta extends ItemBlockBase
             }
 
             //Assemble lang key, only called once per run
-            String lang = getUnlocalizedName() + ".name";
-            lang = lang.replace("${meta}", "" + damage);
-            if (getBlockJson().meta[damage] != null)
+            String lang = getUnlocalizedName();
+            lang = lang.replace(BlockMeta.META_LOCAL_KEY, "" + damage);
+            if (getBlockJson().metaDataValues[damage] != null && getBlockJson().metaDataValues[damage].localization != null)
             {
-                lang = lang.replace("${metaLocalization}", getBlockJson().meta[damage].localization);
+                lang = lang.replace("${metaLocalization}", getBlockJson().metaDataValues[damage].localization);
             }
 
             //Cache and return
@@ -54,7 +54,7 @@ public class ItemBlockMeta extends ItemBlockBase
     @Override
     public String getUnlocalizedName()
     {
-        return getBlockJson().data.localization;
+        return getBlockJson().getUnlocalizedName();
     }
 
     public BlockMeta getBlockJson()

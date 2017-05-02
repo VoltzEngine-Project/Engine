@@ -9,6 +9,11 @@ import com.builtbroken.mc.client.json.imp.IRenderState;
 public abstract class RenderState implements IRenderState
 {
     public final String id;
+    /** ID for Super object / parent object of this render state, allows sharing state data */
+    public String parent;
+    /** Super object / parent object of this render state, allows sharing state data */
+    public IRenderState parentState;
+
     public RenderState(String id)
     {
         this.id = id;

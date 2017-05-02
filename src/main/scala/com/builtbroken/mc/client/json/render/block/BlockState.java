@@ -37,6 +37,11 @@ public class BlockState extends RenderState implements IRenderState
         {
             return textureID[side] != null ? ClientDataHandler.INSTANCE.getTexture(textureID[side]) : null;
         }
+
+        if (parentState != null)
+        {
+            return parentState.getTextureData(side);
+        }
         return getTextureData(0);
     }
 }

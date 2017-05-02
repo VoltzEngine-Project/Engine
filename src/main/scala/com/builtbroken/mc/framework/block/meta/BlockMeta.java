@@ -6,8 +6,12 @@ import com.builtbroken.mc.framework.block.BlockPropertyData;
 import com.builtbroken.mc.framework.block.tile.ITileProvider;
 import com.builtbroken.mc.framework.block.tile.TileProviderMeta;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.List;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -15,7 +19,8 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class BlockMeta extends BlockBase
 {
-    public MetaData[] meta = new MetaData[16];
+    public static final String META_LOCAL_KEY = "${meta}";
+    public MetaData[] metaDataValues = new MetaData[16];
 
     public BlockMeta(BlockPropertyData data)
     {
@@ -52,11 +57,11 @@ public class BlockMeta extends BlockBase
             else
             {
                 //Option for automatic ore name selection using a format key with replacement entries
-                for (int i = 0; i < meta.length; i++)
+                for (int i = 0; i < metaDataValues.length; i++)
                 {
-                    if (meta[i] != null)
+                    if (metaDataValues[i] != null)
                     {
-                        String oreName = data.oreName.replace("${metaLocalization}", meta[i].localization);
+                        String oreName = data.oreName.replace("${metaLocalization}", metaDataValues[i].localization);
                         OreDictionary.registerOre(oreName, new ItemStack(this, 1, i));
                     }
                 }
@@ -64,11 +69,11 @@ public class BlockMeta extends BlockBase
         }
 
         //Load meta exclusive ore names
-        for (int i = 0; i < meta.length; i++)
+        for (int i = 0; i < metaDataValues.length; i++)
         {
-            if (meta[i] != null && meta[i].oreNames != null)
+            if (metaDataValues[i] != null && metaDataValues[i].oreNames != null)
             {
-                for (String s : meta[i].oreNames)
+                for (String s : metaDataValues[i].oreNames)
                 {
                     if (s != null && !s.isEmpty())
                     {
@@ -78,6 +83,25 @@ public class BlockMeta extends BlockBase
                 }
             }
         }
+    }
+
+    @Override
+    public void getSubBlocks(Item item, CreativeTabs creativeTabs, List list)
+    {
+        super.getSubBlocks(item, creativeTabs, list);
+        for (MetaData meta : metaDataValues)
+        {
+            if (meta != null)
+            {
+                list.add(new ItemStack(item, 1, meta.index));
+            }
+        }
+    }
+
+    @Override
+    public int damageDropped(int meta)
+    {
+        return meta;
     }
 
     @Override

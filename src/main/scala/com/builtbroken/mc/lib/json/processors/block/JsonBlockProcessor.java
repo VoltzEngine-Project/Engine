@@ -93,6 +93,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         //Meta data loading
         if (blockData.has("subtypes"))
         {
+            blockPropertyData.localization += "." + BlockMeta.META_LOCAL_KEY;
             block = new BlockMeta(blockPropertyData);
             //Call to load metadata
             readMeta((BlockMeta) block, blockData.get("subtypes").getAsJsonArray(), objectList);
@@ -155,10 +156,10 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
                 if (m >= 0 && m < 16)
                 {
                     //Prevent overriding by mistake
-                    if (block.meta[m] == null)
+                    if (block.metaDataValues[m] == null)
                     {
                         meta.index = m;
-                        block.meta[m] = meta;
+                        block.metaDataValues[m] = meta;
                     }
                     else
                     {
