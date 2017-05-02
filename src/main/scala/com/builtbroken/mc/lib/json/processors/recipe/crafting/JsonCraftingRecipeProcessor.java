@@ -157,6 +157,14 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             //New recipe data
             return new JsonCraftingRecipeData(this, output, items, false, items.length > 9);
         }
+        else if (type.equalsIgnoreCase("sheetmetal")) //TODO make into reg object
+        {
+            return null; //TODO implement
+        }
+        else if (type.equalsIgnoreCase("tools")) //TODO make into reg object
+        {
+            return null;//TODO implement
+        }
         else
         {
             throw new IllegalArgumentException("File is contains an unknown grid recipe type of " + type + " that is not supported.");
