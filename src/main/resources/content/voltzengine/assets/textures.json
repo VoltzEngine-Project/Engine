@@ -1,0 +1,8 @@
+{
+  "texture": {
+    "key": "voltzengine:toolTable",
+    "domain": "voltzengine",
+    "name": "tool-table",
+    "type": "model"
+  }
+}
