@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.logic.wrapper;
 
 import com.builtbroken.mc.api.event.tile.TileEvent;
+import com.builtbroken.mc.api.tile.ITile;
 import com.builtbroken.mc.api.tile.listeners.IBlockListener;
 import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
 import com.builtbroken.mc.api.tile.listeners.ITileWithListeners;
@@ -36,7 +37,7 @@ import java.util.*;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/30/2017.
  */
-public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITileWithListeners, IPacketIDReceiver
+public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITileWithListeners, IPacketIDReceiver, ITile
 {
     /** Object that controls all logic for the tile and some logic of the block */
     protected final ITileNode tile;
@@ -269,6 +270,24 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
                 listeners.put(key, list);
             }
         }
+    }
+
+    @Override
+    public String uniqueContentID()
+    {
+        return getTileNode().uniqueContentID();
+    }
+
+    @Override
+    public String contentType()
+    {
+        return getTileNode().contentType();
+    }
+
+    @Override
+    public String modID()
+    {
+        return getTileNode().modID();
     }
 
     //=============================================

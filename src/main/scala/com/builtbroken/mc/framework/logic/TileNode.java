@@ -5,7 +5,6 @@ import com.builtbroken.jlib.data.vector.Pos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
-import com.builtbroken.mc.api.tile.ITile;
 import com.builtbroken.mc.api.tile.listeners.IPlacementListener;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
@@ -34,7 +33,7 @@ import java.util.UUID;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2017.
  */
-public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, ITile, IPlacementListener
+public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlacementListener
 {
     protected static int DESCRIPTION_PACKET_ID = -1;
 
