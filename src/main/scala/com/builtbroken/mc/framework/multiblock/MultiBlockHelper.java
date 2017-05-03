@@ -169,6 +169,15 @@ public class MultiBlockHelper
         {
             //Get layout of multi-block for it's current state
             Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
+            return canBuild(world, tile.xi(), tile.yi(), tile.zi(), map, offset);
+        }
+        return false;
+    }
+
+    public static boolean canBuild(World world, int x, int y, int z, Map<IPos3D, String> map, boolean offset)
+    {
+        if (world != null && Engine.multiBlock != null)
+        {
             //Ensure the map is not null or empty in case there is no structure to generate
             if (map != null && !map.isEmpty())
             {
@@ -195,7 +204,7 @@ public class MultiBlockHelper
                         //Moves the position based on the location of the host
                         if (offset)
                         {
-                            location = new Location((IWorldPosition) tile).add(location);
+                            location = new Location(world, x, y, z).add(location);
                         }
                         Block block = world.getBlock(location.xi(), location.yi(), location.zi());
                         if (!block.isAir(world, location.xi(), location.yi(), location.zi()) && !block.isReplaceable(world, location.xi(), location.yi(), location.zi()))

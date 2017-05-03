@@ -330,7 +330,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
                 }
             }
         }
-        return super.canPlaceBlockOnSide(world, x, y, z, side);
+        return canPlaceBlockAt(world, x, y, z);
     }
 
     @Override
@@ -349,6 +349,41 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             }
         }
         return super.canPlaceBlockAt(world, x, y, z);
+    }
+
+    public boolean canPlaceBlockAt(Entity entity, World world, int x, int y, int z)
+    {
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "placement");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IPlacementListener)
+            {
+                if (!((IPlacementListener) next).canPlaceAt(entity))
+                {
+                    return false;
+                }
+            }
+        }
+        return canPlaceBlockAt(world, x, y, z);
+    }
+
+    @Override
+    public boolean canReplace(World world, int x, int y, int z, int side, ItemStack stack)
+    {
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "placement");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IPlacementListener)
+            {
+                if (!((IPlacementListener) next).canReplace(world, x, y, z, side, stack))
+                {
+                    return false;
+                }
+            }
+        }
+        return this.canPlaceBlockOnSide(world, x, y, z, side);
     }
 
     @Override

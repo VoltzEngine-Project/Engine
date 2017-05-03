@@ -12,9 +12,12 @@ import com.builtbroken.mc.framework.multiblock.MultiBlockHelper;
 import com.builtbroken.mc.framework.multiblock.structure.MultiBlockLayoutHandler;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import com.builtbroken.mc.lib.helper.BlockUtility;
 import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
 import com.builtbroken.mc.prefab.tile.listeners.TileListener;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -164,11 +167,16 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
             {
                 dir = ((IRotation) ((ITileNodeHost) tileEntity).getTileNode()).getDirection();
             }
+            return getLayoutOfMultiBlock(dir);
+        }
+        return MultiBlockLayoutHandler.get(layoutKey);
+    }
 
-            if (dir != null && dir != ForgeDirection.UNKNOWN)
-            {
-                return MultiBlockLayoutHandler.get(layoutKey + "." + dir.name().toLowerCase());
-            }
+    protected HashMap<IPos3D, String> getLayoutOfMultiBlock(ForgeDirection dir)
+    {
+        if (dir != null && dir != ForgeDirection.UNKNOWN)
+        {
+            return MultiBlockLayoutHandler.get(layoutKey + "." + dir.name().toLowerCase());
         }
         return MultiBlockLayoutHandler.get(layoutKey);
     }
@@ -189,7 +197,13 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public boolean canPlaceAt()
     {
-        return MultiBlockHelper.canBuild(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true);
+        return doRotation || MultiBlockHelper.canBuild(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true);
+    }
+
+    @Override
+    public boolean canPlaceAt(Entity entity)
+    {
+        return !doRotation || entity instanceof EntityLivingBase && MultiBlockHelper.canBuild(world(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineForgeDirection((EntityLivingBase) entity)), true);
     }
 
     public static class Builder implements ITileEventListenerBuilder
