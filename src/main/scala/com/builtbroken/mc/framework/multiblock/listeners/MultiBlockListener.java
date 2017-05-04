@@ -113,10 +113,11 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     {
         if (!_destroyingStructure && tileMulti instanceof TileEntity)
         {
-            Pos pos = new Pos((TileEntity) tileMulti).sub(new Pos(this));
+            Pos pos = new Pos((TileEntity) tileMulti).floor().sub(new Pos(this).floor());
 
             if (getLayoutOfMultiBlock().containsKey(pos))
             {
+                _destroyingStructure = true;
                 MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost() != null ? getMultiTileHost() : this, harvest, true, true);
                 _destroyingStructure = false;
                 return true;
