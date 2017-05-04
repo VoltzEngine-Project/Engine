@@ -1,6 +1,9 @@
 package com.builtbroken.mc.lib.world.radar;
 
 import com.builtbroken.mc.imp.transform.region.Cube;
+import com.builtbroken.mc.lib.world.radar.data.RadarEntity;
+import com.builtbroken.mc.lib.world.radar.data.RadarObject;
+import com.builtbroken.mc.lib.world.radar.data.RadarTile;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -17,15 +20,16 @@ import java.util.*;
  */
 public class RadarMap
 {
+    public static final int UPDATE_DELAY = 20;
+
     /** DIM ID, never change */
-    protected final int dimID;
+    public final int dimID;
 
     /** Map of chunk coords( converted to long) to radar contacts in that chunk */
-    protected HashMap<ChunkCoordIntPair, List<RadarObject>> chunk_to_entities = new HashMap();
-    protected List<RadarObject> allEntities = new ArrayList();
+    public final HashMap<ChunkCoordIntPair, List<RadarObject>> chunk_to_entities = new HashMap();
+    public final List<RadarObject> allEntities = new ArrayList();
 
-    int ticks = 0;
-    static final int UPDATE_DELAY = 20;
+    public int ticks = 0;
 
     /**
      * Dimension ID

@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.world.radar;
+package com.builtbroken.mc.lib.world.radar.data;
 
 import com.builtbroken.mc.api.IWorldPosition;
 import net.minecraft.world.ChunkCoordIntPair;

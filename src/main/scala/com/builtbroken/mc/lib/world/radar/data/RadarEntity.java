@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.world.radar;
+package com.builtbroken.mc.lib.world.radar.data;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -9,7 +9,7 @@ import net.minecraft.world.World;
  */
 public class RadarEntity extends RadarObject<Entity>
 {
-    protected Entity entity;
+    public Entity entity;
 
     public RadarEntity(Entity referent)
     {

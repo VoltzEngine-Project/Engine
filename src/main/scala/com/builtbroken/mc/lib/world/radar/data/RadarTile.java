@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.world.radar;
+package com.builtbroken.mc.lib.world.radar.data;
 
 
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -11,7 +11,7 @@ import net.minecraft.world.World;
  */
 public class RadarTile extends RadarObject<TileEntity>
 {
-    TileEntity tile;
+    public TileEntity tile;
 
     public RadarTile(TileEntity referent)
     {
