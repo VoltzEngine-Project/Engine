@@ -357,7 +357,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
 
     public void sendPacketToGuiUsers(IPacket packet)
     {
-        if (isServer() && this instanceof IPlayerUsing)
+        if (isServer() && this instanceof IPlayerUsing && packet != null)
         {
             for (EntityPlayer player : ((IPlayerUsing) this).getPlayersUsing())
             {
