@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.block;
 
 import com.builtbroken.mc.framework.block.tile.ITileProvider;
+import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.lib.helper.MaterialDict;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
@@ -28,6 +29,8 @@ public class BlockPropertyData extends JsonGenData
     /** Handles supplying the tile entity for the block */
     public ITileProvider tileEntityProvider;
 
+    /** Block hosting this data */
+    public BlockBase block;
 
     //Block data
     private Material material = Material.clay;
@@ -41,6 +44,10 @@ public class BlockPropertyData extends JsonGenData
     private int renderType = 0;
     private int color = -1;
     private int lightValue;
+
+    private Cube renderBounds = Cube.FULL;
+    private Cube blockBounds = Cube.FULL;
+    private Cube selectionBounds = Cube.FULL;
 
 
     public BlockPropertyData(IJsonProcessor processor, String registryKey, String MOD, String name)
@@ -182,5 +189,39 @@ public class BlockPropertyData extends JsonGenData
     public boolean hasComparatorInputOverride()
     {
         return hasComparatorInputOverride;
+    }
+
+    public Cube getRenderBounds()
+    {
+        return renderBounds;
+    }
+
+    @JsonProcessorData(value = "renderBounds", type = "cube")
+    public void setRenderBounds(Cube renderBounds)
+    {
+        this.renderBounds = renderBounds;
+    }
+
+    public Cube getBlockBounds()
+    {
+        return blockBounds;
+    }
+
+    @JsonProcessorData(value = "blockBounds", type = "cube")
+    public void setBlockBounds(Cube blockBounds)
+    {
+        this.blockBounds = blockBounds;
+        block.setBlockBounds(blockBounds.min().xf(), blockBounds.min().yf(), blockBounds.min().zf(), blockBounds.max().xf(), blockBounds.max().yf(), blockBounds.max().zf());
+    }
+
+    public Cube getSelectionBounds()
+    {
+        return selectionBounds;
+    }
+
+    @JsonProcessorData(value = "selectionBounds", type = "cube")
+    public void setSelectionBounds(Cube blockBounds)
+    {
+        this.selectionBounds = blockBounds;
     }
 }

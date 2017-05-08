@@ -38,6 +38,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     {
         super(data.getMaterial());
         this.data = data;
+        this.data.block = this;
         this.setBlockName(data.localization.replace("${name}", data.name).replace("${mod}", data.getMod()));
         this.setResistance(data.getResistance());
         this.setHardness(data.getHardness());
@@ -568,7 +570,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
                 }
             }
         }
-        return super.getSelectedBoundingBoxFromPool(world, x, y, z);
+        return data.getSelectionBounds().clone().add(x, y, z).toAABB();
     }
 
     @Override
@@ -587,7 +589,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
                 }
             }
         }
-        return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+        return data.getBlockBounds().clone().add(x, y, z).toAABB();
     }
 
     @Override
@@ -691,7 +693,13 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
         RenderData data = ClientDataHandler.INSTANCE.getRenderData(contentID);
         if (data != null)
         {
-            for (String key : new String[]{"block." + meta, "tile." + meta, "block", "tile"})
+            for (String key : new String[]{
+                    "block." + meta,
+                    "block." + ForgeDirection.getOrientation(meta).name().toLowerCase(),
+                    "tile." + meta,
+                    "tile." + ForgeDirection.getOrientation(meta).name().toLowerCase(),
+                    "block",
+                    "tile"})
             {
                 IRenderState state = data.getState(key);
                 if (state != null && state.getIcon(side) != null)

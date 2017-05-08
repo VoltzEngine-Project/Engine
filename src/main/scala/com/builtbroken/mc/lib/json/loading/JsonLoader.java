@@ -1,10 +1,7 @@
 package com.builtbroken.mc.lib.json.loading;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.json.conversion.JsonConverter;
-import com.builtbroken.mc.lib.json.conversion.JsonConverterNBT;
-import com.builtbroken.mc.lib.json.conversion.JsonConverterPos;
-import com.builtbroken.mc.lib.json.conversion.JsonConverterStringArray;
+import com.builtbroken.mc.lib.json.conversion.*;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -34,6 +31,7 @@ public class JsonLoader
         addConverter(new JsonConverterPos());
         addConverter(new JsonConverterNBT());
         addConverter(new JsonConverterStringArray());
+        addConverter(new JsonConverterCube());
     }
 
     public static void addConverter(JsonConverter converter)
