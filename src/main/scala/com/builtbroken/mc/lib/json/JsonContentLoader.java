@@ -710,7 +710,7 @@ public final class JsonContentLoader extends AbstractLoadable
         }
         catch (Exception e)
         {
-            debug.error("Failed to load resources from class path.", e);
+            throw new RuntimeException("Failed to load resources from class path.  Class='" + clazz + "' folder= '" + folder + "'", e);
         }
     }
 
@@ -721,23 +721,30 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void loadResourcesFromPackage(URI uri, String folder) throws Exception
     {
-        if ("jar".equals(uri.getScheme()))
+        try
         {
-            debug.error("Jar detected, using secondary method to load resources.");
-
-            URI jar = new URI("jar", uri.getSchemeSpecificPart().replace("%20", " "), null);
-
-            Map<String, Object> env = new HashMap<>();
-            env.put("create", "true");
-
-            try (FileSystem fs = FileSystems.newFileSystem(jar, env))
+            if ("jar".equals(uri.getScheme()))
             {
-                walkPaths(fs.getPath(folder));
+                debug.error("Jar detected, using secondary method to load resources.");
+
+                URI jar = new URI("jar", uri.getSchemeSpecificPart().replace("%20", " "), null);
+
+                Map<String, Object> env = new HashMap<>();
+                env.put("create", "true");
+
+                try (FileSystem fs = FileSystems.newFileSystem(jar, env))
+                {
+                    walkPaths(fs.getPath(folder));
+                }
+            }
+            else
+            {
+                walkPaths(Paths.get(uri));
             }
         }
-        else
+        catch (Exception e)
         {
-            walkPaths(Paths.get(uri));
+            throw new RuntimeException("Failed to walk files from URI = " + uri, e);
         }
     }
 
@@ -755,7 +762,7 @@ public final class JsonContentLoader extends AbstractLoadable
                 if (extensionsToLoad.contains(extension))
                 {
                     debug.log("Found " + name);
-                    JsonLoader.loadJson(filePath.toAbsolutePath().toString(), Files.newBufferedReader(nextPath), jsonEntries);
+                    JsonLoader.loadJson(nextPath.toAbsolutePath().toString(), Files.newBufferedReader(nextPath), jsonEntries);
                 }
             }
         }

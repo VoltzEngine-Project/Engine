@@ -5,6 +5,7 @@ import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.framework.item.logic.ItemNode;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -34,6 +35,8 @@ public abstract class ItemBase extends Item implements IJsonRenderStateProvider
 {
     /** Mod that owns the content, domain ID */
     public final String owner;
+
+    public ItemNode node;
 
     /**
      * @param name - used to localize the item

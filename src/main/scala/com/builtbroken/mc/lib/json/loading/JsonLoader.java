@@ -86,9 +86,16 @@ public class JsonLoader
      */
     public static void loadJson(String fileName, Reader reader, HashMap<String, List<JsonEntry>> entries)
     {
-        JsonReader jsonReader = new JsonReader(reader);
-        JsonElement element = Streams.parse(jsonReader);
-        loadJsonElement(fileName, element, entries);
+        try
+        {
+            JsonReader jsonReader = new JsonReader(reader);
+            JsonElement element = Streams.parse(jsonReader);
+            loadJsonElement(fileName, element, entries);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Failed to parse file '" + fileName + "'", e);
+        }
     }
 
     /**
