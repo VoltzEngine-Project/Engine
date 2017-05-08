@@ -418,8 +418,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             Object tile = getTile(world, x, y, z);
             if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem(), x, y, z))
             {
-
-                ListenerIterator it = new ListenerIterator(world, x, y, z, this, "activation");
+                ListenerIterator it = new ListenerIterator(world, x, y, z, this, "wrench");
                 while (it.hasNext())
                 {
                     ITileEventListener next = it.next();
