@@ -55,6 +55,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     public ItemBase(ItemNode node)
     {
         this.node = node;
+        this.node.item = this;
     }
 
     /**
@@ -65,8 +66,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     public ItemBase(String id, String owner, String name)
     {
         this(new ItemNode(owner, id));
-        setUnlocalizedName(owner + ":" + name);
-        setTextureName(owner + ":" + name);
+        node.setUnlocalizedName(name);
     }
 
     @Override
@@ -337,5 +337,50 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     public List<IItemEventListener> getItemListeners(String key)
     {
         return listeners.get(key);
+    }
+
+
+    //=============================================
+    //============== to string ====================
+    //=============================================
+
+    @Override
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getClassDisplayName());
+        builder.append("(");
+        toStringData(builder);
+        builder.append(")@");
+        builder.append(hashCode());
+        return builder.toString();
+    }
+
+    /**
+     * Gets the debug display name of the class.
+     * Normally this is just the class name
+     * but is designed to be overridden in
+     * the code generator for simplicity
+     *
+     * @return name
+     */
+    protected String getClassDisplayName()
+    {
+        return getClass().getSimpleName();
+    }
+
+    /**
+     * Called to build data about the class.
+     * By default this outputs if the
+     * tile is on the server or client,
+     * the world,
+     * the position,
+     * and the tile being hosted
+     *
+     * @param builder - builder to append data to
+     */
+    protected void toStringData(StringBuilder builder)
+    {
+
     }
 }
