@@ -143,7 +143,10 @@ public class ModCreativeTab extends CreativeTabs
      */
     protected void add(List list, Item item)
     {
-        item.getSubItems(item, this, list);
+        if (item != null)
+        {
+            item.getSubItems(item, this, list);
+        }
     }
 
     /**
@@ -154,7 +157,10 @@ public class ModCreativeTab extends CreativeTabs
      */
     protected void add(List list, Block block)
     {
-        block.getSubBlocks(Item.getItemFromBlock(block), this, list);
+        if (block != null)
+        {
+            block.getSubBlocks(Item.getItemFromBlock(block), this, list);
+        }
     }
 
     public static abstract class ItemSorter implements Comparator

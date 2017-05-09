@@ -167,7 +167,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
 
     public PacketTile getDescPacket()
     {
-        Pos pos = getHost() != null ? new Pos((TileEntity) getHost()) : new Pos();
+        Pos pos = getHost() != null ? new Pos(getHost()) : new Pos();
         if (overrideRenderBounds != null)
         {
             return new PacketTile(this, 1, pos, shouldRenderBlock, true, overrideRenderBounds);
