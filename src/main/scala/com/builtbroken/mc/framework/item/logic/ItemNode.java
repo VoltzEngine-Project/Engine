@@ -8,12 +8,14 @@ package com.builtbroken.mc.framework.item.logic;
  */
 public class ItemNode
 {
-    public final String mod;
+    /** Domain of the mod that owners this content */
+    public final String owner;
+    /** Unique ID of the content */
     public final String id;
 
-    public ItemNode(String mod, String id)
+    public ItemNode(String owner, String id)
     {
-        this.mod = mod;
+        this.owner = owner;
         this.id = id;
     }
 }
