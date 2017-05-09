@@ -55,7 +55,32 @@ public class JsonItemProcessor extends JsonProcessor<ItemBase>
         ensureValuesExist(itemData, "name");
 
         ItemBase item;
-        if (itemData.has("nodeClass"))
+        if (itemData.has("itemClass"))
+        {
+            String className = itemData.get("itemClass").getAsString();
+            try
+            {
+                Class clazz = Class.forName(className);
+                item = (ItemBase) clazz.newInstance();
+            }
+            catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException("Failed to find item class for '" + className + "'", e);
+            }
+            catch (InstantiationException e)
+            {
+                throw new RuntimeException("Failed to create item for class '" + className + "'", e);
+            }
+            catch (IllegalAccessException e)
+            {
+                throw new RuntimeException("Failed to access item constructor for class '" + className + "'", e);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException("Unexpected error creating node from '" + className + "'", e);
+            }
+        }
+        else if (itemData.has("nodeClass"))
         {
             String className = itemData.get("nodeClass").getAsString();
             try
@@ -71,7 +96,7 @@ public class JsonItemProcessor extends JsonProcessor<ItemBase>
             }
             catch (InstantiationException e)
             {
-                throw new RuntimeException("Failed to create node constructor for class '" + className + "'", e);
+                throw new RuntimeException("Failed to create constructor for class '" + className + "'", e);
             }
             catch (IllegalAccessException e)
             {
