@@ -93,7 +93,8 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
             }
         }
 
-        String id = classToNameMap.get(tile.getClass());
+        Class clazz = tile.getClass();
+        String id = classToNameMap.get(clazz);
         if (id == null)
         {
             id = tile.getClass().getName();

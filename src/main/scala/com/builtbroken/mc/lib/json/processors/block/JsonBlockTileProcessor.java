@@ -5,6 +5,7 @@ import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.block.meta.MetaData;
 import com.builtbroken.mc.framework.block.tile.ITileProvider;
 import com.builtbroken.mc.framework.block.tile.TileProviderByClass;
+import com.builtbroken.mc.framework.block.tile.TileProviderMeta;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
@@ -55,7 +56,14 @@ public class JsonBlockTileProcessor extends JsonProcessor<ITileProvider> impleme
     {
         String pack = block.getClass().getName().replace("class", "");
         pack = pack.substring(0, pack.lastIndexOf("."));
-        block.data.tileEntityProvider = process(element, pack);
+        if (block.data.tileEntityProvider instanceof TileProviderMeta)
+        {
+            ((TileProviderMeta) block.data.tileEntityProvider).backupProvider = process(element, pack);
+        }
+        else
+        {
+            block.data.tileEntityProvider = process(element, pack);
+        }
     }
 
     @Override

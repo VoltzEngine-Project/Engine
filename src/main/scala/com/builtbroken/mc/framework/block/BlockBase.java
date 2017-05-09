@@ -29,6 +29,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -104,12 +105,23 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
         {
             this.mod = mod;
             registered = true;
-            manager.newBlock(data.registryKey, this, ItemBlockBase.class);
+            manager.newBlock(data.registryKey, this, getItemBlockClass());
             if (data.tileEntityProvider != null)
             {
                 data.tileEntityProvider.register(this, mod, manager);
             }
         }
+    }
+
+    /**
+     * Gets the item block class to use with this block,
+     * only used during registration.
+     *
+     * @return
+     */
+    protected Class<? extends ItemBlock> getItemBlockClass()
+    {
+        return ItemBlockBase.class;
     }
 
     @Override
