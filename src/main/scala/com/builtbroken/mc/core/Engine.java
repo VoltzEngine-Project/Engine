@@ -584,19 +584,19 @@ public class Engine implements IJsonGenMod
         {
             gemOre = contentRegistry.newBlock("veGemOre", new BlockGemOre("stone"), ItemBlockGemOre.class);
             GemOres.registerSet(gemOre, getConfig());
-        }
 
-        for (GemTypes types : GemTypes.values())
-        {
-            if (types.isRequested())
+            for (GemTypes types : GemTypes.values())
             {
-                types.item = new ItemGem(types);
-                contentRegistry.newItem("Gem" + LanguageUtility.capitalizeFirst(types.name) + "Item", types.item);
-                for (Gems gem : Gems.values())
+                if (types.isRequested())
                 {
-                    if (gem != Gems.UNKNOWN)
+                    types.item = new ItemGem(types);
+                    contentRegistry.newItem("Gem" + LanguageUtility.capitalizeFirst(types.name) + "Item", types.item);
+                    for (Gems gem : Gems.values())
                     {
-                        OreDictionary.registerOre(types.oreDict + gem.getOreName(), types.stack(gem));
+                        if (gem != Gems.UNKNOWN)
+                        {
+                            OreDictionary.registerOre(types.oreDict + gem.getOreName(), types.stack(gem));
+                        }
                     }
                 }
             }
@@ -736,6 +736,24 @@ public class Engine implements IJsonGenMod
     {
         //Clean up resources to free up ram
         loader.loadComplete();
+
+        long time = System.nanoTime();
+        Engine.logger().error("Checking ore dictionary for bad values");
+        //Fix ore dictionary
+        String[] oreNames = OreDictionary.getOreNames();
+        for (String name : oreNames)
+        {
+            ArrayList<ItemStack> stacks = OreDictionary.getOres(name);
+            for (ItemStack stack : stacks)
+            {
+                if (stack == null || stack.getItem() == null)
+                {
+                    Engine.logger().error("\tFound bad ore dictionary value stack='" + stack + "'  ore_name='" + name + "'");
+                }
+            }
+        }
+        time = System.nanoTime() - time;
+        Engine.logger().error("Done.... took: " + StringHelpers.formatNanoTime(time));
     }
 
     public AbstractProxy getProxy()
