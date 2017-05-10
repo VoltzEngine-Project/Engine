@@ -10,4 +10,7 @@ public @interface ItemWrapped
 {
     /** File name to use for the class */
     String className();
+
+    /** Wrappers to use during processing */
+    String wrappers() default "";
 }
