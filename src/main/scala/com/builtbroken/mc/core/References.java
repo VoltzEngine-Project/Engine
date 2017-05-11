@@ -1,7 +1,5 @@
 package com.builtbroken.mc.core;
 
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 
 /**
@@ -11,10 +9,6 @@ public final class References
 {
     public static final String ID = "voltzengine";
     public static final String NAME = "Voltz Engine";
-
-    @Deprecated
-    /** Use Engine.instance.logger */
-    public static Logger LOGGER;
 
     public static final String MAJOR_VERSION = "@MAJOR@";
     public static final String MINOR_VERSION = "@MINOR@";

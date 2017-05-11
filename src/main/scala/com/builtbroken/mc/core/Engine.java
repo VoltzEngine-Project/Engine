@@ -189,8 +189,6 @@ public class Engine implements IJsonGenMod
 
     /** List of content that has been requested to load, replaces old load system */
     protected static List<String> requestedContent = new ArrayList();
-    protected static HashMap<String, Block> requestedBlocks = new HashMap();
-    protected static HashMap<String, Item> requestedItems = new HashMap();
 
     /**
      * Requests that all ores are generated
@@ -365,7 +363,6 @@ public class Engine implements IJsonGenMod
         heatDataConfig.load();
         explosiveConfig.load();
 
-        References.LOGGER = logger;
         ConfigScanner.instance().generateSets(event.getAsmData());
         ConfigHandler.sync(getConfig(), References.DOMAIN);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
@@ -407,6 +404,7 @@ public class Engine implements IJsonGenMod
         //Internal systems
         if (config.getBoolean("ASMTestingEnabled", "Internal", true, "Enables the testing of the internally used ASM code, used to ensure quality of the game. Only disable if you know the ASM is functional or there are issues with it running. Normally though if the ASM test fails then the ASM code itself was not injected. Which will result in several features of the mod not functioning correctly."))
         {
+            //TODO check for Bukkit and disable
             loader.applyModule(new ProxyASMTest());
         }
         loader.applyModule(getProxy());
@@ -723,7 +721,6 @@ public class Engine implements IJsonGenMod
 
         //Creates world change threads for ques
         actionProcessorThreads = getConfig().getInt("WorldActionThreads", "Multi-Threading", Runtime.getRuntime().availableProcessors() - 1, 0, 100, "Creates the number of threads to be used for processing changes to the world. Used by mods like ICBM to calculate explosives before removing blocks from the world. Try to keep this one less than the number of processors you have. This way minecraft is not chocked out for CPU time.");
-
 
         //Save configs as this is our last chance
         heatDataConfig.save();

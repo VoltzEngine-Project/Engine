@@ -212,7 +212,7 @@ public class SaveManager
                 }
                 else
                 {
-                    References.LOGGER.warn("SaveManager: Skipping object with id " + nbt.getString("id"));
+                    Engine.logger().warn("SaveManager: Skipping object with id " + nbt.getString("id"));
                 }
 
                 return obj;
