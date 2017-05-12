@@ -1,7 +1,5 @@
 package com.builtbroken.mc.lib.world.generator;
 
-import com.builtbroken.jlib.lang.StringHelpers;
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
@@ -50,7 +48,6 @@ public class OreGenReplace extends OreGenerator
     @Override
     public void generate(World world, Random random, int varX, int varZ)
     {
-        long time = System.nanoTime();
         int blocksPlaced = 0;
         while (blocksPlaced < settings.amountPerChunk)
         {
@@ -64,8 +61,6 @@ public class OreGenReplace extends OreGenerator
             }
             blocksPlaced += placed;
         }
-        time = System.nanoTime() - time;
-        Engine.logger().info("OreGenReplace[" + name + "] >> Chunk(" + varX + ", " + +varZ + ") >> Blocks: " + blocksPlaced + " >> TotalTime: " + StringHelpers.formatNanoTime(time));
     }
 
     /**
