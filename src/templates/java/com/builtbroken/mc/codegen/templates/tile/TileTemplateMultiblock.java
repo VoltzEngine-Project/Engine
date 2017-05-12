@@ -6,6 +6,7 @@ import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.api.tile.node.ITileNode;
+import com.builtbroken.mc.codegen.processor.TileWrappedTemplate;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
 import net.minecraft.entity.player.EntityPlayer;

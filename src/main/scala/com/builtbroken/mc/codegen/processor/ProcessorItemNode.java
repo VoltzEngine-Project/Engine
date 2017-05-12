@@ -2,7 +2,6 @@ package com.builtbroken.mc.codegen.processor;
 
 import com.builtbroken.mc.codegen.data.BuildData;
 import com.builtbroken.mc.codegen.template.Template;
-import com.builtbroken.mc.codegen.templates.item.ItemWrappedTemplate;
 
 import java.io.File;
 import java.io.IOException;
