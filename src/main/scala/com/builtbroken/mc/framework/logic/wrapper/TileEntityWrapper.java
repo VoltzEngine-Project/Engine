@@ -142,6 +142,12 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     }
 
     @Override
+    public boolean canUpdate()
+    {
+        return getTileNode().requiresPerTickUpdate();
+    }
+
+    @Override
     public void invalidate()
     {
         super.invalidate();
