@@ -14,12 +14,14 @@ import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -51,6 +53,8 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     protected final Set<EntityPlayer> playersUsing = new HashSet();
 
     protected final HashMap<String, List<ITileEventListener>> listeners = new HashMap();
+
+    private AxisAlignedBB renderBoundCache;
 
     /**
      * @param controller - tile, passed in by child class wrapper
@@ -222,9 +226,9 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     }
 
     @Override
-    public Block getHostBlock()
+    public BlockBase getHostBlock()
     {
-        return getBlockType();
+        return (BlockBase) getBlockType();
     }
 
     @Override
@@ -288,6 +292,17 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     public String modID()
     {
         return getTileNode().modID();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox()
+    {
+        if (renderBoundCache == null)
+        {
+            renderBoundCache = getHostBlock().data.getRenderBounds().clone().add(xi(), yi(), zi()).toAABB();
+        }
+        return renderBoundCache;
     }
 
     //=============================================
