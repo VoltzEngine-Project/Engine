@@ -3,7 +3,7 @@ package com.builtbroken.mc.lib.world.edit;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.edit.BlockEditResult;
-import com.builtbroken.mc.api.edit.IWorldEdit;
+import com.builtbroken.mc.api.explosive.IBlastEdit;
 import com.builtbroken.mc.imp.transform.vector.AbstractLocation;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import io.netty.buffer.ByteBuf;
@@ -29,7 +29,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 12/7/2015.
  */
-public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit, IPos3D, IWorldPosition
+public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit, IPos3D, IWorldPosition
 {
     /** Block that was at the location */
     public Block prev_block = Blocks.air;
@@ -171,10 +171,33 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
      *
      * @return this
      */
-    public BlockEdit doDrops()
+    public void doDrops()
     {
         this.doItemDrop = true;
-        return this;
+    }
+
+    @Override
+    public void setBlastDirection(EnumFacing dir)
+    {
+        this.face = dir;
+    }
+
+    @Override
+    public EnumFacing getBlastDirection()
+    {
+        return face;
+    }
+
+    @Override
+    public void setEnergy(float energy)
+    {
+        this.energy = energy;
+    }
+
+    @Override
+    public float getEnergy()
+    {
+        return this.energy;
     }
 
     @Override
