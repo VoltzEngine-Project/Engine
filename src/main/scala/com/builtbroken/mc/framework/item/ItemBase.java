@@ -88,7 +88,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         super.addInformation(stack, player, list, b);
         if (Engine.runningAsDev)
         {
-            list.add("Node: " + node);
+            list.add("Node: " + node.getClass().getSimpleName());
             list.add("RenderID: " + getRenderContentID(stack.getItemDamage()));
             list.add("RenderS: " + getRenderKey(stack));
             list.add("RenderE: " + getRenderKey(stack, player, player.getItemInUseCount()));
