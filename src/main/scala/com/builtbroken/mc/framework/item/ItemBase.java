@@ -7,6 +7,9 @@ import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.network.IPacketReceiver;
+import com.builtbroken.mc.core.network.packet.PacketPlayerItem;
+import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.item.logic.ItemNode;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
@@ -14,6 +17,7 @@ import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.item.processor.JsonItemProcessor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +42,7 @@ import java.util.Random;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/9/2017.
  */
-public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGenObject, IItemWithListeners
+public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGenObject, IItemWithListeners, IPacketReceiver
 {
     /** Handles item properties and main logic */
     public final ItemNode node;
@@ -339,6 +343,42 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         return listeners.get(key);
     }
 
+    @Override
+    public void read(ByteBuf buf, EntityPlayer player, PacketType packet)
+    {
+        if (packet instanceof PacketPlayerItem)
+        {
+            int slot = ((PacketPlayerItem) packet).slotId;
+            ItemStack stack = player.inventory.getStackInSlot(slot);
+            if (stack != null)
+            {
+                if (stack.getItem() == this)
+                {
+                    try
+                    {
+                        node.readPacketData(buf, player, stack);
+                    }
+                    catch (Exception e)
+                    {
+                        Engine.logger().error("ItemBase#read() >> Unexpected error while handling packet on stack[" + stack + "] item[" + stack.getItem() + "] from packet[" + packet + "]", e);
+                    }
+                }
+                else if (Engine.runningAsDev)
+                {
+                    Engine.logger().error("ItemBase#read() >> stack in slot[" + slot + "] item is not an instance of " + this + " can not read packet.");
+                }
+            }
+            else if (Engine.runningAsDev)
+            {
+                Engine.logger().error("ItemBase#read() >> stack in slot[" + slot + "] item is null preventing packet reading.");
+            }
+        }
+    }
+
+    public PacketPlayerItem getPacket(int slotID, Object... args)
+    {
+        return new PacketPlayerItem(slotID, args);
+    }
 
     //=============================================
     //============== to string ====================

@@ -1,8 +1,12 @@
 package com.builtbroken.mc.framework.item.logic;
 
 import com.builtbroken.mc.api.items.listeners.IItemEventListener;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.item.ItemBase;
 import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,9 +78,24 @@ public class ItemNode implements IItemEventListener
     {
         this.unlocalizedName = name;
         item.setUnlocalizedName(owner + ":" + name);
-        if(item.iconString == null)
+        if (item.iconString == null)
         {
             item.setTextureName(owner + ":" + name);
+        }
+    }
+
+    /**
+     * Called to read packet data
+     *
+     * @param buf
+     * @param player
+     * @param stack
+     */
+    public void readPacketData(ByteBuf buf, EntityPlayer player, ItemStack stack)
+    {
+        if (Engine.runningAsDev)
+        {
+            throw new RuntimeException("Received packet on item without being coded to handle packets.");
         }
     }
 }
