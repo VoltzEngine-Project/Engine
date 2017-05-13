@@ -2,7 +2,6 @@ package com.builtbroken.mc.client.json.render.processor;
 
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
-import com.builtbroken.mc.client.json.render.state.TextureState;
 import com.builtbroken.mc.client.json.render.tile.TileRenderData;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.processors.JsonProcessor;
@@ -28,6 +27,7 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
     {
         stateProcessors.add(new BlockStateJsonProcessor());
         stateProcessors.add(new ModelStateJsonProcessor());
+        stateProcessors.add(new ItemStateJsonProcessor());
     }
 
     private final HashMap<IRenderState, RenderJsonSubProcessor> stateToProcessor = new HashMap();
@@ -115,15 +115,10 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
                 }
             }
 
-            //Backup state / Default state
+            //No state, crash TODO add config to ignore broken states
             if (renderState == null)
             {
-                //Texture state, basally for icons
-                renderState = new TextureState(stateID);
-                if (renderStateObject.has("textureID"))
-                {
-                    ((TextureState) renderState).textureID = renderStateObject.get("textureID").getAsString();
-                }
+                throw new RuntimeException("Failed to process render state for StateID[" + stateID + "] SubRenderType[" + subType + "] RenderType[" + overAllRenderType + "]");
             }
 
             //Add state to map
@@ -131,11 +126,12 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
         }
 
         //Handle post calls
-        for (IRenderState renderState : data.renderStatesByName.values())
+        for (IRenderState state : data.renderStatesByName.values())
         {
-            if (stateToProcessor.containsKey(renderState))
+            //Handles post processor actions
+            if (stateToProcessor.containsKey(state))
             {
-                stateToProcessor.get(renderState).postHandle(renderState, data);
+                stateToProcessor.get(state).postHandle(state, data);
             }
         }
 

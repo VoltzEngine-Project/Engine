@@ -32,6 +32,10 @@ public class TextureState extends RenderState implements IRenderState
     @Override
     public TextureData getTextureData(int side)
     {
-        return textureID != null ? ClientDataHandler.INSTANCE.getTexture(textureID) : null;
+        if (textureID != null)
+        {
+            return ClientDataHandler.INSTANCE.getTexture(textureID);
+        }
+        return parentState != null ? parentState.getTextureData(side) : null;
     }
 }

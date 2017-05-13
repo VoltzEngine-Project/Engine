@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.item;
 
+import com.builtbroken.mc.api.items.listeners.IItemActivationListener;
 import com.builtbroken.mc.api.items.listeners.IItemEventListener;
 import com.builtbroken.mc.api.items.listeners.IItemWithListeners;
 import com.builtbroken.mc.client.json.ClientDataHandler;
@@ -15,6 +16,7 @@ import com.builtbroken.mc.framework.item.logic.ItemNode;
 import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.processors.item.processor.JsonItemProcessor;
+import com.builtbroken.mc.prefab.items.listeners.ItemListenerIterator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -74,17 +76,29 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     }
 
     @Override
+    public List<IItemEventListener> getItemListeners(String key)
+    {
+        return listeners.get(key);
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b)
     {
         super.addInformation(stack, player, list, b);
         if (Engine.runningAsDev)
         {
+            list.add("Node: " + node);
             list.add("RenderID: " + getRenderContentID(stack.getItemDamage()));
             list.add("RenderS: " + getRenderKey(stack));
             list.add("RenderE: " + getRenderKey(stack, player, player.getItemInUseCount()));
         }
+        //TODO add listener support
     }
+
+    //=============================================
+    //============== Render code ==================
+    //=============================================
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -276,6 +290,10 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         return list;
     }
 
+    //=============================================
+    //============== Wrapper ====================
+    //=============================================
+
     @Override
     public WeightedRandomChestContent getChestGenBase(ChestGenHooks chest, Random rnd, WeightedRandomChestContent original)
     {
@@ -293,7 +311,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @Override
     public int getMaxItemUseDuration(ItemStack stack)
     {
-        //TODO implement json hook
+        //TODO implement json hook, largest duration wins
         return 0;
     }
 
@@ -302,6 +320,50 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     {
         //TODO implement listener hook
     }
+
+    @Override
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    {
+        if (stack != null)
+        {
+            ItemStack copy = stack.copy();
+            ItemListenerIterator it = new ItemListenerIterator(this, "activation");
+            while (it.hasNext())
+            {
+                IItemEventListener next = it.next();
+                if (next instanceof IItemActivationListener)
+                {
+                    copy = ((IItemActivationListener) next).onItemRightClick(copy, world, player);
+                }
+            }
+            return copy;
+        }
+        return stack;
+    }
+
+    @Override
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hit_x, float hit_y, float hit_z)
+    {
+        if (stack != null)
+        {
+            boolean clicked = false;
+            ItemListenerIterator it = new ItemListenerIterator(this, "activation");
+            while (it.hasNext())
+            {
+                IItemEventListener next = it.next();
+                if (next instanceof IItemActivationListener)
+                {
+                    clicked = ((IItemActivationListener) next).onItemUse(stack, player, world, x, y, z, side, hit_x, hit_y, hit_z);
+                }
+            }
+            return clicked;
+        }
+        return false;
+    }
+
+    //=============================================
+    //============== JSON data ====================
+    //=============================================
 
     @Override
     public void register(IJsonGenMod mod, ModManager manager)
@@ -334,14 +396,12 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
 
     public String getRenderContentID(int meta)
     {
-        return "item." + getMod() + ":" + node.id;
+        return getMod() + ":" + node.id;
     }
 
-    @Override
-    public List<IItemEventListener> getItemListeners(String key)
-    {
-        return listeners.get(key);
-    }
+    //=============================================
+    //============== Network ====================
+    //=============================================
 
     @Override
     public void read(ByteBuf buf, EntityPlayer player, PacketType packet)
