@@ -20,10 +20,12 @@
     "states": [
       {
         "id": "tile",
+        "renderType": "model",
         "modelID": "modelThing"
       },
       {
         "id": "tile.2",
+        "renderType": "model",
         "parent": "tile",
         "rotation": {
           "yaw": 90

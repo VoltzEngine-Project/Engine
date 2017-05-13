@@ -5,6 +5,7 @@
     "states": [
       {
         "id": "item.inventory",
+        "renderType": "item",
         "textureID": "ve.testItemTexture"
       }
     ]
