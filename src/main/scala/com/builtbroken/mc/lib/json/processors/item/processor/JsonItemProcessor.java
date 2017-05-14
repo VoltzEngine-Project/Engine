@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.json.processors.item.processor;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.item.ItemBase;
 import com.builtbroken.mc.framework.item.logic.ItemNode;
@@ -11,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Loads basic item data from a processor
@@ -51,6 +53,7 @@ public class JsonItemProcessor extends JsonProcessor<ItemBase>
     @Override
     public boolean process(JsonElement element, List<IJsonGenObject> objectList)
     {
+        debugPrinter.start("ItemProcessor", "Processing entry", Engine.runningAsDev);
         JsonObject itemData = element.getAsJsonObject();
         ensureValuesExist(itemData, "name");
 
@@ -58,6 +61,7 @@ public class JsonItemProcessor extends JsonProcessor<ItemBase>
         if (itemData.has("itemClass"))
         {
             String className = itemData.get("itemClass").getAsString();
+            debugPrinter.log("ItemClass: " + className);
             try
             {
                 Class clazz = Class.forName(className);
@@ -83,6 +87,7 @@ public class JsonItemProcessor extends JsonProcessor<ItemBase>
         else if (itemData.has("nodeClass"))
         {
             String className = itemData.get("nodeClass").getAsString();
+            debugPrinter.log("NodeClass: " + className);
             try
             {
 
@@ -114,11 +119,28 @@ public class JsonItemProcessor extends JsonProcessor<ItemBase>
             String mod = itemData.getAsJsonPrimitive("mod").getAsString();
             String name = itemData.getAsJsonPrimitive("name").getAsString();
             item = new ItemBase(id, mod, name);
+
+            debugPrinter.log("Name: " + name);
+            debugPrinter.log("Mod: " + mod);
+            debugPrinter.log("ID: " + id);
         }
 
-        //TODO implement subtypes and other data
+        //TODO implement subtypes
+
+        //Handles loading node data for item
+        for (Map.Entry<String, JsonElement> entry : itemData.entrySet())
+        {
+            if (itemPropDataHandler.handle(item.node, entry.getKey().toLowerCase(), entry.getValue()))
+            {
+                if (Engine.runningAsDev)
+                {
+                    debugPrinter.log("Injected Key: " + entry.getKey());
+                }
+            }
+        }
 
         objectList.add(item);
+        debugPrinter.end("Done...");
         return true;
     }
 }
