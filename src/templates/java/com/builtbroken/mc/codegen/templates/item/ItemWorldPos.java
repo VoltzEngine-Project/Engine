@@ -25,7 +25,7 @@ public class ItemWorldPos extends ItemBase implements IWorldPosItem
     @Override
     public Location getLocation(ItemStack stack)
     {
-        if (stack.getTagCompound().hasKey("linkPos"))
+        if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("linkPos"))
         {
             return new Location(stack.getTagCompound().getCompoundTag("linkPos"));
         }
