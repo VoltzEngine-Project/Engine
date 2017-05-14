@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.item;
 
+import com.builtbroken.jlib.data.Colors;
 import com.builtbroken.mc.api.items.listeners.IItemActivationListener;
 import com.builtbroken.mc.api.items.listeners.IItemEventListener;
 import com.builtbroken.mc.api.items.listeners.IItemWithListeners;
@@ -27,6 +28,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
@@ -324,19 +326,27 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
     {
-        if (stack != null)
+        try
         {
-            ItemStack copy = stack.copy();
-            ItemListenerIterator it = new ItemListenerIterator(this, "activation");
-            while (it.hasNext())
+            if (stack != null)
             {
-                IItemEventListener next = it.next();
-                if (next instanceof IItemActivationListener)
+                ItemStack copy = stack.copy();
+                ItemListenerIterator it = new ItemListenerIterator(this, "activation");
+                while (it.hasNext())
                 {
-                    copy = ((IItemActivationListener) next).onItemRightClick(copy, world, player);
+                    IItemEventListener next = it.next();
+                    if (next instanceof IItemActivationListener)
+                    {
+                        copy = ((IItemActivationListener) next).onItemRightClick(copy, world, player);
+                    }
                 }
+                return copy;
             }
-            return copy;
+        }
+        catch (Exception e)
+        {
+            player.addChatComponentMessage(new ChatComponentText(Colors.RED.code + "Unexpected error using item, see logs for error details"));
+            Engine.logger().error("ItemBase: Unexpected error triggering listeners during onItemRightClick(" + stack + ", " + player + ", " + world + ")");
         }
         return stack;
     }
@@ -344,19 +354,27 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hit_x, float hit_y, float hit_z)
     {
-        if (stack != null)
+        try
         {
-            boolean clicked = false;
-            ItemListenerIterator it = new ItemListenerIterator(this, "activation");
-            while (it.hasNext())
+            if (stack != null)
             {
-                IItemEventListener next = it.next();
-                if (next instanceof IItemActivationListener)
+                boolean clicked = false;
+                ItemListenerIterator it = new ItemListenerIterator(this, "activation");
+                while (it.hasNext())
                 {
-                    clicked = ((IItemActivationListener) next).onItemUse(stack, player, world, x, y, z, side, hit_x, hit_y, hit_z);
+                    IItemEventListener next = it.next();
+                    if (next instanceof IItemActivationListener)
+                    {
+                        clicked = ((IItemActivationListener) next).onItemUse(stack, player, world, x, y, z, side, hit_x, hit_y, hit_z);
+                    }
                 }
+                return clicked;
             }
-            return clicked;
+        }
+        catch (Exception e)
+        {
+            player.addChatComponentMessage(new ChatComponentText(Colors.RED.code + "Unexpected error using item, see logs for error details"));
+            Engine.logger().error("ItemBase: Unexpected error triggering listeners during onItemUse(" + stack + ", " + player + ", " + world + ", " + x + ", " + y + ", " + z + ", " + side, e);
         }
         return false;
     }
