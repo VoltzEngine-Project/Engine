@@ -58,7 +58,7 @@ public class CommandJsonRecipe extends SubCommand
                     ItemStack stack = new JsonCraftingRecipeData(null, null, null, false, false).toStack(entryID);
                     if (stack != null)
                     {
-                        List<IRecipe> recipes = InventoryUtility.getRecipesWithOutput(stack);
+                        List<IRecipe> recipes = entryID.contains("#") ? InventoryUtility.getRecipesWithOutput(stack) : InventoryUtility.getRecipesWithOutput(stack.getItem());
                         if (recipes != null)
                         {
                             sender.addChatMessage(new ChatComponentText("Found " + recipes.size() + " for '" + entryID + "' saving to external json file"));
@@ -78,6 +78,7 @@ public class CommandJsonRecipe extends SubCommand
                                         if (recipe instanceof ShapedOreRecipe)
                                         {
                                             int width = 0;
+                                            int height = 0;
                                             Object[] recipeItems = null;
 
                                             Field field = ShapedOreRecipe.class.getDeclaredField("input");
@@ -88,8 +89,12 @@ public class CommandJsonRecipe extends SubCommand
                                             field.setAccessible(true);
                                             width = field.getInt(recipe);
 
+                                            field = ShapedOreRecipe.class.getDeclaredField("height");
+                                            field.setAccessible(true);
+                                            height = field.getInt(recipe);
 
-                                            Pair<String, HashMap<String, JsonElement>> itemSet = generateItemData(recipeItems, width);
+
+                                            Pair<String, HashMap<String, JsonElement>> itemSet = generateItemData(recipeItems, width, height);
 
                                             //Build data
                                             if (itemSet != null)
@@ -115,7 +120,7 @@ public class CommandJsonRecipe extends SubCommand
                                         }
                                         else if (recipe instanceof ShapedRecipes)
                                         {
-                                            Pair<String, HashMap<String, JsonElement>> itemSet = generateItemData(((ShapedRecipes) recipe).recipeItems, ((ShapedRecipes) recipe).recipeWidth);
+                                            Pair<String, HashMap<String, JsonElement>> itemSet = generateItemData(((ShapedRecipes) recipe).recipeItems, ((ShapedRecipes) recipe).recipeWidth, ((ShapedRecipes) recipe).recipeHeight);
 
                                             //Build data
                                             if (itemSet != null)
@@ -181,25 +186,22 @@ public class CommandJsonRecipe extends SubCommand
         return handleHelp(sender, args);
     }
 
-    protected Pair<String, HashMap<String, JsonElement>> generateItemData(Object[] recipeItems, int width)
+    protected Pair<String, HashMap<String, JsonElement>> generateItemData(Object[] recipeItems, int width, int height)
     {
         HashMap<String, JsonElement> items = new HashMap();
+        HashMap<String, String> itemToKey = new HashMap();
         String grid = "";
 
         int c = 0;
         int w = 0;
+        int h = 0;
 
         //Map items to characters
         boolean upper = false;
         if (recipeItems != null)
         {
-            for (Object st : recipeItems)
+            for (Object obj : recipeItems)
             {
-                if (w++ > (width - 1))
-                {
-                    w = 0;
-                    grid += ",";
-                }
                 if (c > EnglishLetters.values().length)
                 {
                     c = 0;
@@ -212,15 +214,29 @@ public class CommandJsonRecipe extends SubCommand
                         return null;
                     }
                 }
-                if (st != null)
+                if (obj != null)
                 {
                     if (c < EnglishLetters.values().length)
                     {
-                        String ch = EnglishLetters.values()[c].name();
-                        ch = upper ? ch : ch.toLowerCase();
+                        JsonElement element = toItemJson(obj);
+                        String json = element.toString();
 
-                        items.put(ch, toItemJson(st));
-                        grid += ch;
+                        if(itemToKey.containsKey(json))
+                        {
+                            String key = itemToKey.get(json);
+                            grid += key;
+                        }
+                        else
+                        {
+                            String ch = EnglishLetters.values()[c].name();
+                            ch = upper ? ch : ch.toLowerCase();
+
+                            items.put(ch, element);
+                            itemToKey.put(json, ch);
+
+                            grid += ch;
+                            c++;
+                        }
                     }
                 }
                 else
@@ -228,7 +244,15 @@ public class CommandJsonRecipe extends SubCommand
                     grid += " ";
                 }
 
-                c++;
+                if (w++ >= (width - 1))
+                {
+                    w = 0;
+                    h++;
+                    if(h < height)
+                    {
+                        grid += ",";
+                    }
+                }
             }
             return new Pair(grid, items);
         }
