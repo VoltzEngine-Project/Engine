@@ -4,10 +4,10 @@ import com.builtbroken.jlib.lang.EnglishLetters;
 import com.builtbroken.jlib.type.Pair;
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
+import com.builtbroken.mc.lib.json.conversion.JsonConverterNBT;
 import com.builtbroken.mc.lib.json.processors.recipe.crafting.JsonCraftingRecipeData;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -89,20 +89,20 @@ public class CommandJsonRecipe extends SubCommand
                                             width = field.getInt(recipe);
 
 
-                                            Pair<String, HashMap<String, String>> itemSet = generateItemData(recipeItems, width);
+                                            Pair<String, HashMap<String, JsonElement>> itemSet = generateItemData(recipeItems, width);
 
                                             //Build data
                                             if (itemSet != null)
                                             {
                                                 JsonObject recipeObject = new JsonObject();
                                                 recipeObject.add("type", new JsonPrimitive("shaped"));
-                                                recipeObject.add("output", new JsonPrimitive(toString(recipe.getRecipeOutput())));
+                                                recipeObject.add("output", toItemJson(recipe.getRecipeOutput()));
                                                 recipeObject.add("grid", new JsonPrimitive(itemSet.left()));
 
                                                 JsonObject itemEntry = new JsonObject();
-                                                for (Map.Entry<String, String> entry : itemSet.right().entrySet())
+                                                for (Map.Entry<String, JsonElement> entry : itemSet.right().entrySet())
                                                 {
-                                                    itemEntry.add(entry.getKey(), new JsonPrimitive(entry.getValue()));
+                                                    itemEntry.add(entry.getKey(), entry.getValue());
                                                 }
                                                 recipeObject.add("items", itemEntry);
 
@@ -115,20 +115,20 @@ public class CommandJsonRecipe extends SubCommand
                                         }
                                         else if (recipe instanceof ShapedRecipes)
                                         {
-                                            Pair<String, HashMap<String, String>> itemSet = generateItemData(((ShapedRecipes) recipe).recipeItems, ((ShapedRecipes) recipe).recipeWidth);
+                                            Pair<String, HashMap<String, JsonElement>> itemSet = generateItemData(((ShapedRecipes) recipe).recipeItems, ((ShapedRecipes) recipe).recipeWidth);
 
                                             //Build data
                                             if (itemSet != null)
                                             {
                                                 JsonObject recipeObject = new JsonObject();
                                                 recipeObject.add("type", new JsonPrimitive("shaped"));
-                                                recipeObject.add("output", new JsonPrimitive(toString(recipe.getRecipeOutput())));
+                                                recipeObject.add("output", toItemJson(recipe.getRecipeOutput()));
                                                 recipeObject.add("grid", new JsonPrimitive(itemSet.left()));
 
                                                 JsonObject itemEntry = new JsonObject();
-                                                for (Map.Entry<String, String> entry : itemSet.right().entrySet())
+                                                for (Map.Entry<String, JsonElement> entry : itemSet.right().entrySet())
                                                 {
-                                                    itemEntry.add(entry.getKey(), new JsonPrimitive(entry.getValue()));
+                                                    itemEntry.add(entry.getKey(), entry.getValue());
                                                 }
                                                 recipeObject.add("items", itemEntry);
 
@@ -153,9 +153,10 @@ public class CommandJsonRecipe extends SubCommand
 
                                 if (object.entrySet().size() > 0)
                                 {
+                                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
                                     try (FileWriter file = new FileWriter(writeFile))
                                     {
-                                        file.write(object.toString());
+                                        file.write(gson.toJson(object));
                                     }
                                 }
                             }
@@ -180,9 +181,9 @@ public class CommandJsonRecipe extends SubCommand
         return handleHelp(sender, args);
     }
 
-    protected Pair<String, HashMap<String, String>> generateItemData(Object[] recipeItems, int width)
+    protected Pair<String, HashMap<String, JsonElement>> generateItemData(Object[] recipeItems, int width)
     {
-        HashMap<String, String> items = new HashMap();
+        HashMap<String, JsonElement> items = new HashMap();
         String grid = "";
 
         int c = 0;
@@ -194,6 +195,11 @@ public class CommandJsonRecipe extends SubCommand
         {
             for (Object st : recipeItems)
             {
+                if (w++ > (width - 1))
+                {
+                    w = 0;
+                    grid += ",";
+                }
                 if (c > EnglishLetters.values().length)
                 {
                     c = 0;
@@ -213,19 +219,13 @@ public class CommandJsonRecipe extends SubCommand
                         String ch = EnglishLetters.values()[c].name();
                         ch = upper ? ch : ch.toLowerCase();
 
-                        items.put(ch, toString(st));
+                        items.put(ch, toItemJson(st));
                         grid += ch;
                     }
                 }
                 else
                 {
                     grid += " ";
-                }
-
-                if (w++ >= (width - 1))
-                {
-                    w = 0;
-                    grid += ",";
                 }
 
                 c++;
@@ -235,29 +235,47 @@ public class CommandJsonRecipe extends SubCommand
         return null;
     }
 
-    protected String toString(Object output)
+    protected JsonElement toItemJson(Object output)
     {
         if (output instanceof String)
         {
-            return (String) output;
+            return new JsonPrimitive((String) output);
         }
         else if (output instanceof Block)
         {
-            return "block@" + Block.blockRegistry.getNameForObject(output);
+            return new JsonPrimitive("block@" + Block.blockRegistry.getNameForObject(output));
         }
         else if (output instanceof Item)
         {
-            return "item@" + Item.itemRegistry.getNameForObject(output);
+            return new JsonPrimitive("item@" + Item.itemRegistry.getNameForObject(output));
         }
         else if (output instanceof ItemStack)
         {
             if (((ItemStack) output).getItem() instanceof ItemBlock)
             {
-                return "block@" + Block.blockRegistry.getNameForObject(((ItemBlock) ((ItemStack) output).getItem()).field_150939_a) + "#" + ((ItemStack) output).getItemDamage(); //TODO add NBT
+                if (((ItemStack) output).getTagCompound() != null)
+                {
+                    JsonObject object = new JsonObject();
+                    object.add("type", new JsonPrimitive("block"));
+                    object.add("value", new JsonPrimitive(Block.blockRegistry.getNameForObject(((ItemBlock) ((ItemStack) output).getItem()).field_150939_a)));
+                    object.add("meta", new JsonPrimitive(((ItemStack) output).getItemDamage()));
+                    object.add("nbt", JsonConverterNBT.toJson(((ItemStack) output).getTagCompound()));
+                    return object;
+                }
+                return new JsonPrimitive("block@" + Block.blockRegistry.getNameForObject(((ItemBlock) ((ItemStack) output).getItem()).field_150939_a) + "#" + ((ItemStack) output).getItemDamage());
             }
             else
             {
-                return "item@" + Item.itemRegistry.getNameForObject(((ItemStack) output).getItem()) + "#" + ((ItemStack) output).getItemDamage(); //TODO add NBT
+                if (((ItemStack) output).getTagCompound() != null)
+                {
+                    JsonObject object = new JsonObject();
+                    object.add("type", new JsonPrimitive("item"));
+                    object.add("value", new JsonPrimitive(Item.itemRegistry.getNameForObject(((ItemStack) output).getItem())));
+                    object.add("meta", new JsonPrimitive(((ItemStack) output).getItemDamage()));
+                    object.add("nbt", JsonConverterNBT.toJson(((ItemStack) output).getTagCompound()));
+                    return object;
+                }
+                return new JsonPrimitive("item@" + Item.itemRegistry.getNameForObject(((ItemStack) output).getItem()) + "#" + ((ItemStack) output).getItemDamage());
             }
         }
         else if (output instanceof ArrayList)
@@ -297,13 +315,13 @@ public class CommandJsonRecipe extends SubCommand
                 }
             }
 
-            return "ore@" + name;
+            return new JsonPrimitive("ore@" + name);
         }
         else
         {
             System.out.println("Could not ID '" + output + "'");
         }
-        return "???";
+        return new JsonPrimitive("???");
     }
 
     @Override
