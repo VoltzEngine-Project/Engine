@@ -7,6 +7,7 @@ import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
 import com.builtbroken.mc.core.commands.ext.SubCommandWithName;
 import com.builtbroken.mc.core.commands.ext.UserSubCommand;
+import com.builtbroken.mc.core.commands.json.CommandJsonRecipe;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandGroup;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandUser;
 import com.builtbroken.mc.core.commands.prefab.AbstractCommand;
@@ -40,24 +41,43 @@ public class CommandVE extends ModularCommand
     private ModularCommand sub_command_group;
     private ModularCommand sub_command_user;
     private ModularCommand sub_command_debug;
+    private ModularCommand sub_command_json;
 
 
     private CommandVE()
     {
         super("ve");
         if (!disableButcherCommand)
+        {
             addCommand(new CommandVEButcher());
+        }
         if (!disableRemoveCommand)
+        {
             addCommand(new CommandVERemove());
+        }
         addCommand(new CommandVEVersion());
         if (!disableClearCommand)
+        {
             addCommand(new CommandVEClear());
+        }
 
-        if(Engine.runningAsDev)
+        if (Engine.runningAsDev)
         {
             addToDebugCommand(new CommandDebugRecipes());
             addToDebugCommand(new CommandDebugItem());
         }
+
+        addToJsonCommand(new CommandJsonRecipe());
+    }
+
+    public void addToJsonCommand(AbstractCommand command)
+    {
+        if (sub_command_json == null)
+        {
+            sub_command_json = new ModularCommand("json");
+            addCommand(sub_command_json);
+        }
+        sub_command_debug.addCommand(command);
     }
 
     public void addToDebugCommand(AbstractCommand command)

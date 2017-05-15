@@ -365,7 +365,10 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
                     IItemEventListener next = it.next();
                     if (next instanceof IItemActivationListener)
                     {
-                        clicked = ((IItemActivationListener) next).onItemUse(stack, player, world, x, y, z, side, hit_x, hit_y, hit_z);
+                        if (((IItemActivationListener) next).onItemUse(stack, player, world, x, y, z, side, hit_x, hit_y, hit_z))
+                        {
+                            clicked = true;
+                        }
                     }
                 }
                 return clicked;
@@ -377,6 +380,54 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
             Engine.logger().error("ItemBase: Unexpected error triggering listeners during onItemUse(" + stack + ", " + player + ", " + world + ", " + x + ", " + y + ", " + z + ", " + side, e);
         }
         return false;
+    }
+
+    @Override
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hit_x, float hit_y, float hit_z)
+    {
+        try
+        {
+            if (stack != null)
+            {
+                boolean clicked = false;
+                ItemListenerIterator it = new ItemListenerIterator(this, "activation");
+                while (it.hasNext())
+                {
+                    IItemEventListener next = it.next();
+                    if (next instanceof IItemActivationListener)
+                    {
+                        clicked = ((IItemActivationListener) next).onItemUseFirst(stack, player, world, x, y, z, side, hit_x, hit_y, hit_z);
+                    }
+                }
+                return clicked;
+            }
+        }
+        catch (Exception e)
+        {
+            player.addChatComponentMessage(new ChatComponentText(Colors.RED.code + "Unexpected error using item, see logs for error details"));
+            Engine.logger().error("ItemBase: Unexpected error triggering listeners during onItemUseFirst(" + stack + ", " + player + ", " + world + ", " + x + ", " + y + ", " + z + ", " + side, e);
+        }
+        return false;
+    }
+
+
+    @Override
+    public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player)
+    {
+        boolean clicked = false;
+        ItemListenerIterator it = new ItemListenerIterator(this, "activation");
+        while (it.hasNext())
+        {
+            IItemEventListener next = it.next();
+            if (next instanceof IItemActivationListener)
+            {
+                if (((IItemActivationListener) next).doesSneakBypassUse(world, x, y, z, player))
+                {
+                    clicked = true;
+                }
+            }
+        }
+        return clicked;
     }
 
     //=============================================
