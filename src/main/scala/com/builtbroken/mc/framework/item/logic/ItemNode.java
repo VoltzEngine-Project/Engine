@@ -61,7 +61,7 @@ public class ItemNode implements IItemEventListener
         return maxStackSize;
     }
 
-    @JsonProcessorData(value = "maxStackSize")
+    @JsonProcessorData(value = "maxStackSize", type = "int")
     public void setMaxStackSize(int maxStackSize)
     {
         this.maxStackSize = maxStackSize;

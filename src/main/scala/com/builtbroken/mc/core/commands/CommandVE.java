@@ -77,7 +77,7 @@ public class CommandVE extends ModularCommand
             sub_command_json = new ModularCommand("json");
             addCommand(sub_command_json);
         }
-        sub_command_debug.addCommand(command);
+        sub_command_json.addCommand(command);
     }
 
     public void addToDebugCommand(AbstractCommand command)
