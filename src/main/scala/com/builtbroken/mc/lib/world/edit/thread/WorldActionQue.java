@@ -17,6 +17,7 @@ public final class WorldActionQue
 {
     /** Current queue of queues */
     private static final Queue<IWorldAction> editQues = new LinkedList();
+    public static int MAX_EDITS_PER_TICK = 1000;
     /** Current queue being processed */
     private static IWorldAction currentQue;
 
@@ -41,13 +42,22 @@ public final class WorldActionQue
     {
         if (event.phase == TickEvent.Phase.END)
         {
-            if (currentQue == null || currentQue.isQueDone())
+            int edits = 0;
+            long time = System.nanoTime();
+            while (System.nanoTime() - time < 10000 && edits < MAX_EDITS_PER_TICK)
             {
-                currentQue = editQues.poll();
-            }
-            if (currentQue != null)
-            {
-                currentQue.runQue(event.world, event.side);
+                if (currentQue == null || currentQue.isQueDone())
+                {
+                    currentQue = editQues.poll();
+                }
+                if (currentQue != null)
+                {
+                    int i = currentQue.runQue(event.world, event.side);
+                    if (i > 0)
+                    {
+                        edits += i;
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.world.edit.thread;
 
+import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.edit.IWorldChangeLayeredAction;
 import com.builtbroken.mc.api.edit.IWorldEdit;
@@ -23,6 +24,8 @@ import java.util.Collection;
  */
 public class WCAThreadProcess implements IThreadProcess
 {
+    public static int MAX_EDITS_PER_TICK = 200;
+
     /** Location of the Blast */
     public final Location position;
     /** Blast instance */
@@ -30,7 +33,7 @@ public class WCAThreadProcess implements IThreadProcess
     /** Trigger cause of the blast */
     public final TriggerCause triggerCause;
     /** Blocks per tick limiter */
-    public int blocksPerTick = 200;
+    public int blocksPerTick;
 
     /** Blocks to remove from the world */
     private Collection<IWorldEdit> effectedBlocks;
@@ -49,6 +52,10 @@ public class WCAThreadProcess implements IThreadProcess
         this.blast = blast;
         this.triggerCause = triggerCause;
         blocksPerTick = blast.shouldThreadAction();
+        if (blocksPerTick < 0)
+        {
+            //blocksPerTick = MAX_EDITS_PER_TICK;
+        }
     }
 
     @Override
@@ -62,10 +69,21 @@ public class WCAThreadProcess implements IThreadProcess
                 {
                     if (((IWorldChangeLayeredAction) blast).shouldContinueAction(i))
                     {
+                        long time = System.nanoTime();
                         effectedBlocks = blast.getEffectedBlocks();
+                        if(Engine.runningAsDev)
+                        {
+                            time = System.nanoTime() - time;
+                            System.out.println("Layer(" + i + ") generated " + effectedBlocks.size() + " blocks and took " + StringHelpers.formatNanoTime(time));
+                        }
+
                         //Triggers an event allowing other mods to edit the block list
                         MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
                         WorldActionQue.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }

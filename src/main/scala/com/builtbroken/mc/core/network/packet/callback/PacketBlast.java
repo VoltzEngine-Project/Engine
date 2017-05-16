@@ -62,11 +62,12 @@ public class PacketBlast implements IPacket
         ByteBufUtils.writeUTF8String(buffer, handler.getID());
 
         NBTTagCompound tag = new NBTTagCompound();
+        tag.setBoolean("a", true);
         if (blast.cause != null)
         {
             tag.setTag("trigger", TriggerCauseRegistry.cache(blast.cause));
         }
-        if (blast.getAdditionBlastData() != null)
+        if (blast.getAdditionBlastData() != null && !blast.getAdditionBlastData().hasNoTags())
         {
             tag.setTag("explosiveData", blast.getAdditionBlastData());
         }

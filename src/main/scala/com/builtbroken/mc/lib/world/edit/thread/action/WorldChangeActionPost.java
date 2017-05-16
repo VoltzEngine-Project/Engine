@@ -22,13 +22,14 @@ public class WorldChangeActionPost implements IWorldAction
     }
 
     @Override
-    public void runQue(World world, Side side)
+    public int runQue(World world, Side side)
     {
         if (!world.isRemote)
         {
             action.doEffectOther(false);
             done = true;
         }
+        return 0;
     }
 
     @Override

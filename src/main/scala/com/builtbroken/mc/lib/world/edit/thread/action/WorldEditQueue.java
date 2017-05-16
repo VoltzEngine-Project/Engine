@@ -59,7 +59,7 @@ public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldActi
     }
 
     @Override
-    public void runQue(World world, Side side)
+    public int runQue(World world, Side side)
     {
         //TODO fix so this is not called for each world
         if (world == this.world)
@@ -76,6 +76,7 @@ public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldActi
                     editsPerTick = size();
                 }
 
+                int edits = 0;
                 while (it.hasNext() && c++ <= editsPerTick)
                 {
                     IWorldEdit edit = it.next();
@@ -86,6 +87,7 @@ public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldActi
                             if (!world.isRemote)
                             {
                                 action.handleBlockPlacement(edit);
+                                edits++;
                             }
                             if (action instanceof IWorldChangeAudio)
                             {
@@ -119,12 +121,14 @@ public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldActi
                     }
                 }
 
+                return edits;
             }
             catch (Exception e)
             {
                 Engine.instance.logger().error("Crash while processing world change " + action, e);
             }
         }
+        return -1;
     }
 
     @Override
