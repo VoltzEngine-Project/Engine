@@ -159,11 +159,15 @@ public final class TileMapRegistry
     {
         if (event.tile() != null)
         {
-            if(Engine.runningAsDev)
+            if (Engine.runningAsDev)
             {
                 Engine.logger().info("Added tile to TileMap. Tile = " + event.tile());
             }
             add(event.tile()); //TODO check if there was a tile already stored at location
+        }
+        else if (Engine.runningAsDev)
+        {
+            Engine.logger().info("Error something tried to add a null tile to the map", new RuntimeException());
         }
     }
 
@@ -172,11 +176,15 @@ public final class TileMapRegistry
     {
         if (event.tile() != null)
         {
-            if(Engine.runningAsDev)
+            if (Engine.runningAsDev)
             {
                 Engine.logger().info("Removed tile from TileMap. Tile = " + event.tile());
             }
             remove(event.tile());
+        }
+        else if (Engine.runningAsDev)
+        {
+            Engine.logger().info("Error something tried to remove a null tile to the map", new RuntimeException());
         }
     }
 }

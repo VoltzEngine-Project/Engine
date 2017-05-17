@@ -56,6 +56,8 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     /** Ensure prev_block is the same */
     public boolean checkForEntity = false;
 
+    public int placementNotification = 3;
+
     private AxisAlignedBB bounds;
 
     public BlockEdit(World world, double x, double y, double z)
@@ -283,7 +285,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
             InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
         }
         //Place the block and check if the world says its placed
-        if (super.setBlock(world, newBlock, newMeta))
+        if (super.setBlock(world, newBlock, newMeta, placementNotification))
         {
             //Checks if the block can stay to fix block issues (crops, plants, doors, plates, redstone)
             if (!newBlock.canBlockStay(world, xi(), yi(), zi()))
@@ -364,5 +366,11 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     public String toString()
     {
         return "BlockEdit[ " + (world() != null && world().provider != null ? world().provider.dimensionId : null) + "d, " + xi() + "x, " + yi() + "y, " + zi() + "z]";
+    }
+
+    public BlockEdit setNotificationLevel(int notificationlevel)
+    {
+        this.placementNotification = notificationlevel;
+        return this;
     }
 }
