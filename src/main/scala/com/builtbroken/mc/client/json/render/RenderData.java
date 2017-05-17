@@ -4,6 +4,7 @@ import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
 import net.minecraft.item.ItemStack;
@@ -63,7 +64,19 @@ public class RenderData extends JsonGenData
      */
     public boolean render(String state)
     {
-        return canRenderState(state) && ((IModelState)getState(state)).render(false);
+        if (canRenderState(state))
+        {
+            try
+            {
+                return ((IModelState) getState(state)).render(false);
+            }
+            catch (Exception e)
+            {
+                Engine.logger().error("RenderData: Error rendering model state " + state, e);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

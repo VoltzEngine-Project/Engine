@@ -9,6 +9,7 @@ import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.prefab.tile.listeners.ListenerIterator;
@@ -34,25 +35,32 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f)
     {
         GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5, y, z + 0.5);
-        RenderData data = getRenderData(tile);
-        if (data != null && data.renderType.equalsIgnoreCase("tile"))
+        try
         {
-            //Try to get tile specific state
-            String key = getRenderStateKey(tile);
-
-            //Loop default keys
-            for (String de : new String[]{key, "tile", "entity", "item.entity"})
+            GL11.glTranslated(x + 0.5, y, z + 0.5);
+            RenderData data = getRenderData(tile);
+            if (data != null && data.renderType.equalsIgnoreCase("tile"))
             {
-                if (de != null)
+                //Try to get tile specific state
+                String key = getRenderStateKey(tile);
+
+                //Loop default keys
+                for (String de : new String[]{key, "tile", "entity", "item.entity"})
                 {
-                    IRenderState state = data.getState(de);
-                    if (state instanceof IModelState && ((IModelState) state).render(false))
+                    if (de != null)
                     {
-                        break;
+                        IRenderState state = data.getState(de);
+                        if (state instanceof IModelState && ((IModelState) state).render(false))
+                        {
+                            break;
+                        }
                     }
                 }
             }
+        }
+        catch (Exception e)
+        {
+            Engine.logger().error("TileRenderHandler: Error rendering " + tile, e);
         }
         GL11.glPopMatrix();
 
@@ -65,7 +73,16 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
                 ITileEventListener next = it.next();
                 if (next instanceof ITileRenderListener)
                 {
-                    ((ITileRenderListener) next).renderDynamic(tile, x, y, z, f);
+                    GL11.glPushMatrix();
+                    try
+                    {
+                        ((ITileRenderListener) next).renderDynamic(tile, x, y, z, f);
+                    }
+                    catch (Exception e)
+                    {
+                        Engine.logger().error("TileRenderHandler: Error calling listener[" + next + "] for  Tile[" + tile + "]", e);
+                    }
+                    GL11.glPopMatrix();
                 }
             }
         }
