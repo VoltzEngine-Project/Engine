@@ -3,6 +3,8 @@ package com.builtbroken.mc.lib.world.map;
 import com.builtbroken.mc.api.event.tile.TileEvent;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.world.radar.RadarMap;
+import com.builtbroken.mc.lib.world.radar.data.RadarObject;
+import com.builtbroken.mc.lib.world.radar.data.RadarTile;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -12,6 +14,7 @@ import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Map based system for tracking Tiles in the world that should not be tracked using systems like radar. This is designed for
@@ -157,6 +160,10 @@ public final class TileMapRegistry
     @SubscribeEvent
     public void onTileLoaded(TileEvent.TileLoadEvent event)
     {
+        //Remove previous tiles
+        removeTilesAtLocation(event.world, event.x, event.y, event.z);
+
+        //Add new tile
         if (event.tile() != null)
         {
             if (Engine.runningAsDev)
@@ -174,17 +181,39 @@ public final class TileMapRegistry
     @SubscribeEvent
     public void onTileLoaded(TileEvent.TileUnLoadEvent event)
     {
-        if (event.tile() != null)
+        removeTilesAtLocation(event.world, event.x, event.y, event.z);
+    }
+
+    /**
+     * Called to remove tiles at the location
+     * <p>
+     * Will also clear any invalid tiles it happens to find as well.
+     *
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void removeTilesAtLocation(World world, int x, int y, int z)
+    {
+        RadarMap map = getRadarMapForWorld(world);
+        if (map != null)
         {
-            if (Engine.runningAsDev)
+            List<RadarObject> list = map.getRadarObjects(x, z, 5);
+            for (RadarObject object : list)
             {
-                Engine.logger().info("Removed tile from TileMap. Tile = " + event.tile());
+                if (object instanceof RadarTile)
+                {
+                    if (((RadarTile) object).tile.isInvalid() || object.xi() == x && object.yi() == y && object.zi() == z)
+                    {
+                        map.remove(object);
+                        if (Engine.runningAsDev)
+                        {
+                            Engine.logger().info("Removed tile from TileMap. Tile = " + object, new RuntimeException());
+                        }
+                    }
+                }
             }
-            remove(event.tile());
-        }
-        else if (Engine.runningAsDev)
-        {
-            Engine.logger().info("Error something tried to remove a null tile to the map", new RuntimeException());
         }
     }
 }
