@@ -10,6 +10,7 @@ import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.framework.block.BlockBase;
+import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.prefab.tile.listeners.ListenerIterator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -76,8 +77,7 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
         {
             try
             {
-                Class clazz = TileEntity.class;
-                Field field = clazz.getDeclaredField("classToNameMap");
+                Field field = ReflectionUtility.getMCField(TileEntity.class, "classToNameMap", "field_145853_j");
                 field.setAccessible(true);
                 HashMap map = (HashMap) field.get(null);
 
