@@ -13,7 +13,9 @@ import com.builtbroken.mc.lib.world.edit.thread.action.WorldChangeActionPost;
 import com.builtbroken.mc.lib.world.edit.thread.action.WorldEditQueue;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Low priority Multi-thread for IWorldChangeActions
@@ -70,8 +72,9 @@ public class WCAThreadProcess implements IThreadProcess
                     if (((IWorldChangeLayeredAction) blast).shouldContinueAction(i))
                     {
                         long time = System.nanoTime();
-                        effectedBlocks = blast.getEffectedBlocks();
-                        if(Engine.runningAsDev)
+                        effectedBlocks = new ArrayList();
+                        ((IWorldChangeLayeredAction) blast).getEffectedBlocks((List<IWorldEdit>) effectedBlocks, i);
+                        if (Engine.runningAsDev)
                         {
                             time = System.nanoTime() - time;
                             System.out.println("Layer(" + i + ") generated " + effectedBlocks.size() + " blocks and took " + StringHelpers.formatNanoTime(time));
