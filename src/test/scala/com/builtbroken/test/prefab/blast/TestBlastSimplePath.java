@@ -49,10 +49,23 @@ public class TestBlastSimplePath extends AbstractTest
         blast.setLocation(world, 0, 30, 0);
         blast.setYield(3);
 
+        //First loop
         List<IWorldEdit> edits = new ArrayList();
         blast.pathEntire(new BlockPos(0, 30, 0), edits, 1);
-        assertEquals(7, edits.size());
-        assertEquals(6, blast.stack.size());
+        assertEquals(7, edits.size()); //Should edit 7 blocks
+        assertEquals(6, blast.stack.size()); //Should map 6 new starting points
+        //TODO check each entry in stack
+
+        edits.clear();
+
+        //TODO path one at a time looking at each entry
+    }
+
+    private final void pathNext(TestBlastPath blast, int x, int y, int z)
+    {
+        List<IWorldEdit> edits  = new ArrayList();
+        blast.continuePathEntire(edits, 1);
+        assertEquals(1, edits.size());
     }
 
     private final void reset(World world)
