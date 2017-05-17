@@ -159,6 +159,10 @@ public final class TileMapRegistry
     {
         if (event.tile() != null)
         {
+            if(Engine.runningAsDev)
+            {
+                Engine.logger().info("Added tile to TileMap. Tile = " + event.tile());
+            }
             add(event.tile()); //TODO check if there was a tile already stored at location
         }
     }
@@ -168,6 +172,10 @@ public final class TileMapRegistry
     {
         if (event.tile() != null)
         {
+            if(Engine.runningAsDev)
+            {
+                Engine.logger().info("Removed tile from TileMap. Tile = " + event.tile());
+            }
             remove(event.tile());
         }
     }
