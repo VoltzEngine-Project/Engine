@@ -139,7 +139,7 @@ public class HeatedBlockRegistry
         //Constant data
         addNewHeatingConversion(Blocks.ice, Blocks.water, (int) TemperatureUnit.Fahrenheit.conversion.toKelvin(32));
         addNewHeatingConversion(Blocks.obsidian, Blocks.lava, 1293);
-        addNewHeatingConversion(Blocks.stone, Blocks.lava, 1293);
+        addNewHeatingConversion(Blocks.stone, new PlacementData(Blocks.lava, 1), 1293);
         addNewHeatingConversion(Blocks.grass, Blocks.dirt, 600); //Made up conversion
 
         //Everything else not registered, init with default data to make life simple
