@@ -32,9 +32,9 @@ public class CommandDebugMap extends SubCommand
             {
 
             }
-            else if (args[0].equalsIgnoreCase("tile"))
+            else if (args[0].equalsIgnoreCase("tile") && args.length > 1)
             {
-                if (args.length > 1 && args[1].equalsIgnoreCase("enableDebug"))
+                if (args[1].equalsIgnoreCase("enableDebug"))
                 {
                     if (args.length > 2)
                     {
@@ -71,7 +71,7 @@ public class CommandDebugMap extends SubCommand
                         return true;
                     }
                 }
-                else if (args[0].equalsIgnoreCase("objects"))
+                else if (args[1].equalsIgnoreCase("objects"))
                 {
                     RadarMap map = TileMapRegistry.getRadarMapForWorld(player.worldObj);
                     if (map.allEntities.size() > 0)
@@ -84,7 +84,7 @@ public class CommandDebugMap extends SubCommand
                     }
                     return true;
                 }
-                else if (args[0].equalsIgnoreCase("chunks"))
+                else if (args[1].equalsIgnoreCase("chunks"))
                 {
                     RadarMap map = TileMapRegistry.getRadarMapForWorld(player.worldObj);
                     if (map.chunk_to_entities.size() > 0)
@@ -97,14 +97,14 @@ public class CommandDebugMap extends SubCommand
                     }
                     return true;
                 }
-                else if (args[0].equalsIgnoreCase("around"))
+                else if (args[1].equalsIgnoreCase("around"))
                 {
                     int range = 100;
-                    if (args.length > 1)
+                    if (args.length > 2)
                     {
                         try
                         {
-                            range = Integer.parseInt(args[1]);
+                            range = Integer.parseInt(args[2]);
                         }
                         catch (NumberFormatException e)
                         {
@@ -124,6 +124,7 @@ public class CommandDebugMap extends SubCommand
                     }
                     return true;
                 }
+                return handleHelp(player, args);
             }
             else if (args[0].equalsIgnoreCase("heat"))
             {
@@ -142,6 +143,9 @@ public class CommandDebugMap extends SubCommand
     @Override
     public void getHelpOutput(ICommandSender sender, List<String> items)
     {
-        items.add("tile enableDebug <true/false>");
+        items.add("tile enableDebug <true/false> - toggles console debug");
+        items.add("tile around [range] - number of tiles nearby");
+        items.add("tile chunks - outputs number of chunks mapped");
+        items.add("tile objects - outputs number of tiles mapped");
     }
 }
