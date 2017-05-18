@@ -1,5 +1,7 @@
 package com.builtbroken.mc.lib.world.radar;
 
+import com.builtbroken.jlib.lang.DebugPrinter;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.lib.world.radar.data.RadarEntity;
 import com.builtbroken.mc.lib.world.radar.data.RadarObject;
@@ -31,6 +33,12 @@ public class RadarMap
 
     public int ticks = 0;
 
+    /** Debug printer */
+    public DebugPrinter debug;
+
+    /** Enables debug display, game still needs to be in dev mode to work */
+    public boolean debugRadarMap = false;
+
     /**
      * Dimension ID
      *
@@ -39,6 +47,24 @@ public class RadarMap
     public RadarMap(int dimID)
     {
         this.dimID = dimID;
+        debug = new DebugPrinter(Engine.logger());
+        if (!Engine.runningAsDev || !debugRadarMap)
+        {
+            debug.disable();
+        }
+    }
+
+    public void setDebugEnabled(boolean b)
+    {
+        debugRadarMap = b;
+        if (debugRadarMap)
+        {
+            debug.enable();
+        }
+        else
+        {
+            debug.disable();
+        }
     }
 
     /**
@@ -47,10 +73,14 @@ public class RadarMap
      */
     public void update()
     {
+        debug.start("Update", "Objects: " + allEntities.size() + "  Chunks: " + chunk_to_entities.size());
         if (ticks++ >= UPDATE_DELAY && chunk_to_entities.size() > 0)
         {
             ticks = 0;
             //TODO consider multi-threading if number of entries is too high (need to ensure runs in less than 10ms~)
+
+
+            debug.start("Looking for invalid radar objects and updating position data");
             HashMap<RadarObject, ChunkCoordIntPair> removeList = new HashMap();
             List<RadarObject> addList = new ArrayList();
             for (Map.Entry<ChunkCoordIntPair, List<RadarObject>> entry : chunk_to_entities.entrySet())
@@ -61,15 +91,21 @@ public class RadarMap
                     {
                         if (entry.getKey() != object.getChunkCoordIntPair())
                         {
+                            debug.log("Removed from map: " + object);
                             removeList.put(object, entry.getKey());
                             if (object.isValid())
                             {
                                 addList.add(object);
+                                debug.log("Queued for re-add");
                             }
                         }
                     }
                 }
             }
+            debug.end();
+
+
+            debug.start("Removing objects from map");
             for (Map.Entry<RadarObject, ChunkCoordIntPair> entry : removeList.entrySet())
             {
                 allEntities.remove(entry.getKey());
@@ -91,18 +127,27 @@ public class RadarMap
                     chunk_to_entities.remove(entry.getValue());
                 }
             }
-            addList.forEach(this::add);
+            debug.end();
 
+
+            debug.start("Adding entries: " + addList.size());
+            addList.forEach(this::add);
+            debug.end();
+
+            debug.start("Removing invalid objects");
             Iterator<RadarObject> it = allEntities.iterator();
             while (it.hasNext())
             {
                 RadarObject object = it.next();
-                if (object.isValid())
+                if (!object.isValid())
                 {
+                    debug.log("Removed: " + object);
                     it.remove();
                 }
             }
+            debug.end();
         }
+        debug.end();
     }
 
     public boolean add(Entity entity)

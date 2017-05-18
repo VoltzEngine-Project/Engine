@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.commands;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.commands.debug.CommandDebugItem;
+import com.builtbroken.mc.core.commands.debug.CommandDebugMap;
 import com.builtbroken.mc.core.commands.debug.CommandDebugRecipes;
 import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
@@ -65,6 +66,7 @@ public class CommandVE extends ModularCommand
         {
             addToDebugCommand(new CommandDebugRecipes());
             addToDebugCommand(new CommandDebugItem());
+            addToDebugCommand(new CommandDebugMap());
         }
 
         addToJsonCommand(new CommandJsonRecipe());

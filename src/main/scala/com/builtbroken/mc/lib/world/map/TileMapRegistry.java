@@ -166,11 +166,19 @@ public final class TileMapRegistry
         //Add new tile
         if (event.tile() != null)
         {
+            boolean added = add(event.tile());
             if (Engine.runningAsDev)
             {
-                Engine.logger().info("Added tile to TileMap. Tile = " + event.tile());
+                if (added)
+                {
+                    Engine.logger().info("Added tile to TileMap. Tile = " + event.tile());
+                }
+                else
+                {
+                    Engine.logger().info("Failed to add tile to TileMap. Tile = " + event.tile());
+                }
             }
-            add(event.tile()); //TODO check if there was a tile already stored at location
+
         }
         else if (Engine.runningAsDev)
         {
