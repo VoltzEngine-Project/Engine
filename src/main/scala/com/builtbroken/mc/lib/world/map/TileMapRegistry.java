@@ -2,6 +2,7 @@ package com.builtbroken.mc.lib.world.map;
 
 import com.builtbroken.mc.api.event.tile.TileEvent;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.framework.multiblock.TileMulti;
 import com.builtbroken.mc.lib.world.radar.RadarMap;
 import com.builtbroken.mc.lib.world.radar.data.RadarObject;
 import com.builtbroken.mc.lib.world.radar.data.RadarTile;
@@ -166,19 +167,26 @@ public final class TileMapRegistry
         //Add new tile
         if (event.tile() != null)
         {
-            boolean added = add(event.tile());
-            if (Engine.runningAsDev)
+            //Exclude multi-tiles to prevent repeat entries
+            if (!(event.tile() instanceof TileMulti))
             {
-                if (added)
+                boolean added = add(event.tile());
+                if (Engine.runningAsDev)
                 {
-                    Engine.logger().info("Added tile to TileMap. Tile = " + event.tile());
-                }
-                else
-                {
-                    Engine.logger().info("Failed to add tile to TileMap. Tile = " + event.tile());
+                    if (added)
+                    {
+                        Engine.logger().info("Added tile to TileMap. Tile = " + event.tile());
+                    }
+                    else
+                    {
+                        Engine.logger().info("Failed to add tile to TileMap. Tile = " + event.tile());
+                    }
                 }
             }
-
+            else
+            {
+                //TODO get host from multi-tile
+            }
         }
         else if (Engine.runningAsDev)
         {
