@@ -260,7 +260,7 @@ public class RadarMap
      */
     public List<RadarObject> getRadarObjects(double x, double z, double distance)
     {
-        return getRadarObjects(new Cube(x - distance, 0, z - distance, x + distance, 255, z + distance), true);
+        return getRadarObjects(new Cube(x - distance, 0, z - distance, x + distance, 255, z + distance).cropToWorld(), true);
     }
 
     /**

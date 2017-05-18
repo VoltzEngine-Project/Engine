@@ -147,7 +147,7 @@ public final class TileMapRegistry
     @SubscribeEvent
     public void worldUnload(WorldEvent.Unload event)
     {
-        if (event.world.provider != null)
+        if (event.world.provider != null && !event.world.isRemote)
         {
             int dim = event.world.provider.dimensionId;
             if (WORLD_TO_MAP.containsKey(dim))
@@ -161,43 +161,49 @@ public final class TileMapRegistry
     @SubscribeEvent
     public void onTileLoaded(TileEvent.TileLoadEvent event)
     {
-        //Remove previous tiles
-        removeTilesAtLocation(event.world, event.x, event.y, event.z);
-
-        //Add new tile
-        if (event.tile() != null)
+        if (event.world.provider != null && !event.world.isRemote)
         {
-            //Exclude multi-tiles to prevent repeat entries
-            if (!(event.tile() instanceof TileMulti))
+            //Remove previous tiles
+            removeTilesAtLocation(event.world, event.x, event.y, event.z);
+
+            //Add new tile
+            if (event.tile() != null)
             {
-                boolean added = add(event.tile());
-                if (Engine.runningAsDev)
+                //Exclude multi-tiles to prevent repeat entries
+                if (!(event.tile() instanceof TileMulti))
                 {
-                    if (added)
+                    boolean added = add(event.tile());
+                    if (Engine.runningAsDev)
                     {
-                        Engine.logger().info("Added tile to TileMap. Tile = " + event.tile());
-                    }
-                    else
-                    {
-                        Engine.logger().info("Failed to add tile to TileMap. Tile = " + event.tile());
+                        if (added)
+                        {
+                            Engine.logger().info("Added tile to TileMap. Tile = " + event.tile());
+                        }
+                        else
+                        {
+                            Engine.logger().info("Failed to add tile to TileMap. Tile = " + event.tile());
+                        }
                     }
                 }
+                else
+                {
+                    //TODO get host from multi-tile
+                }
             }
-            else
+            else if (Engine.runningAsDev)
             {
-                //TODO get host from multi-tile
+                Engine.logger().info("Error something tried to add a null tile to the map", new RuntimeException());
             }
-        }
-        else if (Engine.runningAsDev)
-        {
-            Engine.logger().info("Error something tried to add a null tile to the map", new RuntimeException());
         }
     }
 
     @SubscribeEvent
     public void onTileLoaded(TileEvent.TileUnLoadEvent event)
     {
-        removeTilesAtLocation(event.world, event.x, event.y, event.z);
+        if (event.world.provider != null && !event.world.isRemote)
+        {
+            removeTilesAtLocation(event.world, event.x, event.y, event.z);
+        }
     }
 
     /**
