@@ -31,6 +31,8 @@ public class HeatedBlockRegistry
 
     /** Defaults for materials, Specific heat is the amount of energy it takes to heat 1 gram of matter by 1 degree C */
     public static HashMap<Material, Float> default_specific_heat_mat = new HashMap(); //TODO calculate and cache per block (add support for blocks made of several materials by averaging)
+    public static HashMap<Material, Float> default_fusion_heat_mat = new HashMap();
+    public static HashMap<Material, Float> default_vaporization_mat = new HashMap();
 
     /** Default background temperature of a world */
     public static HashMap<Integer, Integer> default_temp_dim = new HashMap();
@@ -40,6 +42,7 @@ public class HeatedBlockRegistry
 
     static
     {
+        //TODO move to JSON file
         default_temp_dim.put(1, 327);
         default_temp_dim.put(0, 293);
         default_temp_dim.put(-1, 227); //TODO loop worlds to apply default temp based on world type
@@ -89,10 +92,20 @@ public class HeatedBlockRegistry
                     //http://hyperphysics.phy-astr.gsu.edu/hbase/Tables/sphtt.html#c1
                     // Q = c * m * delta T
                     // Q = heat added
-                    // c = specific heat
+                    // c = specific heat        4.186j/g
                     // m = mass
                     // delta T = change in temp C
                     return getSpecificHeat(block) * mass * change;
+
+                    //TODO implement vaporization Q = m * L
+                    //Q = energy
+                    //m = mass
+                    //L = vaporization heat
+                    // 2600j/g for water
+
+                    //TODO implement fusion
+                    // same equation but L is heat of fusion
+                    // 333j/g for water
                 }
                 else
                 {
