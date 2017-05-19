@@ -1,7 +1,9 @@
 package com.builtbroken.mc.lib.world.heat;
 
 import com.builtbroken.jlib.data.science.units.TemperatureUnit;
+import com.builtbroken.mc.api.VoltzEngineAPI;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.imp.transform.vector.BlockPos;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraft.block.Block;
@@ -17,19 +19,30 @@ import java.util.HashMap;
  */
 public class HeatedBlockRegistry
 {
-    public static HashMap<Block, BlockConversionData> warm_up_conversion = new HashMap();
-    public static HashMap<Block, BlockConversionData> cool_down_conversion = new HashMap();
+    /** Block to heated block, ex ice to water */
+    public static HashMap<Block, BlockConversionData> warm_up_conversion = new HashMap();//TODO add handlers and meta support
+    /** Block to cooled block, ex water to ice */
+    public static HashMap<Block, BlockConversionData> cool_down_conversion = new HashMap(); //TODO add handlers and meta support
 
-    public static HashMap<Material, Integer> default_melting_point_mat = new HashMap();
+    /** Default melting point of a material, used as a backup value */
+    public static HashMap<Material, Integer> default_melting_point_mat = new HashMap(); //TODO add handlers
+    /** Default temperature of the material, used only if something does not match world temp... eg. lava & fire */
     public static HashMap<Material, Integer> default_temp_mat = new HashMap();
 
+    /** Defaults for materials, Specific heat is the amount of energy it takes to heat 1 gram of matter by 1 degree C */
+    public static HashMap<Material, Float> default_specific_heat_mat = new HashMap(); //TODO calculate and cache per block (add support for blocks made of several materials by averaging)
+
+    /** Default background temperature of a world */
     public static HashMap<Integer, Integer> default_temp_dim = new HashMap();
+
+    //TODO get a biome temp default values
+    //TODO get vaporization point of material, e.g. block -> nothing
 
     static
     {
         default_temp_dim.put(1, 327);
         default_temp_dim.put(0, 293);
-        default_temp_dim.put(-1, 227);
+        default_temp_dim.put(-1, 227); //TODO loop worlds to apply default temp based on world type
 
         default_melting_point_mat.put(Material.carpet, 600);
         default_melting_point_mat.put(Material.cloth, 600);
@@ -50,6 +63,47 @@ public class HeatedBlockRegistry
         default_temp_mat.put(Material.craftedSnow, 253);
     }
 
+    /**
+     * Called to calculate how much energy it would take to heat
+     * the block at the location in world to the new temperature
+     *
+     * @param world   - world the block is inside
+     * @param pos     - position of the block
+     * @param newTemp - desired temperature
+     * @return energy cost to change the temperature, negative means a loss of energy from the block
+     */
+    public static float getEnergyNeededToHeat(World world, BlockPos pos, int newTemp)
+    {
+        Block block = pos.getBlock(world);
+        if (block != null)
+        {
+            float mass = (float) VoltzEngineAPI.massRegistry.getMass(block);
+            int actual_temp = HeatDataManager.getTempKelvin(world, pos.x, pos.y, pos.z);
+            float change = TemperatureUnit.Celsius.conversion.fromKelvin(Math.abs(actual_temp - newTemp));
+            if (change >= 1)
+            {
+                if (newTemp > actual_temp)
+                {
+                    ////http://hyperphysics.phy-astr.gsu.edu/hbase/thermo/spht.html
+                    //http://hyperphysics.phy-astr.gsu.edu/hbase/thermo/Dulong.html#c1
+                    //http://hyperphysics.phy-astr.gsu.edu/hbase/Tables/sphtt.html#c1
+                    // Q = c * m * delta T
+                    // Q = heat added
+                    // c = specific heat
+                    // m = mass
+                    // delta T = change in temp C
+                    return getSpecificHeat(block) * mass * change;
+                }
+                else
+                {
+                    return -getSpecificHeat(block) * mass * change; //TODO see if this is correct
+                }
+            }
+            return 0;
+        }
+        return -1; //No data to heat
+    }
+
     public static void addNewHeatingConversion(Block block, Block result, int kelvin)
     {
         addNewHeatingConversion(block, new PlacementData(result, -1), kelvin);
@@ -68,6 +122,15 @@ public class HeatedBlockRegistry
 
         }
         warm_up_conversion.put(block.block(), new BlockConversionData(block, result, kelvin));
+    }
+
+    public static float getSpecificHeat(Block block)
+    {
+        if (default_specific_heat_mat.containsKey(block.blockMaterial))
+        {
+            return default_specific_heat_mat.get(block.blockMaterial);
+        }
+        return 1;
     }
 
     public static PlacementData getResult(Block block)

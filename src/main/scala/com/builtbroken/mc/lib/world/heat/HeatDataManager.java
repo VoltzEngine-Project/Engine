@@ -21,7 +21,7 @@ public class HeatDataManager
 
     public static WorldHeatMap getMapForDim(int dim)
     {
-        if(!dims.containsKey(dim))
+        if (!dims.containsKey(dim))
         {
             dims.put(dim, new WorldHeatMap(dim));
         }
@@ -30,16 +30,22 @@ public class HeatDataManager
 
     public static int getTempKelvin(Location location)
     {
-        return default_return;
+        return getTempKelvin(location.world, location.xi(), location.yi(), location.zi());
+    }
+
+    public static int getTempKelvin(World world, int x, int y, int z)
+    {
+        //TODO get temp at location
+        return HeatedBlockRegistry.getDefaultTemp(world, world.getBlock(x, y, z));
     }
 
     public static int getTempFahrenheit(Location location)
     {
-        return (int)TemperatureUnit.Fahrenheit.conversion.fromKelvin(default_return);
+        return (int) TemperatureUnit.Fahrenheit.conversion.fromKelvin(default_return);
     }
 
     public static int getTempCelsius(Location location)
     {
-        return (int)TemperatureUnit.Celsius.conversion.fromKelvin(default_return);
+        return (int) TemperatureUnit.Celsius.conversion.fromKelvin(default_return);
     }
 }
