@@ -121,11 +121,11 @@ public class HeatedBlockRegistry
     public static int getDefaultTemp(World world, Block block)
     {
         Material mat = block.getMaterial();
-        if(default_temp_mat.containsKey(mat))
+        if (default_temp_mat.containsKey(mat))
         {
             return default_temp_mat.get(mat);
         }
-        else if(default_temp_dim.containsKey(world.provider.dimensionId))
+        else if (default_temp_dim.containsKey(world.provider.dimensionId))
         {
             return default_temp_dim.get(world.provider.dimensionId);
         }
@@ -139,7 +139,7 @@ public class HeatedBlockRegistry
         //Constant data
         addNewHeatingConversion(Blocks.ice, Blocks.water, (int) TemperatureUnit.Fahrenheit.conversion.toKelvin(32));
         addNewHeatingConversion(Blocks.obsidian, Blocks.lava, 1293);
-        addNewHeatingConversion(Blocks.stone, new PlacementData(Blocks.lava, 1), 1293);
+        addNewHeatingConversion(Blocks.stone, new PlacementData(Blocks.cobblestone, 1), 1293);
         addNewHeatingConversion(Blocks.grass, Blocks.dirt, 600); //Made up conversion
 
         //Everything else not registered, init with default data to make life simple
@@ -152,16 +152,22 @@ public class HeatedBlockRegistry
                 {
                     String name = reg.getNameForObject(obj);
                     Material mat = ((Block) obj).getMaterial();
+                    Block blockToConvertTo = Blocks.air;
                     int temp = 0;
 
                     if (mat.getCanBurn())
                     {
                         temp = 600;
                     }
+                    else if (mat == Material.rock)
+                    {
+                        temp = 1293;
+                        blockToConvertTo = Blocks.lava;
+                    }
 
                     if (temp > 0)
                     {
-                        String conversion = config.getString(name, "Heat_Conversions", reg.getNameForObject(Blocks.air), "");
+                        String conversion = config.getString(name, "Heat_Conversions", reg.getNameForObject(blockToConvertTo), "");
 
                         if (reg.getObject(conversion) != null)
                         {
@@ -170,7 +176,14 @@ public class HeatedBlockRegistry
                             {
                                 if (!warm_up_conversion.containsKey(obj))
                                 {
-                                    addNewHeatingConversion((Block) obj, (Block) c_obj, 600);
+                                    if (blockToConvertTo == Blocks.lava)
+                                    {
+                                        addNewHeatingConversion((Block) obj, new PlacementData(Blocks.cobblestone, 0), temp);
+                                    }
+                                    else
+                                    {
+                                        addNewHeatingConversion((Block) obj, (Block) c_obj, temp);
+                                    }
                                 }
                             }
                             else
