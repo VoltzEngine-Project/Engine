@@ -8,9 +8,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -50,7 +53,9 @@ public class BlockHeatedStone extends Block
     {
         //Sets the block to tick randomly so it can cool down
         if (world != null)
+        {
             world.scheduleBlockUpdate(x, y, z, this, getTicksForMeta(world.getBlockMetadata(x, y, z)));
+        }
     }
 
     private int getTicksForMeta(int meta)
@@ -73,6 +78,35 @@ public class BlockHeatedStone extends Block
         else
         {
             world.setBlock(x, y, z, Blocks.stone);
+        }
+    }
+
+    @Override
+    public void onEntityWalking(World world, int x, int y, int z, Entity entity)
+    {
+        if (entity instanceof EntityLivingBase)
+        {
+            entity.attackEntityFrom(DamageSource.inFire, 0.1f);
+            entity.setFire(5);
+        }
+    }
+
+    @Override
+    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
+    {
+        if (entity instanceof EntityLivingBase)
+        {
+            entity.attackEntityFrom(DamageSource.inFire, 0.5f);
+            entity.setFire(5);
+        }
+    }
+
+    @Override
+    public void fillWithRain(World world, int x, int y, int z)
+    {
+        if (world.rand.nextFloat() > 0.9)
+        {
+            updateTick(world, x, y, z, world.rand);
         }
     }
 

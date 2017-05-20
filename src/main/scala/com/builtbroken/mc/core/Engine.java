@@ -36,13 +36,14 @@ import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.core.handler.SelectionHandler;
 import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
-import com.builtbroken.mc.lib.data.mass.MassRegistry;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.access.global.GlobalAccessSystem;
 import com.builtbroken.mc.framework.multiblock.BlockMultiblock;
 import com.builtbroken.mc.framework.multiblock.EnumMultiblock;
 import com.builtbroken.mc.framework.multiblock.ItemBlockMulti;
 import com.builtbroken.mc.framework.multiblock.listeners.MultiBlockListener;
+import com.builtbroken.mc.lib.data.heat.HeatedBlockRegistry;
+import com.builtbroken.mc.lib.data.mass.MassRegistry;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
@@ -66,7 +67,6 @@ import com.builtbroken.mc.lib.world.edit.PlacementData;
 import com.builtbroken.mc.lib.world.edit.thread.WorkerThread;
 import com.builtbroken.mc.lib.world.edit.thread.WorldActionQue;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
-import com.builtbroken.mc.lib.data.heat.HeatedBlockRegistry;
 import com.builtbroken.mc.lib.world.map.TileMapRegistry;
 import com.builtbroken.mc.lib.world.radar.RadarRegistry;
 import com.builtbroken.mc.lib.world.radio.RadioRegistry;
@@ -110,7 +110,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 
@@ -641,8 +644,11 @@ public class Engine implements IJsonGenMod
             if (enabledHeatMap)
             {
                 HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(heatedStone, 15), 600);
-                HeatedBlockRegistry.addNewHeatingConversion(heatedStone, Blocks.lava, 1200);
             }
+        }
+        else
+        {
+            HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(Blocks.cobblestone, 1), 1293);
         }
 
         logger.info("Starting resource generator");
