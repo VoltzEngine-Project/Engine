@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.registry;
+package com.builtbroken.mc.lib.data.mass;
 
 import com.builtbroken.mc.api.IHasMass;
 import com.builtbroken.mc.api.IMassRegistry;

@@ -1,7 +1,8 @@
-package com.builtbroken.mc.lib.world.heat;
+package com.builtbroken.mc.lib.world.map.heat;
 
 import com.builtbroken.jlib.data.science.units.TemperatureUnit;
 import com.builtbroken.mc.imp.transform.vector.Location;
+import com.builtbroken.mc.lib.data.heat.HeatedBlockRegistry;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -11,19 +12,19 @@ import java.util.HashMap;
  */
 public class HeatDataManager
 {
-    private static HashMap<Integer, WorldHeatMap> dims = new HashMap();
+    private static HashMap<Integer, HeatMap> dims = new HashMap();
     private static int default_return = 293;
 
-    public static WorldHeatMap getMapForWorld(World world)
+    public static HeatMap getMapForWorld(World world)
     {
         return getMapForDim(world.provider.dimensionId);
     }
 
-    public static WorldHeatMap getMapForDim(int dim)
+    public static HeatMap getMapForDim(int dim)
     {
         if (!dims.containsKey(dim))
         {
-            dims.put(dim, new WorldHeatMap(dim));
+            dims.put(dim, new HeatMap(dim));
         }
         return dims.get(dim);
     }

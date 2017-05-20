@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.world.heat;
+package com.builtbroken.mc.lib.data.heat;
 
 import com.builtbroken.mc.lib.world.edit.PlacementData;
 

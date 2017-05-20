@@ -1,10 +1,11 @@
-package com.builtbroken.mc.lib.world.heat;
+package com.builtbroken.mc.lib.data.heat;
 
 import com.builtbroken.jlib.data.science.units.TemperatureUnit;
 import com.builtbroken.mc.api.VoltzEngineAPI;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.BlockPos;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
+import com.builtbroken.mc.lib.world.map.heat.HeatDataManager;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
