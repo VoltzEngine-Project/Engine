@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.world.map.radiation;
+package com.builtbroken.mc.lib.world.map.block;
 
 
 import com.builtbroken.mc.lib.world.map.data.ChunkMap;
@@ -10,11 +10,11 @@ import com.builtbroken.mc.lib.world.map.data.s.ChunkDataShort;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 5/20/2017.
  */
-public class RadiationMap extends ChunkMap<ChunkDataShort>
+public class ExtendedBlockDataMap extends ChunkMap<ChunkDataShort>
 {
-    public RadiationMap(RadiationDataManager manager, int dimID)
+    public ExtendedBlockDataMap(int dimID)
     {
-        super(manager, dimID);
+        super(dimID);
     }
 
     /**
@@ -25,7 +25,7 @@ public class RadiationMap extends ChunkMap<ChunkDataShort>
      * @param z - location in the world
      * @return value shorted, do not assume 0 means a stored value
      */
-    public short getRadiation(int x, int y, int z)
+    public short getValue(int x, int y, int z)
     {
         ChunkDataShort chunk = getChunkFromBlockCoords(x, z);
         if (chunk != null)
@@ -36,7 +36,7 @@ public class RadiationMap extends ChunkMap<ChunkDataShort>
     }
 
     /**
-     * Sets the radiation value at the location on the map
+     * Sets the extended data value
      *
      * @param x     - location in the world
      * @param y     - location in the world
@@ -44,7 +44,7 @@ public class RadiationMap extends ChunkMap<ChunkDataShort>
      * @param value - new data
      * @return old data
      */
-    public short setRadiation(int x, int y, int z, short value)
+    public short setValue(int x, int y, int z, short value)
     {
         ChunkDataShort chunk = getChunkFromBlockCoords(x, z);
         if (chunk != null)
@@ -64,6 +64,6 @@ public class RadiationMap extends ChunkMap<ChunkDataShort>
     @Override
     public String toString()
     {
-        return "RadiationMap[" + dimID + "]";
+        return "ExtendedBlockDataMap[" + dimID + "]";
     }
 }

@@ -648,7 +648,7 @@ public class Engine implements IJsonGenMod
         }
         else
         {
-            HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(Blocks.cobblestone, 1), 1293);
+            HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(Blocks.cobblestone, 1), 600);
         }
 
         logger.info("Starting resource generator");

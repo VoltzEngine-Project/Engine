@@ -1,4 +1,4 @@
-package com.builtbroken.mc.lib.world.map.data;
+package com.builtbroken.mc.lib.world.map.data.s;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 

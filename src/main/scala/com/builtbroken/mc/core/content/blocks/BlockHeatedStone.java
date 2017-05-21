@@ -70,6 +70,7 @@ public class BlockHeatedStone extends Block
     @Override
     public void updateTick(World world, int x, int y, int z, Random rand)
     {
+        //TODO handle meta change through heat map to reduce TPS problems & smooth transition
         if (world.getBlockMetadata(x, y, z) > 0)
         {
             world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) - 1, 3);
@@ -84,21 +85,28 @@ public class BlockHeatedStone extends Block
     @Override
     public void onEntityWalking(World world, int x, int y, int z, Entity entity)
     {
-        if (entity instanceof EntityLivingBase)
-        {
-            entity.attackEntityFrom(DamageSource.inFire, 0.1f);
-            entity.setFire(5);
-        }
+        damageEntity(world, x, y, z, entity);
     }
 
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
     {
+        damageEntity(world, x, y, z, entity);
+    }
+
+    protected void damageEntity(World world, int x, int y, int z, Entity entity)
+    {
+        //TODO switch to applied heat method and use heat map to handle damage
+        int meta = world.getBlockMetadata(x, y, z);
         if (entity instanceof EntityLivingBase)
         {
-            entity.attackEntityFrom(DamageSource.inFire, 0.5f);
-            entity.setFire(5);
+            entity.attackEntityFrom(DamageSource.inFire, 0.1f * (meta / 16));
+            if (world.rand.nextFloat() > ((16 - meta) / 16)) //meta 0 -> 100%, 16 -> 0%
+            {
+                entity.setFire(5);
+            }
         }
+        //TODO damage no living entities through specific typing, e.g. missiles will warp casing
     }
 
     @Override
@@ -107,6 +115,7 @@ public class BlockHeatedStone extends Block
         if (world.rand.nextFloat() > 0.9)
         {
             updateTick(world, x, y, z, world.rand);
+            //TODO add chance to crack stone
         }
     }
 
@@ -124,35 +133,39 @@ public class BlockHeatedStone extends Block
         int meta = world.getBlockMetadata(x, y, z);
         switch (meta)
         {
+            //https://en.wikipedia.org/wiki/Color_temperature
             case 0:
-                return Integer.parseInt("FFE6E6", 16);
+                return Integer.parseInt("FFE5CE", 16);
             case 1:
-                return Integer.parseInt("FFCCCC", 16);
+                return Integer.parseInt("FFE5CE", 16);
             case 2:
-                return Integer.parseInt("FFB2B2", 16);
+                return Integer.parseInt("FFD4A8", 16);
             case 3:
-                return Integer.parseInt("FF9999", 16);
+                return Integer.parseInt("FFC07F", 16);
             case 4:
-                return Integer.parseInt("FF8080", 16);
+                return Integer.parseInt("FFBC76", 16);
             case 5:
-                return Integer.parseInt("FF6666", 16);
+                return Integer.parseInt("FFC07F", 16);
             case 6:
-                return Integer.parseInt("FF4D4D", 16);
+                return Integer.parseInt("FFBC76", 16);
             case 7:
-                return Integer.parseInt("FF3333", 16);
+                return Integer.parseInt("FFB569", 16);
             case 8:
-                return Integer.parseInt("FF1919", 16);
+                return Integer.parseInt("FFAA54", 16);
             case 9:
-                return Integer.parseInt("FF0000", 16);
+                return Integer.parseInt("FFA448", 16);
             case 10:
-                return Integer.parseInt("E60000", 16);
+                return Integer.parseInt("FF9D3C", 16);
             case 11:
-                return Integer.parseInt("B20000", 16);
+                return Integer.parseInt("FF8200", 16);
             case 12:
+                return Integer.parseInt("FF7A00", 16);
             case 13:
+                return Integer.parseInt("FF7A00", 16);
             case 14:
+                return Integer.parseInt("FF7A00", 16);
             case 15:
-                return Integer.parseInt("990000", 16);
+                return Integer.parseInt("FF7A00", 16);
         }
         return 16777215;
     }
