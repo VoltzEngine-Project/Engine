@@ -10,7 +10,7 @@ import com.builtbroken.jlib.data.vector.IPos3D;
  */
 public class ChunkSectionShort
 {
-    protected final short[] data = new short[4096]; //65,636 bits of memory usage
+    public final short[] data = new short[4096]; //65,636 bits of memory usage
 
     public short getValue(int x, int y, int z)
     {
@@ -32,13 +32,39 @@ public class ChunkSectionShort
         data[p(x, y, z)] = value;
     }
 
+    public void setValue(int x, int y, int z, int value)
+    {
+        data[p(x, y, z)] = (short)value;
+    }
+
     public void setValue(IPos3D pos, short value)
     {
         setValue(pos.xi(), pos.yi(), pos.zi(), value);
     }
 
-    protected int p(int x, int y, int z)
+    public void setValue(IPos3D pos, int value)
     {
+        setValue(pos.xi(), pos.yi(), pos.zi(), value);
+    }
+
+    /**
+     * Get the position in the data array for the 3D location
+     * <p>
+     * 3D -> 1D
+     *
+     * @param x - 0 - 15
+     * @param y - 0 - 15
+     * @param z - 0 - 15
+     * @return position between 0 - 4095 inclusive
+     */
+    public int p(int x, int y, int z)
+    {
+        //http://sys.cs.rice.edu/course/comp314/10/p2/javabits.html
+        //X take the first 4 bits
+        //Y is the middle 4 bits
+        //Z is the last 4 bits
+        // XXXX YYYY ZZZZ
+        //12bits, 1 1/2 bytes
         return x << 8 | y << 4 | z;
     }
 }

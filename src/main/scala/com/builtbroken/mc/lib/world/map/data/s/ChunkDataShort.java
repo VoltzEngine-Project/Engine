@@ -8,7 +8,7 @@ import com.builtbroken.mc.lib.world.map.data.ChunkData;
  */
 public class ChunkDataShort extends ChunkData
 {
-    protected final ChunkSectionShort[] sections = new ChunkSectionShort[16];
+    public final ChunkSectionShort[] sections = new ChunkSectionShort[16];
 
     public ChunkDataShort(int x, int z)
     {
@@ -22,7 +22,12 @@ public class ChunkDataShort extends ChunkData
         {
             sections[s] = new ChunkSectionShort();
         }
-        return sections[s].getValue(x, y & 16, z);
+        return sections[s].getValue(x, y & 15, z);
+    }
+
+    public short setValue(int x, int y, int z, int value)
+    {
+        return setValue(x, y, z, (short) value);
     }
 
     public short setValue(int x, int y, int z, short value)
@@ -32,8 +37,8 @@ public class ChunkDataShort extends ChunkData
         {
             sections[s] = new ChunkSectionShort();
         }
-        short prev =  sections[s].getValue(x, y & 16, z);
-        sections[s].setValue(x, y & 16, z, value);
+        short prev = sections[s].getValue(x, y & 15, z);
+        sections[s].setValue(x, y & 15, z, value);
         return prev;
     }
 }

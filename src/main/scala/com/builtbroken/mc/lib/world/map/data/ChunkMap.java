@@ -70,7 +70,7 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
     protected C add(C chunk)
     {
         chunks.put(chunk.position, chunk);
-        return null;
+        return chunk;
     }
 
     @SubscribeEvent
