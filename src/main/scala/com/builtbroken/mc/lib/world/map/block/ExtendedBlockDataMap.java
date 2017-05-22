@@ -3,7 +3,6 @@ package com.builtbroken.mc.lib.world.map.block;
 
 import com.builtbroken.mc.lib.world.map.data.ChunkMap;
 import com.builtbroken.mc.lib.world.map.data.s.ChunkDataShort;
-import net.minecraft.world.chunk.Chunk;
 
 /**
  * Tracks radiation values for the world
@@ -61,8 +60,7 @@ public class ExtendedBlockDataMap extends ChunkMap<ChunkDataShort>
         }
         else
         {
-            Chunk chunk1
-            chunk = add(new ChunkDataShort(x << 4, z << 4));
+            chunk = add(new ChunkDataShort(x >> 4, z >> 4));
             chunk.setValue(x & 15, y, z & 15, value);
         }
         return 0;

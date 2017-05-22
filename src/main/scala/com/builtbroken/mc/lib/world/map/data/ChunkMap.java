@@ -54,7 +54,7 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
 
     public C getChunkFromBlockCoords(int x, int z)
     {
-        return getChunk(x << 4, z << 4);
+        return getChunk(x >> 4, z >> 4);
     }
 
     public C getChunk(int x, int z)
