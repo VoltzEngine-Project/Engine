@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.WorldEvent;
 
 import java.io.File;
 import java.util.HashMap;
@@ -100,10 +101,23 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
         }
     }
 
+    @SubscribeEvent
+    public void onWorldSave(WorldEvent.Save event)
+    {
+        if (event.world.provider.dimensionId == dimID)
+        {
+            saveAll();
+        }
+    }
+
+    /**
+     * Called when the world has be unloaded from
+     * the game. At this time everything should be
+     * saved and caches cleared.
+     */
     public void onWorldUnload()
     {
-        //Use for cleanup
-        //TODO save data
+        saveAll();
     }
 
     /**
@@ -116,20 +130,17 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
         return dimID;
     }
 
-    @Override
-    public boolean equals(Object object)
-    {
-        if (object == this)
-        {
-            return true;
-        }
-        else if (object.getClass() == getClass())
-        {
-            return ((ChunkMap) object).dimID == dimID;
-        }
-        return false;
-    }
-
+    /**
+     * Called to check if this map should be unloaded to
+     * save memory.
+     * <p>
+     * Conditions that validate for unload are if the map
+     * is empty or has not been used for an extended period
+     * of time. In which unloading it would free up memory
+     * for other data systems to use.
+     *
+     * @return true if should unload
+     */
     public boolean shouldUnload()
     {
         return chunks.isEmpty();
@@ -156,6 +167,12 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
         //TODO load chunk data
     }
 
+
+    public void saveAll()
+    {
+        //TODO load chunk data
+    }
+
     @Override
     public NBTTagCompound save(NBTTagCompound nbt)
     {
@@ -168,4 +185,17 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
         return dimID == world.provider.dimensionId;
     }
 
+    @Override
+    public boolean equals(Object object)
+    {
+        if (object == this)
+        {
+            return true;
+        }
+        else if (object.getClass() == getClass())
+        {
+            return ((ChunkMap) object).dimID == dimID;
+        }
+        return false;
+    }
 }
