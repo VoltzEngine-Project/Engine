@@ -1,6 +1,8 @@
 package com.builtbroken.mc.lib.world.map.data.s;
 
 import com.builtbroken.mc.lib.world.map.data.ChunkData;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -40,5 +42,29 @@ public class ChunkDataShort extends ChunkData
         short prev = sections[s].getValue(x, y & 15, z);
         sections[s].setValue(x, y & 15, z, value);
         return prev;
+    }
+
+    @Override
+    public void load(NBTTagCompound nbt)
+    {
+
+    }
+
+    @Override
+    public NBTTagCompound save(NBTTagCompound nbt)
+    {
+        NBTTagList list = new NBTTagList();
+        for (int i = 0; i < sections.length; i++)
+        {
+            if (sections[i] != null) //TODO does need saved
+            {
+                NBTTagCompound tag = new NBTTagCompound();
+                sections[i].save(nbt);
+                tag.setByte("section_id", (byte) i);
+                list.appendTag(tag);
+            }
+        }
+        nbt.setTag("sections", list);
+        return nbt;
     }
 }

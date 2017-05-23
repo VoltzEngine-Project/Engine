@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.content.blocks;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.MathUtility;
+import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -49,6 +50,26 @@ public class BlockHeatedStone extends Block
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
+    {
+        if (world instanceof World)
+        {
+            short blockID = ExtendedBlockDataManager.INSTANCE.getValue((World) world, x, y, z);
+            if (blockID != 0)
+            {
+                //MMMM BBBB BBBB BBBB
+                Block block = Block.getBlockById(blockID);
+                if (block != null)
+                {
+                    return block.getIcon(side, 0);
+                }
+            }
+        }
+        return Blocks.stone.getIcon(side, 0);
+    }
+
+    @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
         //Sets the block to tick randomly so it can cool down
@@ -78,7 +99,24 @@ public class BlockHeatedStone extends Block
         }
         else
         {
-            world.setBlock(x, y, z, Blocks.stone);
+            short blockID = ExtendedBlockDataManager.INSTANCE.getValue((World) world, x, y, z);
+            if (blockID != 0)
+            {
+                //MMMM BBBB BBBB BBBB
+                Block block = Block.getBlockById(blockID);
+                if (block != null)
+                {
+                    world.setBlock(x, y, z, block);
+                }
+                else
+                {
+                    world.setBlock(x, y, z, Blocks.stone);
+                }
+            }
+            else
+            {
+                world.setBlock(x, y, z, Blocks.stone);
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.content.debug;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
+import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
 import com.builtbroken.mc.prefab.items.ItemAbstract;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -79,6 +80,7 @@ public class ItemDevData extends ItemAbstract
             if (stack.getItemDamage() == 0)
             {
                 player.addChatComponentMessage(new ChatComponentText("Block: " + block));
+                player.addChatComponentMessage(new ChatComponentText(" Extended: " + ExtendedBlockDataManager.INSTANCE.getValue(world, x, y, z)));
                 player.addChatComponentMessage(new ChatComponentText(" Meta: " + meta));
                 player.addChatComponentMessage(new ChatComponentText(" Class: " + block.getClass()));
                 if (tile != null)
@@ -101,7 +103,7 @@ public class ItemDevData extends ItemAbstract
                             {
                                 field.setAccessible(true);
                                 Object obj = field.get(tile);
-                                if(!(obj instanceof Collection))
+                                if (!(obj instanceof Collection))
                                 {
                                     player.addChatComponentMessage(new ChatComponentText("Field[" + (i++) + ", " + field.getName() + "] = " + obj));
                                     if (i % 5 == 0)

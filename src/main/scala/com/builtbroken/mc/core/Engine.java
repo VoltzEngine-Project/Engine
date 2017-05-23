@@ -64,6 +64,7 @@ import com.builtbroken.mc.lib.recipe.item.RecipeTool;
 import com.builtbroken.mc.lib.recipe.item.grid.RecipeShapedOreLarge;
 import com.builtbroken.mc.lib.recipe.item.sheetmetal.RecipeSheetMetal;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
+import com.builtbroken.mc.lib.world.edit.PlacementDataExtended;
 import com.builtbroken.mc.lib.world.edit.thread.WorkerThread;
 import com.builtbroken.mc.lib.world.edit.thread.WorldActionQue;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
@@ -643,7 +644,8 @@ public class Engine implements IJsonGenMod
             NEIProxy.hideItem(heatedStone);
             if (enabledHeatMap)
             {
-                HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(heatedStone, 15), 600);
+                HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementDataExtended(heatedStone, 15, Block.getIdFromBlock(Blocks.stone)), 600);
+                HeatedBlockRegistry.addNewHeatingConversion(Blocks.cobblestone, new PlacementDataExtended(heatedStone, 15, Block.getIdFromBlock(Blocks.cobblestone)), 600);
             }
         }
         else

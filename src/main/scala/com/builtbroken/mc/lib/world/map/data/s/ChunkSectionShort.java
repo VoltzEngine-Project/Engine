@@ -1,6 +1,8 @@
 package com.builtbroken.mc.lib.world.map.data.s;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.ISave;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Used to stored data about a section of a chunk using a short value
@@ -8,7 +10,7 @@ import com.builtbroken.jlib.data.vector.IPos3D;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 5/20/2017.
  */
-public class ChunkSectionShort
+public class ChunkSectionShort implements ISave
 {
     public final short[] data = new short[4096]; //65,636 bits of memory usage
 
@@ -66,5 +68,17 @@ public class ChunkSectionShort
         // XXXX YYYY ZZZZ
         //12bits, 1 1/2 bytes
         return x << 8 | y << 4 | z;
+    }
+
+    @Override
+    public void load(NBTTagCompound nbt)
+    {
+
+    }
+
+    @Override
+    public NBTTagCompound save(NBTTagCompound nbt)
+    {
+        return nbt;
     }
 }
