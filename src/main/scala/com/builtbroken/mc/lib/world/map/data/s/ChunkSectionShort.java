@@ -4,6 +4,10 @@ import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.ISave;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
+
 /**
  * Used to stored data about a section of a chunk using a short value
  *
@@ -36,7 +40,7 @@ public class ChunkSectionShort implements ISave
 
     public void setValue(int x, int y, int z, int value)
     {
-        data[p(x, y, z)] = (short)value;
+        data[p(x, y, z)] = (short) value;
     }
 
     public void setValue(IPos3D pos, short value)
@@ -73,12 +77,29 @@ public class ChunkSectionShort implements ISave
     @Override
     public void load(NBTTagCompound nbt)
     {
+        if (nbt.hasKey("data"))
+        {
+            byte[] payload = nbt.getByteArray("data");
+            ByteBuffer bb = ByteBuffer.wrap(payload).order(ByteOrder.BIG_ENDIAN);
+            ShortBuffer sb = bb.asShortBuffer();
 
+            int i = 0;
+            while (sb.hasRemaining())
+            {
+                data[i++] = sb.get();
+            }
+        }
     }
 
     @Override
     public NBTTagCompound save(NBTTagCompound nbt)
     {
+        ByteBuffer byteBuf = ByteBuffer.allocate(2 * data.length);
+        for (int i = 0; i < data.length; i++)
+        {
+            byteBuf.putShort(data[i]);
+        }
+        nbt.setByteArray("data", byteBuf.array());
         return nbt;
     }
 }

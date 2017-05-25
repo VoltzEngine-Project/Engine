@@ -55,7 +55,7 @@ public class BlockHeatedStone extends Block
     {
         if (world instanceof World)
         {
-            short blockID = ExtendedBlockDataManager.INSTANCE.getValue((World) world, x, y, z);
+            short blockID = ExtendedBlockDataManager.SERVER.getValue((World) world, x, y, z);
             if (blockID != 0)
             {
                 //MMMM BBBB BBBB BBBB
@@ -99,7 +99,7 @@ public class BlockHeatedStone extends Block
         }
         else
         {
-            short blockID = ExtendedBlockDataManager.INSTANCE.getValue((World) world, x, y, z);
+            short blockID = ExtendedBlockDataManager.SERVER.getValue((World) world, x, y, z);
             if (blockID != 0)
             {
                 //MMMM BBBB BBBB BBBB

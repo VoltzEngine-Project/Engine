@@ -12,8 +12,8 @@ import com.builtbroken.mc.client.json.effects.EffectJsonProcessor;
 import com.builtbroken.mc.client.json.effects.EffectListJsonProcessor;
 import com.builtbroken.mc.client.json.models.ModelJsonProcessor;
 import com.builtbroken.mc.client.json.render.RenderData;
-import com.builtbroken.mc.client.json.render.processor.RenderJsonProcessor;
 import com.builtbroken.mc.client.json.render.item.ItemJsonRenderer;
+import com.builtbroken.mc.client.json.render.processor.RenderJsonProcessor;
 import com.builtbroken.mc.client.json.render.tile.TileRenderData;
 import com.builtbroken.mc.client.json.render.tile.TileRenderHandler;
 import com.builtbroken.mc.client.json.texture.TextureJsonProcessor;
@@ -25,6 +25,7 @@ import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
+import com.builtbroken.mc.core.network.packet.callback.chunk.PacketRequestData;
 import com.builtbroken.mc.framework.access.global.gui.GuiAccessSystem;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.multiblock.MultiBlockRenderHelper;
@@ -35,6 +36,8 @@ import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.lib.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.fx.FxBeam;
+import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
+import com.builtbroken.mc.lib.world.map.data.ChunkData;
 import com.builtbroken.mc.prefab.tile.listeners.RotatableListener;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -42,6 +45,8 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -60,6 +65,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -227,6 +233,68 @@ public class ClientProxy extends CommonProxy
         }
     }
 
+    @SubscribeEvent
+    public void clientUpdate(TickEvent.WorldTickEvent event)
+    {
+        if (Engine.enableExtendedMetaPacketSync) ///TODO reduce check to every 10 ticks
+        {
+            try
+            {
+                if (event.side == Side.CLIENT)
+                {
+                    Minecraft mc = Minecraft.getMinecraft();
+                    if (mc != null)
+                    {
+                        EntityPlayer player = mc.thePlayer;
+                        World world = mc.theWorld;
+                        if (player != null && world != null)
+                        {
+                            if (ExtendedBlockDataManager.CLIENT.dimID != world.provider.dimensionId)
+                            {
+                                ExtendedBlockDataManager.CLIENT.clear();
+                                ExtendedBlockDataManager.CLIENT.dimID = world.provider.dimensionId;
+                            }
+                            int renderDistance = mc.gameSettings.renderDistanceChunks + 2;
+                            int centerX = ((int) Math.floor(player.posX)) >> 4;
+                            int centerZ = ((int) Math.floor(player.posZ)) >> 4;
+
+                            //Clear out chunks outside of render distance
+                            List<ChunkData> chunksToRemove = new ArrayList();
+                            for (ChunkData data : ExtendedBlockDataManager.CLIENT.chunks.values())
+                            {
+                                if (Math.abs(data.position.chunkXPos - centerX) > renderDistance || Math.abs(data.position.chunkZPos - centerZ) > renderDistance)
+                                {
+                                    chunksToRemove.add(data);
+                                }
+                            }
+
+                            for (ChunkData data : chunksToRemove)
+                            {
+                                ExtendedBlockDataManager.CLIENT.chunks.remove(data.position);
+                            }
+
+                            renderDistance = mc.gameSettings.renderDistanceChunks;
+                            for(int x = centerX - renderDistance; x < centerX + renderDistance; x++)
+                            {
+                                for(int z = centerZ - renderDistance; z < centerZ + renderDistance; z++)
+                                {
+                                    ChunkData chunkData = ExtendedBlockDataManager.CLIENT.getChunk(x, z);
+                                    if(chunkData == null)
+                                    {
+                                        Engine.instance.packetHandler.sendToServer(new PacketRequestData(world.provider.dimensionId, x, z, 0));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Engine.logger().error("Unexpected error while updating client chunk data state", e);
+            }
+        }
+    }
 
     @Override
     public void playJsonAudio(World world, String audioKey, double x, double y, double z, float pitch, float volume)

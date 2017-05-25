@@ -30,7 +30,7 @@ public class PlacementDataExtended extends PlacementData
     {
         if (world.setBlock(x, y, z, block(), meta(), 2))
         {
-            ExtendedBlockDataManager.INSTANCE.setValue(world, x, y, z, extraData);
+            ExtendedBlockDataManager.SERVER.setValue(world, x, y, z, extraData);
             return true;
         }
         return false;

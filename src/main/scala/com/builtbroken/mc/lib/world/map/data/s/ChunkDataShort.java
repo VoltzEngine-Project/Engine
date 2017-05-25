@@ -1,6 +1,8 @@
 package com.builtbroken.mc.lib.world.map.data.s;
 
 import com.builtbroken.mc.lib.world.map.data.ChunkData;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -47,7 +49,16 @@ public class ChunkDataShort extends ChunkData
     @Override
     public void load(NBTTagCompound nbt)
     {
+        clear();
 
+        NBTTagList list = nbt.getTagList("sections", 10);
+        for (int i = 0; i < list.tagCount(); i++)
+        {
+            NBTTagCompound tag = list.getCompoundTagAt(i);
+            int section = tag.getInteger("section_id");
+            sections[section] = new ChunkSectionShort();
+            sections[section].load(nbt);
+        }
     }
 
     @Override
@@ -66,5 +77,29 @@ public class ChunkDataShort extends ChunkData
         }
         nbt.setTag("sections", list);
         return nbt;
+    }
+
+    @Override
+    public Object readBytes(ByteBuf buf)
+    {
+        load(ByteBufUtils.readTag(buf));
+        return this;
+    }
+
+    @Override
+    public ByteBuf writeBytes(ByteBuf buf)
+    {
+        NBTTagCompound tag = new NBTTagCompound();
+        save(tag);
+        ByteBufUtils.writeTag(buf, tag);
+        return buf;
+    }
+
+    public void clear()
+    {
+        for (int i = 0; i < sections.length; i++)
+        {
+            sections[i] = null; //TODO clear data
+        }
     }
 }

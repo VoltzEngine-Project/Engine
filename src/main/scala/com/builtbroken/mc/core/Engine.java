@@ -175,7 +175,9 @@ public class Engine implements IJsonGenMod
     //config files
     public static Configuration heatDataConfig;
     public static Configuration explosiveConfig;
+
     public static int actionProcessorThreads = 3;
+    public static boolean enableExtendedMetaPacketSync = true;
 
     //Configs
     public static boolean enabledHeatMap = true;
@@ -492,6 +494,9 @@ public class Engine implements IJsonGenMod
         CommandVE.disableButcherCommand = getConfig().getBoolean("DisableButcherCommands", "Commands", false, "Turns off butcher command");
         CommandVE.disableClearCommand = getConfig().getBoolean("DisableClearCommands", "Commands", false, "Turns off clear command");
         CommandVE.disableRemoveCommand = getConfig().getBoolean("DisableRemoverCommands", "Commands", false, "Turns off remove command");
+
+        //Map commands
+        enableExtendedMetaPacketSync = getConfig().getBoolean("EnableExtendedBlockMetaPacketSync", "Map_data", true, "While on extended meta values will be synced to the client. Can be disabled on both sides to save on bandwidth but will result in rendering issues if disabled.");
 
         ToolMode.REGISTRY.add(new ToolModeGeneral());
         ToolMode.REGISTRY.add(new ToolModeRotation());

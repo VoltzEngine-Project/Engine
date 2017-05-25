@@ -12,7 +12,8 @@ import net.minecraft.world.World;
  */
 public class ExtendedBlockDataManager extends ChunkMapManager<ExtendedBlockDataMap>
 {
-    public static final ExtendedBlockDataManager INSTANCE = new ExtendedBlockDataManager();
+    public static final ExtendedBlockDataManager SERVER = new ExtendedBlockDataManager();
+    public static final ExtendedBlockDataMap CLIENT = new ExtendedBlockDataMap(null, 0);
 
     protected ExtendedBlockDataManager()
     {
@@ -36,17 +37,28 @@ public class ExtendedBlockDataManager extends ChunkMapManager<ExtendedBlockDataM
      */
     public short getValue(World world, int x, int y, int z)
     {
-        ExtendedBlockDataMap map = getMap(world, false);
-        if (map != null)
+        if(world.isRemote)
         {
-            return map.getValue(x, y, z);
+            return CLIENT.getValue(x, y, z);
+        }
+        else
+        {
+            ExtendedBlockDataMap map = getMap(world, false);
+            if (map != null)
+            {
+                return map.getValue(x, y, z);
+            }
         }
         return 0;
     }
 
     public short setValue(World world, int x, int y, int z, int value)
     {
-        return setValue(world, x, y, z, (short) value);
+        if (!world.isRemote)
+        {
+            return setValue(world, x, y, z, (short) value);
+        }
+        return 0;
     }
 
     /**
@@ -60,10 +72,13 @@ public class ExtendedBlockDataManager extends ChunkMapManager<ExtendedBlockDataM
      */
     public short setValue(World world, int x, int y, int z, short value)
     {
-        ExtendedBlockDataMap map = getMap(world, true);
-        if (map != null)
+        if (!world.isRemote)
         {
-            return map.setValue(x, y, z, value);
+            ExtendedBlockDataMap map = getMap(world, true);
+            if (map != null)
+            {
+                return map.setValue(x, y, z, value);
+            }
         }
         return 0;
     }

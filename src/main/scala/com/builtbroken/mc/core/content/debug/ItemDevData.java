@@ -80,7 +80,7 @@ public class ItemDevData extends ItemAbstract
             if (stack.getItemDamage() == 0)
             {
                 player.addChatComponentMessage(new ChatComponentText("Block: " + block));
-                player.addChatComponentMessage(new ChatComponentText(" Extended: " + ExtendedBlockDataManager.INSTANCE.getValue(world, x, y, z)));
+                player.addChatComponentMessage(new ChatComponentText(" Extended: " + ExtendedBlockDataManager.SERVER.getValue(world, x, y, z)));
                 player.addChatComponentMessage(new ChatComponentText(" Meta: " + meta));
                 player.addChatComponentMessage(new ChatComponentText(" Class: " + block.getClass()));
                 if (tile != null)

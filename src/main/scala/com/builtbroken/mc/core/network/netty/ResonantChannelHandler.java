@@ -6,6 +6,8 @@ import com.builtbroken.mc.core.network.packet.*;
 import com.builtbroken.mc.core.network.packet.callback.PacketAudio;
 import com.builtbroken.mc.core.network.packet.callback.PacketBlast;
 import com.builtbroken.mc.core.network.packet.callback.PacketOpenGUI;
+import com.builtbroken.mc.core.network.packet.callback.chunk.PacketRequestData;
+import com.builtbroken.mc.core.network.packet.callback.chunk.PacketSendData;
 import com.builtbroken.mc.core.network.packet.user.PacketMouseClick;
 import com.builtbroken.mc.core.network.packet.user.PacketPlayerItemMode;
 import com.builtbroken.mc.framework.access.global.packets.PacketAccessGui;
@@ -41,6 +43,8 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<IPac
         addPacket(PacketOpenGUI.class);
         addPacket(PacketGui.class);
         addPacket(PacketAccessGui.class);
+        addPacket(PacketSendData.class);
+        addPacket(PacketRequestData.class);
     }
 
     public void addPacket(Class<? extends IPacket> clazz)

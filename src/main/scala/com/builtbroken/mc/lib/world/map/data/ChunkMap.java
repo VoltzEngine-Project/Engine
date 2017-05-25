@@ -22,7 +22,7 @@ import java.util.HashMap;
 public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
 {
     /** Dim ID, used to match the map to the world */
-    public final int dimID;
+    public int dimID;
 
     protected long ticks = 0L;
 
@@ -58,6 +58,13 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
         return getChunk(x >> 4, z >> 4);
     }
 
+    /**
+     * Gets the chunk if it exists
+     *
+     * @param x
+     * @param z
+     * @return chunk, or null if missing
+     */
     public C getChunk(int x, int z)
     {
         ChunkCoordIntPair coords = new ChunkCoordIntPair(x, z);
@@ -149,7 +156,7 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
     @Override
     public File getSaveFile()
     {
-        return mapManager.getSaveFile(dimID);
+        return mapManager != null ? mapManager.getSaveFile(dimID) : null;
     }
 
     @Override
@@ -197,5 +204,10 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
             return ((ChunkMap) object).dimID == dimID;
         }
         return false;
+    }
+
+    public void clear()
+    {
+        chunks.clear();
     }
 }
