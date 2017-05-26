@@ -13,23 +13,23 @@ import net.minecraft.world.World;
 import java.awt.*;
 
 /**
- * Spawns a laser from point A to point B
+ * Spawns a stream of smoke used for gun like effects
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
- * Created by Dark(DarkGuardsman, Robert) on 2/15/2017.
+ * Created by Dark(DarkGuardsman, Robert) on 5/26/2017.
  */
-public class VEProviderLaserBeam extends VisualEffectProvider
+public class VEProviderSmokeStream extends VisualEffectProvider
 {
-    public VEProviderLaserBeam()
+    public VEProviderSmokeStream()
     {
-        super("laser");
+        super("smokeStream");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void displayEffect(World world, double x, double y, double z, double mx, double my, double mz, boolean movementIsEndpoint, NBTTagCompound otherData)
     {
-        Color color = Color.red;
+        Color color = Color.gray;
         int lifeTicks = 2;
         if (otherData != null)
         {
@@ -49,7 +49,7 @@ public class VEProviderLaserBeam extends VisualEffectProvider
                 color = new Color(otherData.getInteger("color"));
             }
         }
-        FxBeam laser = new FxBeam(SharedAssets.LASER_TEXTURE, world, new Pos(x, y, z), new Pos(mx, my, mz), color, lifeTicks);
+        FxBeam laser = new FxBeam(SharedAssets.NOISE_TEXTURE, world, new Pos(x, y, z), new Pos(mx, my, mz), color, lifeTicks);
         FMLClientHandler.instance().getClient().effectRenderer.addEffect(laser);
     }
 }

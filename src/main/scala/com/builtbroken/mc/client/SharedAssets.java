@@ -23,7 +23,11 @@ public final class SharedAssets
     /** Simple grey texture to use as a place holder */
     public static ResourceLocation GREY_TEXTURE = new ResourceLocation(References.DOMAIN, References.TEXTURE_DIRECTORY + "grey.png");
     /** Simple grey texture to use as a place holder, has a 40%~ish occupancy to work with alpha objects better */
-    public static ResourceLocation GREY_TEXTURE_40pAlpha  = new ResourceLocation(References.DOMAIN, References.TEXTURE_DIRECTORY + "40%grey.png");
+    public static ResourceLocation GREY_TEXTURE_40pAlpha = new ResourceLocation(References.DOMAIN, References.TEXTURE_DIRECTORY + "40%grey.png");
+
+    public static ResourceLocation NOISE_TEXTURE = new ResourceLocation(References.DOMAIN, References.TEXTURE_DIRECTORY + "noise.png");
+    public static ResourceLocation LASER_TEXTURE = new ResourceLocation(References.DOMAIN, References.TEXTURE_DIRECTORY + "laser.png");
+    public static ResourceLocation FADED_SPHERE_TEXTURE = new ResourceLocation(References.DOMAIN, References.TEXTURE_DIRECTORY + "fadedSphere.png");
 
     //TODO java docs, TODO use texture() method, TODO move to loadResources() method
     public static final ResourceLocation GUI_EMPTY_FILE = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "gui_empty.png");

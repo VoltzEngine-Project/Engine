@@ -43,7 +43,7 @@ public class FXShockWave extends EntityFX
 		float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTickRate - interpPosY);
 		float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTickRate - interpPosZ);
 		GL11.glTranslated(f11, f12, f13);
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture(texture != null ? texture : SharedAssets.GREY_TEXTURE);
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(texture != null ? texture : SharedAssets.FADED_SPHERE_TEXTURE);
 		RenderUtility.enableBlending();
 		RenderUtility.disableLighting();
 

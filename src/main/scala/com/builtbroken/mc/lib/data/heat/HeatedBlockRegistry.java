@@ -138,6 +138,26 @@ public class HeatedBlockRegistry
         warm_up_conversion.put(block.block(), new BlockConversionData(block, result, kelvin));
     }
 
+    public static void addNewCoolingConversion(Block block, Block result, int kelvin)
+    {
+        addNewCoolingConversion(block, new PlacementData(result, -1), kelvin);
+    }
+
+    public static void addNewCoolingConversion(Block block, PlacementData result, int kelvin)
+    {
+        addNewCoolingConversion(new PlacementData(block, -1), result, kelvin);
+    }
+
+    public static void addNewCoolingConversion(PlacementData block, PlacementData result, int kelvin)
+    {
+        if (cool_down_conversion.containsKey(block.block()))
+        {
+            Engine.instance.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.block()) + " is being replaced by " + result);
+
+        }
+        cool_down_conversion.put(block.block(), new BlockConversionData(block, result, kelvin));
+    }
+
     public static float getSpecificHeat(Block block)
     {
         if (default_specific_heat_mat.containsKey(block.blockMaterial))
@@ -213,10 +233,19 @@ public class HeatedBlockRegistry
     {
         config.setCategoryComment("Block_Heat_Conversions", "Conversion of one block into another when a lot of heat is added. \'Air\' as an entry means the block turned into dust");
 
-        //Constant data
+        //Vanilla block handling
+        //---------------------------------------------------------------------
+
+        //Heating values
         addNewHeatingConversion(Blocks.ice, Blocks.water, (int) TemperatureUnit.Fahrenheit.conversion.toKelvin(32));
         addNewHeatingConversion(Blocks.obsidian, Blocks.lava, 1293);
         addNewHeatingConversion(Blocks.grass, Blocks.dirt, 600); //Made up conversion
+
+        //Cooling values
+        addNewCoolingConversion(Blocks.water, Blocks.ice, 273);
+        addNewCoolingConversion(Blocks.lava, Blocks.obsidian, 1200); //made up value
+
+        //---------------------------------------------------------------------
 
         //Everything else not registered, init with default data to make life simple
         if (Block.blockRegistry instanceof FMLControlledNamespacedRegistry)
