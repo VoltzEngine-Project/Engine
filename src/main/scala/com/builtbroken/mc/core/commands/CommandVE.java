@@ -17,6 +17,7 @@ import com.builtbroken.mc.core.commands.sub.CommandVEButcher;
 import com.builtbroken.mc.core.commands.sub.CommandVEClear;
 import com.builtbroken.mc.core.commands.sub.CommandVERemove;
 import com.builtbroken.mc.core.commands.sub.CommandVEVersion;
+import com.builtbroken.mc.core.commands.thread.CommandThreadClear;
 
 /**
  * Created by robert on 1/23/2015.
@@ -43,6 +44,7 @@ public class CommandVE extends ModularCommand
     private ModularCommand sub_command_user;
     private ModularCommand sub_command_debug;
     private ModularCommand sub_command_json;
+    private ModularCommand sub_command_thread;
 
 
     private CommandVE()
@@ -70,6 +72,18 @@ public class CommandVE extends ModularCommand
         }
 
         addToJsonCommand(new CommandJsonRecipe());
+
+        addToThreadCommand(new CommandThreadClear());
+    }
+
+    public void addToThreadCommand(AbstractCommand command)
+    {
+        if (sub_command_thread == null)
+        {
+            sub_command_thread = new ModularCommand("thread");
+            addCommand(sub_command_thread);
+        }
+        sub_command_thread.addCommand(command);
     }
 
     public void addToJsonCommand(AbstractCommand command)
