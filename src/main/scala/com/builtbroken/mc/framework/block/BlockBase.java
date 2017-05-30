@@ -700,8 +700,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     public IIcon getIconFromJson(int side, int meta)
     {
         //handle json data
-        String contentID = getContentID(meta);
-        RenderData data = ClientDataHandler.INSTANCE.getRenderData(contentID);
+        RenderData data = getRenderData(meta);
         if (data != null)
         {
             for (String key : new String[]{
@@ -720,6 +719,11 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             }
         }
         return Blocks.wool.getIcon(0, side);
+    }
+
+    public RenderData getRenderData(int meta)
+    {
+        return ClientDataHandler.INSTANCE.getRenderData(getContentID(meta));
     }
 
     public String getContentID(int meta)

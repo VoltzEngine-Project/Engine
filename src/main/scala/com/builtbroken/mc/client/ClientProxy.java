@@ -18,6 +18,7 @@ import com.builtbroken.mc.client.json.render.processor.RenderJsonProcessor;
 import com.builtbroken.mc.client.json.render.tile.TileRenderData;
 import com.builtbroken.mc.client.json.render.tile.TileRenderHandler;
 import com.builtbroken.mc.client.json.texture.TextureJsonProcessor;
+import com.builtbroken.mc.client.listeners.blocks.JsonIconListener;
 import com.builtbroken.mc.client.listeners.blocks.RotatableIconListener;
 import com.builtbroken.mc.core.CommonProxy;
 import com.builtbroken.mc.core.Engine;
@@ -113,6 +114,7 @@ public class ClientProxy extends CommonProxy
     {
         super.loadJsonContentHandlers();
         JsonBlockListenerProcessor.addBuilder(new RotatableIconListener.Builder());
+        JsonBlockListenerProcessor.addBuilder(new JsonIconListener.Builder());
     }
 
     @Override
@@ -276,12 +278,12 @@ public class ClientProxy extends CommonProxy
                             }
 
                             renderDistance = mc.gameSettings.renderDistanceChunks;
-                            for(int x = centerX - renderDistance; x < centerX + renderDistance; x++)
+                            for (int x = centerX - renderDistance; x < centerX + renderDistance; x++)
                             {
-                                for(int z = centerZ - renderDistance; z < centerZ + renderDistance; z++)
+                                for (int z = centerZ - renderDistance; z < centerZ + renderDistance; z++)
                                 {
                                     ChunkData chunkData = ExtendedBlockDataManager.CLIENT.getChunk(x, z);
-                                    if(chunkData == null)
+                                    if (chunkData == null)
                                     {
                                         Engine.instance.packetHandler.sendToServer(new PacketRequestData(world.provider.dimensionId, x, z, 0));
                                     }
