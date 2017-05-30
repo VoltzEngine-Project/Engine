@@ -14,6 +14,9 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Advanced version of the built in JSON icon system for blocks. Allows the tile state to modify the content ID or state ID.
  *
@@ -66,6 +69,14 @@ public class JsonIconListener extends TileListener implements IIconListener, IBl
             }
         }
         return block.getIconFromJson(side, meta);
+    }
+
+    @Override
+    public List<String> getListenerKeys()
+    {
+        List<String> list = new ArrayList();
+        list.add("icon");
+        return list;
     }
 
     public static class Builder implements ITileEventListenerBuilder

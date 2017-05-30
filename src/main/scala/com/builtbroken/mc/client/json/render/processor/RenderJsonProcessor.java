@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -81,48 +82,54 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
         }
 
         JsonArray array = object.get("states").getAsJsonArray();
-        for (JsonElement e : array)
+        for (JsonElement arrayElement : array)
         {
-            IRenderState renderState = null;
-
-            //Data
-            JsonObject renderStateObject = e.getAsJsonObject();
-            ensureValuesExist(renderStateObject, "id");
-
-            //State ID
-            JsonPrimitive stateIDElement = renderStateObject.getAsJsonPrimitive("id");
-            String stateID = stateIDElement.getAsString();
-
-            //Type override
-            String subType = overAllRenderType;
-            if (renderStateObject.has("renderType"))
+            if (arrayElement instanceof JsonObject)
             {
-                subType = renderStateObject.get("renderType").getAsString();
-            }
+                JsonObject renderStateObject = arrayElement.getAsJsonObject();
 
-            //Check sub processors in order to get state
-            for (RenderJsonSubProcessor processor : stateProcessors)
-            {
-                if (processor.canProcess(subType))
+                //For loop handling for the lazy
+                if (renderStateObject.has("for"))
                 {
-                    renderState = processor.process(renderStateObject, stateID, overAllRenderType, subType);
-                    if (renderState != null)
+                    renderStateObject = renderStateObject.getAsJsonObject("for");
+                    ensureValuesExist(renderStateObject, "start", "end", "state");
+                    int start = renderStateObject.getAsJsonPrimitive("start").getAsInt();
+                    int end = renderStateObject.getAsJsonPrimitive("end").getAsInt();
+
+                    if (start >= end)
                     {
-                        stateToProcessor.put(renderState, processor);
-                        processor.process(renderState, renderStateObject);
-                        break;
+                        throw new IllegalArgumentException("Start can not be greater than or equal to end for a for loop.");
+                    }
+
+                    JsonObject template = renderStateObject.getAsJsonObject("state");
+                    for (int i = start; i <= end; i++)
+                    {
+                        JsonObject state = new JsonObject();
+
+                        //Copy template and rename values as needed
+                        for (Map.Entry<String, JsonElement> entry : template.entrySet())
+                        {
+                            if (entry.getValue() instanceof JsonPrimitive && ((JsonPrimitive) entry.getValue()).isString())
+                            {
+                                String s = entry.getValue().getAsString();
+                                s = s.replace("%number%", "" + i);
+                                state.add(entry.getKey(), new JsonPrimitive(s));
+                            }
+                            else
+                            {
+                                state.add(entry.getKey(), entry.getValue());
+                            }
+                        }
+
+                        //Load state
+                        handle(state, data, overAllRenderType);
                     }
                 }
+                else
+                {
+                    handle(renderStateObject, data, overAllRenderType);
+                }
             }
-
-            //No state, crash TODO add config to ignore broken states
-            if (renderState == null)
-            {
-                throw new RuntimeException("Failed to process render state for StateID[" + stateID + "] SubRenderType[" + subType + "] RenderType[" + overAllRenderType + "]");
-            }
-
-            //Add state to map
-            data.add(stateID, renderState);
         }
 
         //Handle post calls
@@ -141,5 +148,48 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
         //TODO validate states to ensure they fill function
         //TODO ensure modelID exists if model state
         return data;
+    }
+
+    protected void handle(JsonObject renderStateObject, RenderData data, String overAllRenderType)
+    {
+        IRenderState renderState = null;
+
+        //Data
+        ensureValuesExist(renderStateObject, "id");
+
+        //State ID
+        JsonPrimitive stateIDElement = renderStateObject.getAsJsonPrimitive("id");
+        String stateID = stateIDElement.getAsString();
+
+        //Type override
+        String subType = overAllRenderType;
+        if (renderStateObject.has("renderType"))
+        {
+            subType = renderStateObject.get("renderType").getAsString();
+        }
+
+        //Check sub processors in order to get state
+        for (RenderJsonSubProcessor processor : stateProcessors)
+        {
+            if (processor.canProcess(subType))
+            {
+                renderState = processor.process(renderStateObject, stateID, overAllRenderType, subType);
+                if (renderState != null)
+                {
+                    stateToProcessor.put(renderState, processor);
+                    processor.process(renderState, renderStateObject);
+                    break;
+                }
+            }
+        }
+
+        //No state, crash TODO add config to ignore broken states
+        if (renderState == null)
+        {
+            throw new RuntimeException("Failed to process render state for StateID[" + stateID + "] SubRenderType[" + subType + "] RenderType[" + overAllRenderType + "]");
+        }
+
+        //Add state to map
+        data.add(stateID, renderState);
     }
 }
