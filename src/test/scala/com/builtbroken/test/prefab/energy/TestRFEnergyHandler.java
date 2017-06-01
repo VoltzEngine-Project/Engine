@@ -14,7 +14,7 @@ public class TestRFEnergyHandler extends AbstractTest
 {
     public void testInit()
     {
-        RFEnergyHandler handler = RFEnergyHandler.INSTANCE;
+        RFEnergyHandler handler = new RFEnergyHandler(2);
         //TODO If the ratio changes UPDATE THE WIKI with the new values
         Assert.assertTrue("Handler ratio should be 0.5", handler.toForeignEnergy == (1.0 / 2.0));
         Assert.assertTrue("Handler ratio should be 2", handler.toUEEnergy == 2);

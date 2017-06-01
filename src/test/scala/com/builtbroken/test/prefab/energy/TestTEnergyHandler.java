@@ -32,7 +32,7 @@ public class TestTEnergyHandler extends AbstractTest
         block = new BlockTEnergyHandler();
         ModRegistry.registerBlock(block, "test:TEnergyHandler");
         GameRegistry.registerTileEntity(TileTEnergyHandler.class, "test:TEnergyHandler");
-        handler = RFEnergyHandler.INSTANCE; //Never change conversion ratio for this test as it will cause all tests to fail in this class
+        handler = new RFEnergyHandler(2); //Never change conversion ratio for this test as it will cause all tests to fail in this class
     }
 
     public void testPlacement()
