@@ -21,7 +21,7 @@ public class CommonRegistryProxy
 
     public void registerTileEntity(String name, String prefix, Block block, TileEntity tile)
     {
-        GameRegistry.registerTileEntityWithAlternatives(tile.getClass(), prefix + name, name, tile.getClass().getSimpleName(), prefix + tile.getClass().getSimpleName());
+        GameRegistry.registerTileEntity(tile.getClass(), prefix + name);
     }
 
     public void registerDummyRenderer(Class<? extends TileEntity> clazz)
