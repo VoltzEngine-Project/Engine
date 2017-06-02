@@ -326,7 +326,29 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
     {
-        //TODO implement
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "change");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IChangeListener)
+            {
+                ((IChangeListener) next).onNeighborBlockChange(block);
+            }
+        }
+    }
+
+    @Override
+    public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ)
+    {
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "change");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IChangeListener)
+            {
+                ((IChangeListener) next).onNeighborChange(tileX, tileY, tileZ);
+            }
+        }
     }
 
     @Override
@@ -398,12 +420,6 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             }
         }
         return this.canPlaceBlockOnSide(world, x, y, z, side);
-    }
-
-    @Override
-    public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ)
-    {
-        //TODO implement
     }
 
     @Override
