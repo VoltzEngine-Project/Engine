@@ -23,6 +23,8 @@ import com.builtbroken.mc.client.listeners.blocks.RotatableIconListener;
 import com.builtbroken.mc.core.CommonProxy;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.core.commands.CommandVE;
+import com.builtbroken.mc.core.commands.json.visuals.CommandJsonRender;
 import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
@@ -115,6 +117,11 @@ public class ClientProxy extends CommonProxy
         super.loadJsonContentHandlers();
         JsonBlockListenerProcessor.addBuilder(new RotatableIconListener.Builder());
         JsonBlockListenerProcessor.addBuilder(new JsonIconListener.Builder());
+
+        if (Engine.runningAsDev)
+        {
+            CommandVE.INSTANCE.addToDebugCommand(new CommandJsonRender());
+        }
     }
 
     @Override
