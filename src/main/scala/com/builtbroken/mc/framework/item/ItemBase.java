@@ -21,6 +21,7 @@ import com.builtbroken.mc.prefab.items.listeners.ItemListenerIterator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -91,7 +92,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         if (Engine.runningAsDev)
         {
             list.add("Node: " + node.getClass().getSimpleName());
-            list.add("RenderID: " + getRenderContentID(stack.getItemDamage()));
+            list.add("RenderID: " + getRenderContentID(stack));
             list.add("RenderS: " + getRenderKey(stack));
             list.add("RenderE: " + getRenderKey(stack, player, player.getItemInUseCount()));
         }
@@ -149,7 +150,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         String gunState = getRenderKey(stack, player, useRemaining);
         if (gunState != null)
         {
-            RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(stack.getItemDamage()));
+            RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(stack));
             if (data != null)
             {
                 IRenderState state = data.getState(RenderData.INVENTORY_RENDER_KEY + "." + gunState);
@@ -173,7 +174,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         String renderKey = getRenderKey(stack);
         if (renderKey != null)
         {
-            RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(stack.getItemDamage()));
+            RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(stack));
             if (data != null)
             {
                 IRenderState state = data.getState(RenderData.INVENTORY_RENDER_KEY + "." + renderKey);
@@ -280,6 +281,18 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @Override
     public String getRenderContentID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered)
     {
+        if(objectBeingRendered instanceof ItemStack)
+        {
+            return getRenderContentID((ItemStack) objectBeingRendered);
+        }
+        else if(objectBeingRendered instanceof Item)
+        {
+            return getRenderContentID(new ItemStack((Item) objectBeingRendered));
+        }
+        else if(objectBeingRendered instanceof Block)
+        {
+            return getRenderContentID(new ItemStack((Block) objectBeingRendered));
+        }
         return getRenderContentID(0);
     }
 
@@ -461,6 +474,11 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     public String getContentID()
     {
         return node.id;
+    }
+
+    public String getRenderContentID(ItemStack stack)
+    {
+        return getRenderContentID(stack.getItemDamage());
     }
 
     public String getRenderContentID(int meta)

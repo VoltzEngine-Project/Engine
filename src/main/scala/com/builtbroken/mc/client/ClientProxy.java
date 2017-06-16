@@ -181,8 +181,9 @@ public class ClientProxy extends CommonProxy
      * @param keys     - keys for the render type supported
      * @param renderer - render handler
      */
-    public static void registerItemJsonRenders(IItemRenderer renderer, String... keys)
+    public static int registerItemJsonRenders(IItemRenderer renderer, String... keys)
     {
+        int count = 0;
         for (List<IJsonGenObject> list : JsonContentLoader.INSTANCE.generatedObjects.values())
         {
             if (list != null && !list.isEmpty())
@@ -190,7 +191,7 @@ public class ClientProxy extends CommonProxy
                 for (IJsonGenObject obj : list)
                 {
                     Item item = null;
-                    if (obj instanceof Item && obj instanceof IJsonRenderStateProvider)
+                    if (obj instanceof Item)
                     {
                         item = (Item) obj;
                     }
@@ -200,26 +201,39 @@ public class ClientProxy extends CommonProxy
                     }
                     if (item != null)
                     {
-                        List<String> ids = ((IJsonRenderStateProvider) item).getRenderContentIDs();
-                        for (String id : ids)
+                        if (registerItemJsonRender(renderer, item, keys))
                         {
-                            RenderData data = ClientDataHandler.INSTANCE.getRenderData(id);
-                            if (data != null)
-                            {
-                                for (String key : keys)
-                                {
-                                    if (data.renderType.equalsIgnoreCase(key))
-                                    {
-                                        MinecraftForgeClient.registerItemRenderer(item, renderer);
-                                        break;
-                                    }
-                                }
-                            }
+                            count++;
                         }
                     }
                 }
             }
         }
+        return count;
+    }
+
+    public static boolean registerItemJsonRender(IItemRenderer renderer, Item item, String... keys)
+    {
+        if (item instanceof IJsonRenderStateProvider)
+        {
+            List<String> ids = ((IJsonRenderStateProvider) item).getRenderContentIDs();
+            for (String id : ids)
+            {
+                RenderData data = ClientDataHandler.INSTANCE.getRenderData(id);
+                if (data != null)
+                {
+                    for (String key : keys)
+                    {
+                        if (data.renderType.equalsIgnoreCase(key))
+                        {
+                            MinecraftForgeClient.registerItemRenderer(item, renderer);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @SubscribeEvent

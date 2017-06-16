@@ -1,5 +1,6 @@
 package com.builtbroken.mc.client.json.render.state;
 
+import com.builtbroken.jlib.helpers.MathHelper;
 import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IModelState;
@@ -42,7 +43,7 @@ public class ModelState extends TextureState implements IModelState
     }
 
     @Override
-    public boolean render(boolean subRender)
+    public boolean render(boolean subRender, float yaw, float pitch, float roll)
     {
         TextureData textureData = getTexture();
         ModelData data = getModel();
@@ -51,7 +52,7 @@ public class ModelState extends TextureState implements IModelState
             //Starts rendering by storing previous matrix
             GL11.glPushMatrix();
 
-            if(!subRender)
+            if (!subRender)
             {
                 //TODO handle parent additions, in which parent and child data are combined
                 //Scales object by value
@@ -67,15 +68,15 @@ public class ModelState extends TextureState implements IModelState
                 //Rotates object, needs to be handled after scaling
                 if (rotation != null)
                 {
-                    GL11.glRotated(rotation.pitch(), 1, 0, 0);
-                    GL11.glRotated(rotation.yaw(), 0, 1, 0);
-                    GL11.glRotated(rotation.roll(), 0, 0, 1);
+                    GL11.glRotated(MathHelper.clampAngleTo360(rotation.pitch() + pitch), 1, 0, 0);
+                    GL11.glRotated(MathHelper.clampAngleTo360(rotation.yaw() + yaw), 0, 1, 0);
+                    GL11.glRotated(MathHelper.clampAngleTo360(rotation.roll() + roll), 0, 0, 1);
                 }
                 else if (parentState instanceof IModelState && ((IModelState) parentState).getRotation() != null)
                 {
-                    GL11.glRotated(((IModelState) parentState).getRotation().pitch(), 1, 0, 0);
-                    GL11.glRotated(((IModelState) parentState).getRotation().yaw(), 0, 1, 0);
-                    GL11.glRotated(((IModelState) parentState).getRotation().roll(), 0, 0, 1);
+                    GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().pitch() + pitch), 1, 0, 0);
+                    GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().yaw() + yaw), 0, 1, 0);
+                    GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().roll() + roll), 0, 0, 1);
                 }
 
                 //Moves the object

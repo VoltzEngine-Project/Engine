@@ -40,13 +40,25 @@ public interface IModelState extends IRenderState
 
     /**
      * Called to render the model centered on a position
-     * <p>
-     * Position and rotation is preset so no need to worry about. All
-     * this render call should do is render the model in the state given.
-     * The state should be static with no change. If a dynamic state is
-     * needs used a dynamic render system.
      *
+     * @param subRender - is the render part of a larger render
      * @return true if rendered
      */
-    boolean render(boolean subRender);
+    default boolean render(boolean subRender)
+    {
+        return render(subRender, 0, 0, 0);
+    }
+
+    /**
+     * Called to render the model centered on a position.
+     * <p>
+     * Rotation changes are used to dynamically modify the render.
+     *
+     * @param subRender - is the render part of a larger render
+     * @param yaw       - rotation to add to default render
+     * @param pitch     - rotation to add to default render
+     * @param roll      - rotation to add to default render
+     * @return true if rendered
+     */
+    boolean render(boolean subRender, float yaw, float pitch, float roll);
 }
