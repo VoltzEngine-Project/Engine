@@ -171,20 +171,17 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int pass)
     {
-        String renderKey = getRenderKey(stack);
-        if (renderKey != null)
+        RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(stack));
+        if (data != null)
         {
-            RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(stack));
-            if (data != null)
+            String renderKey = getRenderKey(stack);
+            IRenderState state = data.getState(RenderData.INVENTORY_RENDER_KEY + (renderKey != null ? "." + renderKey : ""));
+            if (state != null)
             {
-                IRenderState state = data.getState(RenderData.INVENTORY_RENDER_KEY + "." + renderKey);
-                if (state != null)
+                IIcon icon = state.getIcon(pass);
+                if (icon != null)
                 {
-                    IIcon icon = state.getIcon(pass);
-                    if (icon != null)
-                    {
-                        return icon;
-                    }
+                    return icon;
                 }
             }
         }
@@ -192,7 +189,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     }
 
     /**
-     * Called to ge the render key for the stack
+     * Called to get the render key for the stack
      * <p>
      * Keep in mind key is prefixed by render type
      * <p>
@@ -281,15 +278,15 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @Override
     public String getRenderContentID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered)
     {
-        if(objectBeingRendered instanceof ItemStack)
+        if (objectBeingRendered instanceof ItemStack)
         {
             return getRenderContentID((ItemStack) objectBeingRendered);
         }
-        else if(objectBeingRendered instanceof Item)
+        else if (objectBeingRendered instanceof Item)
         {
             return getRenderContentID(new ItemStack((Item) objectBeingRendered));
         }
-        else if(objectBeingRendered instanceof Block)
+        else if (objectBeingRendered instanceof Block)
         {
             return getRenderContentID(new ItemStack((Block) objectBeingRendered));
         }

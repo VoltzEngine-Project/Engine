@@ -68,15 +68,15 @@ public class ModelState extends TextureState implements IModelState
                 //Rotates object, needs to be handled after scaling
                 if (rotation != null)
                 {
-                    GL11.glRotated(MathHelper.clampAngleTo360(rotation.pitch() + pitch), 1, 0, 0);
-                    GL11.glRotated(MathHelper.clampAngleTo360(rotation.yaw() + yaw), 0, 1, 0);
-                    GL11.glRotated(MathHelper.clampAngleTo360(rotation.roll() + roll), 0, 0, 1);
+                    GL11.glRotated(rotation.roll() + roll, 0, 0, 1);
+                    GL11.glRotated(rotation.pitch() + pitch, 1, 0, 0);
+                    GL11.glRotated(rotation.yaw() + yaw, 0, 1, 0);
                 }
                 else if (parentState instanceof IModelState && ((IModelState) parentState).getRotation() != null)
                 {
+                    GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().roll() + roll), 0, 0, 1);
                     GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().pitch() + pitch), 1, 0, 0);
                     GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().yaw() + yaw), 0, 1, 0);
-                    GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().roll() + roll), 0, 0, 1);
                 }
 
                 //Moves the object
