@@ -28,14 +28,17 @@ public class AudioData extends JsonGenData
 
     public void play(double x, double y, double z, float pitch, float volume)
     {
-        SoundEventAccessorComposite sound = Minecraft.getMinecraft().getSoundHandler().getSound(soundLocation);
-        if (sound != null)
+        if(Minecraft.getMinecraft() != null && Minecraft.getMinecraft().theWorld != null)
         {
-            Minecraft.getMinecraft().theWorld.playSound(x, y, z, soundLocation.toString(), pitch, volume, false);
-        }
-        else
-        {
-            Engine.logger().error("No sound file for " + soundLocation);
+            SoundEventAccessorComposite sound = Minecraft.getMinecraft().getSoundHandler().getSound(soundLocation);
+            if (sound != null)
+            {
+                Minecraft.getMinecraft().theWorld.playSound(x, y, z, soundLocation.toString(), pitch, volume, false);
+            }
+            else
+            {
+                Engine.logger().error("No sound file for " + soundLocation);
+            }
         }
     }
 
