@@ -112,7 +112,7 @@ public class ClientDataHandler
         {
             return null;
         }
-        return audioData.get(key);
+        return audioData.get(key.toLowerCase());
     }
 
     public IEffectData getEffect(String key)
@@ -121,7 +121,7 @@ public class ClientDataHandler
         {
             return null;
         }
-        return effectData.get(key);
+        return effectData.get(key.toLowerCase());
     }
 
     @SubscribeEvent
