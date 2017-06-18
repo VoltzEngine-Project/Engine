@@ -188,7 +188,8 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     {
         try
         {
-            IPacket packet = getPacketForData(DESCRIPTION_PACKET_ID);
+            IPacket packet = getPacketForData();
+            packet.data().writeInt(DESCRIPTION_PACKET_ID);
             writeDescPacket(packet.data());
             return packet;
         }
