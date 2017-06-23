@@ -245,7 +245,9 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
             if (chunk != null && chunk.isChunkLoaded)
             {
                 //Check if the prev_block still exists
-                if (checkForPrevBlockEquals && prev_block != getBlock() && prev_meta != getBlockMetadata())
+                Block currentBlock = getBlock();
+                int currentMeta = getBlockMetadata();
+                if (checkForPrevBlockEquals && prev_block != currentBlock && prev_meta != currentMeta)
                 {
                     return BlockEditResult.PREV_BLOCK_CHANGED;
                 }
@@ -282,7 +284,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
         //Breaks block in order to drop items contained
         if (doItemDrop)
         {
-            InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
+            InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), false);
         }
         //Place the block and check if the world says its placed
         if (super.setBlock(world, newBlock, newMeta, placementNotification))
