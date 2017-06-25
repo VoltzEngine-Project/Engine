@@ -21,7 +21,9 @@ public class MaterialDict
         add("ground", Material.ground);
         add("wood", Material.wood);
         add("rock", Material.rock);
+        add("stone", Material.rock);
         add("iron", Material.iron);
+        add("metal", Material.iron);
         add("anvil", Material.anvil);
         add("water", Material.water);
         //TODO add rest
@@ -29,11 +31,11 @@ public class MaterialDict
 
     public static void add(String name, Material mat)
     {
-        map.put(name, mat);
+        map.put(name.toLowerCase(), mat);
     }
 
     public static Material get(String name)
     {
-        return map.containsKey(name) ? map.get(name) : Material.rock;
+        return map.containsKey(name.toLowerCase()) ? map.get(name.toLowerCase()) : Material.rock;
     }
 }
