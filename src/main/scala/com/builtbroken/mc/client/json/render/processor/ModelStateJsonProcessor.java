@@ -6,7 +6,12 @@ import com.builtbroken.mc.client.json.render.tile.TileState;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.json.conversion.JsonConverterPos;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -86,6 +91,40 @@ public class ModelStateJsonProcessor extends RenderJsonSubProcessor
             renderState = new ModelState(stateID, modelID, offset, scale, rotation);
         }
 
+
+        if (renderStateObject.has("rotationOrder"))
+        {
+            List<String> rotations = new ArrayList();
+
+            JsonArray array = renderStateObject.getAsJsonArray("rotationOrder");
+            for (int i = 0; i < array.size(); i++)
+            {
+                JsonElement e = array.get(i);
+                if (e.isJsonPrimitive())
+                {
+                    String value = e.getAsString().toLowerCase();
+                    if (!(value.equalsIgnoreCase("yaw") || value.equalsIgnoreCase("pitch") || value.equalsIgnoreCase("roll")))
+                    {
+                        throw new IllegalArgumentException("Rotations order values can only be one of the follow {yaw, pitch, roll}");
+                    }
+                    rotations.add(value);
+                }
+                else
+                {
+                    throw new IllegalArgumentException("Rotations value must be a string containing yaw, pitch, or roll.");
+                }
+            }
+
+            if (rotations.size() > 3)
+            {
+                throw new IllegalArgumentException("Only 3 rotations can be applied, used parented objects to apply more.");
+            }
+            renderState.rotationOrder = new String[rotations.size()];
+            for (int i = 0; i < rotations.size(); i++)
+            {
+                renderState.rotationOrder[i] = rotations.get(i);
+            }
+        }
 
         if (renderStateObject.has("renderOnlyParts"))
         {

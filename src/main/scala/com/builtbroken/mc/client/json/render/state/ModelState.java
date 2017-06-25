@@ -24,6 +24,7 @@ public class ModelState extends TextureState implements IModelState
     public Pos offset;
     public Pos scale;
     public EulerAngle rotation;
+    public String[] rotationOrder = new String[] { "roll", "pitch", "yaw"};
 
     public boolean renderParent = false;
     public boolean renderOnlyParts = true;
@@ -65,18 +66,27 @@ public class ModelState extends TextureState implements IModelState
                     GL11.glScaled(((IModelState) parentState).getScale().x(), ((IModelState) parentState).getScale().y(), ((IModelState) parentState).getScale().z());
                 }
 
-                //Rotates object, needs to be handled after scaling
-                if (rotation != null)
+                //Apply rotation, using render defined order
+                if(rotationOrder != null)
                 {
-                    GL11.glRotated(rotation.roll() + roll, 0, 0, 1);
-                    GL11.glRotated(rotation.pitch() + pitch, 1, 0, 0);
-                    GL11.glRotated(rotation.yaw() + yaw, 0, 1, 0);
-                }
-                else if (parentState instanceof IModelState && ((IModelState) parentState).getRotation() != null)
-                {
-                    GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().roll() + roll), 0, 0, 1);
-                    GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().pitch() + pitch), 1, 0, 0);
-                    GL11.glRotated(MathHelper.clampAngleTo360(((IModelState) parentState).getRotation().yaw() + yaw), 0, 1, 0);
+                    for (String r : rotationOrder)
+                    {
+                        if (r != null)
+                        {
+                            if (r.equalsIgnoreCase("roll"))
+                            {
+                                doRoll(roll);
+                            }
+                            else if (r.equalsIgnoreCase("pitch"))
+                            {
+                                doPitch(pitch);
+                            }
+                            else if (r.equalsIgnoreCase("yaw"))
+                            {
+                                doYaw(yaw);
+                            }
+                        }
+                    }
                 }
 
                 //Moves the object
@@ -127,6 +137,51 @@ public class ModelState extends TextureState implements IModelState
             return true;
         }
         return false;
+    }
+
+    private void doRoll(float extra)
+    {
+        float roll = extra;
+        if (rotation != null)
+        {
+            roll += rotation.roll();
+        }
+        else if (parentState instanceof IModelState && ((IModelState) parentState).getRotation() != null)
+        {
+            roll += ((IModelState) parentState).getRotation().roll();
+        }
+
+        GL11.glRotated(MathHelper.clampAngleTo360(roll), 0, 0, 1);
+    }
+
+    private void doPitch(float extra)
+    {
+        float pitch = extra;
+        if (rotation != null)
+        {
+            pitch += rotation.pitch();
+        }
+        else if (parentState instanceof IModelState && ((IModelState) parentState).getRotation() != null)
+        {
+            pitch += ((IModelState) parentState).getRotation().pitch();
+        }
+
+        GL11.glRotated(MathHelper.clampAngleTo360(pitch), 1, 0, 0);
+    }
+
+    private void doYaw(float extra)
+    {
+        float yaw = extra;
+        if (rotation != null)
+        {
+           yaw += rotation.yaw();
+        }
+        else if (parentState instanceof IModelState && ((IModelState) parentState).getRotation() != null)
+        {
+            yaw += ((IModelState) parentState).getRotation().yaw();
+        }
+
+        GL11.glRotated(MathHelper.clampAngleTo360(yaw), 0, 1, 0);
     }
 
     @Override
