@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core.registry;
 
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -34,7 +35,7 @@ public class CommonRegistryProxy
             {
                 try
                 {
-                    Field field = TileEntity.class.getDeclaredField("nameToClassMap");
+                    Field field = ReflectionUtility.getMCField(TileEntity.class, "field_145855_i", "nameToClassMap");
                     field.setAccessible(true);
                     Map map = (Map) field.get(null);
                     if (map.containsKey(name))
