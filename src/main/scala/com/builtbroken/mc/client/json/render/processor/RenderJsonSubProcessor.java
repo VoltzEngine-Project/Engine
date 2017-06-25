@@ -65,5 +65,23 @@ public abstract class RenderJsonSubProcessor
         }
     }
 
+
+    /**
+     * Quick way to check that required fields exist in the json file
+     *
+     * @param object
+     * @param values
+     */
+    public static void ensureValuesExist(JsonObject object, String... values)
+    {
+        for (String value : values)
+        {
+            if (!object.has(value))
+            {
+                throw new IllegalArgumentException("File is missing " + value + " value " + object);
+            }
+        }
+    }
+
     public abstract boolean canProcess(String type);
 }

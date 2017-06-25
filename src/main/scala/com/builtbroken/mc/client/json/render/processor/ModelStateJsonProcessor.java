@@ -9,6 +9,7 @@ import com.builtbroken.mc.lib.json.conversion.JsonConverterPos;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,10 +140,59 @@ public class ModelStateJsonProcessor extends RenderJsonSubProcessor
         //Loads parts to render if all is not selected
         if (renderStateObject.has("parts"))
         {
-            String parts = renderStateObject.get("parts").getAsString();
-            if (!parts.equals("all"))
+            JsonElement partsElement = renderStateObject.get("parts");
+            if (partsElement.isJsonArray())
             {
-                renderState.parts = parts.split(",");
+                JsonArray array = partsElement.getAsJsonArray();
+                List<String> parts = new ArrayList();
+                for (JsonElement element : array)
+                {
+                    if (element.isJsonPrimitive())
+                    {
+                        parts.add(element.getAsString()); //TODO validate //TODO check if model contains (give warning if not)
+                    }
+                    //For loop handling to simplify loading of repeat values with minor number changes
+                    else if (element.isJsonObject() && element.getAsJsonObject().has("for"))
+                    {
+                        JsonObject object = element.getAsJsonObject().getAsJsonObject("for");
+                        ensureValuesExist(object, "start", "end", "part");
+                        int start = object.getAsJsonPrimitive("start").getAsInt();
+                        int end = object.getAsJsonPrimitive("end").getAsInt();
+
+                        if (start >= end)
+                        {
+                            throw new IllegalArgumentException("Start can not be greater than or equal to end for a for loop.");
+                        }
+
+                        JsonPrimitive template = object.getAsJsonPrimitive("part");
+                        for (int i = start; i <= end; i++)
+                        {
+                            parts.add(template.getAsString().replace("%number%", "" + i));
+                        }
+                    }
+                    else
+                    {
+                        throw new IllegalArgumentException("Invalid json data for parts array, input must be a string or for loop object.");
+                    }
+                }
+
+                renderState.parts = new String[parts.size()];
+                for (int i = 0; i < parts.size(); i++)
+                {
+                    renderState.parts[i] = parts.get(i);
+                }
+            }
+            else if (partsElement.isJsonPrimitive())
+            {
+                String parts = partsElement.getAsString();
+                if (!parts.equals("all"))
+                {
+                    renderState.parts = parts.split(",");
+                }
+            }
+            else
+            {
+                throw new IllegalArgumentException("Invalid json type for model parts, support types are string and string array");
             }
         }
         return renderState;
