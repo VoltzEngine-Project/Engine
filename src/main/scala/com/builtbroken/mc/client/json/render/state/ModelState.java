@@ -47,8 +47,8 @@ public class ModelState extends TextureState implements IModelState
     public boolean render(boolean subRender, float yaw, float pitch, float roll)
     {
         TextureData textureData = getTexture();
-        ModelData data = getModel();
-        if (data != null && data.getModel() != null)
+        ModelData modelData = getModel();
+        if (modelData != null && modelData.getModel() != null)
         {
             //Starts rendering by storing previous matrix
             GL11.glPushMatrix();
@@ -130,7 +130,7 @@ public class ModelState extends TextureState implements IModelState
             }
 
             //Render model
-            data.render(renderOnlyParts, getPartsToRender());
+            modelData.render(renderOnlyParts, getPartsToRender());
 
             //Ends render by restoring previous matrix(rotation, position, etc)
             GL11.glPopMatrix();
