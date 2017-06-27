@@ -32,6 +32,6 @@ public class MultiBlockLayoutHandler
 
     public static void register(MultiBlockLayout multiBlockLayout)
     {
-        layouts.put(multiBlockLayout.key, multiBlockLayout);
+        layouts.put(multiBlockLayout.key.toLowerCase(), multiBlockLayout);
     }
 }

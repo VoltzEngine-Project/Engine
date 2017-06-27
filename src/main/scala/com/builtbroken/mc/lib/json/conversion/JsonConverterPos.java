@@ -42,6 +42,10 @@ public class JsonConverterPos extends JsonConverter<Pos>
             {
                 return new Pos(primitive.getAsDouble());
             }
+            else if(primitive.isString())
+            {
+                return new Pos(Double.parseDouble(primitive.getAsString()));
+            }
         }
         return null;
     }
@@ -57,18 +61,35 @@ public class JsonConverterPos extends JsonConverter<Pos>
         double x = 0, y = 0, z = 0;
         if (offsetObject.has("x"))
         {
-            x = offsetObject.getAsJsonPrimitive("x").getAsDouble();
+            x = getNumber(offsetObject.getAsJsonPrimitive("x"));
         }
         if (offsetObject.has("y"))
         {
-            y = offsetObject.getAsJsonPrimitive("y").getAsDouble();
+            y = getNumber(offsetObject.getAsJsonPrimitive("y"));
         }
         if (offsetObject.has("z"))
         {
-            z = offsetObject.getAsJsonPrimitive("z").getAsDouble();
+            z = getNumber(offsetObject.getAsJsonPrimitive("z"));
         }
         return new Pos(x, y, z);
     }
+
+    public static double getNumber(JsonPrimitive primitive)
+    {
+        if (primitive.isNumber())
+        {
+            return primitive.getAsDouble();
+        }
+        else if(primitive.isString())
+        {
+            return Double.parseDouble(primitive.getAsString());
+        }
+        else
+        {
+            throw new IllegalArgumentException("Could not parse value, " + primitive);
+        }
+    }
+
 
     /**
      * Creates a pos from a json array containing x, y, z fields

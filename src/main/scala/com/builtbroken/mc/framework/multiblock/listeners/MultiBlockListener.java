@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.multiblock.listeners;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.IModObject;
 import com.builtbroken.mc.api.tile.access.IRotation;
 import com.builtbroken.mc.api.tile.listeners.*;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
@@ -9,6 +10,7 @@ import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.multiblock.MultiBlockHelper;
+import com.builtbroken.mc.framework.multiblock.structure.MultiBlockLayout;
 import com.builtbroken.mc.framework.multiblock.structure.MultiBlockLayoutHandler;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -25,6 +27,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -43,6 +46,18 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @JsonProcessorData("buildFirstTick")
     protected boolean buildFirstTick = true;
 
+    @JsonProcessorData(value = "metadata", type = "int")
+    protected int metaCheck = -1;
+
+    @JsonProcessorData("contentUseID")
+    protected String contentUseID = null;
+
+    @JsonProcessorData("directionOffset")
+    protected boolean directionOffset = false;
+
+    @JsonProcessorData(value = "directionMultiplier", type = "int")
+    protected int directionMultiplier = 1;
+
     @Override
     public List<String> getListenerKeys()
     {
@@ -53,6 +68,30 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         list.add("update");
         list.add("multiblock");
         return list;
+    }
+
+    @Override
+    public boolean isValidForTile()
+    {
+        if (contentUseID != null)
+        {
+            TileEntity tile = getTileEntity();
+            if (tile instanceof IModObject)
+            {
+                if (((IModObject) tile).uniqueContentID().equals(contentUseID))
+                {
+                    return true;
+                }
+            }
+            else if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() != null)
+            {
+                if (((ITileNodeHost) tile).getTileNode().uniqueContentID().equals(contentUseID))
+                {
+                    return true;
+                }
+            }
+        }
+        return metaCheck == -1 || getBlockMeta() == metaCheck;
     }
 
     @Override
@@ -114,13 +153,17 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         if (!_destroyingStructure && tileMulti instanceof TileEntity)
         {
             Pos pos = new Pos((TileEntity) tileMulti).floor().sub(new Pos(this).floor());
-
-            if (getLayoutOfMultiBlock().containsKey(pos))
+            HashMap<IPos3D, String> map = getLayoutOfMultiBlock();
+            if (map != null && map.containsKey(pos))
             {
                 _destroyingStructure = true;
                 MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost() != null ? getMultiTileHost() : this, harvest, true, true);
                 _destroyingStructure = false;
                 return true;
+            }
+            else if(Engine.runningAsDev)
+            {
+                System.out.println("Error map was null");
             }
         }
         return false;
@@ -177,7 +220,29 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     {
         if (dir != null && dir != ForgeDirection.UNKNOWN)
         {
-            return MultiBlockLayoutHandler.get(layoutKey + "." + dir.name().toLowerCase());
+            final String key = layoutKey + "." + dir.name().toLowerCase();
+            HashMap<IPos3D, String> directionalMap = MultiBlockLayoutHandler.get(key);
+            if (directionalMap == null && directionOffset)
+            {
+                HashMap<IPos3D, String> map = MultiBlockLayoutHandler.get(layoutKey);
+                if (map != null)
+                {
+                    directionalMap = new HashMap();
+                    for (Map.Entry<IPos3D, String> entry : map.entrySet())
+                    {
+                        if (entry.getKey() != null)
+                        {
+                            Pos pos = entry.getKey() instanceof Pos ? (Pos) entry.getKey() : new Pos(entry.getKey());
+                            pos = pos.add(new Pos(dir).multiply(directionMultiplier));
+                            directionalMap.put(pos, entry.getValue());
+                        }
+                    }
+                    MultiBlockLayout layout = new MultiBlockLayout(null, key);
+                    layout.tiles.putAll(directionalMap);
+                    MultiBlockLayoutHandler.register(layout);
+                }
+            }
+            return directionalMap;
         }
         return MultiBlockLayoutHandler.get(layoutKey);
     }
