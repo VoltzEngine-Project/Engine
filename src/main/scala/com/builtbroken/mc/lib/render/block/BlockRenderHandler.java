@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.render.block;
 
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import com.builtbroken.mc.prefab.tile.Tile;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -46,7 +46,10 @@ public class BlockRenderHandler implements ISimpleBlockRenderingHandler
 
         if (tile instanceof Tile)
         {
-            return ((Tile) tile).renderStatic(renderBlocks, new Pos(x, y, z), 0);
+            if(((Tile) tile).renderStatic(renderBlocks, new Pos(x, y, z), 0))
+            {
+                return true;
+            }
         }
 
         /**

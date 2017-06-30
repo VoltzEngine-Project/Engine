@@ -7,7 +7,7 @@ import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.thread.WCAThreadProcess;
 import com.builtbroken.mc.prefab.explosive.blast.Blast;
 import cpw.mods.fml.common.eventhandler.Event;
@@ -69,7 +69,7 @@ public final class WorldChangeHelper
                 if (!loc.world.isRemote)
                 {
                     //Check if we want to run as a thread
-                    if (action.shouldThreadAction() > 0)
+                    if (action.shouldThreadAction() > 0 || action.shouldThreadAction() == -2)
                     {
                         //Generate thread and return completed as we have no way to track what happens(effectively)
                         WCAThreadProcess thread = new WCAThreadProcess(loc.clone(), action, triggerCause);

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.testing.tile;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.world.FakeWorld;
 import net.minecraft.block.Block;

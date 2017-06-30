@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.content.debug;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.tile.Tile;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;

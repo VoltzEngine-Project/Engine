@@ -1,5 +1,6 @@
 /bin
 /out
+/runs
 /run
 *.classpath
 *.project
@@ -38,3 +39,6 @@ libs/industrialcraft-2-2.2.817-experimental-dev.jar
 libs/industrialcraft-2-2.2.824-experimental-dev.jar
 libs/industrialcraft-2-2.2.824-experimental-api.jar
 tmp/
+run2/
+src/generated/
+libs/

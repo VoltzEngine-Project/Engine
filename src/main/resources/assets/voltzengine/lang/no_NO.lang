@@ -1,0 +1,494 @@
+death.attack.electrocution=%1$s ble drept av elektrisitet!
+
+tile.voltzengine:unknown.name=Ukjent Blokk
+item.voltzengine:unknown.name=Ukjent Element
+
+tile.voltzengine:hotrock.name=Oppvarmet Stein
+
+tile.voltzengine:DemoRFBattery.name=Eksperimentell RF Batteri
+tile.voltzengine:DemoUEBattery.name=Eksperimentell UE Batteri
+
+## General
+text.general.feature.unimplemented=Ikke Implementert
+text.general.feature.wip=Arbeid Pågår
+text.general.feature.broken=Ødelagy
+text.general.feature.banned=Bannlyst
+text.general.feature.disable=Deaktivert
+text.general.power.amount= %1 av %2 andeler strøm
+
+## RF text
+text.rf.power.amount= %1 av %2 rødstein flux
+
+## General - Tooltips
+item.tooltip.description.more=Hold %key for flere detaljer
+
+## Power text
+text.power.amount= %1 av %2 joules
+
+## Explosives
+explosive.voltzengine:tnt.name=TNT
+
+## Ores
+tile.voltzengine:oreCopper.name=Kobbermalm
+tile.voltzengine:oreTin.name=Tinnmalm
+tile.voltzengine:oreSilver.name=Sølvmalm
+tile.voltzengine:oreLead.name=Blymalm
+tile.voltzengine:oreZinc.name=Sinkmalm
+tile.voltzengine:oreNickel.name=Nikkelmalm
+tile.voltzengine:oreAluminium.name=Bauksittmalm
+tile.voltzengine:oreBauxite.name=Bauksittmalm
+tile.voltzengine:oreMagnesite.name=Magnesittmalm
+tile.voltzengine:oreUranium.name=Uranmalm
+tile.voltzengine:orePlatinum.name=Platinamalm
+
+## Ores, Gems
+tile.voltzengine:oreAmazonite.name=Amazonittmalm
+tile.voltzengine:oreSmokeyquartz.name=Røykende Kvartsmalm
+tile.voltzengine:oreOnyxblack.name=Svartstripet Onyxmalm
+tile.voltzengine:oreOnyxred.name=Rødstripet Onyxmalm
+tile.voltzengine:oreGarnetgreen.name=Grønn Granatmalm
+tile.voltzengine:oreGarnetred.name=Rød Granatmalm
+tile.voltzengine:oreGarnetorange.name=Oransj Granatmalm
+tile.voltzengine:oreGarnetyellow.name=Gul Granatmalm
+
+## Gems
+item.voltzengine:gem.amazonite.uncut.name=Amazonitt Edelstein
+item.voltzengine:gem.quartz.uncut.name=Kvarts Edelstein
+item.voltzengine:gem.quartz.smokey.uncut.name=Røykende Kvarts Edelstein
+item.voltzengine:gem.quartz.smoky.uncut.name=Uslipt Røykende Kvarts Edelstein
+item.voltzengine:gem.onyx.black.uncut.name=Svart Onyx Edelstein
+item.voltzengine:gem.onyx.red.uncut.name=Rød Onyx Edelstein
+item.voltzengine:gem.garnet.green.uncut.name=Grønn Granat Edelstein
+item.voltzengine:gem.garnet.orange.uncut.name=Oransj Granat Edelstein
+item.voltzengine:gem.garnet.red.uncut.name=Rød Granat Edelstein
+item.voltzengine:gem.garnet.yellow.uncut.name=Gul Granat Edelstein
+item.voltzengine:gem.emerald.uncut.name=Smaragd Edelstein
+
+## Dust
+item.voltzengine:dustCopper.name=Kobber Støv
+item.voltzengine:dustTin.name=Tinn Støv
+item.voltzengine:dustSilver.name=Sølv Støv
+item.voltzengine:dustLead.name=Bly Støv
+item.voltzengine:dustZinc.name=Sink Støv
+item.voltzengine:dustNickel.name=Nikkel Støv
+item.voltzengine:dustAluminium.name=Aluminium Støv
+item.voltzengine:dustMagnesium.name=Magnesium Støv
+item.voltzengine:dustSteel.name=Stål Støv
+item.voltzengine:dustBrass.name=Messing Støv
+item.voltzengine:dustBronze.name=Bronse Støv
+item.voltzengine:dustIron.name=Jern Støv
+item.voltzengine:dustGold.name=Gull Støv
+item.voltzengine:dustStone.name=Stein Støv
+item.voltzengine:dustWood.name=Tre Støv
+item.voltzengine:dustUranium.name=Uran Støv
+item.voltzengine:dustDiamond.name=Diamant Støv
+item.voltzengine:dustPlatinum.name=Platina Støv
+
+## Impure Dust
+item.voltzengine:dustImpureCopper.name=Urent Kobber Støv
+item.voltzengine:dustImpureTin.name=Urent Tinn Støv
+item.voltzengine:dustImpureSilver.name=Urent Sølv Støv
+item.voltzengine:dustImpureLead.name=Urent Bly Støv
+item.voltzengine:dustImpureZinc.name=Urent Sink Støv
+item.voltzengine:dustImpureNickel.name=Urent Nikkel Støv
+item.voltzengine:dustImpureAluminium.name=Urent Aluminium Støv
+item.voltzengine:dustImpureMagnesium.name=Urent Magnesium Støv
+item.voltzengine:dustImpureSteel.name=Urent Stål Støv
+item.voltzengine:dustImpureBrass.name=Urent Messing Støv
+item.voltzengine:dustImpureBronze.name=Urent Bronse Støv
+item.voltzengine:dustImpureIron.name=Urent Jern Støv
+item.voltzengine:dustImpureGold.name=Urent Gull Støv
+item.voltzengine:dustImpureStone.name=Urent Stein Støv
+item.voltzengine:dustImpureWood.name=Urent Tre Støv
+item.voltzengine:dustImpureUranium.name=Urent Uran Støv
+item.voltzengine:dustImpureDiamond.name=Urent Diamant Støv
+item.voltzengine:dustImpurePlatinum.name=Urent Platina Støv
+
+## Ruble
+item.voltzengine:rubbleCopper.name=Cobber Bruddstein
+item.voltzengine:rubbleTin.name=Tinn Bruddstein
+item.voltzengine:rubbleSilver.name=Sølv Bruddstein
+item.voltzengine:rubbleLead.name=Bly Bruddstein
+item.voltzengine:rubbleZinc.name=Sink Bruddstein
+item.voltzengine:rubbleNickel.name=Nikkel Bruddstein
+item.voltzengine:rubbleAluminium.name=Aluminium Bruddstein
+item.voltzengine:rubbleMagnesium.name=Magnesium Bruddstein
+item.voltzengine:rubbleIron.name=Jern Bruddstein
+item.voltzengine:rubbleGold.name=Gull Bruddstein
+item.voltzengine:rubbleStone.name=Rullestein
+item.voltzengine:rubbleWood.name=Tre Klump
+item.voltzengine:rubbleUranium.name=Uran Bruddstein
+item.voltzengine:rubbleDiamond.name=Diamant Bruddstein
+item.voltzengine:rubblePlatinum.name=Platina Bruddstein
+
+## Ingot
+item.voltzengine:ingotCopper.name=Kobberbarre
+item.voltzengine:ingotTin.name=Tinnbarre
+item.voltzengine:ingotSilver.name=Sølvbarre
+item.voltzengine:ingotLead.name=Blybarre
+item.voltzengine:ingotZinc.name=Sinkbarre
+item.voltzengine:ingotNickel.name=Nikkelbarre
+item.voltzengine:ingotAluminium.name=Aluminiumbarre
+item.voltzengine:ingotMagnesium.name=Magnesiumbarre
+item.voltzengine:ingotSteel.name=Stålbarre
+item.voltzengine:ingotBrass.name=Messingbarre
+item.voltzengine:ingotBronze.name=Bronsebarre
+item.voltzengine:ingotDiamond.name=Diamantbarre
+item.voltzengine:ingotPlatinum.name=Platinabarre
+
+## Plate
+item.voltzengine:plateCopper.name=Kobber Plate
+item.voltzengine:plateTin.name=Tinn Plate
+item.voltzengine:plateSilver.name=Sølv Plate
+item.voltzengine:plateLead.name=Bly Plate
+item.voltzengine:plateZinc.name=Sink Plate
+item.voltzengine:plateNickel.name=Nikkel Plate
+item.voltzengine:plateAluminium.name=Aluminium Plate
+item.voltzengine:plateMagnesium.name=Magnesium Plate
+item.voltzengine:plateSteel.name=Stål Plate
+item.voltzengine:plateBrass.name=Messing Plate
+item.voltzengine:plateBronze.name=Bronse Plate
+item.voltzengine:plateIron.name=Jern Plate
+item.voltzengine:plateGold.name=Gull Plate
+item.voltzengine:plateStone.name=Stein Plate
+item.voltzengine:plateWood.name=Tre Plate
+item.voltzengine:plateDiamond.name=Diamant Plate
+item.voltzengine:platePlatinum.name=Platina Plate
+
+## Rod
+item.voltzengine:rodCopper.name=Kobber Stang
+item.voltzengine:rodTin.name=Tinn Stang
+item.voltzengine:rodSilver.name=Sølv Stang
+item.voltzengine:rodLead.name=Bly Stang
+item.voltzengine:rodZinc.name=Sink Stang
+item.voltzengine:rodNickel.name=Nikkel Stang
+item.voltzengine:rodAluminium.name=Aluminium Stang
+item.voltzengine:rodMagnesium.name=Magnesium Stang
+item.voltzengine:rodSteel.name=Stål Stang
+item.voltzengine:rodBrass.name=Messing Stang
+item.voltzengine:rodBronze.name=Bronse Stang
+item.voltzengine:rodGold.name=Gull Stang
+item.voltzengine:rodIron.name=Jern Stang
+item.voltzengine:rodStone.name=Stein Stang
+item.voltzengine:rodWood.name=Tre Kjepp
+item.voltzengine:rodDiamond.name=Diamant Stang
+item.voltzengine:rodPlatinum.name=Platina Stang
+
+## Gear
+item.voltzengine:gearCopper.name=Kobber Tannhjul
+item.voltzengine:gearTin.name=Tinn Tannhjul
+item.voltzengine:gearSilver.name=Sølv Tannhjul
+item.voltzengine:gearLead.name=Bly Tannhjul
+item.voltzengine:gearZinc.name=Sink Tannhjul
+item.voltzengine:gearNickel.name=Nikkel Tannhjul
+item.voltzengine:gearAluminium.name=Aluminium Tannhjul
+item.voltzengine:gearMagnesium.name=Magnesium Tannhjul
+item.voltzengine:gearWood.name=Tre Tannhjul
+item.voltzengine:gearGold.name=Gull Tannhjul
+item.voltzengine:gearIron.name=Jern Tannhjul
+item.voltzengine:gearStone.name=Stein Tannhjul
+item.voltzengine:gearSteel.name=Stål Tannhjul
+item.voltzengine:gearBrass.name=Messing Tannhjul
+item.voltzengine:gearBronze.name=Bronse Tannhjul
+item.voltzengine:gearDiamond.name=Diamant Tannhjul
+item.voltzengine:gearPlatinum.name=Platina Tannhjul
+
+## Ax Head
+item.voltzengine:axHeadCopper.name=Kobber Øks Hode
+item.voltzengine:axHeadTin.name=Tinn Øks Hode
+item.voltzengine:axHeadSilver.name=Sølv Øks Hode
+item.voltzengine:axHeadLead.name=Bly Øks Hode
+item.voltzengine:axHeadZinc.name=Sink Øks Hode
+item.voltzengine:axHeadNickel.name=Nikkel Øks Hode
+item.voltzengine:axHeadAluminium.name=Aluminium Øks Hode
+item.voltzengine:axHeadMagnesium.name=Magnesium Øks Hode
+item.voltzengine:axHeadSteel.name=Stål Øks Hode
+item.voltzengine:axHeadBrass.name=Messing Øks Hode
+item.voltzengine:axHeadBronze.name=Bronse Øks Hode
+item.voltzengine:axHeadIron.name=Jern Øks Hode
+item.voltzengine:axHeadGold.name=Gull Øks Hode
+item.voltzengine:axHeadStone.name=Stein Øks Hode
+item.voltzengine:axHeadWood.name=Tre Øks Hode
+item.voltzengine:axHeadDiamond.name=Diamant Øks Hode
+item.voltzengine:axHeadPlatinum.name=Platina Øks Hode
+
+## Shovel Head
+item.voltzengine:shovelHeadCopper.name=Kobber Spade Hode
+item.voltzengine:shovelHeadTin.name=Tinn Spade Hode
+item.voltzengine:shovelHeadSilver.name=Sølv Spade Hode
+item.voltzengine:shovelHeadLead.name=Bly Spade Hode
+item.voltzengine:shovelHeadZinc.name=Sink Spade Hode
+item.voltzengine:shovelHeadNickel.name=Nikkel Spade Hode
+item.voltzengine:shovelHeadAluminium.name=Aluminium Spade Hode
+item.voltzengine:shovelHeadMagnesium.name=Magnesium Spade Hode
+item.voltzengine:shovelHeadSteel.name=Stål Spade Hode
+item.voltzengine:shovelHeadBrass.name=Messing Spade Hode
+item.voltzengine:shovelHeadBronze.name=Bronse Spade Hode
+item.voltzengine:shovelHeadIron.name=Jern Spade Hode
+item.voltzengine:shovelHeadGold.name=Gull Spade Hode
+item.voltzengine:shovelHeadStone.name=Stein Spade Hode
+item.voltzengine:shovelHeadWood.name=Tre Spade Hode
+item.voltzengine:shovelHeadDiamond.name=Diamant Spade Hode
+item.voltzengine:shovelHeadPlatinum.name=Platina Spade Hode
+
+## Sword Blade
+item.voltzengine:swordBladeCopper.name=Kobber Sverd Blad
+item.voltzengine:swordBladeTin.name=Tinn Sverd Blad
+item.voltzengine:swordBladeSilver.name=Sølv Sverd Blad
+item.voltzengine:swordBladeLead.name=Bly Sverd Blad
+item.voltzengine:swordBladeZinc.name=Sink Sverd Blad
+item.voltzengine:swordBladeNickel.name=Nikkel Sverd Blad
+item.voltzengine:swordBladeAluminium.name=Aluminium Sverd Blad
+item.voltzengine:swordBladeMagnesium.name=Magnesium Sverd Blad
+item.voltzengine:swordBladeSteel.name=Stål Sverd Blad
+item.voltzengine:swordBladeBrass.name=Messing Sverd Blad
+item.voltzengine:swordBladeBronze.name=Bronse Sverd Blad
+item.voltzengine:swordBladeIron.name=Jern Sverd Blad
+item.voltzengine:swordBladeGold.name=Gull Sverd Blad
+item.voltzengine:swordBladeStone.name=Stein Sverd Blad
+item.voltzengine:swordBladeWood.name=Tre Sverd Blad
+item.voltzengine:swordBladeDiamond.name=Diamant Sverd Blad
+item.voltzengine:swordBladePlatinum.name=Platina Sverd Blad
+
+## Pick Head
+item.voltzengine:pickHeadCopper.name=Kobber Hakke Hode
+item.voltzengine:pickHeadTin.name=Tinn Hakke Hode
+item.voltzengine:pickHeadSilver.name=Sølv Hakke Hode
+item.voltzengine:pickHeadLead.name=Bly Hakke Hode
+item.voltzengine:pickHeadZinc.name=Sink Hakke Hode
+item.voltzengine:pickHeadNickel.name=Nikkel Hakke Hode
+item.voltzengine:pickHeadAluminium.name=Aluminium Hakke Hode
+item.voltzengine:pickHeadMagnesium.name=Magnesium Hakke Hode
+item.voltzengine:pickHeadSteel.name=Stål Hakke Hode
+item.voltzengine:pickHeadBrass.name=Messing Hakke Hode
+item.voltzengine:pickHeadBronze.name=Bronse Hakke Hode
+item.voltzengine:pickHeadIron.name=Jern Hakke Hode
+item.voltzengine:pickHeadGold.name=Gull Hakke Hode
+item.voltzengine:pickHeadStone.name=Stein Hakke Hode
+item.voltzengine:pickHeadWood.name=Tre Hakke Hode
+item.voltzengine:pickHeadDiamond.name=Diamant Hakke Hode
+item.voltzengine:pickHeadPlatinum.name=Platina Hakke Hode
+
+## Hoe Head
+item.voltzengine:hoeHeadCopper.name=Kobber Ljå Hode
+item.voltzengine:hoeHeadTin.name=Tinn Ljå Hode
+item.voltzengine:hoeHeadSilver.name=Sølv Ljå Hode
+item.voltzengine:hoeHeadLead.name=Bly Ljå Hode
+item.voltzengine:hoeHeadZinc.name=Sink Ljå Hode
+item.voltzengine:hoeHeadNickel.name=Nikkel Ljå Hode
+item.voltzengine:hoeHeadAluminium.name=Aluminium Ljå Hode
+item.voltzengine:hoeHeadMagnesium.name=Magnesium Ljå Hode
+item.voltzengine:hoeHeadSteel.name=Stål Ljå Hode
+item.voltzengine:hoeHeadBrass.name=Messing Ljå Hode
+item.voltzengine:hoeHeadBronze.name=Bronse Ljå Hode
+item.voltzengine:hoeHeadIron.name=Jern Ljå Hode
+item.voltzengine:hoeHeadGold.name=Gull Ljå Hode
+item.voltzengine:hoeHeadStone.name=Stein Ljå Hode
+item.voltzengine:hoeHeadWood.name=Tre Ljå Hode
+item.voltzengine:hoeHeadDiamond.name=Diamant Ljå Hode
+item.voltzengine:hoeHeadPlatinum.name=Platina Ljå Hode
+
+## Wire
+item.voltzengine:wireCopper.name=Kobber Ledning
+item.voltzengine:wireTin.name=Tinn Ledning
+item.voltzengine:wireSilver.name=Sølv Ledning
+item.voltzengine:wireLead.name=Bly Ledning
+item.voltzengine:wireZinc.name=Sink Ledning
+item.voltzengine:wireNickel.name=Nikkel Ledning
+item.voltzengine:wireAluminium.name=Aluminium Ledning
+item.voltzengine:wireMagnesium.name=Magnesium Ledning
+item.voltzengine:wireSteel.name=Stål Ledning
+item.voltzengine:wireBrass.name=Messing Ledning
+item.voltzengine:wireBronze.name=Bronse Ledning
+item.voltzengine:wireIron.name=Jern Ledning
+item.voltzengine:wireGold.name=Gull Ledning
+item.voltzengine:wireStone.name=Stein Ledning
+item.voltzengine:wireWood.name=Tre Ledning
+item.voltzengine:wireDiamond.name=Diamant Ledning
+item.voltzengine:wirePlatinum.name=Platina Ledning
+
+## Screw
+item.voltzengine:screwCopper.name=Kobber Skrue
+item.voltzengine:screwTin.name=Tinn Skrue
+item.voltzengine:screwSilver.name=Sølv Skrue
+item.voltzengine:screwLead.name=Bly Skrue
+item.voltzengine:screwZinc.name=Sink Skrue
+item.voltzengine:screwNickel.name=Nikkel Skrue
+item.voltzengine:screwAluminium.name=Aluminium Skrue
+item.voltzengine:screwMagnesium.name=Magnesium Skrue
+item.voltzengine:screwSteel.name=Stål Skrue
+item.voltzengine:screwBrass.name=Messing Skrue
+item.voltzengine:screwBronze.name=Bronse Skrue
+item.voltzengine:screwIron.name=Jern Skrue
+item.voltzengine:screwGold.name=Gull Skrue
+item.voltzengine:screwStone.name=Stein Skrue
+item.voltzengine:screwWood.name=Tre Skrue
+item.voltzengine:screwDiamond.name=Diamant Skrue
+item.voltzengine:screwPlatinum.name=Platina Skrue
+
+## Nugget
+item.voltzengine:nuggetCopper.name=Kobberklump
+item.voltzengine:nuggetTin.name=Tinnklump
+item.voltzengine:nuggetSilver.name=Sølvklump
+item.voltzengine:nuggetLead.name=Blyklump
+item.voltzengine:nuggetZinc.name=Sinkklump
+item.voltzengine:nuggetNickel.name=Nikkelklump
+item.voltzengine:nuggetAluminium.name=Aluminiumklump
+item.voltzengine:nuggetMagnesium.name=Magnesiumklump
+item.voltzengine:nuggetSteel.name=Stålklump
+item.voltzengine:nuggetBrass.name=Messingklump
+item.voltzengine:nuggetBronze.name=Bronseklump
+item.voltzengine:nuggetIron.name=Jernklump
+item.voltzengine:nuggetGold.name=Gullklump
+item.voltzengine:nuggetStone.name=Steinklump
+item.voltzengine:nuggetWood.name=Treklump
+item.voltzengine:nuggetDiamond.name=Diamantklump
+item.voltzengine:nuggetPlatinum.name=Platinaklump
+
+
+## Sheet Metal
+item.voltzengine:sheetMetal.name=Blikk
+item.voltzengine:sheetMetal.metalSheet.name=Blikk
+item.voltzengine:sheetMetal.metalSheet_half.name=1/2 Blikk
+item.voltzengine:sheetMetal.metalSheet_quarter.name=1/4 Blikk
+item.voltzengine:sheetMetal.metalSheet_quarter.name=1/4 Blikk
+item.voltzengine:sheetMetal.metalSheet_third.name=1/3 Blikk
+item.voltzengine:sheetMetal.metalSheet_eighth.name=1/8 Blikk
+item.voltzengine:sheetMetal.metalSheetTriangle.name=Blikk Kile
+item.voltzengine:sheetMetal.metalCone_micro.name=Blikk Kjegle u
+item.voltzengine:sheetMetal.metalCone_small.name=Blikk Kjegle s
+item.voltzengine:sheetMetal.metalCone_medium.name=Blikk Kjegle
+item.voltzengine:sheetMetal.metalSheet_microFin.name=Blikk Halefinne u
+item.voltzengine:sheetMetal.metalSheet_smallFin.name=Blikk Halefinne s
+item.voltzengine:sheetMetal.metalSheet_curved1.name=Bøyd Blikk
+item.voltzengine:sheetMetal.metalSheet_curved2.name=Bøyd Blikk
+item.voltzengine:sheetMetal.metalSheet_curved3.name=Bøyd Blikk
+item.voltzengine:sheetMetal.metalSheet_curved4.name=Bøyd Blikk
+item.voltzengine:sheetMetal.metalSheet_smallCylinder.name=Liten Blikk Sylinder
+item.voltzengine:sheetMetal.metalSheet_cylinder.name=Blikk Sylinder
+item.voltzengine:sheetMetal.metalSheet_halfCylinder.name=Halv Blikk Sylinder
+item.voltzengine:sheetMetal.rivets.name=Grunker
+
+## Crafting Parts
+item.voltzengine:craftingPart.copperCoil.name=Kobber Spole
+item.voltzengine:craftingPart.dcMotor.name=Likestrømsmotor
+item.voltzengine:craftingPart.motor.name=Motor
+item.voltzengine:craftingPart.stepperMotor.name=Trinnmotor
+item.voltzengine:craftingPart.copperCoilStepper.name=Motor Spole Deler
+
+## Creative Testing Blocks
+tile.voltzengine:creativeBuilder.name=Kreativ Bygger
+tile.voltzengine:infiniteEnergy.name=Evig Energi
+tile.voltzengine:infiniteFluid.name=Evig Væske
+
+## Tools
+toolmode.mode=Modus
+toolmode.general.name=Generell
+toolmode.rotation.name=Rotasjon
+
+item.voltzengine:devDataTool.name=Utvikler Data Verktøy
+item.voltzengine:devDataTool.0.name=[UTVIKLER] Enkel Blokk Data
+item.voltzengine:devDataTool.1.name=[UTIVKLER] Reflektiv "Tile" Data
+
+item.voltzengine:sheetMetalTools.name=Blikk Verktøy
+item.voltzengine:sheetMetalTools.hammer.name=Blikkhammer
+item.voltzengine:sheetMetalTools.shears.name=Blikksaks
+
+item.voltzengine:simpleTools.hammer.name=Stein Hammer
+item.voltzengine:simpleTools.chisel.name=Steinmeisel
+item.voltzengine:simpleTools.drill.name=Steindrill
+item.voltzengine:simpleTools.file.name=Steinfil
+item.voltzengine:simpleTools.cutter.name=Avbitertang
+
+## GPS
+gps.pos.set.name=GPS Data Lagret
+gps.error.pos.invalid.name=Ugyldig Plassering
+gps.data.transferred.name=Data overført
+gps.cleared.name=GPS Data Slettet
+
+## Linking
+link.error.world.match.name=Begrenset til lagrings dimensjon
+link.error.pos.invalid.name=Ugyldig lenket plassering
+link.error.pos.distance.max.name=Distansen er for høy
+link.error.pos.distance.min.name=Distansen er for lav
+link.error.tile.invalid.name=Ugyldig lenket blokk
+link.error.code.match.name=Lenke kode tilsvarer ikke
+link.error.data.stored.name=Lenke dataen er allerede lagret
+link.error.pos.loop.name=Kan ikke lenke til seg selv, løkke oppdaget
+link.error.tile.limit.max.name=Max lenkede blokker nådd
+link.error.tile.already.added.name=Blokk allerede linket
+link.cleared.name=Lenke data slettet
+link.pos.set.name=Lenke data lagret
+link.completed.name=Lenke Lagd
+
+# Items
+item.voltzengine:screwdriver.name=Skrutrekker
+item.voltzengine:screwdriver.tooltip=Brukt til å konfigurere blokker. Shift-høyre klikk for å endre modus.
+
+# Chips
+item.voltzengine:circuits.circuitBasic.name=Grunnleggende Kretskort
+item.voltzengine:circuits.circuitAdvanced.name=Avansert Kretskort
+item.voltzengine:circuits.circuitElite.name=Elite Kretskort
+
+#Misc
+# %0 goes before the localized name of the shift key, %1 goes after
+info.voltzengine:tooltip.noShift=Hold #0shift#1 for mer informasjon
+info.recipes.tooltip=Hold #0J#1 for materialer
+
+info.energylevel.waila=Nåverende Energi Level
+info.energycapacity.waila=Maksimum Energi Level
+
+info.isCraftingOnlyItem=Arbeidsmateriale
+
+info.voltzengine:explosive.name=Sprengstoff
+info.voltzengine:explosive.size.name=Størrelse
+info.voltzengine:explosive.yield.name=Passasjerkilometer: %.2fm radius
+info.voltzengine:explosive.item.name=ExGjenstand
+
+## Permissions
+root.machine=Administrer Maskinen
+root.machine.enable=Aktiver Maskinen
+root.machine.disable=Deaktivet Maskinen
+root.machine.open=Åpne Maskinen
+root.machine.off=Skru Av Maskinen
+root.machine.on=Skru På Maskinen
+root.machine.lock=Lås Maskinen
+root.machine.unlock=Lås Opp Maskinen
+root.machine.upgrade=Oppgrader Maskinen
+root.machine.downgrade=Nedgrader Maskinen
+root.machine.config=Konfigurer Maskinen
+
+root.group=Adminstrer Grupper
+root.group.user=Administrer Bruker
+root.group.user.add=Legg Til Bruker
+root.group.user.remove=Fjern Bruker
+root.group.entity=Administrer "Enhet"
+root.group.entity.add=Legg til "Entity"
+root.group.entity.remove=Fjern "Entity"
+root.group.permission=Rediger Gruppe Tillatelser
+root.group.permission.add=Legg Til Gruppe Tillatelser
+root.group.permission.remove=Fjern Gruppe Tillaltelser
+root.group.admin=Administrer Grupper
+root.group.owner=Rediger Gruppe Eier
+
+root.profile=Administrer Profil
+root.profile.admin=Administrer Profil
+root.profile.owner=Rediger Profil Eier
+root.profile.addGroup=Legg til Gruppe
+root.profile.removeGroup=Fjern Gruppe
+root.profile.modifyGroup=Rediger Gruppe
+root.profile.enable=Aktiver Gruppe
+root.profile.user=Forvalt Brukere
+
+root.inventory=Administrer Innhold
+root.inventory.lock=Lås Innhold
+root.inventory.unlock=Lås Opp Innhold
+root.inventory.input=Tilførsels Innhold
+root.inventory.open=Åpent Innhold
+root.inventory.output=Utmatings Innhold
+root.inventory.enable=Aktiver Innhold
+root.inventory.disable=Deaktiver Innhold
+root.inventory.modify=Rediger Innhold
+
+## Block Tile error messages
+blockTile.error.onBlockActivated=Uforventet feil under maskin klikk, se konsollen for detaljer eller rapporter problemet til en administrator.

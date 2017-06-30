@@ -2,7 +2,7 @@ package com.builtbroken.mc.core.content.tool;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.handler.SelectionHandler;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.Selection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

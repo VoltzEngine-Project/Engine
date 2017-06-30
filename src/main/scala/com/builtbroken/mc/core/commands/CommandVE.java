@@ -1,20 +1,23 @@
 package com.builtbroken.mc.core.commands;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.commands.debug.CommandDebugItem;
+import com.builtbroken.mc.core.commands.debug.CommandDebugMap;
 import com.builtbroken.mc.core.commands.debug.CommandDebugRecipes;
 import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
 import com.builtbroken.mc.core.commands.ext.SubCommandWithName;
 import com.builtbroken.mc.core.commands.ext.UserSubCommand;
-import com.builtbroken.mc.core.commands.modflags.*;
+import com.builtbroken.mc.core.commands.json.CommandJsonRecipe;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandGroup;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandUser;
+import com.builtbroken.mc.core.commands.prefab.AbstractCommand;
+import com.builtbroken.mc.core.commands.prefab.ModularCommand;
 import com.builtbroken.mc.core.commands.sub.CommandVEButcher;
 import com.builtbroken.mc.core.commands.sub.CommandVEClear;
 import com.builtbroken.mc.core.commands.sub.CommandVERemove;
 import com.builtbroken.mc.core.commands.sub.CommandVEVersion;
-import com.builtbroken.mc.prefab.commands.AbstractCommand;
-import com.builtbroken.mc.prefab.commands.ModularCommand;
+import com.builtbroken.mc.core.commands.thread.CommandThreadClear;
 
 /**
  * Created by robert on 1/23/2015.
@@ -40,38 +43,57 @@ public class CommandVE extends ModularCommand
     private ModularCommand sub_command_group;
     private ModularCommand sub_command_user;
     private ModularCommand sub_command_debug;
+    private ModularCommand sub_command_json;
+    private ModularCommand sub_command_thread;
 
 
     private CommandVE()
     {
         super("ve");
         if (!disableButcherCommand)
+        {
             addCommand(new CommandVEButcher());
+        }
         if (!disableRemoveCommand)
+        {
             addCommand(new CommandVERemove());
+        }
         addCommand(new CommandVEVersion());
         if (!disableClearCommand)
-            addCommand(new CommandVEClear());
-        if (!disableModflagCommands)
         {
-            ModularCommand region_add = new ModularCommandRemoveAdd("region", "region", false);
-            ModularCommand region_remove = new ModularCommandRemoveAdd("region", "region", true);
-            ModularCommand region = new CommandRegion();
-
-            addToNewCommand(new CommandNewRegion());
-            addToRemoveCommand(new CommandRemoveRegion());
-
-            region_add.addCommand(new CommandAddUserToRegion());
-            region_remove.addCommand(new CommandRemoveUserFromRegion());
-
-            region.addCommand(region_add);
-            region.addCommand(region_remove);
-            addCommand(region);
+            addCommand(new CommandVEClear());
         }
-        if(Engine.runningAsDev)
+
+        if (Engine.runningAsDev)
         {
             addToDebugCommand(new CommandDebugRecipes());
+            addToDebugCommand(new CommandDebugItem());
+            addToDebugCommand(new CommandDebugMap());
         }
+
+        addToJsonCommand(new CommandJsonRecipe());
+
+        addToThreadCommand(new CommandThreadClear());
+    }
+
+    public void addToThreadCommand(AbstractCommand command)
+    {
+        if (sub_command_thread == null)
+        {
+            sub_command_thread = new ModularCommand("thread");
+            addCommand(sub_command_thread);
+        }
+        sub_command_thread.addCommand(command);
+    }
+
+    public void addToJsonCommand(AbstractCommand command)
+    {
+        if (sub_command_json == null)
+        {
+            sub_command_json = new ModularCommand("json");
+            addCommand(sub_command_json);
+        }
+        sub_command_json.addCommand(command);
     }
 
     public void addToDebugCommand(AbstractCommand command)

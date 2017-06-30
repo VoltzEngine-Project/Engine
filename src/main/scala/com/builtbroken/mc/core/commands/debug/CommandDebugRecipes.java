@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.commands.debug;
 
-import com.builtbroken.mc.prefab.commands.SubCommand;
+import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.builtbroken.mc.prefab.tile.BlockTile;
 import cpw.mods.fml.common.Loader;

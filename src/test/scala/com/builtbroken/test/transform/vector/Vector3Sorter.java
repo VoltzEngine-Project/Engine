@@ -1,8 +1,8 @@
 package com.builtbroken.test.transform.vector;
 
 import junit.framework.TestCase;
-import com.builtbroken.mc.lib.transform.sorting.Vector3DistanceComparator;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.sorting.Vector3DistanceComparator;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.commands.sub;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.prefab.commands.SubCommand;
+import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 

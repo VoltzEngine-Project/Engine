@@ -1,6 +1,6 @@
 package com.builtbroken.test.prefab.energy;
 
-import com.builtbroken.mc.lib.mod.compat.rf.RFEnergyHandler;
+import com.builtbroken.mc.mods.rf.RFEnergyHandler;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import org.junit.Assert;
@@ -14,9 +14,9 @@ public class TestRFEnergyHandler extends AbstractTest
 {
     public void testInit()
     {
-        RFEnergyHandler handler = RFEnergyHandler.INSTANCE;
+        RFEnergyHandler handler = new RFEnergyHandler(2);
         //TODO If the ratio changes UPDATE THE WIKI with the new values
-        Assert.assertTrue("Handler ratio should be 0.5", handler.toForgienEnergy == (1.0 / 2.0));
+        Assert.assertTrue("Handler ratio should be 0.5", handler.toForeignEnergy == (1.0 / 2.0));
         Assert.assertTrue("Handler ratio should be 2", handler.toUEEnergy == 2);
     }
 }

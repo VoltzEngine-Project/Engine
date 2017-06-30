@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.commands.ext;
 
-import com.builtbroken.mc.prefab.commands.SubCommand;
+import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 

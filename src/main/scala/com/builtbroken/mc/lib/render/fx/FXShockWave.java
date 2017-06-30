@@ -1,26 +1,30 @@
 package com.builtbroken.mc.lib.render.fx;
 
+import com.builtbroken.mc.client.SharedAssets;
+import com.builtbroken.mc.lib.render.RenderUtility;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
-import com.builtbroken.mc.lib.render.RenderUtility;
-import com.builtbroken.mc.lib.transform.vector.Pos;
 
 @SideOnly(Side.CLIENT)
 public class FXShockWave extends EntityFX
 {
-	public FXShockWave(World par1World, Pos position, float par8, float par10, float par12, double distance)
+	public ResourceLocation texture;
+
+	public FXShockWave(World par1World, double x, double y, double z, float par8, float par10, float par12, double distance)
 	{
-		this(par1World, position, par8, par10, par12, 1.0F, distance);
+		this(par1World, x, y, z, par8, par10, par12, 1.0F, distance);
 	}
 
-	public FXShockWave(World par1World, Pos position, float r, float g, float b, float size, double distance)
+	public FXShockWave(World par1World, double x, double y, double z, float r, float g, float b, float size, double distance)
 	{
-		super(par1World, position.x(), position.y(), position.z(), 0.0D, 0.0D, 0.0D);
+		super(par1World, x, y, z, 0.0D, 0.0D, 0.0D);
 		this.particleRed = r;
 		this.particleGreen = g;
 		this.particleBlue = b;
@@ -32,11 +36,14 @@ public class FXShockWave extends EntityFX
 	}
 
 	@Override
-	public void renderParticle(Tessellator tessellator, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void renderParticle(Tessellator tessellator, float partialTickRate, float par3, float par4, float par5, float par6, float par7)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslated(this.posX, this.posY, this.posZ);
-
+		float f11 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTickRate - interpPosX);
+		float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTickRate - interpPosY);
+		float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTickRate - interpPosZ);
+		GL11.glTranslated(f11, f12, f13);
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(texture != null ? texture : SharedAssets.FADED_SPHERE_TEXTURE);
 		RenderUtility.enableBlending();
 		RenderUtility.disableLighting();
 

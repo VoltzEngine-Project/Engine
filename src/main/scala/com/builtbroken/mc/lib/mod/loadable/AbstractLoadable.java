@@ -24,6 +24,12 @@ public class AbstractLoadable implements ILoadableProxy
     }
 
     @Override
+    public void loadComplete()
+    {
+
+    }
+
+    @Override
     public boolean shouldLoad()
     {
         return true;

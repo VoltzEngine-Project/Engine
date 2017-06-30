@@ -1,8 +1,11 @@
 package com.builtbroken.mc.lib.mod;
 
 import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.lib.json.IJsonGenMod;
+import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -26,7 +29,7 @@ import java.io.File;
  * @Mod.Metadata
  * @ModstatInfo Created by robert on 12/7/2014.
  */
-public abstract class AbstractMod implements IMod
+public abstract class AbstractMod implements IMod, IJsonGenMod
 {
     /** Loader handler for proxies and loadable objects */
     protected LoadableHandler loader;
@@ -60,6 +63,12 @@ public abstract class AbstractMod implements IMod
     {
         this(domain);
         this.configPath = configName + ".cfg";
+    }
+
+    @Override
+    public void loadJsonContentHandlers()
+    {
+        getProxy().loadJsonContentHandlers();
     }
 
     public void preInit(FMLPreInitializationEvent event)
@@ -98,6 +107,7 @@ public abstract class AbstractMod implements IMod
         loadHandlers(loader);
         loadBlocks(manager);
         loadItems(manager);
+        JsonContentLoader.INSTANCE.claimContent(this);
 
         //Fire post load methods
         if (fireProxyPreInit)
@@ -126,6 +136,11 @@ public abstract class AbstractMod implements IMod
 
         //Close save file
         getConfig().save();
+    }
+
+    public void loadComplete(FMLLoadCompleteEvent event)
+    {
+        loader.loadComplete();
     }
 
     /**
@@ -165,6 +180,7 @@ public abstract class AbstractMod implements IMod
      * on the item or block class, as well {@link com.builtbroken.mc.lib.mod.loadable.ILoadable}
      * to handle recipes instead. As this provides a much more organized and cleaner solution
      * to managing content.
+     *
      * @param manager
      */
     public void loadRecipes(ModManager manager)
@@ -188,6 +204,7 @@ public abstract class AbstractMod implements IMod
     }
 
     public abstract AbstractProxy getProxy();
+
 
     @Override
     public final String getPrefix()

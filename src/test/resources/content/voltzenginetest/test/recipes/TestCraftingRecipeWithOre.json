@@ -1,0 +1,14 @@
+{
+  "author": {
+    "name": "${voltzengine}"
+  },
+  "craftingGridRecipe": {
+    "loadCondition":"devMode",
+    "type": "shaped",
+    "output":"minecraft:cobblestone",
+    "grid": "RR,RR",
+    "items": {
+      "R": "rock"
+    }
+  }
+}

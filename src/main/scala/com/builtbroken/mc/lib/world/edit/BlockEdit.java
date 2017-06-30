@@ -2,8 +2,9 @@ package com.builtbroken.mc.lib.world.edit;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
-import com.builtbroken.mc.api.edit.IWorldEdit;
-import com.builtbroken.mc.lib.transform.vector.AbstractLocation;
+import com.builtbroken.mc.api.edit.BlockEditResult;
+import com.builtbroken.mc.api.explosive.IBlastEdit;
+import com.builtbroken.mc.imp.transform.vector.AbstractLocation;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -28,7 +29,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 12/7/2015.
  */
-public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit, IPos3D, IWorldPosition
+public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit, IPos3D, IWorldPosition
 {
     /** Block that was at the location */
     public Block prev_block = Blocks.air;
@@ -54,6 +55,8 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
     public boolean checkForPrevBlockEquals = false;
     /** Ensure prev_block is the same */
     public boolean checkForEntity = false;
+
+    public int placementNotification = 3;
 
     private AxisAlignedBB bounds;
 
@@ -170,10 +173,33 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
      *
      * @return this
      */
-    public BlockEdit doDrops()
+    public void doDrops()
     {
         this.doItemDrop = true;
-        return this;
+    }
+
+    @Override
+    public void setBlastDirection(EnumFacing dir)
+    {
+        this.face = dir;
+    }
+
+    @Override
+    public EnumFacing getBlastDirection()
+    {
+        return face;
+    }
+
+    @Override
+    public void setEnergy(float energy)
+    {
+        this.energy = energy;
+    }
+
+    @Override
+    public float getEnergy()
+    {
+        return this.energy;
     }
 
     @Override
@@ -219,7 +245,9 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
             if (chunk != null && chunk.isChunkLoaded)
             {
                 //Check if the prev_block still exists
-                if (checkForPrevBlockEquals && prev_block != getBlock() && prev_meta != getBlockMetadata())
+                Block currentBlock = getBlock();
+                int currentMeta = getBlockMetadata();
+                if (checkForPrevBlockEquals && prev_block != currentBlock && prev_meta != currentMeta)
                 {
                     return BlockEditResult.PREV_BLOCK_CHANGED;
                 }
@@ -256,16 +284,22 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
         //Breaks block in order to drop items contained
         if (doItemDrop)
         {
-            InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
+            InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), false);
         }
         //Place the block and check if the world says its placed
-        if (super.setBlock(world, newBlock, newMeta))
+        if (super.setBlock(world, newBlock, newMeta, placementNotification))
         {
             //Checks if the block can stay to fix block issues (crops, plants, doors, plates, redstone)
             if (!newBlock.canBlockStay(world, xi(), yi(), zi()))
             {
                 //Drops the block
                 InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
+            }
+            //Check to make blocks above this block are removed if invalid
+            Block block = world.getBlock(xi(), yi() + 1, zi());
+            if (!block.canBlockStay(world, xi(), yi() + 1, zi()))
+            {
+                InventoryUtility.dropBlockAsItem(world, xi(), yi() + 1, zi(), true);
             }
             return BlockEditResult.PLACED;
         }
@@ -334,5 +368,11 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IWorldEdit
     public String toString()
     {
         return "BlockEdit[ " + (world() != null && world().provider != null ? world().provider.dimensionId : null) + "d, " + xi() + "x, " + yi() + "y, " + zi() + "z]";
+    }
+
+    public BlockEdit setNotificationLevel(int notificationlevel)
+    {
+        this.placementNotification = notificationlevel;
+        return this;
     }
 }

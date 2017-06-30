@@ -1,0 +1,10 @@
+{
+  "author": {
+    "name": "${voltzengine}"
+  },
+  "furnaceRecipe": {
+    "loadCondition": "devMode",
+    "output": "item@minecraft:stick",
+    "input": "item@minecraft:stick"
+  }
+}

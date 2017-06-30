@@ -212,7 +212,7 @@ public class SaveManager
                 }
                 else
                 {
-                    References.LOGGER.warn("SaveManager: Skipping object with id " + nbt.getString("id"));
+                    Engine.logger().warn("SaveManager: Skipping object with id " + nbt.getString("id"));
                 }
 
                 return obj;
@@ -268,6 +268,7 @@ public class SaveManager
                             NBTTagCompound tag = new NBTTagCompound();
                             object.save(tag);
                             tag.setString("id", getID(object.getClass()));
+                            tag.setString("ve_version", References.VERSION);
 
                             /* Save data using NBTUtility */
                             NBTUtility.saveData(file, tag);

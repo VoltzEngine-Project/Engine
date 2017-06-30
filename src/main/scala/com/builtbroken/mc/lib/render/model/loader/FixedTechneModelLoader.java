@@ -28,5 +28,4 @@ public class FixedTechneModelLoader implements IModelCustomLoader
 	{
 		return new FixedTechneModel(resource);
 	}
-
 }

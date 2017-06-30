@@ -1,7 +1,9 @@
 package com.builtbroken.mc.lib.world.radar;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.region.Cube;
+import com.builtbroken.mc.lib.world.radar.data.RadarEntity;
+import com.builtbroken.mc.lib.world.radar.data.RadarObject;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;

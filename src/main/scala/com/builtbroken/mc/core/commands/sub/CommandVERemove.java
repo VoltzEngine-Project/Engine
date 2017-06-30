@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.commands.sub;
 
 import com.builtbroken.jlib.lang.StringHelpers;
-import com.builtbroken.mc.prefab.commands.SubCommand;
+import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.prefab.entity.selector.EntitySelector;
 import com.builtbroken.mc.prefab.entity.selector.EntitySelectors;
 import net.minecraft.command.ICommandSender;
@@ -31,7 +31,7 @@ public class CommandVERemove extends SubCommand
         //Find out what entity selector to use
         if (name.equalsIgnoreCase("projectiles"))
         {
-            return EntitySelectors.PLAYER_SELECTOR.selector();
+            return EntitySelectors.PROJECTILE_SELECTOR.selector();
         }
         else if (name.equalsIgnoreCase("mobs"))
         {

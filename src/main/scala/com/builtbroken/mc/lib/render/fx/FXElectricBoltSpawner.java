@@ -1,9 +1,9 @@
 package com.builtbroken.mc.lib.render.fx;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
-import com.builtbroken.mc.lib.transform.vector.Pos;
 
 import java.util.Random;
 
@@ -12,10 +12,10 @@ import java.util.Random;
  */
 public class FXElectricBoltSpawner extends EntityFX
 {
-	private Pos start;
-	private Pos end;
+	private IPos3D start;
+	private IPos3D end;
 
-	public FXElectricBoltSpawner(World world, Pos startVec, Pos targetVec, long seed, int duration)
+	public FXElectricBoltSpawner(World world, IPos3D startVec, IPos3D targetVec, long seed, int duration)
 	{
 		super(world, startVec.x(), startVec.y(), startVec.z(), 0.0D, 0.0D, 0.0D);
 

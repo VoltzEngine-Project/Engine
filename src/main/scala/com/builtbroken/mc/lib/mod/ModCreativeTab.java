@@ -101,6 +101,7 @@ public class ModCreativeTab extends CreativeTabs
     {
         if (itemStack == null || itemStack.getItem() == null)
         {
+            //Display error for devs to see
             if (itemStack == null)
             {
                 Engine.instance.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " is null");
@@ -109,6 +110,20 @@ public class ModCreativeTab extends CreativeTabs
             {
                 Engine.instance.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " contains a null Item reference");
             }
+
+            //Attempt to use a random item in the tab
+            List list = new ArrayList();
+            displayAllReleventItems(list);
+            for (Object object : list)
+            {
+                if (object instanceof ItemStack)
+                {
+                    itemStack = (ItemStack) object;
+                    return itemStack;
+                }
+            }
+
+            //If that fails set to redstone block as backup
             itemStack = new ItemStack(Blocks.redstone_block);
         }
         return itemStack;
@@ -128,7 +143,10 @@ public class ModCreativeTab extends CreativeTabs
      */
     protected void add(List list, Item item)
     {
-        item.getSubItems(item, this, list);
+        if (item != null)
+        {
+            item.getSubItems(item, this, list);
+        }
     }
 
     /**
@@ -139,7 +157,10 @@ public class ModCreativeTab extends CreativeTabs
      */
     protected void add(List list, Block block)
     {
-        block.getSubBlocks(Item.getItemFromBlock(block), this, list);
+        if (block != null)
+        {
+            block.getSubBlocks(Item.getItemFromBlock(block), this, list);
+        }
     }
 
     public static abstract class ItemSorter implements Comparator

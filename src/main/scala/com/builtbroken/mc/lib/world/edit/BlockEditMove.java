@@ -1,7 +1,8 @@
 package com.builtbroken.mc.lib.world.edit;
 
 import com.builtbroken.mc.api.IWorldPosition;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.api.edit.BlockEditResult;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 

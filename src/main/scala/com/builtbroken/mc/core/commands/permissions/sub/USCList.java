@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.commands.permissions.sub;
 
 import com.builtbroken.mc.core.commands.ext.UserSubCommand;
-import com.builtbroken.mc.lib.access.AccessUser;
+import com.builtbroken.mc.framework.access.AccessUser;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 

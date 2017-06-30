@@ -3,7 +3,7 @@ package com.builtbroken.mc.lib.world.radio.network;
 import com.builtbroken.mc.api.map.radio.IRadioWaveReceiver;
 import com.builtbroken.mc.api.map.radio.IRadioWaveSender;
 import com.builtbroken.mc.api.map.radio.wireless.*;
-import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.lib.world.radio.RadioMap;
 import com.builtbroken.mc.lib.world.radio.RadioRegistry;
 import net.minecraft.entity.Entity;

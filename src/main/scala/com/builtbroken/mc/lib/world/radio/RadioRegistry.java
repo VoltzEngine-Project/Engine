@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.world.radio;
 import com.builtbroken.mc.api.map.radio.IRadioWaveReceiver;
 import com.builtbroken.mc.api.map.radio.IRadioWaveSender;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.imp.transform.region.Cube;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
@@ -19,6 +20,9 @@ public final class RadioRegistry
 {
     /** Used only for event calls */
     public static final RadioRegistry INSTANCE = new RadioRegistry();
+
+    /** Used to indicate the object has full map radio range */
+    public static final Cube INFINITE = new Cube(-Integer.MAX_VALUE, -Integer.MAX_VALUE, -Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
     /** World id to radio maps */
     private static final HashMap<Integer, RadioMap> RADIO_MAPS = new HashMap();
@@ -37,10 +41,10 @@ public final class RadioRegistry
 
     public static boolean addOrUpdate(IRadioWaveReceiver receiver)
     {
-        if(!add(receiver))
+        if (!add(receiver))
         {
             RadioMap map = getRadarMapForDim(receiver.world().provider.dimensionId);
-            if(map.receive_to_chunks.containsKey(receiver))
+            if (map.receive_to_chunks.containsKey(receiver))
             {
                 map.update(receiver);
                 return true;

@@ -3,11 +3,13 @@ package com.builtbroken.mc.core.network.packet.callback;
 import com.builtbroken.mc.api.event.TriggerCauseRegistry;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.network.packet.AbstractPacket;
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.prefab.explosive.blast.Blast;
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.client.Minecraft;
@@ -18,7 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 12/15/2016.
  */
-public class PacketBlast extends AbstractPacket
+public class PacketBlast implements IPacket
 {
     public Blast blast;
     public BlastPacketType type;
@@ -60,11 +62,12 @@ public class PacketBlast extends AbstractPacket
         ByteBufUtils.writeUTF8String(buffer, handler.getID());
 
         NBTTagCompound tag = new NBTTagCompound();
+        tag.setBoolean("a", true);
         if (blast.cause != null)
         {
             tag.setTag("trigger", TriggerCauseRegistry.cache(blast.cause));
         }
-        if (blast.getAdditionBlastData() != null)
+        if (blast.getAdditionBlastData() != null && !blast.getAdditionBlastData().hasNoTags())
         {
             tag.setTag("explosiveData", blast.getAdditionBlastData());
         }
@@ -78,6 +81,7 @@ public class PacketBlast extends AbstractPacket
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
         type = BlastPacketType.values()[buffer.readInt()];

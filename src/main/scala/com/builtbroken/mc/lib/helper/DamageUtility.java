@@ -5,17 +5,21 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 
-/** Utility that handles how damage is applied to entities
- * 
- * @author DarkGuardsman */
+/**
+ * Utility that handles how damage is applied to entities
+ *
+ * @author DarkGuardsman
+ */
 public class DamageUtility
 {
-    /** Can a damage source harm the entity in question.
-     * 
+    /**
+     * Can a damage source harm the entity in question.
+     *
      * @param entity - entity being attacked
      * @param source - damage source/type
      * @param damage - amount of damage
-     * @return true if the damage can be applied */
+     * @return true if the damage can be applied
+     */
     public static boolean canHarm(Entity entity, DamageSource source, float damage)
     {
         if (canDamage(entity))
@@ -36,15 +40,17 @@ public class DamageUtility
         return false;
     }
 
-    /** Can damage be applied at all to the entity
-     * 
+    /**
+     * Can damage be applied at all to the entity
+     *
      * @param entity - entity being attacked
-     * @return true if the entity can be damaged */
+     * @return true if the entity can be damaged
+     */
     public static boolean canDamage(Entity entity)
     {
-        if (entity instanceof EntityLivingBase)
+        if (!entity.isEntityInvulnerable() && entity.isEntityAlive())
         {
-            if (!entity.isEntityInvulnerable() && entity.isEntityAlive())
+            if (entity instanceof EntityLivingBase)
             {
                 if (entity instanceof EntityPlayer)
                 {
@@ -53,8 +59,8 @@ public class DamageUtility
                         return false;
                     }
                 }
-                return true;
             }
+            return true;
         }
         return false;
     }

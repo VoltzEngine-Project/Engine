@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.render;
 
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.WorldUtility;
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.block.Block;
@@ -25,6 +26,9 @@ import java.util.Set;
 
 import static org.lwjgl.opengl.GL11.*;
 
+/**
+ * Helps with rendering Minecraft based objects
+ */
 public class RenderUtility
 {
     public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
@@ -33,7 +37,18 @@ public class RenderUtility
      * Icon loading map for external icon registration.
      */
     public static final HashMap<String, IIcon> loadedIconMap = new HashMap<>();
+    @Deprecated
+    /** This will be made private soon, use {@link #getBlockRenderer()} */
     public static RenderBlocks renderBlocks = new RenderBlocks();
+
+    public static RenderBlocks getBlockRenderer()
+    {
+        if (renderBlocks.blockAccess == null)
+        {
+            renderBlocks.blockAccess = Minecraft.getMinecraft().theWorld;
+        }
+        return renderBlocks;
+    }
 
     public static ResourceLocation getResource(String domain, String name)
     {
@@ -537,37 +552,41 @@ public class RenderUtility
     public static void renderCube(double x1, double y1, double z1, double x2, double y2, double z2, Block block, IIcon overrideTexture, int meta)
     {
         GL11.glPushMatrix();
+        if (RenderManager.instance != null && RenderManager.instance.renderEngine != null && TextureMap.locationBlocksTexture != null)
+        {
+            RenderManager.instance.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        }
         Tessellator t = Tessellator.instance;
 
         GL11.glColor4f(1, 1, 1, 1);
 
-        renderBlocks.setRenderBounds(x1, y1, z1, x2, y2, z2);
+        getBlockRenderer().setRenderBounds(x1, y1, z1, x2, y2, z2);
 
         t.startDrawingQuads();
 
         IIcon useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 0, meta);
         t.setNormal(0.0F, -1.0F, 0.0F);
-        renderBlocks.renderFaceYNeg(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceYNeg(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 1, meta);
         t.setNormal(0.0F, 1.0F, 0.0F);
-        renderBlocks.renderFaceYPos(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceYPos(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 2, meta);
         t.setNormal(0.0F, 0.0F, -1.0F);
-        renderBlocks.renderFaceZNeg(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceZNeg(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 3, meta);
         t.setNormal(0.0F, 0.0F, 1.0F);
-        renderBlocks.renderFaceZPos(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceZPos(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 4, meta);
         t.setNormal(-1.0F, 0.0F, 0.0F);
-        renderBlocks.renderFaceXNeg(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceXNeg(block, 0, 0, 0, useTexture);
 
         useTexture = overrideTexture != null ? overrideTexture : getTextureSafe(block, 5, meta);
         t.setNormal(1.0F, 0.0F, 0.0F);
-        renderBlocks.renderFaceXPos(block, 0, 0, 0, useTexture);
+        getBlockRenderer().renderFaceXPos(block, 0, 0, 0, useTexture);
         t.draw();
 
         GL11.glPopMatrix();
@@ -584,11 +603,23 @@ public class RenderUtility
      * @param side
      * @return
      */
-    public static IIcon getTextureSafe(Block block, int meta, int side)
+    public static IIcon getTextureSafe(Block block, int side, int meta)
     {
         if (block != null)
         {
-            IIcon icon = block.getIcon(side, meta);
+            IIcon icon = null;
+
+            try
+            {
+                icon = block.getIcon(side, meta);
+            }
+            catch (Exception e)
+            {
+                if (Engine.runningAsDev)
+                {
+                    Engine.logger().error("Error getting icon for " + block + " M:" + meta + " S:" + side, e);
+                }
+            }
             if (icon == null)
             {
                 return Blocks.stone.getIcon(0, 0);

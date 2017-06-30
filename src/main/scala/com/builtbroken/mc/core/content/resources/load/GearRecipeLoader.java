@@ -6,7 +6,7 @@ import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
-import com.builtbroken.mc.prefab.recipe.item.RecipeTool;
+import com.builtbroken.mc.lib.recipe.item.RecipeTool;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;

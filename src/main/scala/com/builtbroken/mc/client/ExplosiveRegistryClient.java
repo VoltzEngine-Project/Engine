@@ -10,11 +10,13 @@ import com.builtbroken.mc.prefab.items.ItemStackWrapper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -27,6 +29,9 @@ import java.util.Map;
  */
 public class ExplosiveRegistryClient
 {
+    /** Number of passes to use when rendering explosive icons n = (1 + layers used) */
+    public static final int renderPassesForItem = 4;
+
     /** Map of explosive items to corner icons, icons are item icons */
     public static final HashMap<ItemStackWrapper, IIcon> EX_CORNER_ICONS = new HashMap();
 
@@ -35,6 +40,32 @@ public class ExplosiveRegistryClient
 
     @SideOnly(Side.CLIENT)
     public static IIcon missing_corner_icon;
+
+    public static HashMap<Integer, EntityList.EntityEggInfo> entityIDToEgg = new HashMap();
+
+    public static void mapEntityIDsToEggs()
+    {
+        entityIDToEgg.clear();
+        Iterator iterator = EntityList.entityEggs.values().iterator();
+
+        while (iterator.hasNext())
+        {
+            EntityList.EntityEggInfo entityegginfo = (EntityList.EntityEggInfo) iterator.next();
+            if (entityegginfo != null)
+            {
+                entityIDToEgg.put(entityegginfo.spawnedID, entityegginfo);
+            }
+        }
+    }
+
+    public static EntityList.EntityEggInfo getEggInfo(int id)
+    {
+        if (entityIDToEgg.isEmpty())
+        {
+            mapEntityIDsToEggs();
+        }
+        return entityIDToEgg.get(id);
+    }
 
     /**
      * Gets the corner icon for the explosive item. Defaults
@@ -45,7 +76,7 @@ public class ExplosiveRegistryClient
      * @param stack
      * @return item or missing icon
      */
-    public static IIcon getCornerIconFor(final ItemStack stack)
+    public static IIcon getCornerIconFor(final ItemStack stack, int pass)
     {
         ItemStack item = stack;
         if (item.getItem() instanceof IExplosiveContainerItem)
@@ -57,7 +88,7 @@ public class ExplosiveRegistryClient
             IExplosiveHandler handler = ExplosiveRegistry.get(item);
             if (handler instanceof ITexturedExplosiveHandler)
             {
-                IIcon icon = ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIcon(item);
+                IIcon icon = ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIcon(item, pass);
                 if (icon != null)
                 {
                     return icon;
@@ -70,6 +101,24 @@ public class ExplosiveRegistryClient
             }
         }
         return missing_corner_icon;
+    }
+
+    public static int getColorForCornerIcon(final ItemStack stack, int pass)
+    {
+        ItemStack item = stack;
+        if (item.getItem() instanceof IExplosiveContainerItem)
+        {
+            item = ((IExplosiveContainerItem) item.getItem()).getExplosiveStack(stack);
+        }
+        if (item != null)
+        {
+            IExplosiveHandler handler = ExplosiveRegistry.get(item);
+            if (handler instanceof ITexturedExplosiveHandler)
+            {
+                return ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIconColor(item, pass);
+            }
+        }
+        return 16777215;
     }
 
     /**

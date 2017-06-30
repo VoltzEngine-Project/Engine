@@ -1,8 +1,8 @@
 package com.builtbroken.mc.core.commands.permissions.sub;
 
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
-import com.builtbroken.mc.lib.access.AccessGroup;
-import com.builtbroken.mc.prefab.commands.SubCommand;
+import com.builtbroken.mc.core.commands.prefab.SubCommand;
+import com.builtbroken.mc.framework.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;

@@ -40,14 +40,16 @@ public class BasicInventoryTest extends AbstractTest
                 System.out.println("Engine instance should have been null");
             }
             fail("Didn't throw error");
-        } catch (RuntimeException e)
+        }
+        catch (RuntimeException e)
         {
         }
         try
         {
             inv.setInventorySlotContents(10, new ItemStack(Items.record_11));
             fail("Didn't throw error");
-        } catch (RuntimeException e)
+        }
+        catch (RuntimeException e)
         {
         }
         //Test set when slot is null
@@ -86,7 +88,8 @@ public class BasicInventoryTest extends AbstractTest
         {
             inv.setInventorySlotContents(0, new ItemStack(Items.record_11));
             fail("Should have thrown an error");
-        } catch (RuntimeException e)
+        }
+        catch (RuntimeException e)
         {
 
         }
@@ -95,7 +98,8 @@ public class BasicInventoryTest extends AbstractTest
         {
             inv.setInventorySlotContents(0, new ItemStack(Items.record_13));
             fail("Should have thrown an error");
-        } catch (RuntimeException e)
+        }
+        catch (RuntimeException e)
         {
 
         }
@@ -134,6 +138,66 @@ public class BasicInventoryTest extends AbstractTest
         for (int i = 0; i < 10; i++)
         {
             assertTrue(InventoryUtility.stacksMatchExact(inv.getStackInSlot(i), new ItemStack(Items.apple)));
+        }
+    }
+
+    @Test
+    public void testInventoryUpdate()
+    {
+        BasicInventoryObj inv = new BasicInventoryObj(10);
+        inv.setInventorySlotContents(0, new ItemStack(Items.apple, 1, 0));
+        assertEquals(inv.slot, 0);
+        assertNull(inv.prev);
+        assertEquals(inv.item.getItem(), Items.apple);
+        inv.reset();
+
+        inv.setInventorySlotContents(0, new ItemStack(Items.apple, 1, 0));
+        assertEquals(inv.slot, -1);
+
+        inv.setInventorySlotContents(0, new ItemStack(Items.apple, 2, 0));
+        assertEquals(inv.slot, 0);
+        assertEquals(inv.item.getItem(), Items.apple);
+        assertEquals(inv.prev.getItem(), Items.apple);
+        assertEquals(inv.prev.stackSize, 1);
+        assertEquals(inv.item.stackSize, 2);
+        inv.reset();
+
+        inv.setInventorySlotContents(0, new ItemStack(Items.apple, 1, 0));
+        assertEquals(inv.slot, 0);
+        assertEquals(inv.item.getItem(), Items.apple);
+        assertEquals(inv.prev.getItem(), Items.apple);
+        assertEquals(inv.prev.stackSize, 2);
+        assertEquals(inv.item.stackSize, 1);
+        inv.reset();
+    }
+
+    /**
+     * Test object for accessing internal data
+     */
+    public final class BasicInventoryObj extends BasicInventory
+    {
+        public int slot = -1;
+        public ItemStack prev;
+        public ItemStack item;
+
+        public BasicInventoryObj(int slots)
+        {
+            super(slots);
+        }
+
+        @Override
+        protected void onInventoryChanged(int slot, ItemStack prev, ItemStack item)
+        {
+            this.slot = slot;
+            this.prev = prev;
+            this.item = item;
+        }
+
+        public void reset()
+        {
+            slot = -1;
+            prev = null;
+            item = null;
         }
     }
 }

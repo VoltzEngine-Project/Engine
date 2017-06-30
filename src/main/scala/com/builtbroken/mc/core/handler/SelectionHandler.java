@@ -2,11 +2,11 @@ package com.builtbroken.mc.core.handler;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketSelectionData;
-import com.builtbroken.mc.lib.modflags.Region;
-import com.builtbroken.mc.lib.modflags.RegionManager;
-import com.builtbroken.mc.lib.transform.region.Cube;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.edit.Selection;
+import com.builtbroken.mc.modflag.Region;
+import com.builtbroken.mc.modflag.RegionManager;
 import com.google.common.collect.Maps;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;

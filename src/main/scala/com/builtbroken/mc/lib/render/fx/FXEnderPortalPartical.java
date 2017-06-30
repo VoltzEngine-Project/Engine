@@ -6,7 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.particle.EntityPortalFX;
 import net.minecraft.world.World;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 
 @SideOnly(Side.CLIENT)
 public class FXEnderPortalPartical extends EntityPortalFX

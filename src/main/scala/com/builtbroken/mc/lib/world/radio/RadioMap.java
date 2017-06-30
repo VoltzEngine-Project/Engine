@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.world.radio;
 
 import com.builtbroken.mc.api.map.radio.IRadioWaveReceiver;
 import com.builtbroken.mc.api.map.radio.IRadioWaveSender;
-import com.builtbroken.mc.lib.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.region.Cube;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -32,6 +32,8 @@ public class RadioMap
     /** Cache of active senders to receivers, reduced CPU time at cost of a little memory */
     protected HashMap<IRadioWaveSender, List<IRadioWaveReceiver>> sender_to_receivers_cache = new HashMap();
 
+    protected List<IRadioWaveReceiver> fullMapRangeReceives = new ArrayList();
+
 
     /**
      * Dimension ID
@@ -45,16 +47,25 @@ public class RadioMap
 
     public boolean add(IRadioWaveReceiver receiver)
     {
-        if (!receive_to_chunks.containsKey(receiver))
+        Cube range = receiver.getRadioReceiverRange();
+        if (range != null)
         {
-            Cube range = receiver.getRadioReceiverRange();
-            if (range != null)
+            if (range == RadioRegistry.INFINITE)
+            {
+                if (!fullMapRangeReceives.contains(receiver))
+                {
+                    fullMapRangeReceives.add(receiver);
+                }
+                return true;
+            }
+            if (!receive_to_chunks.containsKey(receiver))
             {
                 updateChunkCache(receiver, range);
                 updateSenderCache(receiver, range);
                 return true;
             }
         }
+
         return false;
     }
 
@@ -127,6 +138,10 @@ public class RadioMap
 
     public boolean remove(IRadioWaveReceiver receiver)
     {
+        if(fullMapRangeReceives.contains(receiver))
+        {
+            fullMapRangeReceives.remove(receiver);
+        }
         if (receive_to_chunks.containsKey(receiver))
         {
             //Clear cached chunk positions
@@ -177,6 +192,12 @@ public class RadioMap
                 receiver.receiveRadioWave(hz, sender, header, data);
             }
             return;
+        }
+
+        //Receivers that have full map range, used for legacy systems mainly
+        for(IRadioWaveReceiver receiver : fullMapRangeReceives)
+        {
+            receiver.receiveRadioWave(hz, sender, header, data);
         }
 
         //Slow way to update receives with messages
@@ -257,7 +278,7 @@ public class RadioMap
         Cube range = sender.getRadioSenderRange();
         if (range != null)
         {
-            sender_to_receivers_cache.put(sender, getReceiversInRange(range, sender instanceof IRadioWaveReceiver ? (IRadioWaveReceiver)sender : (IRadioWaveReceiver)null));
+            sender_to_receivers_cache.put(sender, getReceiversInRange(range, sender instanceof IRadioWaveReceiver ? (IRadioWaveReceiver) sender : (IRadioWaveReceiver) null));
         }
     }
 
@@ -283,7 +304,8 @@ public class RadioMap
     public List<IRadioWaveReceiver> getReceiversInRange(Cube range, List excludeList)
     {
         List<IRadioWaveReceiver> receivers = new ArrayList();
-        if(range != null)
+        receivers.addAll(fullMapRangeReceives);
+        if (range != null)
         {
             for (IRadioWaveReceiver receiver : receive_to_chunks.keySet())
             {

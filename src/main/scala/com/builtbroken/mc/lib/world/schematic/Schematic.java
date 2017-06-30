@@ -3,7 +3,7 @@ package com.builtbroken.mc.lib.world.schematic;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.builtbroken.jlib.type.Pair;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 
 import java.util.HashMap;
 

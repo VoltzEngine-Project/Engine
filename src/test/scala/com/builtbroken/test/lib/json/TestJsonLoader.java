@@ -2,6 +2,8 @@ package com.builtbroken.test.lib.json;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
+import com.builtbroken.mc.lib.json.loading.JsonEntry;
+import com.builtbroken.mc.lib.json.loading.JsonLoader;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.google.gson.JsonElement;
@@ -57,9 +59,25 @@ public class TestJsonLoader extends AbstractTest
         //Test everything that runs in the pre int method
         assertEquals("json", loader.externalContentFolder.getName());
         assertEquals("file", loader.externalContentFolder.getParentFile().getName());
-        assertEquals(1, loader.processors.size());
+
+        //Check number of processors loaded
+        assertEquals(10, loader.processors.size());
+
+        //Check block is loaded, and its sub processors are loaded
         assertSame(loader.blockProcessor, loader.processors.get("block"));
-        assertEquals(2, loader.blockProcessor.subProcessors.size());
+        assertEquals(6, loader.blockProcessor.subProcessors.size());
+        assertSame(loader.craftingRecipeProcessor, loader.blockProcessor.subProcessors.get("craftingGridRecipe"));
+        assertSame(loader.furnaceRecipeProcessor, loader.blockProcessor.subProcessors.get("furnaceRecipe"));
+        assertSame(loader.worldOreGenProcessor, loader.blockProcessor.subProcessors.get("worldGenerator"));
+
+        //Check that item is loaded
+        assertSame(loader.itemProcessor, loader.processors.get("item"));
+
+        //Check that crafting is loaded
+        assertSame(loader.craftingRecipeProcessor, loader.processors.get("craftingGridRecipe"));
+
+        //Check that furnace is loaded
+        assertSame(loader.furnaceRecipeProcessor, loader.processors.get("furnaceRecipe"));
 
         //Call init and setup data it needs
         loader.add(new FakeProcessor("ammo", "after:ammoType"));
@@ -68,23 +86,24 @@ public class TestJsonLoader extends AbstractTest
 
         for (int i = 0; i < 13; i++)
         {
-            JsonContentLoader.loadJsonElement("file" + i, createTestElement("ammo", "ammo" + i), loader.jsonEntries);
+            JsonLoader.loadJsonElement("file" + i, createTestElement("ammo", "ammo" + i), loader.jsonEntries);
         }
         for (int i = 0; i < 5; i++)
         {
-            JsonContentLoader.loadJsonElement("file" + (13 + i), createTestElement("ammoType", "ammoType" + i), loader.jsonEntries);
+            JsonLoader.loadJsonElement("file" + (13 + i), createTestElement("ammoType", "ammoType" + i), loader.jsonEntries);
         }
         for (int i = 0; i < 3; i++)
         {
-            JsonContentLoader.loadJsonElement("file" + (13 + 5 + i), createTestElement("clip", "clip" + i), loader.jsonEntries);
+            JsonLoader.loadJsonElement("file" + (13 + 5 + i), createTestElement("clip", "clip" + i), loader.jsonEntries);
         }
 
         loader.init();
         //TODO test that all files loaded correctly
-        assertEquals(21, loader.generatedObjects.size());
+        assertEquals(13, loader.generatedObjects.get("ammo").size());
+        assertEquals(5, loader.generatedObjects.get("ammoType").size());
+        assertEquals(3, loader.generatedObjects.get("clip").size());
         assertEquals(0, loader.jsonEntries.size());
         assertEquals(0, loader.externalFiles.size());
-        assertEquals(0, loader.classPathResources.size());
         assertEquals(0, loader.externalJarFiles.size());
 
         //Post init does nothing but is still called
@@ -119,9 +138,9 @@ public class TestJsonLoader extends AbstractTest
     public void testJsonLoad()
     {
         final StringReader reader = new StringReader(TEST_OBJECT_ONE);
-        final HashMap<String, List<JsonContentLoader.JsonEntry>> entryList = new HashMap();
+        final HashMap<String, List<JsonEntry>> entryList = new HashMap();
 
-        JsonContentLoader.loadJson("someFile", reader, entryList);
+        JsonLoader.loadJson("someFile", reader, entryList);
 
         assertEquals(1, entryList.size());
         assertEquals("block", entryList.get("block").get(0).jsonKey);

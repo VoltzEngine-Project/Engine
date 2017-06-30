@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.network.netty;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.network.packet.AbstractPacket;
+import com.builtbroken.mc.api.data.IPacket;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.channel.ChannelHandler;
@@ -15,10 +15,10 @@ import net.minecraft.network.NetHandlerPlayServer;
  * @since 31/05/14
  */
 @ChannelHandler.Sharable
-public class ResonantPacketHandler extends SimpleChannelInboundHandler<AbstractPacket>
+public class ResonantPacketHandler extends SimpleChannelInboundHandler<IPacket>
 {
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, AbstractPacket packet) throws Exception
+	protected void channelRead0(ChannelHandlerContext ctx, IPacket packet) throws Exception
 	{
 		INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 

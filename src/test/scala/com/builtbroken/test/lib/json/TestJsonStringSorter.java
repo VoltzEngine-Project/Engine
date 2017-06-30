@@ -1,6 +1,6 @@
 package com.builtbroken.test.lib.json;
 
-import com.builtbroken.mc.lib.json.JsonContentLoader;
+import com.builtbroken.mc.lib.json.loading.ProcessorKeySorter;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import org.junit.runner.RunWith;
@@ -26,7 +26,7 @@ public class TestJsonStringSorter extends AbstractTest
         list.add("tile");
         list.add("clip@after:ammoType");
         list.add("gun@after:ammoType");
-        Collections.sort(list, new JsonContentLoader.StringSortingComparator());
+        Collections.sort(list, new ProcessorKeySorter());
 
         assertSame("block", list.get(0));
         assertSame("item", list.get(1));

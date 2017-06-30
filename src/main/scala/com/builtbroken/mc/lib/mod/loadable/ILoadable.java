@@ -12,4 +12,6 @@ public interface ILoadable
 	void init();
 
 	void postInit();
+
+	void loadComplete();
 }

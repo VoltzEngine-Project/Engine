@@ -1,54 +1,77 @@
 package com.builtbroken.mc.lib.json.processors;
 
+import com.builtbroken.jlib.lang.DebugPrinter;
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.lib.json.JsonContentLoader;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
+import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
+import com.builtbroken.mc.lib.json.loading.JsonProcessorInjectionMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import cpw.mods.fml.common.Loader;
+import org.apache.logging.log4j.LogManager;
+
+import java.util.List;
+import java.util.Map;
 
 /**
+ * Default implementation for processor
+ *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
  */
-public abstract class JsonProcessor<D extends IJsonGenObject>
+public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonProcessor
 {
-    /**
-     * The mod that owns this processor
-     *
-     * @return mod as domain name
-     */
-    public abstract String getMod();
+    protected JsonProcessorInjectionMap keyHandler;
+    protected DebugPrinter debugPrinter;
 
-    /**
-     * Gets the key that this processor uses
-     * for most of it's actions.
-     * <p>
-     * This is mainly used to help sort
-     * entries before processing so items
-     * load in order.
-     *
-     * @return key
-     */
-    public abstract String getJsonKey();
+    public JsonProcessor()
+    {
+        debugPrinter = JsonContentLoader.INSTANCE != null ? JsonContentLoader.INSTANCE.debug : new DebugPrinter(LogManager.getLogger());
+    }
 
-    /**
-     * Gets the order of loading
-     * <p>
-     * use values (after:key) or (before:key)
-     *
-     * @return string
-     */
-    public abstract String getLoadOrder();
+    public JsonProcessor(Class<D> clazz)
+    {
+        this();
+        keyHandler = new JsonProcessorInjectionMap(clazz);
+    }
 
-    /**
-     * Called to process a json block section
-     *
-     * @return
-     */
+    @Override
     public boolean canProcess(String key, JsonElement element)
     {
         return key.equalsIgnoreCase(getJsonKey());
     }
 
-    public abstract D process(JsonElement element);
+    @Override
+    public boolean process(JsonElement element, List<IJsonGenObject> entries)
+    {
+        D output = process(element);
+        if (output != null)
+        {
+            entries.add(output);
+        }
+        return true;
+    }
+
+    public D process(JsonElement element)
+    {
+        return null;
+    }
+
+    protected void processAdditionalKeys(D objectToInject, JsonObject jsonData)
+    {
+        //Call to process extra tags from file
+        for (Map.Entry<String, JsonElement> entry : jsonData.entrySet())
+        {
+            if (keyHandler.handle(objectToInject, entry.getKey().toLowerCase(), entry.getValue()))
+            {
+                if (Engine.runningAsDev)
+                {
+                    debugPrinter.log("Injected Key: " + entry.getKey());
+                }
+            }
+        }
+    }
 
     /**
      * Quick way to check that required fields exist in the json file
@@ -56,7 +79,7 @@ public abstract class JsonProcessor<D extends IJsonGenObject>
      * @param object
      * @param values
      */
-    public void ensureValuesExist(JsonObject object, String... values)
+    public static void ensureValuesExist(JsonObject object, String... values)
     {
         for (String value : values)
         {
@@ -65,5 +88,30 @@ public abstract class JsonProcessor<D extends IJsonGenObject>
                 throw new IllegalArgumentException("File is missing " + value + " value " + object);
             }
         }
+    }
+
+    @Override
+    public boolean shouldLoad(JsonElement object)
+    {
+        if (object instanceof JsonObject)
+        {
+            if (((JsonObject) object).has("loadCondition"))
+            {
+                final String type = ((JsonObject) object).getAsJsonPrimitive("loadCondition").getAsString();
+                if (type.startsWith("mod@"))
+                {
+                    String modName = type.substring(4, type.length());
+                    if (!Loader.isModLoaded(modName))
+                    {
+                        return false;
+                    }
+                }
+                else if (type.equalsIgnoreCase("devMode"))
+                {
+                    return Engine.runningAsDev;
+                }
+            }
+        }
+        return true;
     }
 }

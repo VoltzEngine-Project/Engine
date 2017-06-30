@@ -1,5 +1,8 @@
 package com.builtbroken.mc.lib.json.imp;
 
+import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.lib.json.IJsonGenMod;
+
 /**
  * Applied to all objects created from Json data
  *
@@ -9,14 +12,70 @@ package com.builtbroken.mc.lib.json.imp;
 public interface IJsonGenObject
 {
     /**
-     * Called to register the object to its
-     * handlers. Use this to register
-     * blocks, items, and entities. Do
-     * not use it for oreNames, recipes, or
-     * code that needs other entries to function.
-     * use {@link com.builtbroken.mc.core.registry.implement.IPostInit}
-     * instead to allow all other mods to register there
-     * content in the preInit and init phases
+     * Called at some point after {@link #register()}
+     * to register the content to the game itself.
+     * <p>
+     * This is called several times so make sure
+     * to check if the content has already been
+     * registered. This can easily be handled by
+     * using a boolean check in the object.
+     *
+     * @param mod     - mod registering the content
+     * @param manager - manager used to register the content
      */
-    void register();
+    default void register(IJsonGenMod mod, ModManager manager)
+    {
+
+    }
+
+
+    /**
+     * Called when the gen object has
+     * been created and registered to
+     * {@link com.builtbroken.mc.lib.json.JsonContentLoader}
+     */
+    default void register()
+    {
+    }
+
+    /**
+     * Called after a gen object is created
+     * to ensure values read in are good.
+     * <p>
+     * This should only be used to ensure
+     * combinations of values are usable.
+     * As individual values should be checked
+     * when processed.
+     */
+    default void validate()
+    {
+
+    }
+
+    default void setAuthor(String name)
+    {
+
+    }
+
+    /**
+     * Unique key of the loader that created
+     * this gen object.
+     *
+     * @return key for loader
+     */
+    String getLoader();
+
+    /**
+     * Gets the mod this content belongs to
+     *
+     * @return mod domain ID
+     */
+    String getMod();
+
+    /**
+     * Unique ID for this content
+     *
+     * @return
+     */
+    String getContentID();
 }

@@ -4,7 +4,7 @@ import com.builtbroken.mc.api.tile.IRemovable;
 import com.builtbroken.mc.api.tile.IRemovable.*;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -128,6 +128,7 @@ public class InteractionHandler
                                         event.entityPlayer.inventory.markDirty();
                                     }
                                 }
+                                event.entityPlayer.inventoryContainer.detectAndSendChanges();
                             }
                         } catch (Exception e)
                         {

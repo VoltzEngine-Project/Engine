@@ -4,8 +4,8 @@ import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.prefab.recipe.fluid.MRFluidStack;
-import com.builtbroken.mc.prefab.recipe.fluid.MRLoaderFluidStack;
+import com.builtbroken.mc.lib.recipe.fluid.MRFluidStack;
+import com.builtbroken.mc.lib.recipe.fluid.MRLoaderFluidStack;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,11 +14,15 @@ import com.builtbroken.mc.core.content.debug.ItemInstaHole;
 import com.builtbroken.mc.core.content.debug.TileInfInv;
 import com.builtbroken.mc.core.content.parts.ItemCircuits;
 import com.builtbroken.mc.core.content.parts.ItemCraftingParts;
-import com.builtbroken.mc.core.content.resources.*;
+import com.builtbroken.mc.core.content.resources.DefinedGenItems;
+import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.core.content.resources.gems.*;
 import com.builtbroken.mc.core.content.resources.items.ItemGenMaterial;
 import com.builtbroken.mc.core.content.resources.items.ItemSheetMetal;
 import com.builtbroken.mc.core.content.resources.load.*;
+import com.builtbroken.mc.core.content.resources.ore.BlockOre;
+import com.builtbroken.mc.core.content.resources.ore.ItemBlockOre;
+import com.builtbroken.mc.core.content.resources.ore.MetallicOres;
 import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
 import com.builtbroken.mc.core.content.tool.ItemSelectionWand;
 import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;
@@ -32,46 +36,55 @@ import com.builtbroken.mc.core.handler.SaveManager;
 import com.builtbroken.mc.core.handler.SelectionHandler;
 import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
-import com.builtbroken.mc.core.registry.MassRegistry;
 import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.framework.access.global.GlobalAccessSystem;
+import com.builtbroken.mc.framework.multiblock.BlockMultiblock;
+import com.builtbroken.mc.framework.multiblock.EnumMultiblock;
+import com.builtbroken.mc.framework.multiblock.ItemBlockMulti;
+import com.builtbroken.mc.framework.multiblock.listeners.MultiBlockListener;
+import com.builtbroken.mc.lib.data.heat.HeatedBlockRegistry;
+import com.builtbroken.mc.lib.data.mass.MassRegistry;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
+import com.builtbroken.mc.lib.json.IJsonGenMod;
 import com.builtbroken.mc.lib.json.JsonContentLoader;
+import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
+import com.builtbroken.mc.lib.json.processors.event.JsonMissingMapEventProcessor;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
-import com.builtbroken.mc.lib.mod.compat.Mods;
-import com.builtbroken.mc.lib.mod.compat.ae.AEProxy;
-import com.builtbroken.mc.lib.mod.compat.bc.BCProxy;
-import com.builtbroken.mc.lib.mod.compat.ic.ICProxy;
-import com.builtbroken.mc.lib.mod.compat.mek.MekProxy;
-import com.builtbroken.mc.lib.mod.compat.nei.NEIProxy;
-import com.builtbroken.mc.lib.mod.compat.oc.OCProxy;
-import com.builtbroken.mc.lib.mod.compat.pe.ProjectEProxy;
-import com.builtbroken.mc.lib.mod.compat.rf.RFLoader;
-import com.builtbroken.mc.lib.mod.compat.te.TEProxy;
-import com.builtbroken.mc.lib.mod.compat.tinkers.TinkerProxy;
-import com.builtbroken.mc.lib.mod.compat.ue.TileUniversalBattery;
+import com.builtbroken.mc.lib.mod.Mods;
 import com.builtbroken.mc.lib.mod.config.ConfigHandler;
 import com.builtbroken.mc.lib.mod.config.ConfigScanner;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
+import com.builtbroken.mc.lib.recipe.cast.MRHandlerCast;
+import com.builtbroken.mc.lib.recipe.fluid.MRHandlerFluidStack;
+import com.builtbroken.mc.lib.recipe.item.MRHandlerItemStack;
+import com.builtbroken.mc.lib.recipe.item.MRSmelterHandler;
+import com.builtbroken.mc.lib.recipe.item.RecipeTool;
+import com.builtbroken.mc.lib.recipe.item.grid.RecipeShapedOreLarge;
+import com.builtbroken.mc.lib.recipe.item.sheetmetal.RecipeSheetMetal;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
+import com.builtbroken.mc.lib.world.edit.PlacementDataExtended;
 import com.builtbroken.mc.lib.world.edit.thread.WorkerThread;
 import com.builtbroken.mc.lib.world.edit.thread.WorldActionQue;
 import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
-import com.builtbroken.mc.lib.world.heat.HeatedBlockRegistry;
+import com.builtbroken.mc.lib.world.map.TileMapRegistry;
 import com.builtbroken.mc.lib.world.radar.RadarRegistry;
 import com.builtbroken.mc.lib.world.radio.RadioRegistry;
+import com.builtbroken.mc.mods.ae.AEProxy;
+import com.builtbroken.mc.mods.bc.BCProxy;
+import com.builtbroken.mc.mods.ic.ICProxy;
+import com.builtbroken.mc.mods.mek.MekProxy;
+import com.builtbroken.mc.mods.nei.NEIProxy;
+import com.builtbroken.mc.mods.oc.OCProxy;
+import com.builtbroken.mc.mods.pe.ProjectEProxy;
+import com.builtbroken.mc.mods.rf.RFLoader;
+import com.builtbroken.mc.mods.te.TEProxy;
+import com.builtbroken.mc.mods.tinkers.TinkerProxy;
 import com.builtbroken.mc.prefab.explosive.handler.ExplosiveHandlerTNT;
-import com.builtbroken.mc.prefab.recipe.cast.MRHandlerCast;
-import com.builtbroken.mc.prefab.recipe.fluid.MRHandlerFluidStack;
-import com.builtbroken.mc.prefab.recipe.item.MRHandlerItemStack;
-import com.builtbroken.mc.prefab.recipe.item.MRSmelterHandler;
-import com.builtbroken.mc.prefab.recipe.item.RecipeTool;
-import com.builtbroken.mc.prefab.recipe.item.sheetmetal.RecipeSheetMetal;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
-import com.builtbroken.mc.prefab.tile.multiblock.BlockMultiblock;
-import com.builtbroken.mc.prefab.tile.multiblock.EnumMultiblock;
-import com.builtbroken.mc.prefab.tile.multiblock.ItemBlockMulti;
+import com.builtbroken.mc.prefab.tile.listeners.RotatableListener;
+import com.builtbroken.mc.prefab.tile.listeners.WrenchRotationListener;
 import com.builtbroken.mc.prefab.trigger.TriggerNBTBuilder;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -99,7 +112,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.List;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
@@ -111,7 +124,7 @@ import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
  */
 
 @Mod(modid = References.ID, name = References.NAME, version = References.VERSION, acceptableRemoteVersions = "*", dependencies = "required-after:Forge;after:TConstruct")
-public class Engine
+public class Engine implements IJsonGenMod
 {
     public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
     public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
@@ -125,7 +138,7 @@ public class Engine
     @Instance(References.ID)
     public static Engine instance;
 
-    public LoadableHandler loader;
+    public static LoadableHandler loader = new LoadableHandler();
     public ModManager manager;
     protected static Logger logger = LogManager.getLogger("VoltzEngine");
     private Configuration config;
@@ -161,12 +174,15 @@ public class Engine
     //config files
     public static Configuration heatDataConfig;
     public static Configuration explosiveConfig;
+
     public static int actionProcessorThreads = 3;
+    public static boolean enableExtendedMetaPacketSync = true;
 
     //Configs
     public static boolean enabledHeatMap = true;
     public static boolean log_registering_explosives = false;
 
+    public static boolean XMAS = false;
     /**
      * Conversion ratio of ingot to fluid volume, based on Tinkers *in theory*
      */
@@ -178,8 +194,6 @@ public class Engine
 
     /** List of content that has been requested to load, replaces old load system */
     protected static List<String> requestedContent = new ArrayList();
-    protected static HashMap<String, Block> requestedBlocks = new HashMap();
-    protected static HashMap<String, Item> requestedItems = new HashMap();
 
     /**
      * Requests that all ores are generated
@@ -315,6 +329,23 @@ public class Engine
         sheetMetalRequested = true;
     }
 
+    /**
+     * Requests that the main modules be loaded
+     */
+    public static void requestBaseModules()
+    {
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+        {
+            throw new RuntimeException("Modules can only be requested to load in the pre-init phase");
+        }
+        requestOres();
+        requestResources();
+        requestCraftingParts();
+        requestCircuits();
+        requestSimpleTools();
+        requestSheetMetalContent();
+    }
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -331,14 +362,12 @@ public class Engine
         heatDataConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/HeatMap.cfg"));
         explosiveConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
 
-        loader = new LoadableHandler();
         manager = new ModManager().setPrefix(References.DOMAIN).setTab(CreativeTabs.tabAllSearch);
 
         config.load();
         heatDataConfig.load();
         explosiveConfig.load();
 
-        References.LOGGER = logger;
         ConfigScanner.instance().generateSets(event.getAsmData());
         ConfigHandler.sync(getConfig(), References.DOMAIN);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
@@ -350,6 +379,8 @@ public class Engine
         MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(RadarRegistry.INSTANCE);
         FMLCommonHandler.instance().bus().register(RadarRegistry.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(TileMapRegistry.INSTANCE);
+        FMLCommonHandler.instance().bus().register(TileMapRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(RadioRegistry.INSTANCE);
         FMLCommonHandler.instance().bus().register(RadioRegistry.INSTANCE);
         FMLCommonHandler.instance().bus().register(new WorldActionQue());
@@ -373,15 +404,18 @@ public class Engine
 
         RecipeSorter.register(References.PREFIX + "sheetMetalTools", RecipeSheetMetal.class, SHAPED, "after:minecraft:shaped");
         RecipeSorter.register(References.PREFIX + "Tools", RecipeTool.class, SHAPED, "after:minecraft:shaped");
+        RecipeSorter.register(References.PREFIX + "shapedLarge", RecipeShapedOreLarge.class, SHAPED, "after:minecraft:shaped");
 
         //Internal systems
         if (config.getBoolean("ASMTestingEnabled", "Internal", true, "Enables the testing of the internally used ASM code, used to ensure quality of the game. Only disable if you know the ASM is functional or there are issues with it running. Normally though if the ASM test fails then the ASM code itself was not injected. Which will result in several features of the mod not functioning correctly."))
         {
+            //TODO check for Bukkit and disable
             loader.applyModule(new ProxyASMTest());
         }
         loader.applyModule(getProxy());
         loader.applyModule(packetHandler);
         loader.applyModule(GroupProfileHandler.GLOBAL);
+        loader.applyModule(GlobalAccessSystem.instance);
         //Recipes
         loader.applyModule(SmeltingRecipeLoad.class);
         loader.applyModule(CrusherRecipeLoad.class);
@@ -460,9 +494,11 @@ public class Engine
         CommandVE.disableClearCommand = getConfig().getBoolean("DisableClearCommands", "Commands", false, "Turns off clear command");
         CommandVE.disableRemoveCommand = getConfig().getBoolean("DisableRemoverCommands", "Commands", false, "Turns off remove command");
 
+        //Map commands
+        enableExtendedMetaPacketSync = getConfig().getBoolean("EnableExtendedBlockMetaPacketSync", "Map_data", true, "While on extended meta values will be synced to the client. Can be disabled on both sides to save on bandwidth but will result in rendering issues if disabled.");
+
         ToolMode.REGISTRY.add(new ToolModeGeneral());
         ToolMode.REGISTRY.add(new ToolModeRotation());
-
 
         /**
          * Multiblock Handling
@@ -497,10 +533,31 @@ public class Engine
         //Creeper skull
         ExplosiveRegistry.registerExplosiveItem(new ItemStack(Items.skull, 1, 4), ExplosiveRegistry.get("TNT"), tntValue / 10.0);
 
+        //Call loader
         loader.preInit();
+        //Claim json content
+        JsonContentLoader.INSTANCE.claimContent(this);
+
+        //Ore dictionary registry
         OreDictionary.registerOre(OreNames.WOOD_STICK, Items.stick);
         OreDictionary.registerOre(OreNames.STRING, Items.string);
         OreDictionary.registerOre(OreNames.FLINT, Items.flint);
+
+        Calendar calendar = Calendar.getInstance();
+
+        if (calendar.get(2) + 1 == 12 && calendar.get(5) >= 24 && calendar.get(5) <= 26)
+        {
+            XMAS = true;
+        }
+    }
+
+    @Override
+    public void loadJsonContentHandlers()
+    {
+        JsonBlockListenerProcessor.addBuilder(new RotatableListener.Builder());
+        JsonBlockListenerProcessor.addBuilder(new MultiBlockListener.Builder());
+        JsonBlockListenerProcessor.addBuilder(new WrenchRotationListener.Builder());
+        proxy.loadJsonContentHandlers();
     }
 
     @EventHandler
@@ -509,15 +566,10 @@ public class Engine
         Engine.metadata.modId = References.NAME;
         Engine.metadata.name = References.NAME;
         Engine.metadata.description = References.NAME + " is a content creation toolkit";
-        Engine.metadata.url = "http://www.builtbroken.com/pages/voltzengine/";
-        Engine.metadata.version = References.VERSION + References.BUILD_VERSION;
+        Engine.metadata.url = "http://www.builtbroken.com";
+        Engine.metadata.version = References.VERSION;
         Engine.metadata.authorList = Arrays.asList("DarkCow");
         Engine.metadata.autogenerated = false;
-
-        if (runningAsDev)
-        {
-            manager.newBlock("UEBattery", TileUniversalBattery.class);
-        }
 
         //Register UpdateTicker
         //FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
@@ -525,28 +577,27 @@ public class Engine
         //Late registration of content
         if ((getConfig().hasKey("Content", "LoadOres") || metallicOresRequested) && getConfig().getBoolean("LoadOres", "Content", metallicOresRequested, "Loads up ore blocks and generators. Ore Generation can be disable separate if you want to keep the block for legacy purposes."))
         {
-            ore = contentRegistry.newBlock(References.ID + "StoneOre", new BlockOre("stone"), ItemBlockOre.class);
-            ore.setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+            ore = contentRegistry.newBlock("veStoneOre", new BlockOre("stone"), ItemBlockOre.class);
             MetallicOres.registerSet(ore, getConfig());
         }
 
         if ((getConfig().hasKey("Content", "LoadGemOres") || gemOresRequested) && getConfig().getBoolean("LoadGemOres", "Content", gemOresRequested, "Loads up Gem Ores."))
         {
-            gemOre = contentRegistry.newBlock(References.ID + "GemOre", new BlockGemOre("stone"), ItemBlockGemOre.class);
+            gemOre = contentRegistry.newBlock("veGemOre", new BlockGemOre("stone"), ItemBlockGemOre.class);
             GemOres.registerSet(gemOre, getConfig());
-        }
 
-        for (GemTypes types : GemTypes.values())
-        {
-            if (types.isRequested())
+            for (GemTypes types : GemTypes.values())
             {
-                types.item = new ItemGem(types);
-                contentRegistry.newItem("Gem" + LanguageUtility.capitalizeFirst(types.name) + "Item", types.item);
-                for (Gems gem : Gems.values())
+                if (types.isRequested())
                 {
-                    if (gem != Gems.UNKNOWN)
+                    types.item = new ItemGem(types);
+                    contentRegistry.newItem("Gem" + LanguageUtility.capitalizeFirst(types.name) + "Item", types.item);
+                    for (Gems gem : Gems.values())
                     {
-                        OreDictionary.registerOre(types.oreDict + gem.getOreName(), types.stack(gem));
+                        if (gem != Gems.UNKNOWN)
+                        {
+                            OreDictionary.registerOre(types.oreDict + gem.getOreName(), types.stack(gem));
+                        }
                     }
                 }
             }
@@ -592,9 +643,13 @@ public class Engine
             NEIProxy.hideItem(heatedStone);
             if (enabledHeatMap)
             {
-                HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(heatedStone, 15), 600);
-                HeatedBlockRegistry.addNewHeatingConversion(heatedStone, Blocks.lava, 1200);
+                HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementDataExtended(heatedStone, 15, Block.getIdFromBlock(Blocks.stone)), 600);
+                HeatedBlockRegistry.addNewHeatingConversion(Blocks.cobblestone, new PlacementDataExtended(heatedStone, 15, Block.getIdFromBlock(Blocks.cobblestone)), 600);
             }
+        }
+        else
+        {
+            HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementData(Blocks.cobblestone, 1), 600);
         }
 
         logger.info("Starting resource generator");
@@ -674,7 +729,6 @@ public class Engine
         //Creates world change threads for ques
         actionProcessorThreads = getConfig().getInt("WorldActionThreads", "Multi-Threading", Runtime.getRuntime().availableProcessors() - 1, 0, 100, "Creates the number of threads to be used for processing changes to the world. Used by mods like ICBM to calculate explosives before removing blocks from the world. Try to keep this one less than the number of processors you have. This way minecraft is not chocked out for CPU time.");
 
-
         //Save configs as this is our last chance
         heatDataConfig.save();
         explosiveConfig.save();
@@ -685,7 +739,25 @@ public class Engine
     public void loadCompleteEvent(FMLLoadCompleteEvent event)
     {
         //Clean up resources to free up ram
-        JsonContentLoader.INSTANCE.clear();
+        loader.loadComplete();
+
+        long time = System.nanoTime();
+        Engine.logger().error("Checking ore dictionary for bad values");
+        //Fix ore dictionary
+        String[] oreNames = OreDictionary.getOreNames();
+        for (String name : oreNames)
+        {
+            ArrayList<ItemStack> stacks = OreDictionary.getOres(name);
+            for (ItemStack stack : stacks)
+            {
+                if (stack == null || stack.getItem() == null)
+                {
+                    Engine.logger().error("\tFound bad ore dictionary value stack='" + stack + "'  ore_name='" + name + "'");
+                }
+            }
+        }
+        time = System.nanoTime() - time;
+        Engine.logger().error("Done.... took: " + StringHelpers.formatNanoTime(time));
     }
 
     public AbstractProxy getProxy()
@@ -696,6 +768,18 @@ public class Engine
     public Configuration getConfig()
     {
         return config;
+    }
+
+    @Override
+    public String getPrefix()
+    {
+        return References.PREFIX;
+    }
+
+    @Override
+    public String getDomain()
+    {
+        return References.DOMAIN;
     }
 
     public ModManager getManager()
@@ -807,5 +891,46 @@ public class Engine
             }
         }
         return false;
+    }
+
+    @Mod.EventHandler
+    public void missingMappingEvent(FMLMissingMappingsEvent event)
+    {
+        for (FMLMissingMappingsEvent.MissingMapping missingMapping : event.getAll())
+        {
+            final String name = missingMapping.name;
+            String key = null;
+            if (name.startsWith("VoltzEngine:"))
+            {
+                key = "voltzengine:" + name.split(":")[1];
+                key = key.replace("VoltzEngine", "ve");
+            }
+            else if (JsonMissingMapEventProcessor.mappings.containsKey(name))
+            {
+                key = JsonMissingMapEventProcessor.mappings.get(name);
+            }
+
+            if (key != null && !key.isEmpty())
+            {
+                logger().info("Fixing missing mapping for '" + name + "' replacing with '" + key + "'");
+                Object object = missingMapping.type.getRegistry().getObject(key);
+                if (object == Blocks.air || object == null)
+                {
+                    object = missingMapping.type.getRegistry().getObject(key);
+                }
+
+                if (object != Blocks.air && object != null)
+                {
+                    if (object instanceof Block)
+                    {
+                        missingMapping.remap((Block) object);
+                    }
+                    else if (object instanceof Item)
+                    {
+                        missingMapping.remap((Item) object);
+                    }
+                }
+            }
+        }
     }
 }

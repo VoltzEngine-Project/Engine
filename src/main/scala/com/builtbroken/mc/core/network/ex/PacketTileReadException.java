@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.network.ex;
 
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 

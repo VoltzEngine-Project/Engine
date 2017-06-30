@@ -9,8 +9,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
-import com.builtbroken.mc.api.tile.ITagRender;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.api.tile.client.ITagRender;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 
 import java.util.HashMap;
 import java.util.Iterator;

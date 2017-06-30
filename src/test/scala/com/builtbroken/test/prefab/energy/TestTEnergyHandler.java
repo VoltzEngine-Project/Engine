@@ -1,6 +1,6 @@
 package com.builtbroken.test.prefab.energy;
 
-import com.builtbroken.mc.lib.mod.compat.rf.RFEnergyHandler;
+import com.builtbroken.mc.mods.rf.RFEnergyHandler;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.ModRegistry;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
@@ -32,7 +32,7 @@ public class TestTEnergyHandler extends AbstractTest
         block = new BlockTEnergyHandler();
         ModRegistry.registerBlock(block, "test:TEnergyHandler");
         GameRegistry.registerTileEntity(TileTEnergyHandler.class, "test:TEnergyHandler");
-        handler = RFEnergyHandler.INSTANCE; //Never change conversion ratio for this test as it will cause all tests to fail in this class
+        handler = new RFEnergyHandler(2); //Never change conversion ratio for this test as it will cause all tests to fail in this class
     }
 
     public void testPlacement()

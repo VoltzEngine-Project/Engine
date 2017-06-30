@@ -2,7 +2,7 @@ package com.builtbroken.test.transform.vector;
 
 import junit.framework.TestCase;
 import org.junit.Assert;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 
 /**
  * Created by robert on 10/27/2014.

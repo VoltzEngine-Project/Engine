@@ -16,9 +16,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class WorkerThread extends Thread implements IWorkerThread
 {
-    private Queue<IThreadProcess> que = new ConcurrentLinkedQueue<>();
+    private Queue<IThreadProcess> queue = new ConcurrentLinkedQueue<>();
     private boolean waiting = false;
     private boolean kill = false;
+    private boolean paused = false;
+
+    private IThreadProcess currentProcess;
 
 
     public WorkerThread(String name)
@@ -35,10 +38,14 @@ public class WorkerThread extends Thread implements IWorkerThread
         {
             while (!kill)
             {
-                if (que.size() > 0)
+                if (paused)
                 {
-                    IThreadProcess process = que.poll();
-                    process.runProcess();
+                    wait(100);
+                }
+                if (queue.size() > 0)
+                {
+                    currentProcess = queue.poll();
+                    currentProcess.runProcess();
                 }
                 else
                 {
@@ -47,7 +54,7 @@ public class WorkerThread extends Thread implements IWorkerThread
                         waiting = true;
                         synchronized (this)
                         {
-                            wait(10000);
+                            wait(1000);
                         }
                     }
                     catch (IllegalMonitorStateException e)
@@ -67,11 +74,11 @@ public class WorkerThread extends Thread implements IWorkerThread
         }
         finally
         {
-            //Clean up to prevent process from running after world has closed
-            if (que.size() > 0)
+            //Clean up to prevent currentProcess from running after world has closed
+            if (queue.size() > 0)
             {
                 Engine.instance.logger().info("Killing " + this + " with processes left to run...");
-                for (IThreadProcess process : que)
+                for (IThreadProcess process : queue)
                 {
                     Engine.instance.logger().info("\t" + process);
                     process.killAction();
@@ -85,7 +92,7 @@ public class WorkerThread extends Thread implements IWorkerThread
     {
         if (!contains(process))
         {
-            que.add(process);
+            queue.add(process);
             if (waiting)
             {
                 //http://tutorials.jenkov.com/java-concurrency/thread-signaling.html
@@ -101,18 +108,47 @@ public class WorkerThread extends Thread implements IWorkerThread
     @Override
     public boolean contains(IThreadProcess process)
     {
-        return que.contains(process);
+        return queue.contains(process);
     }
 
     @Override
     public int containedProcesses()
     {
-        return que.size();
+        return queue.size();
     }
 
     @Override
     public void kill()
     {
         this.kill = true;
+        if (currentProcess != null)
+        {
+            currentProcess.killAction();
+        }
+    }
+
+    @Override
+    public boolean clearProcesses()
+    {
+        if (currentProcess != null)
+        {
+            currentProcess.killAction();
+        }
+        queue.clear();
+        return queue.isEmpty();
+    }
+
+    @Override
+    public boolean pauseWorker()
+    {
+        paused = true;
+        return paused;
+    }
+
+    @Override
+    public boolean resumeWorker()
+    {
+        paused = false;
+        return !paused;
     }
 }

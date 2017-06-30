@@ -1,5 +1,6 @@
 package com.builtbroken.mc.lib.world.edit.thread;
 
+import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.edit.IWorldChangeLayeredAction;
 import com.builtbroken.mc.api.edit.IWorldEdit;
@@ -7,12 +8,14 @@ import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.WorldChangeActionEvent;
 import com.builtbroken.mc.api.process.IThreadProcess;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.transform.vector.Location;
+import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.lib.world.edit.thread.action.WorldChangeActionPost;
 import com.builtbroken.mc.lib.world.edit.thread.action.WorldEditQueue;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Low priority Multi-thread for IWorldChangeActions
@@ -23,6 +26,8 @@ import java.util.Collection;
  */
 public class WCAThreadProcess implements IThreadProcess
 {
+    public static int MAX_EDITS_PER_TICK = 200;
+
     /** Location of the Blast */
     public final Location position;
     /** Blast instance */
@@ -30,7 +35,7 @@ public class WCAThreadProcess implements IThreadProcess
     /** Trigger cause of the blast */
     public final TriggerCause triggerCause;
     /** Blocks per tick limiter */
-    public int blocksPerTick = 200;
+    public int blocksPerTick;
 
     /** Blocks to remove from the world */
     private Collection<IWorldEdit> effectedBlocks;
@@ -49,6 +54,10 @@ public class WCAThreadProcess implements IThreadProcess
         this.blast = blast;
         this.triggerCause = triggerCause;
         blocksPerTick = blast.shouldThreadAction();
+        if (blocksPerTick < 0)
+        {
+            //blocksPerTick = MAX_EDITS_PER_TICK;
+        }
     }
 
     @Override
@@ -62,10 +71,22 @@ public class WCAThreadProcess implements IThreadProcess
                 {
                     if (((IWorldChangeLayeredAction) blast).shouldContinueAction(i))
                     {
-                        effectedBlocks = blast.getEffectedBlocks();
+                        long time = System.nanoTime();
+                        effectedBlocks = new ArrayList();
+                        ((IWorldChangeLayeredAction) blast).getEffectedBlocks((List<IWorldEdit>) effectedBlocks, i);
+                        if (Engine.runningAsDev)
+                        {
+                            time = System.nanoTime() - time;
+                            System.out.println("Layer(" + i + ") generated " + effectedBlocks.size() + " blocks and took " + StringHelpers.formatNanoTime(time));
+                        }
+
                         //Triggers an event allowing other mods to edit the block list
                         MinecraftForge.EVENT_BUS.post(new WorldChangeActionEvent.FinishedCalculatingEffectEvent(position, effectedBlocks, blast, triggerCause));
                         WorldActionQue.addEditQue(new WorldEditQueue(position.world, blast, blocksPerTick, effectedBlocks));
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }

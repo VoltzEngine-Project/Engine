@@ -2,6 +2,8 @@ package com.builtbroken.mc.core.content.debug;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
+import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
+import com.builtbroken.mc.prefab.items.ItemAbstract;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -25,7 +27,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/27/2016.
  */
-public class ItemDevData extends Item
+public class ItemDevData extends ItemAbstract
 {
     public ItemDevData()
     {
@@ -78,6 +80,7 @@ public class ItemDevData extends Item
             if (stack.getItemDamage() == 0)
             {
                 player.addChatComponentMessage(new ChatComponentText("Block: " + block));
+                player.addChatComponentMessage(new ChatComponentText(" Extended: " + ExtendedBlockDataManager.SERVER.getValue(world, x, y, z)));
                 player.addChatComponentMessage(new ChatComponentText(" Meta: " + meta));
                 player.addChatComponentMessage(new ChatComponentText(" Class: " + block.getClass()));
                 if (tile != null)
@@ -100,7 +103,7 @@ public class ItemDevData extends Item
                             {
                                 field.setAccessible(true);
                                 Object obj = field.get(tile);
-                                if(!(obj instanceof Collection))
+                                if (!(obj instanceof Collection))
                                 {
                                     player.addChatComponentMessage(new ChatComponentText("Field[" + (i++) + ", " + field.getName() + "] = " + obj));
                                     if (i % 5 == 0)
