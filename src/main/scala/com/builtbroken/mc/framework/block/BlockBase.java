@@ -730,9 +730,13 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
                     "tile"})
             {
                 IRenderState state = data.getState(key);
-                if (state != null && state.getIcon(side) != null)
+                if (state != null)
                 {
-                    return state.getIcon(side);
+                    IIcon icon = state.getIcon(side);
+                    if(icon != null)
+                    {
+                        return icon;
+                    }
                 }
             }
         }

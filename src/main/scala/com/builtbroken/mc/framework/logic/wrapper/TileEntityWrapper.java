@@ -463,4 +463,14 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     {
         return zCoord + 0.5f;
     }
+
+    public boolean isServer()
+    {
+        return world() != null && !world().isRemote;
+    }
+
+    public boolean isClient()
+    {
+        return world() != null && world().isRemote;
+    }
 }
