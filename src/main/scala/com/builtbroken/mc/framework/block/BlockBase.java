@@ -75,6 +75,8 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
         this.setResistance(data.getResistance());
         this.setHardness(data.getHardness());
 
+        setBlockBounds(data.getBlockBounds().min().xf(), data.getBlockBounds().min().yf(), data.getBlockBounds().min().zf(), data.getBlockBounds().max().xf(), data.getBlockBounds().max().yf(), data.getBlockBounds().max().zf());
+
         //Run later, as the default is set without data working
         this.opaque = this.isOpaqueCube();
         this.lightOpacity = this.isOpaqueCube() ? 255 : 0;
