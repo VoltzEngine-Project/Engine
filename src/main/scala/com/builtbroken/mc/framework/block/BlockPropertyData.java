@@ -34,6 +34,7 @@ public class BlockPropertyData extends JsonGenData
 
     //Block data
     private Material material = Material.clay;
+    private String materialName = "clay";
     private boolean isOpaqueCube;
     private boolean renderAsNormalBlock = true;
     private boolean supportsRedstone = false;
@@ -78,6 +79,7 @@ public class BlockPropertyData extends JsonGenData
     @JsonProcessorData("material")
     public void setMaterial(String matName)
     {
+        this.materialName = matName;
         this.material = MaterialDict.get(matName);
     }
 
@@ -211,7 +213,10 @@ public class BlockPropertyData extends JsonGenData
     public void setBlockBounds(Cube blockBounds)
     {
         this.blockBounds = blockBounds;
-        block.setBlockBounds(blockBounds.min().xf(), blockBounds.min().yf(), blockBounds.min().zf(), blockBounds.max().xf(), blockBounds.max().yf(), blockBounds.max().zf());
+        if(block != null)
+        {
+            block.setBlockBounds(blockBounds.min().xf(), blockBounds.min().yf(), blockBounds.min().zf(), blockBounds.max().xf(), blockBounds.max().yf(), blockBounds.max().zf());
+        }
     }
 
     public Cube getSelectionBounds()

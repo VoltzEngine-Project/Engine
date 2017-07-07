@@ -82,7 +82,7 @@ public class BlockMeta extends BlockBase
         super.getSubBlocks(item, creativeTabs, list);
         for (MetaData meta : metaDataValues)
         {
-            if (meta != null)
+            if (meta != null && meta.index != 0)
             {
                 list.add(new ItemStack(item, 1, meta.index));
             }

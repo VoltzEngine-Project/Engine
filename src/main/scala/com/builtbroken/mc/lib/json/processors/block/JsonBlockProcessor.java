@@ -88,6 +88,18 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         //Generate object
         BlockPropertyData blockPropertyData = new BlockPropertyData(this, id, mod, name);
 
+        //Load block property data TODO setup system to do before and after block created loading
+        for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
+        {
+            if (blockPropDataHandler.handle(blockPropertyData, entry.getKey().toLowerCase(), entry.getValue()))
+            {
+                if (Engine.runningAsDev)
+                {
+                    debugPrinter.log("Injected Key: " + entry.getKey());
+                }
+            }
+        }
+
         //Load blocks
         BlockBase block;
         //Meta data loading
@@ -104,32 +116,20 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
             block = new BlockBase(blockPropertyData);
         }
 
-        processAdditionalKeys(blockPropertyData, blockData, block, objectList);
+        //Call to process extra tags from file
+        for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
+        {
+            if (!blockFields.contains(entry.getKey().toLowerCase()))
+            {
+                processUnknownEntry(entry.getKey(), entry.getValue(), block, null, objectList);
+            }
+        }
 
         //Add block to object list
         objectList.add(block);
 
         debugPrinter.end("Done...");
         return true;
-    }
-
-    protected void processAdditionalKeys(Object blockPropertyData, JsonObject blockData, BlockBase block, List<IJsonGenObject> objectList)
-    {
-        //Call to process extra tags from file
-        for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
-        {
-            if (blockPropDataHandler.handle(blockPropertyData, entry.getKey().toLowerCase(), entry.getValue()))
-            {
-                if (Engine.runningAsDev)
-                {
-                    debugPrinter.log("Injected Key: " + entry.getKey());
-                }
-            }
-            else if (!blockFields.contains(entry.getKey().toLowerCase()))
-            {
-                processUnknownEntry(entry.getKey(), entry.getValue(), block, null, objectList);
-            }
-        }
     }
 
     /**

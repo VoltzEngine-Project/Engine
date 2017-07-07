@@ -75,6 +75,8 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
         this.setResistance(data.getResistance());
         this.setHardness(data.getHardness());
 
+        setBlockBounds(data.getBlockBounds().min().xf(), data.getBlockBounds().min().yf(), data.getBlockBounds().min().zf(), data.getBlockBounds().max().xf(), data.getBlockBounds().max().yf(), data.getBlockBounds().max().zf());
+
         //Run later, as the default is set without data working
         this.opaque = this.isOpaqueCube();
         this.lightOpacity = this.isOpaqueCube() ? 255 : 0;
@@ -728,9 +730,13 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
                     "tile"})
             {
                 IRenderState state = data.getState(key);
-                if (state != null && state.getIcon(side) != null)
+                if (state != null)
                 {
-                    return state.getIcon(side);
+                    IIcon icon = state.getIcon(side);
+                    if(icon != null)
+                    {
+                        return icon;
+                    }
                 }
             }
         }

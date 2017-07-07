@@ -73,25 +73,32 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public boolean isValidForTile()
     {
-        if (contentUseID != null)
+        if(isServer())
         {
-            TileEntity tile = getTileEntity();
-            if (tile instanceof IModObject)
+            if (contentUseID != null)
             {
-                if (((IModObject) tile).uniqueContentID().equals(contentUseID))
+                TileEntity tile = getTileEntity();
+                if (tile instanceof IModObject)
                 {
-                    return true;
+                    String id = ((IModObject) tile).uniqueContentID();
+                    if (id.equalsIgnoreCase(contentUseID))
+                    {
+                        return true;
+                    }
                 }
-            }
-            else if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() != null)
-            {
-                if (((ITileNodeHost) tile).getTileNode().uniqueContentID().equals(contentUseID))
+                else if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() != null)
                 {
-                    return true;
+                    String id = ((ITileNodeHost) tile).getTileNode().uniqueContentID();
+                    if (id.equalsIgnoreCase(contentUseID))
+                    {
+                        return true;
+                    }
                 }
+                return false;
             }
+            return metaCheck == -1 || getBlockMeta() == metaCheck;
         }
-        return metaCheck == -1 || getBlockMeta() == metaCheck;
+        return false;
     }
 
     @Override
