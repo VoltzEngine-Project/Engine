@@ -16,11 +16,24 @@ public class CommonRegistryProxy
     public void registerBlock(ModManager manager, String name, String prefix, Block block, Class<? extends ItemBlock> itemBlock)
     {
         GameRegistry.registerBlock(block, itemBlock != null ? itemBlock : ItemBlock.class, name);
+    
+        //Set block name if it is missing
+        if (block.getUnlocalizedName() == null || block.getUnlocalizedName().contains("null"))
+        {
+            block.setBlockName((modPrefix != null ? modPrefix : "") + name);
+        }
     }
 
     public void registerItem(ModManager manager, String name, String modPrefix, Item item)
     {
         GameRegistry.registerItem(item, name);
+        if (modPrefix != null)
+        {
+            if (item.unlocalizedName == null || item.unlocalizedName.isEmpty())
+            {
+                item.setUnlocalizedName(modPrefix + name);
+            }
+        }
     }
 
     public void registerTileEntity(String name, String prefix, Block block, TileEntity tile)

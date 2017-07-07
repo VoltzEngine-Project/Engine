@@ -19,12 +19,6 @@ public class ClientRegistryProxy extends CommonRegistryProxy
     {
         super.registerBlock(manager, name, modPrefix, block, itemBlock);
 
-        //Set block name if it is missing
-        if (block.getUnlocalizedName() == null || block.getUnlocalizedName().contains("null"))
-        {
-            block.setBlockName((modPrefix != null ? modPrefix : "") + name);
-        }
-
         //Set texture name if it is missing
         if (modPrefix != null && (block.textureName == null || block.textureName.isEmpty()))
         {
@@ -44,11 +38,6 @@ public class ClientRegistryProxy extends CommonRegistryProxy
         super.registerItem(manager, name, modPrefix, item);
         if (modPrefix != null)
         {
-            if (item.unlocalizedName == null || item.unlocalizedName.isEmpty())
-            {
-                item.setUnlocalizedName(modPrefix + name);
-            }
-
             if (item.iconString == null || item.iconString.isEmpty())
             {
                 item.setTextureName(modPrefix + name);
