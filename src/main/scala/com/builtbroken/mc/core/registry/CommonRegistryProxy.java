@@ -13,10 +13,10 @@ import java.util.Map;
 
 public class CommonRegistryProxy
 {
-    public void registerBlock(ModManager manager, String name, String prefix, Block block, Class<? extends ItemBlock> itemBlock)
+    public void registerBlock(ModManager manager, String name, String modPrefix, Block block, Class<? extends ItemBlock> itemBlock)
     {
         GameRegistry.registerBlock(block, itemBlock != null ? itemBlock : ItemBlock.class, name);
-    
+
         //Set block name if it is missing
         if (block.getUnlocalizedName() == null || block.getUnlocalizedName().contains("null"))
         {
