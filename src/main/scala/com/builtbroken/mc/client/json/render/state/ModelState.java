@@ -73,7 +73,20 @@ public class ModelState extends TextureState implements IModelState
                     {
                         if (r != null)
                         {
-                            if (r.equalsIgnoreCase("roll"))
+                            //TODO convert string to int for faster compare
+                            if (r.equalsIgnoreCase("-roll"))
+                            {
+                                doRoll(-roll);
+                            }
+                            else if (r.equalsIgnoreCase("-pitch"))
+                            {
+                                doPitch(-pitch);
+                            }
+                            else if (r.equalsIgnoreCase("-yaw"))
+                            {
+                                doYaw(-yaw);
+                            }
+                            else if (r.equalsIgnoreCase("roll"))
                             {
                                 doRoll(roll);
                             }

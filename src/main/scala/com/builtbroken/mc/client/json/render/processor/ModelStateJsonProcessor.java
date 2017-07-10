@@ -104,7 +104,8 @@ public class ModelStateJsonProcessor extends RenderJsonSubProcessor
                 if (e.isJsonPrimitive())
                 {
                     String value = e.getAsString().toLowerCase();
-                    if (!(value.equalsIgnoreCase("yaw") || value.equalsIgnoreCase("pitch") || value.equalsIgnoreCase("roll")))
+                    if (!(value.equalsIgnoreCase("yaw") || value.equalsIgnoreCase("pitch") || value.equalsIgnoreCase("roll")
+                            || value.equalsIgnoreCase("-yaw") || value.equalsIgnoreCase("-pitch") || value.equalsIgnoreCase("-roll")))
                     {
                         throw new IllegalArgumentException("Rotations order values can only be one of the follow {yaw, pitch, roll}");
                     }
