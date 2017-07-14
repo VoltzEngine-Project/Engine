@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.block;
 
 import com.builtbroken.jlib.data.Colors;
+import com.builtbroken.mc.api.data.ActionResponse;
 import com.builtbroken.mc.api.tile.access.IGuiTile;
 import com.builtbroken.mc.api.tile.listeners.*;
 import com.builtbroken.mc.api.tile.listeners.client.IIconListener;
@@ -362,7 +363,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             ITileEventListener next = it.next();
             if (next instanceof IPlacementListener)
             {
-                if (!((IPlacementListener) next).canPlaceOnSide(side))
+                if (((IPlacementListener) next).canPlaceOnSide(side) == ActionResponse.CANCEL)
                 {
                     return false;
                 }
@@ -380,7 +381,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             ITileEventListener next = it.next();
             if (next instanceof IPlacementListener)
             {
-                if (!((IPlacementListener) next).canPlaceAt())
+                if (((IPlacementListener) next).canPlaceAt() == ActionResponse.CANCEL)
                 {
                     return false;
                 }
@@ -397,7 +398,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             ITileEventListener next = it.next();
             if (next instanceof IPlacementListener)
             {
-                if (!((IPlacementListener) next).canPlaceAt(entity))
+                if (((IPlacementListener) next).canPlaceAt(entity) == ActionResponse.CANCEL)
                 {
                     return false;
                 }
@@ -415,7 +416,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
             ITileEventListener next = it.next();
             if (next instanceof IPlacementListener)
             {
-                if (!((IPlacementListener) next).canReplace(world, x, y, z, side, stack))
+                if (((IPlacementListener) next).canReplace(world, x, y, z, side, stack) == ActionResponse.CANCEL)
                 {
                     return false;
                 }
@@ -733,7 +734,7 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
                 if (state != null)
                 {
                     IIcon icon = state.getIcon(side);
-                    if(icon != null)
+                    if (icon != null)
                     {
                         return icon;
                     }

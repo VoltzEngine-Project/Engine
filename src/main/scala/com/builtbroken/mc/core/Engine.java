@@ -83,6 +83,7 @@ import com.builtbroken.mc.mods.te.TEProxy;
 import com.builtbroken.mc.mods.tinkers.TinkerProxy;
 import com.builtbroken.mc.prefab.explosive.handler.ExplosiveHandlerTNT;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
+import com.builtbroken.mc.prefab.tile.listeners.AdjacentPlacementListener;
 import com.builtbroken.mc.prefab.tile.listeners.RenderBoundsListener;
 import com.builtbroken.mc.prefab.tile.listeners.RotatableListener;
 import com.builtbroken.mc.prefab.tile.listeners.WrenchRotationListener;
@@ -559,6 +560,7 @@ public class Engine implements IJsonGenMod
         JsonBlockListenerProcessor.addBuilder(new MultiBlockListener.Builder());
         JsonBlockListenerProcessor.addBuilder(new WrenchRotationListener.Builder());
         JsonBlockListenerProcessor.addBuilder(new RenderBoundsListener.Builder());
+        JsonBlockListenerProcessor.addBuilder(new AdjacentPlacementListener.Builder());
         proxy.loadJsonContentHandlers();
     }
 

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.multiblock.listeners;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.data.ActionResponse;
 import com.builtbroken.mc.api.tile.access.IRotation;
 import com.builtbroken.mc.api.tile.listeners.*;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
@@ -230,15 +231,15 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     }
 
     @Override
-    public boolean canPlaceAt()
+    public ActionResponse canPlaceAt()
     {
-        return doRotation || MultiBlockHelper.canBuild(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true);
+        return (doRotation || MultiBlockHelper.canBuild(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true)) ? ActionResponse.DO : ActionResponse.CANCEL;
     }
 
     @Override
-    public boolean canPlaceAt(Entity entity)
+    public ActionResponse canPlaceAt(Entity entity)
     {
-        return !doRotation || entity instanceof EntityLivingBase && MultiBlockHelper.canBuild(world(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineForgeDirection((EntityLivingBase) entity)), true);
+        return (!doRotation || entity instanceof EntityLivingBase && MultiBlockHelper.canBuild(world(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineForgeDirection((EntityLivingBase) entity)), true)) ? ActionResponse.DO : ActionResponse.CANCEL;
     }
 
     @Override
