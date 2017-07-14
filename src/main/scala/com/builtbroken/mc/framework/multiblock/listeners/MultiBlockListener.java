@@ -1,7 +1,6 @@
 package com.builtbroken.mc.framework.multiblock.listeners;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.api.IModObject;
 import com.builtbroken.mc.api.tile.access.IRotation;
 import com.builtbroken.mc.api.tile.listeners.*;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
@@ -46,12 +45,6 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @JsonProcessorData("buildFirstTick")
     protected boolean buildFirstTick = true;
 
-    @JsonProcessorData(value = "metadata", type = "int")
-    protected int metaCheck = -1;
-
-    @JsonProcessorData("contentUseID")
-    protected String contentUseID = null;
-
     @JsonProcessorData("directionOffset")
     protected boolean directionOffset = false;
 
@@ -68,37 +61,6 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         list.add("update");
         list.add("multiblock");
         return list;
-    }
-
-    @Override
-    public boolean isValidForTile()
-    {
-        if(isServer())
-        {
-            if (contentUseID != null)
-            {
-                TileEntity tile = getTileEntity();
-                if (tile instanceof IModObject)
-                {
-                    String id = ((IModObject) tile).uniqueContentID();
-                    if (id.equalsIgnoreCase(contentUseID))
-                    {
-                        return true;
-                    }
-                }
-                else if (tile instanceof ITileNodeHost && ((ITileNodeHost) tile).getTileNode() != null)
-                {
-                    String id = ((ITileNodeHost) tile).getTileNode().uniqueContentID();
-                    if (id.equalsIgnoreCase(contentUseID))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            return metaCheck == -1 || getBlockMeta() == metaCheck;
-        }
-        return false;
     }
 
     @Override
@@ -277,6 +239,12 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     public boolean canPlaceAt(Entity entity)
     {
         return !doRotation || entity instanceof EntityLivingBase && MultiBlockHelper.canBuild(world(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineForgeDirection((EntityLivingBase) entity)), true);
+    }
+
+    @Override
+    protected boolean isValidForRuntime()
+    {
+        return isServer();
     }
 
     public static class Builder implements ITileEventListenerBuilder

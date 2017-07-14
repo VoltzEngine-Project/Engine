@@ -2,10 +2,7 @@ package com.builtbroken.mc.framework.logic.wrapper;
 
 import com.builtbroken.mc.api.event.tile.TileEvent;
 import com.builtbroken.mc.api.tile.ITile;
-import com.builtbroken.mc.api.tile.listeners.IBlockListener;
-import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
-import com.builtbroken.mc.api.tile.listeners.ITileWithListeners;
-import com.builtbroken.mc.api.tile.listeners.IUpdateListener;
+import com.builtbroken.mc.api.tile.listeners.*;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
@@ -14,6 +11,7 @@ import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
+import com.builtbroken.mc.imp.transform.region.Cube;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -304,11 +302,50 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
+        for (List<ITileEventListener> list : getMultiTileListeners("renderBounds"))
+        {
+            if (list != null && !list.isEmpty())
+            {
+                for (ITileEventListener listener : list)
+                {
+                    if (listener instanceof IRenderBoundsListener)
+                    {
+                        if (listener instanceof IBlockListener)
+                        {
+                            ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                        }
+                        if (listener.isValidForTile())
+                        {
+                            final Cube cube = ((IRenderBoundsListener) listener).getRenderBounds();
+                            if (cube != null && cube.isValid())
+                            {
+                                return cube.clone().add(xi(), yi(), zi()).toAABB();
+                            }
+                        }
+                    }
+                }
+            }
+        }
         if (renderBoundCache == null)
         {
             renderBoundCache = getHostBlock().data.getRenderBounds().clone().add(xi(), yi(), zi()).toAABB();
         }
         return renderBoundCache;
+    }
+
+    /**
+     * Gets list of listeners that apply to this block
+     *
+     * @param key - listener key
+     * @return list of lists
+     */
+    protected List[] getMultiTileListeners(String key)
+    {
+        if (!(getBlockType() instanceof BlockBase))
+        {
+            return new List[]{getListeners(key)};
+        }
+        return new List[]{getListeners(key), ((BlockBase) getBlockType()).listeners.get(key)};
     }
 
     //=============================================
