@@ -426,6 +426,24 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     }
 
     @Override
+    public boolean canBlockStay(World world, int x, int y, int z)
+    {
+        ListenerIterator it = new ListenerIterator(world, x, y, z, this, "placement");
+        while (it.hasNext())
+        {
+            ITileEventListener next = it.next();
+            if (next instanceof IPlacementListener)
+            {
+                if (((IPlacementListener) next).canBlockStay() == ActionResponse.CANCEL)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
     {
         ListenerIterator it = new ListenerIterator(world, x, y, z, this, "activation");
