@@ -6,6 +6,7 @@ import com.builtbroken.mc.client.json.models.ModelData;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.core.Engine;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
@@ -29,6 +30,8 @@ public class ClientDataHandler
     public HashMap<String, AudioData> audioData = new HashMap();
     /** Effect key to effect data */
     public HashMap<String, IEffectData> effectData = new HashMap();
+    /** Block renders to be attached to blocks */
+    public HashMap<String, ISimpleBlockRenderingHandler> blockRenders = new HashMap();
 
     /** Global client data handler for Voltz Engine */
     public static final ClientDataHandler INSTANCE = new ClientDataHandler();
@@ -74,9 +77,18 @@ public class ClientDataHandler
     {
         if (effectData.containsKey(key))
         {
-            Engine.logger().error("Overriding " + audioData.get(key) + " with " + data);
+            Engine.logger().error("Overriding " + effectData.get(key) + " with " + data);
         }
         effectData.put(key, data);
+    }
+
+    public void addBlockRenderer(String key, ISimpleBlockRenderingHandler renderer)
+    {
+        if (blockRenders.containsKey(key.toLowerCase()))
+        {
+            Engine.logger().error("Overriding " + blockRenders.get(key) + " with " + renderer);
+        }
+        blockRenders.put(key.toLowerCase(), renderer);
     }
 
     public RenderData getRenderData(String key)
@@ -122,6 +134,15 @@ public class ClientDataHandler
             return null;
         }
         return effectData.get(key.toLowerCase());
+    }
+
+    public ISimpleBlockRenderingHandler getBlockRender(String key)
+    {
+        if (key == null || key.isEmpty())
+        {
+            return null;
+        }
+        return blockRenders.get(key.toLowerCase());
     }
 
     @SubscribeEvent

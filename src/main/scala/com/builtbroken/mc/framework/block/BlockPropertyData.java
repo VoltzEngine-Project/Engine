@@ -1,11 +1,13 @@
 package com.builtbroken.mc.framework.block;
 
+import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.framework.block.tile.ITileProvider;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.lib.helper.MaterialDict;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
 import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
 import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.material.Material;
 
 /**
@@ -114,6 +116,20 @@ public class BlockPropertyData extends JsonGenData
     public void setRenderType(int renderType)
     {
         this.renderType = renderType;
+    }
+
+    @JsonProcessorData(value = "renderTypeName")
+    public void setRenderTypeName(String renderType)
+    {
+        ISimpleBlockRenderingHandler handler = ClientDataHandler.INSTANCE.getBlockRender(renderType);
+        if(handler != null)
+        {
+            setRenderType(handler.getRenderId());
+        }
+        else
+        {
+            throw new IllegalArgumentException("RenderType[" + renderType + "] was not registered and thus can't be used.");
+        }
     }
 
     public int getColor()
