@@ -883,11 +883,12 @@ public class Engine implements IJsonGenMod
 
     public static boolean isJUnitTest()
     {
+        //TODO do boolean flag from VoltzTestRunner to simplify solution
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         List<StackTraceElement> list = Arrays.asList(stackTrace);
         for (StackTraceElement element : list)
         {
-            if (element.getClassName().startsWith("org.junit."))
+            if (element.getClassName().startsWith("org.junit.") || element.getClassName().startsWith("com.builtbroken.mc.testing.junit.VoltzTestRunner"))
             {
                 return true;
             }
