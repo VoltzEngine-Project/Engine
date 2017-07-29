@@ -92,12 +92,13 @@ public final class ExplosiveRegistry
      * Registers a new explosive
      *
      * @param modID - modID
-     * @param id    - name to register the explosive with
+     * @param id_r    - name to register the explosive with
      * @param ex    - explosive instance
      * @return false an explosive is already registered by the ID
      */
-    public static boolean registerExplosive(String modID, String id, IExplosiveHandler ex, boolean canDisable, boolean canConfigScale)
+    public static boolean registerExplosive(final String modID, final String id_r, final IExplosiveHandler ex, boolean canDisable, boolean canConfigScale)
     {
+        final String id = id_r.toLowerCase();
         if (Engine.explosiveConfig == null || canDisable && Engine.explosiveConfig.getBoolean("enable_" + id, modID, true, ""))
         {
             if (!isRegistered(ex) && !idToExplosiveMap.containsKey(id))
@@ -315,7 +316,7 @@ public final class ExplosiveRegistry
      */
     public static IExplosiveHandler get(String name)
     {
-        return idToExplosiveMap.get(name);
+        return idToExplosiveMap.get(name.toLowerCase());
     }
 
     /**
