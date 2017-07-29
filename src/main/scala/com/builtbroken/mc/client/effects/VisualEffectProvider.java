@@ -4,6 +4,8 @@ import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import java.awt.*;
+
 /**
  * Called to generate a graphic effect into the world from data received
  *
@@ -21,22 +23,48 @@ public abstract class VisualEffectProvider
 
     public void displayEffect(World world, double x, double y, double z, double mx, double my, double mz, boolean movementIsEndpoint, NBTTagCompound otherData)
     {
-        if (movementIsEndpoint)
+        if (shouldDisplay(world, x, y, z, mx, my, mz, movementIsEndpoint, otherData))
         {
-            Pos pos = new Pos(mx, my, mz).sub(x, y, z).normalize();
-            if (otherData.hasKey("vel"))
+            if (movementIsEndpoint)
             {
-                pos = pos.multiply(otherData.getFloat("vel"));
+                Pos pos = new Pos(mx, my, mz).sub(x, y, z).normalize();
+                if (otherData.hasKey("vel"))
+                {
+                    pos = pos.multiply(otherData.getFloat("vel"));
+                }
+                mx = pos.x();
+                my = pos.y();
+                mz = pos.z();
             }
-            mx = pos.x();
-            my = pos.y();
-            mz = pos.z();
+            displayEffect(world, x, y, z, mx, my, mz, otherData);
         }
-        displayEffect(world, x, y, z, mx, my, mz, otherData);
+    }
+
+    protected boolean shouldDisplay(World world, double x, double y, double z, double mx, double my, double mz, boolean movementIsEndpoint, NBTTagCompound otherData)
+    {
+        return shouldDisplay(world, x, y, z);
+    }
+
+    protected boolean shouldDisplay(World world, double x, double y, double z)
+    {
+        return true;
     }
 
     public void displayEffect(World world, double x, double y, double z, double mx, double my, double mz, NBTTagCompound otherData)
     {
 
+    }
+
+    //-------------------------------
+    //---- Helpers ------------------
+    //-------------------------------
+
+    protected Color getColor(NBTTagCompound tag)
+    {
+        if (tag.hasKey("color"))
+        {
+            return new Color(tag.getInteger("color"));
+        }
+        return new Color(tag.getInteger("red"), tag.getInteger("green"), tag.getInteger("blue"));
     }
 }

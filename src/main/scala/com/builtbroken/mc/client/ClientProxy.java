@@ -3,6 +3,7 @@ package com.builtbroken.mc.client;
 import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
 import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.effects.providers.VEProviderLaserBeam;
+import com.builtbroken.mc.client.effects.providers.VEProviderRocketTrail;
 import com.builtbroken.mc.client.effects.providers.VEProviderShockWave;
 import com.builtbroken.mc.client.effects.providers.VEProviderSmokeStream;
 import com.builtbroken.mc.client.json.ClientDataHandler;
@@ -107,6 +108,7 @@ public class ClientProxy extends CommonProxy
         VisualEffectRegistry.addEffectProvider(new VEProviderShockWave());
         VisualEffectRegistry.addEffectProvider(new VEProviderLaserBeam());
         VisualEffectRegistry.addEffectProvider(new VEProviderSmokeStream());
+        VisualEffectRegistry.addEffectProvider(new VEProviderRocketTrail());
 
         MinecraftForge.EVENT_BUS.register(this);
     }

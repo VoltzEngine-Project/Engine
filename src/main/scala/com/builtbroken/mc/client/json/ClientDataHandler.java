@@ -75,11 +75,11 @@ public class ClientDataHandler
 
     public void addEffect(String key, IEffectData data)
     {
-        if (effectData.containsKey(key))
+        if (effectData.containsKey(key.toLowerCase()))
         {
             Engine.logger().error("Overriding " + effectData.get(key) + " with " + data);
         }
-        effectData.put(key, data);
+        effectData.put(key.toLowerCase(), data);
     }
 
     public void addBlockRenderer(String key, ISimpleBlockRenderingHandler renderer)
