@@ -16,6 +16,14 @@ public class TestCore extends AbstractTest
     @Test
     public void testJUnitCheck()
     {
-        assertTrue(Engine.isJUnitTest());
+        if(!Engine.isJUnitTest())
+        {
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            for (StackTraceElement element : stackTrace)
+            {
+                System.out.println(element);
+            }
+            fail();
+        }
     }
 }
