@@ -4,7 +4,9 @@ import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.core.commands.permissions.PermissionsCommandManager;
 import com.builtbroken.mc.core.commands.permissions.sub.*;
+import com.builtbroken.mc.framework.blast.emp.ExEmp;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
+import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.server.MinecraftServer;
 
@@ -19,6 +21,11 @@ public class ServerProxy extends CommonProxy
     public void init()
     {
         super.init();
+
+        //Register explosives
+        ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "Emp", new ExEmp());
+
+        //Handle command system
         GroupProfileHandler.enablePermissions = Engine.instance.getConfig().getBoolean("EnablePermissionSystem", "Commands", Engine.runningAsDev, "Enabled Voltz Engine built in command permission system that works much like Bukkit's PermissionEx Plugin");
         if (GroupProfileHandler.enablePermissions)
         {
