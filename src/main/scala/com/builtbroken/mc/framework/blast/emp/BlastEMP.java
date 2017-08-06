@@ -1,7 +1,8 @@
 package com.builtbroken.mc.framework.blast.emp;
 
 import com.builtbroken.mc.api.edit.IWorldEdit;
-import com.builtbroken.mc.api.energy.IEMInterference;
+import com.builtbroken.mc.api.energy.IEMReceptiveDevice;
+import com.builtbroken.mc.api.energy.IVoltageTransmitter;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.imp.transform.sorting.Vector3DistanceComparator;
 import com.builtbroken.mc.imp.transform.vector.Location;
@@ -32,7 +33,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 12/14/2015.
  */
-public class BlastEMP extends Blast<BlastEMP>
+public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
 {
     public static final String START_AUDIO = "icbm:icbm.taser";
     public static final String EDIT_AUDIO = "icbm:icbm.spark";
@@ -59,7 +60,7 @@ public class BlastEMP extends Blast<BlastEMP>
                 if (object instanceof RadarTile)
                 {
                     TileEntity tile = ((RadarTile) object).tile;
-                    if (!tile.isInvalid() && (tile instanceof IEMInterference || UniversalEnergySystem.isHandler(tile, null)))
+                    if (!tile.isInvalid() && (tile instanceof IEMReceptiveDevice || UniversalEnergySystem.isHandler(tile, null)))
                     {
                         tileLocations.add(new Pos(tile));
                     }
@@ -93,32 +94,36 @@ public class BlastEMP extends Blast<BlastEMP>
         if (power > 1)
         {
             IWorldEdit edit = null;
-            if (tile instanceof IEMInterference)
+            double powerUsed = 0;
+            if (tile instanceof IEMReceptiveDevice)
             {
-                edit = doEMP((IEMInterference) tile, distance, power);
+                powerUsed = ((IEMReceptiveDevice) tile).onElectromagneticRadiationApplied(this, distance, power, false);
+                edit = doEMP((IEMReceptiveDevice) tile, distance, power);
             }
             else if (UniversalEnergySystem.isHandler(tile, null))
             {
                 edit = drainEnergy(tile, distance, power);
+                //TODO calculate power used by EMP action
             }
             if (edit != null)
             {
                 edits.add(edit);
             }
+            return powerUsed < power ? power - powerUsed : 0;
         }
         return power;
     }
 
-    protected IWorldEdit doEMP(IEMInterference tile, double distance, double power)
+    protected IWorldEdit doEMP(IEMReceptiveDevice tile, double distance, double power)
     {
         System.out.println("EMP tile effect: " + tile + " " + distance + " " + power);
-        return new EmpEdit(new Location((TileEntity) tile), power);
+        return new EmpEdit(new Location((TileEntity) tile), this, distance, power);
     }
 
     protected IWorldEdit drainEnergy(TileEntity tile, double distance, double power)
     {
         System.out.println("EMP tile drain: " + tile + " " + distance + " " + power);
-        return new EmpDrainEdit(new Location(tile), power);
+        return new EmpDrainEdit(new Location(tile), this, distance, power);
     }
 
     protected double getEMPRange()
@@ -128,6 +133,10 @@ public class BlastEMP extends Blast<BlastEMP>
 
     protected double getPower(double distance)
     {
+        if (distance == -1)
+        {
+            return (4 / 3) * Math.PI * (size * size * size);
+        }
         return distance * 100;
     }
 
@@ -382,5 +391,11 @@ public class BlastEMP extends Blast<BlastEMP>
     {
         //TODO list of blocks we don't care about (grass, glass, trees, water, etc)
         return !block.isOpaqueCube();
+    }
+
+    @Override
+    public double getTotalVoltagePower()
+    {
+        return getPower(-1);
     }
 }

@@ -2,7 +2,7 @@ package com.builtbroken.mc.framework.blast.emp;
 
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.edit.BlockEditResult;
-import com.builtbroken.mc.lib.energy.UniversalEnergySystem;
+import com.builtbroken.mc.api.energy.IEMReceptiveDevice;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import net.minecraft.tileentity.TileEntity;
 
@@ -10,10 +10,14 @@ import net.minecraft.tileentity.TileEntity;
 public class EmpEdit extends BlockEdit
 {
     final double power;
+    final double distance;
+    final BlastEMP source;
 
-    public EmpEdit(IWorldPosition vec, double power)
+    public EmpEdit(IWorldPosition vec, BlastEMP source,  double distance, double power)
     {
         super(vec);
+        this.source = source;
+        this.distance = distance;
         this.power = power;
     }
 
@@ -28,9 +32,7 @@ public class EmpEdit extends BlockEdit
     @Override
     public BlockEditResult place()
     {
-        //TODO destroy machines, replace machine with burnt up machine containing 60% of crafting parts
-        //We can not place a block without a world
-        if (world != null)
+        if (world != null) //TODO add event fires
         {
             if (isChunkLoaded())
             {
@@ -45,18 +47,9 @@ public class EmpEdit extends BlockEdit
     protected BlockEditResult doPlace()
     {
         TileEntity tile = getTileEntity();
-        if (tile != null && UniversalEnergySystem.isHandler(tile, null))
+        if (tile instanceof IEMReceptiveDevice)
         {
-            //TODO get accessible sides to improve compatibility and performance
-            //TODO make a simple drain method
-            //TODO fire events
-            //TODO implement EMP api to allow machines to control, and config overrides to bypass control
-            //TODO add continues drain effect
-            //TODO break settings on machines
-            //final double power = UniversalEnergySystem.extractEnergy(tile, UniversalEnergySystem.getPotentialEnergy(tile), false);
-            //final double powerScaled = power * power;
-            //UniversalEnergySystem.extractEnergy(tile, powerScaled, true);
-            UniversalEnergySystem.clearEnergy(tile, true);
+            ((IEMReceptiveDevice) tile).onElectromagneticRadiationApplied(source, distance, power, true);
             return BlockEditResult.PLACED;
         }
         return BlockEditResult.PREV_BLOCK_CHANGED;

@@ -10,10 +10,14 @@ import net.minecraft.tileentity.TileEntity;
 public class EmpDrainEdit extends BlockEdit
 {
     final double power;
+    final double distance;
+    final BlastEMP source;
 
-    public EmpDrainEdit(IWorldPosition vec, double power)
+    public EmpDrainEdit(IWorldPosition vec, BlastEMP source,  double distance, double power)
     {
         super(vec);
+        this.source = source;
+        this.distance = distance;
         this.power = power;
     }
 
