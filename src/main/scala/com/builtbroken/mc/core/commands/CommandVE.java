@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.commands.debug.CommandDebugItem;
 import com.builtbroken.mc.core.commands.debug.CommandDebugMap;
 import com.builtbroken.mc.core.commands.debug.CommandDebugRecipes;
+import com.builtbroken.mc.core.commands.energy.CommandChargeItem;
 import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
 import com.builtbroken.mc.core.commands.ext.SubCommandWithName;
@@ -45,7 +46,7 @@ public class CommandVE extends ModularCommand
     private ModularCommand sub_command_debug;
     private ModularCommand sub_command_json;
     private ModularCommand sub_command_thread;
-
+    private ModularCommand sub_command_power;
 
     private CommandVE()
     {
@@ -72,8 +73,18 @@ public class CommandVE extends ModularCommand
         }
 
         addToJsonCommand(new CommandJsonRecipe());
-
         addToThreadCommand(new CommandThreadClear());
+        addToPowerCommand(new CommandChargeItem());
+    }
+
+    public void addToPowerCommand(AbstractCommand command)
+    {
+        if (sub_command_power == null)
+        {
+            sub_command_power = new ModularCommand("power");
+            addCommand(sub_command_power);
+        }
+        sub_command_power.addCommand(command);
     }
 
     public void addToThreadCommand(AbstractCommand command)
