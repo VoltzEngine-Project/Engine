@@ -28,17 +28,42 @@ public class AudioData extends JsonGenData
 
     public void play(double x, double y, double z, float pitch, float volume)
     {
-        if(Minecraft.getMinecraft() != null && Minecraft.getMinecraft().theWorld != null)
+        try
         {
-            SoundEventAccessorComposite sound = Minecraft.getMinecraft().getSoundHandler().getSound(soundLocation);
-            if (sound != null)
+            if (soundLocation != null)
             {
-                Minecraft.getMinecraft().theWorld.playSound(x, y, z, soundLocation.toString(), pitch, volume, false);
+                if (Minecraft.getMinecraft() != null)
+                {
+                    if (Minecraft.getMinecraft().theWorld != null)
+                    {
+                        SoundEventAccessorComposite sound = Minecraft.getMinecraft().getSoundHandler().getSound(soundLocation);
+                        if (sound != null)
+                        {
+                            Minecraft.getMinecraft().theWorld.playSound(x, y, z, soundLocation.toString(), pitch, volume, false);
+                        }
+                        else
+                        {
+                            Engine.logger().debug("AudioData#play() Failed to locate sound instance for " + this, new RuntimeException());
+                        }
+                    }
+                    else if (Engine.runningAsDev)
+                    {
+                        Engine.logger().debug("AudioData#play() Minecraft client world is not loaded" + this, new RuntimeException());
+                    }
+                }
+                else if (Engine.runningAsDev)
+                {
+                    Engine.logger().debug("AudioData#play() Minecraft is not loaded" + this, new RuntimeException());
+                }
             }
-            else
+            else if (Engine.runningAsDev)
             {
-                Engine.logger().error("No sound file for " + soundLocation);
+                Engine.logger().debug("AudioData#play() " + this + " does not have a sound location", new RuntimeException());
             }
+        }
+        catch (Exception e)
+        {
+            Engine.logger().error("AudioData#play() : Failed to play sound " + this, e);
         }
     }
 

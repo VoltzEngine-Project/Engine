@@ -2,6 +2,8 @@ package com.builtbroken.mc.lib.json.loading;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.json.conversion.*;
+import com.builtbroken.mc.lib.json.conversion.data.JsonConverterEnergyBufferData;
+import com.builtbroken.mc.lib.json.conversion.data.JsonConverterEnergyChargeData;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -32,15 +34,18 @@ public class JsonLoader
         addConverter(new JsonConverterNBT());
         addConverter(new JsonConverterStringArray());
         addConverter(new JsonConverterCube());
+        addConverter(new JsonConverterEnergyBufferData());
+        addConverter(new JsonConverterEnergyChargeData());
     }
 
     public static void addConverter(JsonConverter converter)
     {
-        if (conversionHandlers.containsKey(converter.key))
+        String key = converter.key.toLowerCase();
+        if (conversionHandlers.containsKey(key))
         {
-            Engine.logger().error("Overriding converter '" + converter.key + "' with " + converter + ", previous value " + conversionHandlers.get(converter.key));
+            Engine.logger().error("Overriding converter '" + key + "' with " + converter + ", previous value " + conversionHandlers.get(key));
         }
-        conversionHandlers.put(converter.key, converter);
+        conversionHandlers.put(key, converter);
     }
 
     /**
