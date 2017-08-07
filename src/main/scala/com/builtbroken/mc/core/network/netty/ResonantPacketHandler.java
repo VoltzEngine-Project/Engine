@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.network.netty;
 
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.api.data.IPacket;
+import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.channel.ChannelHandler;
@@ -17,23 +17,29 @@ import net.minecraft.network.NetHandlerPlayServer;
 @ChannelHandler.Sharable
 public class ResonantPacketHandler extends SimpleChannelInboundHandler<IPacket>
 {
-	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, IPacket packet) throws Exception
-	{
-		INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, IPacket packet) throws Exception
+    {
+        try
+        {
+            INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 
-		switch (FMLCommonHandler.instance().getEffectiveSide())
-		{
-			case CLIENT:
-				packet.handleClientSide(Engine.proxy.getClientPlayer());
-				break;
-			case SERVER:
-				packet.handleServerSide(((NetHandlerPlayServer) netHandler).playerEntity);
-				break;
-			default:
-				break;
-		}
-
-	}
+            switch (FMLCommonHandler.instance().getEffectiveSide())
+            {
+                case CLIENT:
+                    packet.handleClientSide(Engine.proxy.getClientPlayer());
+                    break;
+                case SERVER:
+                    packet.handleServerSide(((NetHandlerPlayServer) netHandler).playerEntity);
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Engine.logger().error("Failed to handle packet " + packet, e);
+        }
+    }
 
 }

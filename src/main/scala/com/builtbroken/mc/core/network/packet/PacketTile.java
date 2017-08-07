@@ -76,13 +76,27 @@ public class PacketTile extends PacketType
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        handle(player);
+        if (player != null)
+        {
+            handle(player);
+        }
+        else if (Engine.runningAsDev)
+        {
+            Engine.logger().error("PacketTile#handleClientSide(null) - player was null for packet", new RuntimeException());
+        }
     }
 
     @Override
     public void handleServerSide(EntityPlayer player)
     {
-        handle(player);
+        if (player != null)
+        {
+            handle(player);
+        }
+        else if (Engine.runningAsDev)
+        {
+            Engine.logger().error("PacketTile#handleServerSide(null) - player was null for packet", new RuntimeException());
+        }
     }
 
     /**
@@ -92,6 +106,14 @@ public class PacketTile extends PacketType
      */
     public void handle(EntityPlayer player)
     {
+        if (player.getEntityWorld() == null)
+        {
+            if (Engine.runningAsDev)
+            {
+                Engine.logger().error("PacketTile#handle(" + player + ") - world is null for player while handling packet. ", new RuntimeException());
+            }
+            return;
+        }
         handle(player, player.getEntityWorld().getTileEntity(this.x, this.y, this.z));
     }
 
@@ -103,6 +125,7 @@ public class PacketTile extends PacketType
      */
     public void handle(EntityPlayer player, TileEntity tile)
     {
+        //TODO add checksum or hash to verify the packet is sent to the correct tile
         final Location location = new Location(player.worldObj, x, y, z);
         sender_$eq(player);
         if (tile == null)
