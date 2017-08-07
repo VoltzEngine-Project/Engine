@@ -29,6 +29,11 @@ public class UniversalEnergySystem
     /** Map of static objects(Block, Item) to thier handlers for quick reference */
     private static final HashMap<Object, EnergyHandler> objectHandlerMap = new HashMap();
 
+    static
+    {
+        register(new UniversalEnergyHandler());
+    }
+
     public static void register(EnergyHandler module)
     {
         loadedModules.add(module);
@@ -38,9 +43,9 @@ public class UniversalEnergySystem
     {
         if (isHandler(handler, dir))
         {
-            return energyHandlerCache.get(handler.getClass());
+            Class clazz = handler instanceof ItemStack ? ((ItemStack) handler).getItem().getClass() : handler.getClass();
+            return energyHandlerCache.get(clazz);
         }
-
         return null;
     }
 
