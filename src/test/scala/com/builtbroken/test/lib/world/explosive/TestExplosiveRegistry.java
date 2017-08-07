@@ -21,8 +21,8 @@ public class TestExplosiveRegistry extends AbstractTest
     public void testGetString()
     {
         ExplosiveHandlerTNT t = new ExplosiveHandlerTNT();
-        ExplosiveRegistry.getExplosiveMap().put("Yolo", t );
-        assertSame(t, ExplosiveRegistry.get("Yolo"));
+        ExplosiveRegistry.getExplosiveMap().put("yolo", t );
+        assertSame(t, ExplosiveRegistry.get("yolo"));
     }
 
     /** Tests {@link ExplosiveRegistry#get(ItemStack) */

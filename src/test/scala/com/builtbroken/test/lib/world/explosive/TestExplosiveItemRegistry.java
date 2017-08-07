@@ -1,4 +1,4 @@
-package com.builtbroken.test.lib.ex;
+package com.builtbroken.test.lib.world.explosive;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.References;
@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
  * Created by Dark(DarkGuardsman, Robert) on 1/28/2016.
  */
 @RunWith(VoltzTestRunner.class)
-public class TestExplosiveRegistry extends AbstractTest
+public class TestExplosiveItemRegistry extends AbstractTest
 {
     private static ItemNBTExplosive explosive;
 
