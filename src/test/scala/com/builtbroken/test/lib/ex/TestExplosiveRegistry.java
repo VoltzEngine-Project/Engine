@@ -27,7 +27,7 @@ public class TestExplosiveRegistry extends AbstractTest
     @Override
     public void setUpForEntireClass()
     {
-        if(explosive == null)
+        if (explosive == null)
         {
             explosive = new ItemNBTExplosive();
             GameRegistry.registerItem(explosive, "testExplosiveRegExItem");
@@ -37,7 +37,6 @@ public class TestExplosiveRegistry extends AbstractTest
     @Test
     public void testRegisterExplosiveItem()
     {
-        setUpForEntireClass();
         IExplosiveHandler TNT = new ExplosiveHandlerGeneric("tnt", BlastBasic.class, 1);
         ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "TNT", TNT);
         ExplosiveRegistry.registerExplosiveItem(new ItemStack(Blocks.tnt), ExplosiveRegistry.get("TNT"), 2);
@@ -51,8 +50,8 @@ public class TestExplosiveRegistry extends AbstractTest
         explosive.setExplosive(stack, TNT, 3, null);
         ExplosiveRegistry.registerExplosiveItem(stack);
 
-        assertTrue(ExplosiveRegistry.get(stack) == TNT);
-        assertTrue(ExplosiveRegistry.getExplosiveSize(stack) == 3);
+        assertEquals(TNT, ExplosiveRegistry.get(stack));
+        assertEquals(3.0, ExplosiveRegistry.getExplosiveSize(stack));
         assertTrue(ExplosiveRegistry.getItems(TNT).contains(new ItemStackWrapper(stack)));
     }
 }
