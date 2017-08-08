@@ -388,4 +388,14 @@ public class UniversalEnergySystem
         }
         return 0;
     }
+
+    public static double setFullCharge(ItemStack is)
+    {
+        EnergyHandler module = getHandler(is, null);
+        if (module != null)
+        {
+            return module.setFullCharge(is);
+        }
+        return 0;
+    }
 }

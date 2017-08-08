@@ -87,4 +87,5 @@ public abstract class EnergyHandler
 
     public abstract double clearEnergy(Object handler, boolean doAction);
 
+    public abstract double setFullCharge(Object handler);
 }

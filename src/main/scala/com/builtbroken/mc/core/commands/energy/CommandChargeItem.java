@@ -61,27 +61,30 @@ public class CommandChargeItem extends SubCommand
                 {
                     if (UniversalEnergySystem.isHandler(stack, null))
                     {
+                        int received = 0;
                         if (full)
                         {
-                            energy = (int) Math.ceil(UniversalEnergySystem.getMaxEnergy(stack, null));
+                            received = (int) UniversalEnergySystem.setFullCharge(stack);
+                            player.inventoryContainer.detectAndSendChanges();
                         }
-
-                        if (energy > 0)
+                        else if (energy > 0)
                         {
-                            int received = (int) UniversalEnergySystem.fill(stack, null, energy, true);
-                            if (received == 1)
-                            {
-                                player.addChatComponentMessage(new ChatComponentText("Item charged with " + received + " watt of energy"));
-                            }
-                            else
-                            {
-                                player.addChatComponentMessage(new ChatComponentText("Item charged with " + received + " watts of energy"));
-                            }
-
+                            received = (int) UniversalEnergySystem.fill(stack, null, energy, true);
+                            player.inventoryContainer.detectAndSendChanges();
                         }
                         else
                         {
-                            player.addChatComponentMessage(new ChatComponentText("Error: Failed to select charge type of 'energy' value or 'full' this is a logical error (bug) and not a user error"));
+                            player.addChatComponentMessage(new ChatComponentText("Error: Failed to select charge type of 'energy' or 'full' value, this is a logical error (bug) and not a user error"));
+                        }
+
+                        //TODO customize output based on mod power system
+                        if (received == 1)
+                        {
+                            player.addChatComponentMessage(new ChatComponentText("Item charged with " + received + " watt of energy"));
+                        }
+                        else if (received > 0)
+                        {
+                            player.addChatComponentMessage(new ChatComponentText("Item charged with " + received + " watts of energy"));
                         }
                     }
                     else

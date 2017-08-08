@@ -252,4 +252,27 @@ public class UniversalEnergyHandler extends EnergyHandler
         }
         return 0;
     }
+
+    @Override
+    public double setFullCharge(Object handler)
+    {
+        if (handler instanceof IEnergyBufferProvider)
+        {
+            IEnergyBuffer buffer = ((IEnergyBufferProvider) handler).getEnergyBuffer(ForgeDirection.UNKNOWN);
+            if (buffer != null)
+            {
+                int energy = buffer.getEnergyStored();
+                buffer.setEnergyStored(buffer.getMaxBufferSize());
+                return buffer.getEnergyStored() - energy;
+            }
+        }
+        else if (handler instanceof ItemStack && ((ItemStack) handler).getItem() instanceof IEnergyBufferItem)
+        {
+            int energy = ((IEnergyBufferItem) ((ItemStack) handler).getItem()).getEnergy((ItemStack) handler);
+            int cap = ((IEnergyBufferItem) ((ItemStack) handler).getItem()).getEnergyCapacity((ItemStack) handler);
+            ((IEnergyBufferItem) ((ItemStack) handler).getItem()).setEnergy((ItemStack) handler, cap);
+            return cap - energy;
+        }
+        return receiveEnergy(handler, ForgeDirection.UNKNOWN, Double.MAX_VALUE, true);
+    }
 }
