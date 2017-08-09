@@ -1,6 +1,6 @@
 package com.builtbroken.test.lib.json;
 
-import com.builtbroken.mc.lib.json.loading.ProcessorKeySorter;
+import com.builtbroken.mc.framework.json.loading.ProcessorKeySorter;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import org.junit.runner.RunWith;

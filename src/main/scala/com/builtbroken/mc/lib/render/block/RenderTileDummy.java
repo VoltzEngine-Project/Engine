@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 /**
  * Created by robert on 1/11/2015.
  */
+@Deprecated
 public class RenderTileDummy extends TileEntitySpecialRenderer
 {
     @Override

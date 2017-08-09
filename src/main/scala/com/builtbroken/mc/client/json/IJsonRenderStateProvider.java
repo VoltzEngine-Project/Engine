@@ -7,7 +7,7 @@ import net.minecraftforge.client.IItemRenderer;
 import java.util.List;
 
 /**
- * Applied to {@link com.builtbroken.mc.lib.json.imp.IJsonGenObject} or there products that have
+ * Applied to {@link com.builtbroken.mc.framework.json.imp.IJsonGenObject} or there products that have
  * generated json render state data
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.

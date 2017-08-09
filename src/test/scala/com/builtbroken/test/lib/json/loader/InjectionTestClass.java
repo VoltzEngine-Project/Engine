@@ -1,6 +1,6 @@
 package com.builtbroken.test.lib.json.loader;
 
-import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
+import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.google.gson.JsonElement;
 
 /**

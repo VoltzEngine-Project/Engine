@@ -1,7 +1,7 @@
 package com.builtbroken.mc.client.json.audio;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

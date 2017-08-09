@@ -17,6 +17,7 @@ import java.util.HashMap;
  * @author Calclavia
  */
 @SideOnly(Side.CLIENT)
+@Deprecated
 public class ItemRenderHandler implements IItemRenderer
 {
 	public static final ItemRenderHandler instance = new ItemRenderHandler();

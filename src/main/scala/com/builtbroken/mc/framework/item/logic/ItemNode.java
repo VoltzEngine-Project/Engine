@@ -3,7 +3,7 @@ package com.builtbroken.mc.framework.item.logic;
 import com.builtbroken.mc.api.items.listeners.IItemEventListener;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.item.ItemBase;
-import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
+import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

@@ -1,8 +1,8 @@
 package com.builtbroken.mc.framework.multiblock.structure;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
-import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.processors.JsonGenData;
 
 import java.util.HashMap;
 

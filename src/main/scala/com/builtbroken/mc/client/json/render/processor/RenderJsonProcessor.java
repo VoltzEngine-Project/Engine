@@ -4,7 +4,7 @@ import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.tile.TileRenderData;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

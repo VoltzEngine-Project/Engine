@@ -1,8 +1,8 @@
 package com.builtbroken.mc.lib.mod;
 
 import com.builtbroken.mc.core.registry.ModManager;
-import com.builtbroken.mc.lib.json.IJsonGenMod;
-import com.builtbroken.mc.lib.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.IJsonGenMod;
+import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;

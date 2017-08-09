@@ -5,8 +5,8 @@ import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
-import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 

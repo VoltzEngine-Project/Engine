@@ -5,7 +5,7 @@ import com.builtbroken.mc.client.json.render.state.ModelState;
 import com.builtbroken.mc.client.json.render.tile.TileState;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import com.builtbroken.mc.lib.json.conversion.JsonConverterPos;
+import com.builtbroken.mc.framework.json.conversion.JsonConverterPos;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

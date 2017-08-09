@@ -1,7 +1,7 @@
 package com.builtbroken.mc.client.json.render.tile;
 
 import com.builtbroken.mc.client.json.render.RenderData;
-import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import net.minecraft.tileentity.TileEntity;
 
 /**

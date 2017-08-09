@@ -15,7 +15,7 @@ import com.builtbroken.mc.framework.multiblock.structure.MultiBlockLayoutHandler
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.helper.BlockUtility;
-import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
+import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.prefab.tile.listeners.TileListener;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;

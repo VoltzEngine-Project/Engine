@@ -1,9 +1,9 @@
 package com.builtbroken.test.lib.json;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.json.JsonContentLoader;
-import com.builtbroken.mc.lib.json.loading.JsonEntry;
-import com.builtbroken.mc.lib.json.loading.JsonLoader;
+import com.builtbroken.mc.framework.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.loading.JsonEntry;
+import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import com.google.gson.JsonElement;

@@ -3,9 +3,9 @@ package com.builtbroken.mc.framework.block.tile;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.block.BlockBase;
-import com.builtbroken.mc.lib.json.IJsonGenMod;
-import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
-import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import com.builtbroken.mc.framework.json.IJsonGenMod;
+import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 

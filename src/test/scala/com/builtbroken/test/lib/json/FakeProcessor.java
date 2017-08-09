@@ -1,7 +1,7 @@
 package com.builtbroken.test.lib.json;
 
-import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
-import com.builtbroken.mc.lib.json.processors.JsonProcessor;
+import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
+import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
 
 /**

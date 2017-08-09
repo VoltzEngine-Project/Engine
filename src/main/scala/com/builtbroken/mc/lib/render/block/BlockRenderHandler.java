@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL12;
 /**
  * Created by robert on 1/16/2015.
  */
+@Deprecated
 public class BlockRenderHandler implements ISimpleBlockRenderingHandler
 {
     public final static int ID = RenderingRegistry.getNextAvailableRenderId();

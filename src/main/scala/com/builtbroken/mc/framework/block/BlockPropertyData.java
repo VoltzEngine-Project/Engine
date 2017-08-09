@@ -4,9 +4,9 @@ import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.framework.block.tile.ITileProvider;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.lib.helper.MaterialDict;
-import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
-import com.builtbroken.mc.lib.json.loading.JsonProcessorData;
-import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
+import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.material.Material;
 

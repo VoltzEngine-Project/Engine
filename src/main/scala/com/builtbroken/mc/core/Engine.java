@@ -24,7 +24,6 @@ import com.builtbroken.mc.core.content.resources.ore.BlockOre;
 import com.builtbroken.mc.core.content.resources.ore.ItemBlockOre;
 import com.builtbroken.mc.core.content.resources.ore.MetallicOres;
 import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
-import com.builtbroken.mc.core.content.tool.ItemSelectionWand;
 import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;
 import com.builtbroken.mc.core.content.tool.ItemSimpleCraftingTool;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolMode;
@@ -33,11 +32,14 @@ import com.builtbroken.mc.core.content.tool.screwdriver.ToolModeRotation;
 import com.builtbroken.mc.core.content.world.DevWorldLoader;
 import com.builtbroken.mc.core.handler.InteractionHandler;
 import com.builtbroken.mc.core.handler.SaveManager;
-import com.builtbroken.mc.core.handler.SelectionHandler;
 import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.access.global.GlobalAccessSystem;
+import com.builtbroken.mc.framework.json.IJsonGenMod;
+import com.builtbroken.mc.framework.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.processors.block.JsonBlockListenerProcessor;
+import com.builtbroken.mc.framework.json.processors.event.JsonMissingMapEventProcessor;
 import com.builtbroken.mc.framework.multiblock.BlockMultiblock;
 import com.builtbroken.mc.framework.multiblock.EnumMultiblock;
 import com.builtbroken.mc.framework.multiblock.ItemBlockMulti;
@@ -47,14 +49,7 @@ import com.builtbroken.mc.lib.data.mass.MassRegistry;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.PotionUtility;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
-import com.builtbroken.mc.lib.json.IJsonGenMod;
-import com.builtbroken.mc.lib.json.JsonContentLoader;
-import com.builtbroken.mc.lib.json.processors.block.JsonBlockListenerProcessor;
-import com.builtbroken.mc.lib.json.processors.event.JsonMissingMapEventProcessor;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
-import com.builtbroken.mc.lib.mod.Mods;
-import com.builtbroken.mc.lib.mod.config.ConfigHandler;
-import com.builtbroken.mc.lib.mod.config.ConfigScanner;
 import com.builtbroken.mc.lib.mod.loadable.LoadableHandler;
 import com.builtbroken.mc.lib.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.lib.recipe.fluid.MRHandlerFluidStack;
@@ -71,16 +66,7 @@ import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.map.TileMapRegistry;
 import com.builtbroken.mc.lib.world.radar.RadarRegistry;
 import com.builtbroken.mc.lib.world.radio.RadioRegistry;
-import com.builtbroken.mc.mods.ae.AEProxy;
-import com.builtbroken.mc.mods.bc.BCProxy;
-import com.builtbroken.mc.mods.ic.ICProxy;
-import com.builtbroken.mc.mods.mek.MekProxy;
 import com.builtbroken.mc.mods.nei.NEIProxy;
-import com.builtbroken.mc.mods.oc.OCProxy;
-import com.builtbroken.mc.mods.pe.ProjectEProxy;
-import com.builtbroken.mc.mods.rf.RFLoader;
-import com.builtbroken.mc.mods.te.TEProxy;
-import com.builtbroken.mc.mods.tinkers.TinkerProxy;
 import com.builtbroken.mc.prefab.explosive.handler.ExplosiveHandlerTNT;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.prefab.tile.listeners.*;
@@ -140,7 +126,7 @@ public class Engine implements IJsonGenMod
     public static LoadableHandler loader = new LoadableHandler();
     public ModManager manager;
     protected static Logger logger = LogManager.getLogger("VoltzEngine");
-    private Configuration config;
+    public static Configuration config;
 
     public static Block ore = null;
     public static Block gemOre = null;
@@ -153,7 +139,6 @@ public class Engine implements IJsonGenMod
     public static ItemSheetMetalTools itemSheetMetalTools;
     public static Item itemSheetMetal;
     public static Item instaHole;
-    public static Item itemSelectionTool;
     public static Item itemCircuits;
     public static Item itemDevTool;
     public static Item itemCraftingParts;
@@ -367,15 +352,13 @@ public class Engine implements IJsonGenMod
         heatDataConfig.load();
         explosiveConfig.load();
 
-        ConfigScanner.instance().generateSets(event.getAsmData());
-        ConfigHandler.sync(getConfig(), References.DOMAIN);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(proxy);
         MinecraftForge.EVENT_BUS.register(SaveManager.instance());
         MinecraftForge.EVENT_BUS.register(new InteractionHandler());
-        MinecraftForge.EVENT_BUS.register(SelectionHandler.INSTANCE);
+
         MinecraftForge.EVENT_BUS.register(RadarRegistry.INSTANCE);
         FMLCommonHandler.instance().bus().register(RadarRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TileMapRegistry.INSTANCE);
@@ -384,7 +367,7 @@ public class Engine implements IJsonGenMod
         FMLCommonHandler.instance().bus().register(RadioRegistry.INSTANCE);
         FMLCommonHandler.instance().bus().register(new WorldActionQue());
         FMLCommonHandler.instance().bus().register(TileTaskTickHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(SelectionHandler.INSTANCE);
+
         FMLCommonHandler.instance().bus().register(proxy);
 
         //Load heat configs
@@ -428,16 +411,7 @@ public class Engine implements IJsonGenMod
         loader.applyModule(WireRecipeLoader.class);
         loader.applyModule(ScrewRecipeLoader.class);
         loader.applyModule(JsonContentLoader.INSTANCE);
-        //Mod Support
-        config.setCategoryComment("Mod_Support", "If true the proxy class for the mod will be loaded enabling support, set to false if support is not required or breaks the game.");
-        loader.applyModule(NEIProxy.class); //Uses reflection instead of API files
-        loader.applyModule(OCProxy.class, Mods.OC.isLoaded());
-        loader.applyModule(TinkerProxy.class, Mods.TINKERS.isLoaded());
-        loader.applyModule(AEProxy.class, Mods.AE.isLoaded());
-        loader.applyModule(ICProxy.class, Mods.IC2.isLoaded());
-        loader.applyModule(BCProxy.class, Mods.BC.isLoaded());
-        loader.applyModule(MekProxy.class, Mods.MEKANISM.isLoaded());
-        loader.applyModule(ProjectEProxy.class, Mods.PROJECT_E.isLoaded());
+
 
 
         TriggerCauseRegistry.register("entity", new TriggerNBTBuilder("entity"));
@@ -452,37 +426,6 @@ public class Engine implements IJsonGenMod
         if (runningAsDev)
         {
             loader.applyModule(new DevWorldLoader());
-        }
-
-        //Check if RF api exists
-        boolean shouldLoadRFHandler = true;
-        for (String s : new String[]{"IEnergyConnection", "IEnergyContainerItem", "IEnergyHandler", "IEnergyProvider", "IEnergyReceiver", "IEnergyStorage"})
-        {
-            try
-            {
-                Class clazz = Class.forName("cofh.api.energy." + s, false, this.getClass().getClassLoader());
-                if (clazz == null)
-                {
-                    shouldLoadRFHandler = false;
-                    break;
-                }
-            }
-            catch (ClassNotFoundException e)
-            {
-                shouldLoadRFHandler = false;
-                logger().error("Not loading RF support as we couldn't detect " + "cofh.api.energy." + s + " class or interface.");
-                break;
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        if (shouldLoadRFHandler)
-        {
-            loader.applyModule(RFLoader.class);
-            loader.applyModule(TEProxy.class, Mods.TF_EXPANSION.isLoaded());
         }
 
         PotionUtility.resizePotionArray();
@@ -513,10 +456,6 @@ public class Engine implements IJsonGenMod
         if (getConfig().get("Content", "LoadScrewDriver", true, "Basic tool for configuring, rotating, and picking up machines.").getBoolean(true))
         {
             itemWrench = getManager().newItem("ve.screwdriver", new ItemScrewdriver());
-        }
-        if (getConfig().get("Content", "LoadSelectionTool", true, "Admin tool for selecting areas on the ground for world manipulation or other tasks.").getBoolean(true))
-        {
-            itemSelectionTool = getManager().newItem("ve.selectiontool", new ItemSelectionWand());
         }
 
         if (Engine.runningAsDev)

@@ -2,8 +2,8 @@ package com.builtbroken.mc.client.json.models;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
-import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import com.builtbroken.mc.lib.render.RenderUtility;
 import com.builtbroken.mc.lib.render.model.loader.EngineModelLoader;
 import net.minecraft.util.ResourceLocation;

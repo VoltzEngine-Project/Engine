@@ -1,7 +1,7 @@
 package com.builtbroken.test.lib.json.loader;
 
-import com.builtbroken.mc.lib.json.loading.JsonLoader;
-import com.builtbroken.mc.lib.json.loading.JsonProcessorInjectionMap;
+import com.builtbroken.mc.framework.json.loading.JsonLoader;
+import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import junit.framework.TestCase;

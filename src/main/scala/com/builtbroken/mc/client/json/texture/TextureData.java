@@ -1,8 +1,8 @@
 package com.builtbroken.mc.client.json.texture;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
-import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
-import com.builtbroken.mc.lib.json.processors.JsonGenData;
+import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
