@@ -38,14 +38,15 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
     public void genRecipes(List<IRecipe> recipes)
     {
         //If output is a string convert
-        if (output instanceof String)
+        if (canConvertToItem(output))
         {
-            Object out = convertItemEntry((String) output);
+            Object out = convertItemEntry(output);
             if (out != null)
             {
                 output = out;
             }
         }
+        //else TODO make sure output exists and can be used
 
         if (shaped)
         {
@@ -66,14 +67,14 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
                 }
                 else if (convert)
                 {
-                    Object out = convertItemEntry((String) dataObject);
+                    Object out = convertItemEntry(dataObject);
                     if (out != null)
                     {
                         data[i] = out;
                     }
                     else
                     {
-                        Engine.logger().error("The item value of [" + dataObject + "] could not be parsed into a valid recipe item entry. Recipe -> " + this);
+                        Engine.logger().error("JsonCraftingRecipeData: The item value of [" + dataObject + "] could not be parsed into a valid recipe item entry. Recipe -> " + this);
                         return;
                     }
                 }
@@ -125,10 +126,10 @@ public class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeCon
             for (int i = 0; i < data.length; i++)
             {
                 Object dataObject = data[i];
-                if (dataObject instanceof String)
+                if (canConvertToItem(dataObject))
                 {
                     //Convert entries to correct outputs
-                    Object out = convertItemEntry((String) dataObject);
+                    Object out = convertItemEntry(dataObject);
                     if (out != null)
                     {
                         data[i] = out;

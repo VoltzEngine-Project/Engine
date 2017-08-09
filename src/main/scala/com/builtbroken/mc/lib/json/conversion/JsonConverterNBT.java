@@ -23,6 +23,11 @@ public class JsonConverterNBT extends JsonConverter<NBTTagCompound>
     @Override
     public NBTTagCompound convert(JsonElement element)
     {
+        return handle(element);
+    }
+
+    public static NBTTagCompound handle(JsonElement element)
+    {
         NBTTagCompound nbt = new NBTTagCompound();
         if (element instanceof JsonObject)
         {
@@ -31,7 +36,7 @@ public class JsonConverterNBT extends JsonConverter<NBTTagCompound>
         return nbt;
     }
 
-    protected void handle(JsonObject object, NBTTagCompound nbt, int depth)
+    public static void handle(JsonObject object, NBTTagCompound nbt, int depth)
     {
         for (Map.Entry<String, JsonElement> entry : object.entrySet())
         {

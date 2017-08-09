@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.json.processors;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.json.imp.IJsonProcessor;
+import com.builtbroken.mc.lib.json.processors.recipe.RecipeItemEntry;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -57,48 +58,75 @@ public abstract class JsonGenData implements IJsonGenObject
      * into output data that can be used in
      * recipes
      *
-     * @param in
+     * @param object - data to convert
      * @return
      */
-    public Object convertItemEntry(String in)
+    public Object convertItemEntry(Object object)
     {
-        if (in.startsWith("ore@"))
+        if (object instanceof RecipeItemEntry)
         {
-            String oreName = in.substring(4, in.length());
-            if (!OreDictionary.doesOreNameExist(oreName))
+            try
             {
-                Engine.logger().error("The ore value of [" + oreName + "] is not register and will prevent the recipe from working. Recipe -> " + this);
+                return ((RecipeItemEntry) object).get();
             }
-            return oreName;
-        }
-        else if (in.startsWith("item@"))
-        {
-            return findItem(in.substring(5, in.length()));
-        }
-        else if (in.startsWith("block@"))
-        {
-            return findBlock(in.substring(6, in.length()));
-        }
-        else if (in.contains(":"))
-        {
-            Object out = findBlock(in);
-            if (out == null)
+            catch (IllegalArgumentException e)
             {
-                out = findItem(in);
+                Engine.logger().error("Error in recipe data " + this, e);
             }
-            return out;
         }
-        else if (OreDictionary.doesOreNameExist(in))
+        else if (object instanceof String)
         {
-            return in;
-        }
-        else
-        {
-            //TODO search everything and spam errors telling people to not use generic names
-            //TODO add short hand look up for common items (cobble -> minecraft:cobblestone)
-            Engine.logger().error("Could not match value of [" + in + "] to any data set for items, blocks, or ore names. Recipe -> " + this);
+            String in = (String) object;
+            if (in.startsWith("ore@"))
+            {
+                String oreName = in.substring(4, in.length());
+                if (!OreDictionary.doesOreNameExist(oreName))
+                {
+                    Engine.logger().error("The ore value of [" + oreName + "] is not register and will prevent the recipe from working. Recipe -> " + this);
+                }
+                return oreName;
+            }
+            else if (in.startsWith("item@"))
+            {
+                return findItem(in.substring(5, in.length()));
+            }
+            else if (in.startsWith("block@"))
+            {
+                return findBlock(in.substring(6, in.length()));
+            }
+            else if (in.contains(":"))
+            {
+                Object out = findBlock(in);
+                if (out == null)
+                {
+                    out = findItem(in);
+                }
+                return out;
+            }
+            else if (OreDictionary.doesOreNameExist(in))
+            {
+                return in;
+            }
+            else
+            {
+                //TODO search everything and spam errors telling people to not use generic names
+                //TODO add short hand look up for common items (cobble -> minecraft:cobblestone)
+                Engine.logger().error("Could not match value of [" + in + "] to any data set for items, blocks, or ore names. Recipe -> " + this);
+            }
         }
         return null;
+    }
+
+    /**
+     * Checks if the data type can be converted. Does not
+     * look at the content of the data.
+     *
+     * @param object - data
+     * @return true if can convert
+     */
+    protected boolean canConvertToItem(Object object)
+    {
+        return object instanceof String || object instanceof RecipeItemEntry;
     }
 
     protected Object findBlock(String blockName)

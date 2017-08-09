@@ -1,9 +1,11 @@
 package com.builtbroken.mc.lib.json.processors.recipe.crafting;
 
 import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.lib.json.exceptions.JsonFormatException;
 import com.builtbroken.mc.lib.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.lib.json.processors.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.lib.json.processors.recipe.JsonRecipeProcessor;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -42,30 +44,60 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
     }
 
     @Override
-    public JsonCraftingRecipeData process(final Object out, final JsonElement element)
+    public JsonCraftingRecipeData process(final Object out, final JsonElement element) throws JsonFormatException
     {
         final JsonObject recipeData = element.getAsJsonObject();
 
+        //Ensure mandatory objects exist
         ensureValuesExist(recipeData, "type");
+
+        //Get output if missing
         Object output = out;
         if (output == null)
         {
             ensureValuesExist(recipeData, "output");
-            output = recipeData.getAsJsonPrimitive("output").getAsString();
+            JsonElement outputElement = recipeData.get("output");
+            output = getItemFromJson(outputElement);
         }
 
-        String type = recipeData.getAsJsonPrimitive("type").getAsString();
-        if (type.equalsIgnoreCase("shaped"))
+        //Get type and process based on type
+        final String recipeType = recipeData.getAsJsonPrimitive("type").getAsString();
+        if (recipeType.equalsIgnoreCase("shaped"))
         {
+            //Ensure data exists
             ensureValuesExist(recipeData, "grid", "items");
-            //Load grid as string, and split to get rows
-            String[] craftingGridRows = recipeData.getAsJsonPrimitive("grid").getAsString().split(",");
+
+            //Load grid
+            String[] craftingGridRows;
+            JsonElement gridElement = recipeData.get("grid");
+            if (gridElement.isJsonPrimitive())
+            {
+                //Load grid as string, and split to get rows
+                craftingGridRows = gridElement.getAsJsonPrimitive().getAsString().split(",");
+            }
+            else
+            {
+                JsonArray gridArray = gridElement.getAsJsonArray();
+                craftingGridRows = new String[gridArray.size()];
+                int i = 0;
+                for (JsonElement e : gridArray)
+                {
+                    if (e.isJsonPrimitive())
+                    {
+                        craftingGridRows[i++] = e.getAsJsonPrimitive().getAsString();
+                    }
+                    else
+                    {
+                        throw new JsonFormatException("Recipe array must contain only string values of characters representing items.");
+                    }
+                }
+            }
 
             //Load items as object
             JsonObject itemObject = recipeData.getAsJsonObject("items");
 
             //Loop elements of object to get each item entry
-            HashMap<Character, String> items = new HashMap();
+            HashMap<Character, Object> items = new HashMap();
             for (Map.Entry<String, JsonElement> entry : itemObject.entrySet())
             {
                 if (entry.getKey().length() == 1)
@@ -73,14 +105,14 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                     char c = entry.getKey().charAt(0);
                     if (c == '.' || Character.isWhitespace(c))
                     {
-                        throw new IllegalArgumentException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "]. Each entry must be a single character that is not a space or a '.' which is used in place of a space.");
+                        throw new JsonFormatException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "]. Each entry must be a single character that is not a space or a '.' which is used in place of a space.");
 
                     }
-                    items.put(c, entry.getValue().getAsJsonPrimitive().getAsString());
+                    items.put(c, getItemFromJson(entry.getValue()));
                 }
                 else
                 {
-                    throw new IllegalArgumentException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "] each item must be represented by a single character.");
+                    throw new JsonFormatException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "] each item must be represented by a single character.");
                 }
             }
 
@@ -102,7 +134,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                 //Invalid recipe
                 if (size > 0 && l != size)
                 {
-                    throw new IllegalArgumentException("Crafting grid row[" + i + "] is not the same size of " + size + " as previous grid rows. This will prevent the recipe from loading correctly and needs to be fixed.");
+                    throw new JsonFormatException("Crafting grid row[" + i + "] is not the same size of " + size + " as previous grid rows. This will prevent the recipe from loading correctly and needs to be fixed.");
                 }
                 //Increase size smaller, use for validation
                 if (l > size)
@@ -124,7 +156,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                     {
                         if (!items.containsKey(c))
                         {
-                            throw new IllegalArgumentException("File is missing an entry for item linked to '" + c + "' for crafting grid row[" + i + "] index[" + charIndex + "] in recipe data -> " + recipeData);
+                            throw new JsonFormatException("File is missing an entry for item linked to '" + c + "' for crafting grid row[" + i + "] index[" + charIndex + "] in recipe data -> " + recipeData);
                         }
                     }
                 }
@@ -138,7 +170,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             {
                 data[i] = craftingGridRows[i];
             }
-            for (Map.Entry<Character, String> entry : items.entrySet())
+            for (Map.Entry<Character, Object> entry : items.entrySet())
             {
                 data[i++] = entry.getKey();
                 data[i++] = entry.getValue();
@@ -147,7 +179,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             //New recipe data
             return new JsonCraftingRecipeData(this, output, data, true, largeGrid);
         }
-        else if (type.equalsIgnoreCase("shapeless"))
+        else if (recipeType.equalsIgnoreCase("shapeless"))
         {
             ensureValuesExist(recipeData, "items");
 
@@ -157,17 +189,17 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             //New recipe data
             return new JsonCraftingRecipeData(this, output, items, false, items.length > 9);
         }
-        else if (type.equalsIgnoreCase("sheetmetal")) //TODO make into reg object
+        else if (recipeType.equalsIgnoreCase("sheetmetal")) //TODO make into reg object
         {
             return null; //TODO implement
         }
-        else if (type.equalsIgnoreCase("tools")) //TODO make into reg object
+        else if (recipeType.equalsIgnoreCase("tools")) //TODO make into reg object
         {
             return null;//TODO implement
         }
         else
         {
-            throw new IllegalArgumentException("File is contains an unknown grid recipe type of " + type + " that is not supported.");
+            throw new JsonFormatException("File is contains an unknown grid recipe type of " + recipeType + " that is not supported.");
         }
     }
 }
