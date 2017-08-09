@@ -13,6 +13,7 @@ import net.minecraftforge.oredict.OreDictionary;
  * List of ores that generate in Voltz Engine
  * Created by robert on 1/11/2015.
  */
+@Deprecated //TODO move to JSON
 public enum MetallicOres
 {
     TIN(15, 120, 7, 40),

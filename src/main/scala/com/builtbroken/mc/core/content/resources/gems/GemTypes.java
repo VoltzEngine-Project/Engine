@@ -16,6 +16,7 @@ import static com.builtbroken.mc.core.content.resources.gems.Gems.*;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 2/28/2016.
  */
+@Deprecated //TODO move to JSON
 public enum GemTypes
 {
     //http://www.tradeshop.com/gems/howcut.html

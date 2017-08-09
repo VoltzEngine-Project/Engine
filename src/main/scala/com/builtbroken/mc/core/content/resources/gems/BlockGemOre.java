@@ -19,6 +19,7 @@ import java.util.Random;
 /**
  * @author - Kolatra
  */
+@Deprecated //TODO move to JSON
 public class BlockGemOre extends Block
 {
     public IIcon[] icon = new IIcon[16];

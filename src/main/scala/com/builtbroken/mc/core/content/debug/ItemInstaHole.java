@@ -18,6 +18,7 @@ import net.minecraft.world.chunk.Chunk;
  * Used to create a hole in the ground for looking at world generation amounts, caves, etc
  * Created by robert on 11/25/2014.
  */
+@Deprecated
 public class ItemInstaHole extends Item
 {
     public ItemInstaHole()

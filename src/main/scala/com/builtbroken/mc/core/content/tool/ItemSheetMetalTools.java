@@ -25,6 +25,7 @@ import java.util.List;
  * Basic tool used in hand crafting recipes for sheet metal
  * Created by Dark on 8/25/2015.
  */
+@Deprecated //TODO move to JSON
 public class ItemSheetMetalTools extends ItemAbstractCraftingTool implements IPostInit, IRegistryInit
 {
     public static int MAX_SHEARS_DAMAGE = 600;

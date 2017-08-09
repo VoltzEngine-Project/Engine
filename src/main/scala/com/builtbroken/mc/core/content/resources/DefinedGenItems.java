@@ -13,6 +13,7 @@ import static com.builtbroken.mc.core.content.resources.GenMaterial.*;
  * List of known items to generate per material
  * Created by robert on 11/23/2014.
  */
+@Deprecated //TODO move to JSON
 public enum DefinedGenItems
 {
     /** Mostly pure macerated metal */

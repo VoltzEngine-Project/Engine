@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 /**
  * @author - Kolatra
  */
+@Deprecated //TODO move to JSON
 public class ItemBlockGemOre extends ItemBlockMetadata
 {
     public ItemBlockGemOre(Block block)

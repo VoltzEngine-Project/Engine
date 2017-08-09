@@ -9,6 +9,7 @@ import com.builtbroken.mc.core.References;
 /**
  * Created by robert on 11/25/2014.
  */
+@Deprecated //TODO move to JSON
 public class ItemBlockOre extends ItemBlockMetadata
 {
     public ItemBlockOre(Block block)

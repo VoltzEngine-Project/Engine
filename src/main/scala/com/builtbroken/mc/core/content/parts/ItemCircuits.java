@@ -21,6 +21,7 @@ import java.util.List;
  * Item for circuit boards
  * Created by robert on 2/23/2015.
  */
+@Deprecated //TODO move to JSON
 public class ItemCircuits extends Item implements IRegistryInit, IPostInit
 {
     public ItemCircuits()

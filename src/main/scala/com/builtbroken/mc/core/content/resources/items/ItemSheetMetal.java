@@ -16,6 +16,7 @@ import java.util.List;
  * Sheet metal item used only in crafting more complex recipes
  * Created by Dark on 8/25/2015.
  */
+@Deprecated //TODO move to JSON
 public class ItemSheetMetal extends Item
 {
     public ItemSheetMetal()

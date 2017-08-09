@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
  *
  * @author - Kolatra
  */
+@Deprecated //TODO move to JSON
 public enum GemOres
 {
     Amazonite(Gems.AMAZONITE, 5, 20, 2, 15),

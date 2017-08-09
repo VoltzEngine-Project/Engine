@@ -9,6 +9,7 @@ import java.awt.*;
  *
  * @author Darkguardsman
  */
+@Deprecated //TODO move to JSON
 public enum GenMaterial
 {
     UNKNOWN(new Color(164, 5, 137)),

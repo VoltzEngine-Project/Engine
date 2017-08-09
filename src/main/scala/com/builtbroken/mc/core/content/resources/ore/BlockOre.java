@@ -18,6 +18,7 @@ import java.util.List;
  *
  * Created by robert on 11/24/2014.
  */
+@Deprecated //TODO move to JSON
 public class BlockOre extends Block
 {
     public IIcon[] icon = new IIcon[16];

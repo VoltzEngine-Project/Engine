@@ -17,6 +17,7 @@ import java.util.List;
  * Prefab for auto generating ore material items without doing complex meta shifting
  * Created by Robert on 8/28/2015.
  */
+@Deprecated //TODO move to JSON
 public class ItemGenMaterial extends Item
 {
     public final DefinedGenItems itemType;
