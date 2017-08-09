@@ -1,7 +1,7 @@
 package com.builtbroken.mc.framework.json;
 
 import com.builtbroken.mc.core.registry.ModManager;
-import com.builtbroken.mc.lib.mod.IMod;
+import com.builtbroken.mc.framework.mod.IMod;
 import net.minecraftforge.common.config.Configuration;
 
 /**

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.asm;
 
 import com.builtbroken.mc.core.EngineCoreMod;
-import com.builtbroken.mc.lib.mod.AbstractProxy;
+import com.builtbroken.mc.framework.mod.AbstractProxy;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.chunk.Chunk;

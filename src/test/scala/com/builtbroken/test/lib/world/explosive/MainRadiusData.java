@@ -1,6 +1,6 @@
 package com.builtbroken.test.lib.world.explosive;
 
-import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
+import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 
 import java.util.Scanner;
 

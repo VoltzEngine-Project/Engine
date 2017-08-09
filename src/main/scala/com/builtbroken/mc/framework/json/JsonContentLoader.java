@@ -25,8 +25,8 @@ import com.builtbroken.mc.framework.json.processors.recipe.crafting.JsonCrafting
 import com.builtbroken.mc.framework.json.processors.recipe.replace.JsonRecipeReplacementProcessor;
 import com.builtbroken.mc.framework.json.processors.recipe.smelting.JsonFurnaceRecipeProcessor;
 import com.builtbroken.mc.framework.json.processors.world.JsonWorldOreGenProcessor;
-import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
-import com.builtbroken.mc.lib.mod.loadable.ILoadable;
+import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
+import com.builtbroken.mc.framework.mod.loadable.ILoadable;
 import com.google.gson.JsonElement;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.deps;
 
-import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
-import com.builtbroken.mc.lib.mod.loadable.ILoadable;
+import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
+import com.builtbroken.mc.framework.mod.loadable.ILoadable;
 import com.dmurph.tracking.AnalyticsConfigData;
 import com.dmurph.tracking.JGoogleAnalyticsTracker;
 import cpw.mods.fml.common.FMLCommonHandler;

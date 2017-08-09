@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.commands.energy;
 
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
-import com.builtbroken.mc.lib.energy.UniversalEnergySystem;
+import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;

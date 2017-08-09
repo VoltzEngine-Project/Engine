@@ -4,9 +4,9 @@ import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.core.commands.permissions.PermissionsCommandManager;
 import com.builtbroken.mc.core.commands.permissions.sub.*;
-import com.builtbroken.mc.framework.blast.emp.ExEmp;
+import com.builtbroken.mc.core.content.blast.emp.ExEmp;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
-import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
+import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.server.MinecraftServer;
 

@@ -5,7 +5,7 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
-import com.builtbroken.mc.lib.recipe.item.RecipeTool;
+import com.builtbroken.mc.framework.recipe.item.RecipeTool;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;

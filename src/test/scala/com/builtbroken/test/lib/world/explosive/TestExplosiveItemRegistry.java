@@ -2,7 +2,7 @@ package com.builtbroken.test.lib.world.explosive;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
+import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.prefab.explosive.ExplosiveHandlerGeneric;
 import com.builtbroken.mc.prefab.explosive.ItemNBTExplosive;
 import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;

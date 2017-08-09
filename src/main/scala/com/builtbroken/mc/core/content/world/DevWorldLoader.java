@@ -3,7 +3,7 @@ package com.builtbroken.mc.core.content.world;
 import com.builtbroken.mc.core.content.world.chunks.ChunkProviderChess;
 import com.builtbroken.mc.core.content.world.chunks.ChunkProviderEmpty;
 import com.builtbroken.mc.core.content.world.chunks.ChunkProviderStone;
-import com.builtbroken.mc.lib.mod.loadable.AbstractLoadable;
+import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

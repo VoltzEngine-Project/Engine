@@ -4,8 +4,8 @@ import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.GenMaterial;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.recipe.item.MRItemStack;
-import com.builtbroken.mc.lib.recipe.item.MRLoaderItemStack;
+import com.builtbroken.mc.framework.recipe.item.MRItemStack;
+import com.builtbroken.mc.framework.recipe.item.MRLoaderItemStack;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 

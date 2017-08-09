@@ -2,8 +2,8 @@ package com.builtbroken.mc.core.commands.debug;
 
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.lib.world.map.TileMapRegistry;
-import com.builtbroken.mc.lib.world.radar.RadarMap;
-import com.builtbroken.mc.lib.world.radar.data.RadarObject;
+import com.builtbroken.mc.lib.world.map.radar.RadarMap;
+import com.builtbroken.mc.lib.world.map.radar.data.RadarObject;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;

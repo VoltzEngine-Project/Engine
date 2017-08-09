@@ -32,7 +32,7 @@ import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.core.network.packet.callback.chunk.PacketRequestData;
 import com.builtbroken.mc.framework.access.global.gui.GuiAccessSystem;
-import com.builtbroken.mc.framework.blast.emp.ExEmp;
+import com.builtbroken.mc.core.content.blast.emp.ExEmp;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.multiblock.MultiBlockRenderHelper;
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -42,7 +42,7 @@ import com.builtbroken.mc.framework.json.processors.block.JsonBlockListenerProce
 import com.builtbroken.mc.framework.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.render.fx.FxBeam;
-import com.builtbroken.mc.lib.world.explosive.ExplosiveRegistry;
+import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
 import com.builtbroken.mc.lib.world.map.data.ChunkData;
 import com.builtbroken.mc.prefab.tile.listeners.RotatableListener;
