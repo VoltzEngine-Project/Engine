@@ -29,6 +29,7 @@ import java.util.WeakHashMap;
  *
  * @author DarkGuardsman, Calclavia
  */
+@Deprecated
 public class ModManager
 {
     @SidedProxy(clientSide = "com.builtbroken.mc.core.registry.ClientRegistryProxy", serverSide = "com.builtbroken.mc.core.registry.CommonRegistryProxy")

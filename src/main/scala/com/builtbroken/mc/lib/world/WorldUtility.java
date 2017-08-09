@@ -2,7 +2,6 @@ package com.builtbroken.mc.lib.world;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.DummyPlayer;
-import com.builtbroken.mc.lib.helper.wrapper.BitmaskWrapper;
 import com.builtbroken.mc.imp.transform.rotation.Quaternion;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
@@ -289,23 +288,6 @@ public class WorldUtility
 			Engine.instance.logger().error("Failed to replace TileEntity: " + findTile);
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Checks based on a bitmap for sides if this side can be rendered.
-	 *
-	 * @return True if so.
-	 */
-	@Deprecated
-	public static boolean isEnabledSide(int sideMap, ForgeDirection direction)
-	{
-		return BitmaskWrapper.mask(sideMap, direction);
-	}
-
-	@Deprecated
-	public static int setEnableSide(int sideMap, ForgeDirection direction, boolean doEnable)
-	{
-		return BitmaskWrapper.mask(sideMap, direction, doEnable);
 	}
 
 	public static List<ItemStack> getItemStackFromBlock(World world, int i, int j, int k)

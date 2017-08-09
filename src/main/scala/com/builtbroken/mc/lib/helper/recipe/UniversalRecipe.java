@@ -14,6 +14,7 @@ import java.util.ArrayList;
  *
  * @author Calclavia, Darkguardsman
  */
+@Deprecated
 public class UniversalRecipe
 {
     //TODO redesign this system as its not very effective
