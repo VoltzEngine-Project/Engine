@@ -5,8 +5,10 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.content.tool.screwdriver.ToolMode;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
-import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import com.builtbroken.mc.framework.recipe.item.RecipeTool;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
+import com.builtbroken.mc.lib.helper.NBTUtility;
+import com.builtbroken.mc.lib.helper.recipe.OreNames;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,8 +16,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.helper.NBTUtility;
 
 import java.util.List;
 
@@ -46,7 +46,9 @@ public class ItemScrewdriver extends Item implements IToolWrench, IPostInit
     public void addInformation(ItemStack itemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
     {
         par3List.add(LanguageUtility.getLocal("toolmode.mode") + ": " + LanguageUtility.getLocal(ToolMode.REGISTRY.get(getMode(itemStack)).getName()));
-        par3List.addAll(LanguageUtility.splitStringPerWord(LanguageUtility.getLocal("item.resonant:screwdriver.tooltip"), 4));
+
+        String translation = LanguageUtility.getLocal("item.resonant:screwdriver.tooltip");
+        par3List.addAll(LanguageUtility.splitByLine(translation, 120)); //TODO test size
     }
 
     @Override

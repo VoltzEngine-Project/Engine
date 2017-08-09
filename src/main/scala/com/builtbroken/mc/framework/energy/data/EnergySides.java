@@ -1,4 +1,4 @@
-package com.builtbroken.mc.framework.energy;
+package com.builtbroken.mc.framework.energy.data;
 
 import net.minecraftforge.common.util.ForgeDirection;
 

@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.{FluidStack, FluidTank}
  *
  * @author anti344, Calclavia
  */
+@Deprecated
 object ByteBufWrapper {
 
   implicit class ByteBufWrapper(buf: ByteBuf) {

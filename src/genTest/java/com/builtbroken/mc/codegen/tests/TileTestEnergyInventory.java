@@ -7,7 +7,7 @@ import com.builtbroken.mc.framework.logic.TileNode;
 import com.builtbroken.mc.codegen.annotations.EnergyWrapped;
 import com.builtbroken.mc.codegen.annotations.ExternalInventoryWrapped;
 import com.builtbroken.mc.codegen.annotations.TileWrapped;
-import com.builtbroken.mc.prefab.energy.EnergyBuffer;
+import com.builtbroken.mc.framework.energy.data.EnergyBuffer;
 import com.builtbroken.mc.prefab.inventory.ExternalInventory;
 import net.minecraftforge.common.util.ForgeDirection;
 

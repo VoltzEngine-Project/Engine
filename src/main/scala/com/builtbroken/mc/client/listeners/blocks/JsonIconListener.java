@@ -9,7 +9,7 @@ import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.framework.block.BlockBase;
-import com.builtbroken.mc.prefab.tile.listeners.TileListener;
+import com.builtbroken.mc.framework.block.listeners.TileListener;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;

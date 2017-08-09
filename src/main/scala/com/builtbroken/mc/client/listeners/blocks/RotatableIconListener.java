@@ -4,7 +4,7 @@ import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
 import com.builtbroken.mc.api.tile.listeners.ITileEventListenerBuilder;
 import com.builtbroken.mc.api.tile.listeners.client.IIconListener;
 import com.builtbroken.mc.framework.block.BlockBase;
-import com.builtbroken.mc.prefab.tile.listeners.TileListener;
+import com.builtbroken.mc.framework.block.listeners.TileListener;
 import net.minecraft.block.Block;
 import net.minecraft.util.IIcon;
 

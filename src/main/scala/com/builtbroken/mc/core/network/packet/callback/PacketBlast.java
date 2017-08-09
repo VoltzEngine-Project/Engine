@@ -6,7 +6,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
-import com.builtbroken.mc.prefab.explosive.blast.Blast;
+import com.builtbroken.mc.framework.explosive.blast.Blast;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

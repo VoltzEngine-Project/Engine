@@ -3,7 +3,7 @@ package com.builtbroken.mc.framework.json.conversion.data;
 import com.builtbroken.mc.api.data.energy.IEnergyChargeData;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
-import com.builtbroken.mc.prefab.energy.EnergyChargeData;
+import com.builtbroken.mc.framework.energy.data.EnergyChargeData;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

@@ -1,25 +1,24 @@
 package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.lib.helper.wrapper.StringWrapper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.StatCollector;
+import scala.actors.threadpool.Arrays;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class to help you out with strings
+ * Utility class to handle working with Strings
  *
- * @author Calclavia, Darkguardsman
+ * @author Darkguardsman
+ *         based on Calclavia version from Resonant Engine but has been mostly rewritten so no longer marked as author
  */
 public class LanguageUtility
 {
-    //Being lazy :P
-    private static StringWrapper.WrappedString wrap(String str)
-    {
-        return new StringWrapper.WrappedString(str);
-    }
+    public static int toolTipLineLength = 120;
 
     /**
      * Grabs the localization for the string provided. Make sure the string
@@ -39,7 +38,9 @@ public class LanguageUtility
             }
             return "error.key.empty";
         }
-        String translation = wrap(key).getLocal();
+
+        //Get translation
+        String translation = StatCollector.translateToLocal(key);
         if (translation == null || translation.isEmpty())
         {
             if (Engine.runningAsDev)
@@ -68,7 +69,22 @@ public class LanguageUtility
             }
             return "error.key.empty";
         }
-        return wrap(key + (!key.endsWith(".name") ? ".name" : "")).getLocal();
+        if (!key.endsWith(".name"))
+        {
+            key = key + ".name";
+        }
+
+        //Get translation
+        String translation = StatCollector.translateToLocal(key);
+        if (translation == null || translation.isEmpty())
+        {
+            if (Engine.runningAsDev)
+            {
+                Engine.instance.logger().error("LanguageUtility.getLocal(" + key + ") - no translation", new RuntimeException());
+            }
+            return key;
+        }
+        return translation;
     }
 
 
@@ -143,53 +159,43 @@ public class LanguageUtility
         }
     }
 
-    public static List<String> splitStringPerWord(String string, int characters)
+    public static List<String> splitStringPerWord(String string) //TODO move to string utility in coding lib
     {
-        return wrap(string).listWrap(characters);
+        return Arrays.asList(toWordArray(string));
     }
 
-    public static String[] splitStringPerWordIntoArray(String string, int characters)
+    public static String[] toWordArray(String string) //TODO move to string utility in coding lib
     {
-        return wrap(string).wrap(characters);
+        return string.trim().split("\\W+");
     }
 
-    public static String capitalizeFirst(String str)
+    public static List<String> splitByLine(String string, int charsPerLine)
     {
-        return wrap(str).capitalizeFirst();
+        String[] words = toWordArray(string);
+        List<String> lines = new ArrayList(); //TODO predict size for faster runtime
+        String line = "";
+        for (String word : words)
+        {
+            if (word.length() + line.length() <= charsPerLine)
+            {
+                line += word;
+            }
+            else
+            {
+                lines.add(line);
+                line = word;
+            }
+        }
+        return lines;
     }
 
-    public static String decapitalizeFirst(String str)
+    public static String capitalizeFirst(String str) //TODO move to string utility in coding lib
     {
-        return wrap(str).decapitalizeFirst();
+        return str.substring(0, 1).toUpperCase() + str.substring(1, str.length());
     }
 
-    public static String toCamelCase(String str)
+    public static String decapitalizeFirst(String str) //TODO move to string utility in coding lib
     {
-        return wrap(str).toCamelCase();
-    }
-
-    public static String toPascalCase(String str)
-    {
-        return wrap(str).toPascalCase();
-    }
-
-    public static String camelToLowerUnderscore(String str)
-    {
-        return wrap(str).camelToLowerUnderscore();
-    }
-
-    public static String camelToReadable(String str)
-    {
-        return wrap(str).camelToReadable();
-    }
-
-    public static String underscoreToCamel(String str)
-    {
-        return wrap(str).underscoreToCamel();
-    }
-
-    public static String toProperCase(String str)
-    {
-        return wrap(str).toProperCase();
+        return str.substring(0, 1).toLowerCase() + str.substring(1, str.length());
     }
 }

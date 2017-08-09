@@ -45,7 +45,7 @@ import com.builtbroken.mc.lib.render.fx.FxBeam;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
 import com.builtbroken.mc.lib.world.map.data.ChunkData;
-import com.builtbroken.mc.prefab.tile.listeners.RotatableListener;
+import com.builtbroken.mc.framework.block.listeners.RotatableListener;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;

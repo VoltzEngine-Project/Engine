@@ -2,7 +2,7 @@ package com.builtbroken.mc.framework.recipe.extend;
 
 import com.builtbroken.mc.api.recipe.IMachineRecipe;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
-import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

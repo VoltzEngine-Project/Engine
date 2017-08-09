@@ -1,6 +1,6 @@
 package com.builtbroken.mc.framework.recipe.fluid;
 
-import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import com.builtbroken.mc.framework.recipe.extend.MRHandler;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

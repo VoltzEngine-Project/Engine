@@ -1,8 +1,8 @@
 package com.builtbroken.mc.framework.recipe.fluid;
 
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
-import com.builtbroken.mc.prefab.items.ItemStackList;
-import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import com.builtbroken.mc.lib.data.item.ItemStackList;
+import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import com.builtbroken.mc.framework.recipe.extend.MachineRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

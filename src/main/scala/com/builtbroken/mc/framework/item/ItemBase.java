@@ -17,7 +17,6 @@ import com.builtbroken.mc.framework.item.logic.ItemNode;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.processors.item.processor.JsonItemProcessor;
-import com.builtbroken.mc.prefab.items.listeners.ItemListenerIterator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;

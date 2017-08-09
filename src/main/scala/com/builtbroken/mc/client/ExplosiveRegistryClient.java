@@ -6,7 +6,7 @@ import com.builtbroken.mc.api.items.explosives.IExplosiveContainerItem;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
-import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

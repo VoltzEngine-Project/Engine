@@ -17,7 +17,7 @@ import com.builtbroken.mc.lib.helper.WrenchUtility;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import com.builtbroken.mc.prefab.tile.listeners.ListenerIterator;
+import com.builtbroken.mc.framework.block.listeners.ListenerIterator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

@@ -12,7 +12,7 @@ import com.builtbroken.mc.lib.world.map.TileMapRegistry;
 import com.builtbroken.mc.lib.world.map.radar.RadarMap;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarObject;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarTile;
-import com.builtbroken.mc.prefab.explosive.blast.Blast;
+import com.builtbroken.mc.framework.explosive.blast.Blast;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;

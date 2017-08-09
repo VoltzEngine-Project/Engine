@@ -1,7 +1,7 @@
 package com.builtbroken.test.wrapper;
 
 import com.builtbroken.mc.lib.helper.MathUtility;
-import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import net.minecraft.block.Block;

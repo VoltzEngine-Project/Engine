@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.energy;
 
+import com.builtbroken.mc.framework.energy.data.EnergySides;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -4,7 +4,7 @@ import com.builtbroken.mc.api.IHasMass;
 import com.builtbroken.mc.api.IMassRegistry;
 import com.builtbroken.mc.api.items.IItemHasMass;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;

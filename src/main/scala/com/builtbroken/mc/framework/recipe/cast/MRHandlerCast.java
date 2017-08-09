@@ -3,7 +3,7 @@ package com.builtbroken.mc.framework.recipe.cast;
 import com.builtbroken.mc.api.items.crafting.ICastItem;
 import com.builtbroken.mc.api.recipe.*;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.prefab.items.ItemStackWrapper;
+import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;

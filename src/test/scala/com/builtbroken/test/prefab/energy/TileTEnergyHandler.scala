@@ -1,6 +1,6 @@
 package com.builtbroken.test.prefab.energy
 
-import com.builtbroken.mc.prefab.energy.EnergyBuffer
+import com.builtbroken.mc.framework.energy.data.EnergyBuffer
 import net.minecraft.tileentity.TileEntity
 
 /**

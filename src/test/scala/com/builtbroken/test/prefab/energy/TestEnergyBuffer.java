@@ -1,6 +1,6 @@
 package com.builtbroken.test.prefab.energy;
 
-import com.builtbroken.mc.prefab.energy.EnergyBuffer;
+import com.builtbroken.mc.framework.energy.data.EnergyBuffer;
 import com.builtbroken.mc.testing.junit.AbstractTest;
 import com.builtbroken.mc.testing.junit.VoltzTestRunner;
 import org.junit.Assert;

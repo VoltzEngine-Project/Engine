@@ -12,7 +12,7 @@ import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
-import com.builtbroken.mc.prefab.tile.listeners.ListenerIterator;
+import com.builtbroken.mc.framework.block.listeners.ListenerIterator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
