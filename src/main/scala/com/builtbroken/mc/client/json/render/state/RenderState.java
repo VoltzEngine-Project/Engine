@@ -11,6 +11,8 @@ public abstract class RenderState implements IRenderState
     public final String id;
     /** ID for Super object / parent object of this render state, allows sharing state data */
     public String parent;
+    /** Color to apply */
+    public String color;
     /** Super object / parent object of this render state, allows sharing state data */
     public IRenderState parentState;
 

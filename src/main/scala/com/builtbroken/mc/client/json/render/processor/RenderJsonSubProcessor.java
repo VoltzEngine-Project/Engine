@@ -30,6 +30,11 @@ public abstract class RenderJsonSubProcessor
                 ((RenderState) state).parent = renderStateObject.get("parent").getAsString();
             }
 
+            if (renderStateObject.has("color"))
+            {
+                ((RenderState) state).color = renderStateObject.get("color").getAsString();
+            }
+
             if (state instanceof TextureState)
             {
                 if (renderStateObject.has("textureID"))

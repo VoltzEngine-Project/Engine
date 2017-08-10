@@ -3,9 +3,14 @@ package com.builtbroken.mc.client;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.ITexturedExplosiveHandler;
 import com.builtbroken.mc.api.items.explosives.IExplosiveContainerItem;
+import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.imp.IRenderState;
+import com.builtbroken.mc.client.json.render.RenderData;
+import com.builtbroken.mc.client.json.render.state.TextureState;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
+import com.builtbroken.mc.framework.json.imp.IJsonKeyDataProvider;
 import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -15,9 +20,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * Client side registry for explosive system. Most of the code is designed to minimize the requirements
@@ -79,13 +84,19 @@ public class ExplosiveRegistryClient
     public static IIcon getCornerIconFor(final ItemStack stack, int pass)
     {
         ItemStack item = stack;
+
+        //Pull explosive from container
         if (item.getItem() instanceof IExplosiveContainerItem)
         {
             item = ((IExplosiveContainerItem) item.getItem()).getExplosiveStack(stack);
         }
+
+        //If item
         if (item != null)
         {
             IExplosiveHandler handler = ExplosiveRegistry.get(item);
+
+            //Old outdated system TODO remove once converted to JSON fully
             if (handler instanceof ITexturedExplosiveHandler)
             {
                 IIcon icon = ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIcon(item, pass);
@@ -94,6 +105,24 @@ public class ExplosiveRegistryClient
                     return icon;
                 }
             }
+
+            //Try to get icon from JSON
+            String contentID = handler.getID();
+            RenderData data = ClientDataHandler.INSTANCE.getRenderData(handler.getMod() + ":" + contentID); //TODO consider using state ID to get render
+            if (data != null && data.renderType.equalsIgnoreCase("ex"))
+            {
+                List<String> keys = getStatesForCornerIcon(stack, handler, pass);
+                for (String key : keys)
+                {
+                    IRenderState state = data.getState(key);
+                    if (state != null && state instanceof TextureState)
+                    {
+                        return state.getIcon(0);
+                    }
+                }
+            }
+
+            //Cache
             ItemStackWrapper wrapper = new ItemStackWrapper(item);
             if (EX_CORNER_ICONS.containsKey(wrapper))
             {
@@ -113,12 +142,76 @@ public class ExplosiveRegistryClient
         if (item != null)
         {
             IExplosiveHandler handler = ExplosiveRegistry.get(item);
+
+            //Old system TODO remove once fully JSON
             if (handler instanceof ITexturedExplosiveHandler)
             {
                 return ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIconColor(item, pass);
             }
+
+
+            String contentID = handler.getID();
+            RenderData data = ClientDataHandler.INSTANCE.getRenderData(handler.getMod() + ":" + contentID); //TODO consider using state ID to get render
+            if (data != null && data.renderType.equalsIgnoreCase("ex"))
+            {
+                List<String> keys = getStatesForCornerIcon(stack, handler, pass);
+                for (String key : keys)
+                {
+                    IRenderState state = data.getState(key);
+                    if (state != null && state instanceof TextureState)
+                    {
+                        String colorKey = ((TextureState) state).color;
+                        if (colorKey != null && !colorKey.isEmpty())
+                        {
+                            if (colorKey.startsWith("data@"))
+                            {
+                                if (handler instanceof IJsonKeyDataProvider)
+                                {
+                                    Object object = ((IJsonKeyDataProvider) handler).getJsonKeyData(colorKey.substring(5, colorKey.length()), stack);
+                                    if (object instanceof Integer)
+                                    {
+                                        return (int) object;
+                                    }
+                                    else if (object instanceof Color)
+                                    {
+                                        return ((Color) object).getRGB();
+                                    }
+                                    //TODO more options?
+                                }
+                                else
+                                {
+                                    //TODO add warning about missing implementation
+                                }
+                            }
+                            else if (ClientDataHandler.INSTANCE.canSupportColor(colorKey))
+                            {
+                                return ClientDataHandler.INSTANCE.getColorAsInt(colorKey);
+                            }
+                            else
+                            {
+                                //TODO add warning about missing color data
+                            }
+                        }
+                    }
+                }
+            }
         }
         return 16777215;
+    }
+
+    public static List<String> getStatesForCornerIcon(final ItemStack stack, final IExplosiveHandler handler, int pass)
+    {
+        List<String> keys = new ArrayList();
+        String stateOne = handler.getStateID(stack);
+        if (stateOne != null && !stateOne.isEmpty())
+        {
+            keys.add("ex.corner." + handler.getStateID(stack) + "." + pass);
+            keys.add("ex.corner." + handler.getStateID(stack));
+        }
+        keys.add("ex.corner." + pass);
+        keys.add("ex.corner");
+
+        return keys;
     }
 
     /**

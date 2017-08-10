@@ -159,6 +159,12 @@ public abstract class ExplosiveHandler<B extends Blast> implements IExplosiveHan
     }
 
     @Override
+    public String getMod()
+    {
+        return data.modID;
+    }
+
+    @Override
     public String toString()
     {
         return "ExHandler[" + getID() + "]";

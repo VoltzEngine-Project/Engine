@@ -10,6 +10,7 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
+import java.awt.*;
 import java.util.HashMap;
 
 /**
@@ -38,38 +39,38 @@ public class ClientDataHandler
 
     public void addTexture(String key, TextureData texture)
     {
-        if (textures.containsKey(key))
+        if (textures.containsKey(key.toLowerCase()))
         {
             Engine.logger().error("Overriding " + textures.get(key) + " with " + texture);
         }
-        textures.put(key, texture);
+        textures.put(key.toLowerCase(), texture);
     }
 
     public void addModel(String key, ModelData model)
     {
-        if (models.containsKey(key))
+        if (models.containsKey(key.toLowerCase()))
         {
             Engine.logger().error("Overriding " + models.get(key) + " with " + model);
         }
-        models.put(key, model);
+        models.put(key.toLowerCase(), model);
     }
 
     public void addRenderData(String key, RenderData data)
     {
-        if (renderData.containsKey(key))
+        if (renderData.containsKey(key.toLowerCase()))
         {
             Engine.logger().error("Overriding " + renderData.get(key) + " with " + data);
         }
-        renderData.put(key, data);
+        renderData.put(key.toLowerCase(), data);
     }
 
     public void addAudio(String key, AudioData data)
     {
-        if (audioData.containsKey(key))
+        if (audioData.containsKey(key.toLowerCase()))
         {
             Engine.logger().error("Overriding " + audioData.get(key) + " with " + data);
         }
-        audioData.put(key, data);
+        audioData.put(key.toLowerCase(), data);
     }
 
 
@@ -97,7 +98,7 @@ public class ClientDataHandler
         {
             return null;
         }
-        return renderData.get(key);
+        return renderData.get(key.toLowerCase());
     }
 
     public ModelData getModel(String key)
@@ -106,7 +107,7 @@ public class ClientDataHandler
         {
             return null;
         }
-        return models.get(key);
+        return models.get(key.toLowerCase());
     }
 
     public TextureData getTexture(String key)
@@ -115,7 +116,7 @@ public class ClientDataHandler
         {
             return null;
         }
-        return textures.get(key);
+        return textures.get(key.toLowerCase());
     }
 
     public AudioData getAudio(String key)
@@ -161,5 +162,20 @@ public class ClientDataHandler
                 data.register(event.map);
             }
         }
+    }
+
+    public boolean canSupportColor(String colorKey)
+    {
+        return false;
+    }
+
+    public int getColorAsInt(String colorKey)
+    {
+        return 16777215;
+    }
+
+    public Color getColor(String colorKey)
+    {
+        return null;
     }
 }
