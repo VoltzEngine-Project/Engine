@@ -14,6 +14,7 @@ import com.builtbroken.mc.framework.json.loading.JsonEntry;
 import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import com.builtbroken.mc.framework.json.loading.ProcessorKeySorter;
 import com.builtbroken.mc.framework.json.override.JsonOverrideProcessor;
+import com.builtbroken.mc.framework.json.processors.explosive.JsonProcessorExplosive;
 import com.builtbroken.mc.framework.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.framework.json.processors.block.JsonBlockProcessor;
 import com.builtbroken.mc.framework.json.processors.block.JsonBlockTileProcessor;
@@ -162,6 +163,7 @@ public final class JsonContentLoader extends AbstractLoadable
         add(new JsonOverrideProcessor());
         add(new JsonMultiBlockLayoutProcessor());
         add(new JsonMissingMapEventProcessor());
+        add(new JsonProcessorExplosive());
         //TODO add machine recipes
 
         debug.end("Done...");
@@ -172,8 +174,15 @@ public final class JsonContentLoader extends AbstractLoadable
             Object mod = container.getMod();
             if (mod instanceof IJsonGenMod)
             {
-                debug.log("Mod: " + container.getName() + "  " + container.getDisplayVersion());
-                ((IJsonGenMod) mod).loadJsonContentHandlers();
+                try
+                {
+                    debug.log("Mod: " + container.getName() + "  " + container.getDisplayVersion());
+                    ((IJsonGenMod) mod).loadJsonContentHandlers();
+                }
+                catch (Exception e)
+                {
+                    throw new RuntimeException("Unexpected error while loading JSON content handlers from " + ((IJsonGenMod) mod).getDomain(), e);
+                }
             }
         }
         debug.end("Done...");

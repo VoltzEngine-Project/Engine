@@ -3,6 +3,7 @@ package com.builtbroken.mc.framework.json.processors;
 import com.builtbroken.jlib.lang.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.exceptions.JsonFormatException;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
@@ -60,16 +61,29 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
 
     protected void processAdditionalKeys(D objectToInject, JsonObject jsonData)
     {
-        //Call to process extra tags from file
-        for (Map.Entry<String, JsonElement> entry : jsonData.entrySet())
+        try
         {
-            if (keyHandler.handle(objectToInject, entry.getKey().toLowerCase(), entry.getValue()))
+            //Call to process extra tags from file
+            for (Map.Entry<String, JsonElement> entry : jsonData.entrySet())
             {
-                if (Engine.runningAsDev)
+                if (keyHandler.handle(objectToInject, entry.getKey().toLowerCase(), entry.getValue()))
                 {
-                    debugPrinter.log("Injected Key: " + entry.getKey());
+                    if (Engine.runningAsDev)
+                    {
+                        debugPrinter.log("Injected Key: " + entry.getKey());
+                    }
                 }
             }
+
+            keyHandler.enforceRequired(objectToInject);
+        }
+        catch (JsonFormatException e)
+        {
+            throw new RuntimeException("JsonProcessor: Failed to inject JSON data", e);
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace(); //Technically can't happen
         }
     }
 

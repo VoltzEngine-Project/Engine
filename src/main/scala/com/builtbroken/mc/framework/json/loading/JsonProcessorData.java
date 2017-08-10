@@ -23,4 +23,13 @@ public @interface JsonProcessorData
 
     /** Primitive type to load, only use for numbers */
     String type() default "Unknown";
+
+    /**
+     * Enforced that a value is not null and contains data
+     * <p>
+     * Only works on fields at this time.
+     *
+     * @return true to enforce a not null state
+     */
+    boolean required() default false;
 }

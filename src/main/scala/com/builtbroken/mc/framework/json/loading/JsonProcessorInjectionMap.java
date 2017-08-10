@@ -1,8 +1,11 @@
 package com.builtbroken.mc.framework.json.loading;
 
-import com.builtbroken.mc.lib.helper.ReflectionUtility;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
+import com.builtbroken.mc.framework.json.exceptions.JsonFormatException;
+import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.override.JsonOverride;
+import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
@@ -136,11 +139,11 @@ public class JsonProcessorInjectionMap<O extends Object>
 
     public boolean supports(String keyValue, boolean override, String overrideType)
     {
-        if(injectionFields.containsKey(keyValue) || injectionMethods.containsKey(keyValue))
+        if (injectionFields.containsKey(keyValue) || injectionMethods.containsKey(keyValue))
         {
-            if(override)
+            if (override)
             {
-                if(injectionFields.containsKey(keyValue))
+                if (injectionFields.containsKey(keyValue))
                 {
                     Field field = injectionFields.get(keyValue);
                     Annotation[] annotations = field.getDeclaredAnnotations();
@@ -148,14 +151,14 @@ public class JsonProcessorInjectionMap<O extends Object>
                     {
                         for (Annotation annotation : annotations)
                         {
-                            if(annotation instanceof JsonOverride)
+                            if (annotation instanceof JsonOverride)
                             {
                                 return true;
                             }
                         }
                     }
                 }
-                if(injectionMethods.containsKey(keyValue))
+                if (injectionMethods.containsKey(keyValue))
                 {
                     Method method = injectionMethods.get(keyValue);
                     Annotation[] annotations = method.getDeclaredAnnotations();
@@ -163,7 +166,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                     {
                         for (Annotation annotation : annotations)
                         {
-                            if(annotation instanceof JsonOverride)
+                            if (annotation instanceof JsonOverride)
                             {
                                 return true;
                             }
@@ -177,7 +180,7 @@ public class JsonProcessorInjectionMap<O extends Object>
         return false;
     }
 
-    public boolean handle(O objectToInjection, String keyValue, Object valueToInject, boolean override, String overrideType)
+    public <D extends IJsonGenObject> boolean handle(O objectToInjection, String keyValue, Object valueToInject, boolean override, String overrideType)
     {
         try
         {
@@ -529,5 +532,35 @@ public class JsonProcessorInjectionMap<O extends Object>
             throw new RuntimeException("Failed to inject data " + valueToInject + " into " + objectToInjection, e);
         }
         return false;
+    }
+
+    public <D extends IJsonGenObject> void enforceRequired(D objectToInject) throws IllegalAccessException, JsonFormatException
+    {
+        for (Field field : injectionFields.values())
+        {
+            Annotation[] annotations = field.getDeclaredAnnotations();
+            if (annotations != null && annotations.length > 0)
+            {
+                for (Annotation annotation : annotations)
+                {
+                    //Find our annotation, allow multiple for different keys
+                    if (annotation instanceof JsonProcessorData && ((JsonProcessorData) annotation).required())
+                    {
+                        if (!field.isAccessible())
+                        {
+                            Engine.logger().error("JsonProcessorInjectionMap: Failed to access field '" + field + "' to check required state.");
+                        }
+                        else
+                        {
+                            Object object = field.get(objectToInject);
+                            if(object == null)
+                            {
+                                throw new JsonFormatException("JsonProcessorInjectionMap: Missing required value from JSON file '" + ((JsonProcessorData) annotation).value() + "'");
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

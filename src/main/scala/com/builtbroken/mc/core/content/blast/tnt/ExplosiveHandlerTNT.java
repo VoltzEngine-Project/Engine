@@ -2,7 +2,7 @@ package com.builtbroken.mc.core.content.blast.tnt;
 
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.prefab.explosive.AbstractExplosiveHandler;
+import com.builtbroken.mc.framework.explosive.handler.ExplosiveHandler;
 import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -14,7 +14,7 @@ import net.minecraft.world.World;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 2/12/2016.
  */
-public class ExplosiveHandlerTNT extends AbstractExplosiveHandler
+public class ExplosiveHandlerTNT extends ExplosiveHandler
 {
     public ExplosiveHandlerTNT()
     {
