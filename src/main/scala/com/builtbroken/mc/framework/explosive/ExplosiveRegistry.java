@@ -9,8 +9,8 @@ import com.builtbroken.mc.api.explosive.IExplosiveHolder;
 import com.builtbroken.mc.api.items.explosives.IExplosiveItem;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Location;
-import com.builtbroken.mc.lib.world.edit.WorldChangeHelper;
 import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
+import com.builtbroken.mc.lib.world.edit.WorldChangeHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -92,7 +92,7 @@ public final class ExplosiveRegistry
      * Registers a new explosive
      *
      * @param modID - modID
-     * @param id_r    - name to register the explosive with
+     * @param id_r  - name to register the explosive with
      * @param ex    - explosive instance
      * @return false an explosive is already registered by the ID
      */
@@ -262,6 +262,31 @@ public final class ExplosiveRegistry
             return true;
         }
         return false;
+    }
+
+    /**
+     * Removes the explosive from the registry. This is
+     * only designed for JUnit testing. However, can
+     * be used in dire need.
+     *
+     * @param ex_name
+     */
+    public static void unregisterExplosive(String ex_name)
+    {
+        if(ex_name != null && !ex_name.isEmpty())
+        {
+            IExplosiveHandler handler = get(ex_name.toLowerCase());
+            if (handler != null)
+            {
+                idToExplosiveMap.remove(ex_name.toLowerCase());
+                explosiveConfigScale.remove(handler);
+                for (ItemStackWrapper wrapper : explosiveToItems.get(handler))
+                {
+                    itemToExplosive.remove(wrapper);
+                }
+                explosiveToItems.remove(handler);
+            }
+        }
     }
 
 

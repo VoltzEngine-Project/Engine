@@ -3,10 +3,12 @@ package com.builtbroken.mc.framework.json.processors;
 import com.builtbroken.jlib.lang.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.conversion.JsonConverterNBT;
 import com.builtbroken.mc.framework.json.exceptions.JsonFormatException;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
+import com.builtbroken.mc.framework.json.processors.recipe.JsonItemEntry;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import cpw.mods.fml.common.Loader;
@@ -127,5 +129,60 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
             }
         }
         return true;
+    }
+
+
+    public static Object getItemFromJson(JsonElement element) throws JsonFormatException
+    {
+        if (element.isJsonObject())
+        {
+            return fromJson(element.getAsJsonObject());
+        }
+        else if (element.isJsonPrimitive())
+        {
+            return element.getAsString();
+        }
+        throw new JsonFormatException("Could not convert json element into item entry >> '" + element + "'");
+    }
+
+    public static JsonItemEntry fromJson(JsonObject itemStackObject) throws JsonFormatException
+    {
+        //Convert and check types
+        ensureValuesExist(itemStackObject, "item");
+
+        //Create entry
+        JsonItemEntry entry = new JsonItemEntry();
+
+        //Get required data
+        entry.item = itemStackObject.get("item").getAsString();
+        if (itemStackObject.has("meta"))
+        {
+            entry.damage = itemStackObject.get("meta").getAsString();
+        }
+        else if (itemStackObject.has("damage"))
+        {
+            entry.damage = itemStackObject.get("damage").getAsString();
+        }
+
+        //Load optional stacksize
+        if (itemStackObject.has("count"))
+        {
+            entry.count = itemStackObject.getAsJsonPrimitive("count").getAsInt();
+            if (entry.count < 0)
+            {
+                throw new JsonFormatException("Recipe output count must be above zero");
+            }
+            else if (entry.count > 64)
+            {
+                throw new JsonFormatException("Recipe output count must be below 64 as this is the max stacksize for this version of Minecraft.");
+            }
+        }
+
+        //Load optional item data
+        if (itemStackObject.has("nbt"))
+        {
+            entry.nbt = JsonConverterNBT.handle(itemStackObject.get("nbt"));
+        }
+        return entry;
     }
 }

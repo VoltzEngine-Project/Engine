@@ -2,13 +2,11 @@ package com.builtbroken.mc.framework.json.processors.recipe;
 
 import com.builtbroken.mc.framework.block.BlockBase;
 import com.builtbroken.mc.framework.block.meta.MetaData;
-import com.builtbroken.mc.framework.json.conversion.JsonConverterNBT;
 import com.builtbroken.mc.framework.json.exceptions.JsonFormatException;
 import com.builtbroken.mc.framework.json.imp.IJsonBlockSubProcessor;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -81,52 +79,4 @@ public abstract class JsonRecipeProcessor<D extends IJsonGenObject> extends Json
             throw new RuntimeException(e);
         }
     }
-
-    public Object getItemFromJson(JsonElement element) throws JsonFormatException
-    {
-        if (element.isJsonObject())
-        {
-            return fromJson(element.getAsJsonObject());
-        }
-        else if (element.isJsonPrimitive())
-        {
-            return element.getAsString();
-        }
-        throw new JsonFormatException("Could not convert json element into item entry >> '" + element + "'");
-    }
-
-    public RecipeItemEntry fromJson(JsonObject itemStackObject) throws JsonFormatException
-    {
-        //Convert and check types
-        ensureValuesExist(itemStackObject, "item", "meta");
-
-        //Create entry
-        RecipeItemEntry entry = new RecipeItemEntry();
-
-        //Get required data
-        entry.item = itemStackObject.get("item").getAsString();
-        entry.damage = itemStackObject.get("meta").getAsString();
-
-        //Load optional stacksize
-        if (itemStackObject.has("count"))
-        {
-            entry.count = itemStackObject.getAsJsonPrimitive("count").getAsInt();
-            if (entry.count < 0)
-            {
-                throw new JsonFormatException("Recipe output count must be above zero");
-            }
-            else if (entry.count > 64)
-            {
-                throw new JsonFormatException("Recipe output count must be below 64 as this is the max stacksize for this version of Minecraft.");
-            }
-        }
-
-        //Load optional item data
-        if (itemStackObject.has("nbt"))
-        {
-            entry.nbt = JsonConverterNBT.handle(itemStackObject.get("nbt"));
-        }
-        return entry;
-    }
-
 }

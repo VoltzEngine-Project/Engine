@@ -66,7 +66,6 @@ import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.world.map.TileMapRegistry;
 import com.builtbroken.mc.lib.world.map.radar.RadarRegistry;
 import com.builtbroken.mc.lib.world.map.radio.RadioRegistry;
-import com.builtbroken.mc.mods.nei.NEIProxy;
 import com.builtbroken.mc.core.content.blast.tnt.ExplosiveHandlerTNT;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.framework.block.listeners.*;
@@ -548,7 +547,7 @@ public class Engine implements IJsonGenMod
         {
             multiBlock = new BlockMultiblock();
             GameRegistry.registerBlock(multiBlock, ItemBlockMulti.class, "veMultiBlock");
-            NEIProxy.hideItem(multiBlock);
+            //NEIProxy.hideItem(multiBlock);
             EnumMultiblock.register();
         }
 
@@ -581,7 +580,7 @@ public class Engine implements IJsonGenMod
         if (getConfig().getBoolean("LoadHeatedRocks", "Content", heatedRockRequested, "Loads up heated rocks which are used to give explosions an extra short term effect on stone."))
         {
             heatedStone = contentRegistry.newBlock("VEHeatedRock", BlockHeatedStone.class, ItemBlockMetadata.class);
-            NEIProxy.hideItem(heatedStone);
+            //NEIProxy.hideItem(heatedStone);
             if (enabledHeatMap)
             {
                 HeatedBlockRegistry.addNewHeatingConversion(Blocks.stone, new PlacementDataExtended(heatedStone, 15, Block.getIdFromBlock(Blocks.stone)), 600);
@@ -605,7 +604,7 @@ public class Engine implements IJsonGenMod
                 {
                     if (mat == GenMaterial.UNKNOWN || genItem.ignoreMaterials.contains(mat))
                     {
-                        NEIProxy.hideItem(new ItemStack(genItem.item, 1, mat.ordinal()));
+                        //NEIProxy.hideItem(new ItemStack(genItem.item, 1, mat.ordinal())); //TODO set hidden when moved to JSON
                     }
                     else
                     {

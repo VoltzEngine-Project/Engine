@@ -8,10 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
+ * Uses to store an item parsed from JSON data
+ *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 8/9/2017.
  */
-public class RecipeItemEntry
+public class JsonItemEntry
 {
     /** Reference to an item or block */
     public String item;

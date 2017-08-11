@@ -3,7 +3,7 @@ package com.builtbroken.mc.framework.json.processors;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
-import com.builtbroken.mc.framework.json.processors.recipe.RecipeItemEntry;
+import com.builtbroken.mc.framework.json.processors.recipe.JsonItemEntry;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -63,11 +63,11 @@ public abstract class JsonGenData implements IJsonGenObject
      */
     public Object convertItemEntry(Object object)
     {
-        if (object instanceof RecipeItemEntry)
+        if (object instanceof JsonItemEntry)
         {
             try
             {
-                return ((RecipeItemEntry) object).get();
+                return ((JsonItemEntry) object).get();
             }
             catch (IllegalArgumentException e)
             {
@@ -126,7 +126,7 @@ public abstract class JsonGenData implements IJsonGenObject
      */
     protected boolean canConvertToItem(Object object)
     {
-        return object instanceof String || object instanceof RecipeItemEntry;
+        return object instanceof String || object instanceof JsonItemEntry;
     }
 
     protected Object findBlock(String blockName)

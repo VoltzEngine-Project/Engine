@@ -196,6 +196,7 @@ public class ModManager
     /**
      * Creates a new instance of the block class as long as it has a default constructor
      */
+    @Deprecated
     public Block newBlock(Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemBlockClass)
     {
         return newBlock(blockClazz.getSimpleName(), blockClazz, itemBlockClass);
@@ -204,6 +205,7 @@ public class ModManager
     /**
      * Creates a new instance of the block class as long as it has a default constructor
      */
+    @Deprecated
     public Block newBlock(Class<? extends Block> blockClazz)
     {
         return newBlock(blockClazz.getSimpleName(), blockClazz);
