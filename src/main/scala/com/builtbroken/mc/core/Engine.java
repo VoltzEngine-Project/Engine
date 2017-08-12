@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core;
 
 import com.builtbroken.jlib.lang.StringHelpers;
+import com.builtbroken.mc.abstraction.world.IWorld;
 import com.builtbroken.mc.api.VoltzEngineAPI;
 import com.builtbroken.mc.api.event.TriggerCauseRegistry;
 import com.builtbroken.mc.api.process.IWorkerThread;
@@ -8,6 +9,7 @@ import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.asm.ProxyASMTest;
 import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
+import com.builtbroken.mc.core.content.blast.tnt.ExplosiveHandlerTNT;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.debug.ItemDevData;
 import com.builtbroken.mc.core.content.debug.ItemInstaHole;
@@ -36,21 +38,19 @@ import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.netty.PacketManager;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.access.global.GlobalAccessSystem;
+import com.builtbroken.mc.framework.block.listeners.*;
+import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
+import com.builtbroken.mc.framework.explosive.TriggerNBTBuilder;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.json.processors.block.JsonBlockListenerProcessor;
 import com.builtbroken.mc.framework.json.processors.event.JsonMissingMapEventProcessor;
+import com.builtbroken.mc.framework.mod.AbstractProxy;
+import com.builtbroken.mc.framework.mod.loadable.LoadableHandler;
 import com.builtbroken.mc.framework.multiblock.BlockMultiblock;
 import com.builtbroken.mc.framework.multiblock.EnumMultiblock;
 import com.builtbroken.mc.framework.multiblock.ItemBlockMulti;
 import com.builtbroken.mc.framework.multiblock.listeners.MultiBlockListener;
-import com.builtbroken.mc.lib.data.heat.HeatedBlockRegistry;
-import com.builtbroken.mc.lib.data.mass.MassRegistry;
-import com.builtbroken.mc.lib.helper.LanguageUtility;
-import com.builtbroken.mc.lib.helper.PotionUtility;
-import com.builtbroken.mc.lib.helper.recipe.OreNames;
-import com.builtbroken.mc.framework.mod.AbstractProxy;
-import com.builtbroken.mc.framework.mod.loadable.LoadableHandler;
 import com.builtbroken.mc.framework.recipe.cast.MRHandlerCast;
 import com.builtbroken.mc.framework.recipe.fluid.MRHandlerFluidStack;
 import com.builtbroken.mc.framework.recipe.item.MRHandlerItemStack;
@@ -58,18 +58,19 @@ import com.builtbroken.mc.framework.recipe.item.MRSmelterHandler;
 import com.builtbroken.mc.framework.recipe.item.RecipeTool;
 import com.builtbroken.mc.framework.recipe.item.grid.RecipeShapedOreLarge;
 import com.builtbroken.mc.framework.recipe.item.sheetmetal.RecipeSheetMetal;
-import com.builtbroken.mc.lib.world.edit.PlacementData;
-import com.builtbroken.mc.lib.world.edit.PlacementDataExtended;
 import com.builtbroken.mc.framework.thread.WorkerThread;
 import com.builtbroken.mc.framework.thread.action.WorldActionQue;
-import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
+import com.builtbroken.mc.lib.data.heat.HeatedBlockRegistry;
+import com.builtbroken.mc.lib.data.mass.MassRegistry;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
+import com.builtbroken.mc.lib.helper.PotionUtility;
+import com.builtbroken.mc.lib.helper.recipe.OreNames;
+import com.builtbroken.mc.lib.world.edit.PlacementData;
+import com.builtbroken.mc.lib.world.edit.PlacementDataExtended;
 import com.builtbroken.mc.lib.world.map.TileMapRegistry;
 import com.builtbroken.mc.lib.world.map.radar.RadarRegistry;
 import com.builtbroken.mc.lib.world.map.radio.RadioRegistry;
-import com.builtbroken.mc.core.content.blast.tnt.ExplosiveHandlerTNT;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
-import com.builtbroken.mc.framework.block.listeners.*;
-import com.builtbroken.mc.framework.explosive.TriggerNBTBuilder;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -873,5 +874,14 @@ public class Engine implements IJsonGenMod
                 }
             }
         }
+    }
+
+    //=====================================================
+    //======= Abstraction Layer ===========================
+    //=====================================================
+
+    public static IWorld getWorld(int dim)
+    {
+
     }
 }

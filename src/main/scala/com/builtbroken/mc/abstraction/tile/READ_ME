@@ -1,0 +1,1 @@
+Tile data is wrapper for any information a location in the world can provide. This includes the Block instance, State data, and TileEntity instance.
