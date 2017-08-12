@@ -2,6 +2,7 @@
 /out
 /runs
 /run
+/src/genTest/gen
 *.classpath
 *.project
 .settings/

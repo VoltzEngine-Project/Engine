@@ -1,6 +1,6 @@
 package com.builtbroken.mc.abstraction.imp;
 
-import com.builtbroken.mc.abstraction.entity.IEntityData;
+import com.builtbroken.mc.abstraction.tile.ITileMaterial;
 import com.builtbroken.mc.abstraction.world.IWorld;
 
 /**
@@ -13,7 +13,7 @@ public interface IMinecraftInterface
 {
     IWorld getWorld(int dim);
 
-    IEntityData getEntity(int entityID);
-
     ///TODO get ITEM, BLOCK, MATERIAL, etc
+
+    ITileMaterial getTileMaterial(String name);
 }

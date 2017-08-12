@@ -26,22 +26,22 @@ public class ServerProxy extends CommonProxy
         ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "Emp", new ExEmp());
 
         //Handle command system
-        GroupProfileHandler.enablePermissions = Engine.instance.getConfig().getBoolean("EnablePermissionSystem", "Commands", Engine.runningAsDev, "Enabled Voltz Engine built in command permission system that works much like Bukkit's PermissionEx Plugin");
+        GroupProfileHandler.enablePermissions = configuration.getBoolean("EnablePermissionSystem", "Commands", Engine.runningAsDev, "Enabled Voltz Engine built in command permission system that works much like Bukkit's PermissionEx Plugin");
         if (GroupProfileHandler.enablePermissions)
         {
-            Engine.instance.logger().info("Overriding MC's CommandManager");
+            Engine.logger().info("Overriding MC's CommandManager");
             Field field = ReflectionUtility.getMCField(MinecraftServer.class, "commandManager", "field_71321_q");
             try
             {
                 ReflectionUtility.setFinalField(FMLCommonHandler.instance().getMinecraftServerInstance(), field, new PermissionsCommandManager());
-                Engine.instance.logger().info("New command manager set to " + FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager());
+                Engine.logger().info("New command manager set to " + FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager());
             } catch (NoSuchFieldException e)
             {
-                Engine.instance.logger().error("Failed to override command manager as the field was not found");
+                Engine.logger().error("Failed to override command manager as the field was not found");
                 e.printStackTrace();
             } catch (IllegalAccessException e)
             {
-                Engine.instance.logger().error("Failed to override command manager as our access was blocked");
+                Engine.logger().error("Failed to override command manager as our access was blocked");
                 e.printStackTrace();
             }
         }

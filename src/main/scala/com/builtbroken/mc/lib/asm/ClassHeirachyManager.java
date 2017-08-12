@@ -90,7 +90,7 @@ public class ClassHeirachyManager implements IClassTransformer
             }
         } catch (IOException e)
         {
-            Engine.instance.logger().catching(e);
+            Engine.logger().catching(e);
         }
 
         if (cache != null)
@@ -103,7 +103,7 @@ public class ClassHeirachyManager implements IClassTransformer
             cache = declareReflection(name);
         } catch (ClassNotFoundException e)
         {
-            Engine.instance.logger().catching(e);
+            Engine.logger().catching(e);
         }
 
         return cache;

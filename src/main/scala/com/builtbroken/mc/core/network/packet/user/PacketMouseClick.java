@@ -38,7 +38,7 @@ public class PacketMouseClick extends PacketPlayerItem
         }
         else
         {
-            Engine.instance.logger().error("Failed to handle mouse click packet due to item in slot " + this.slotId + " is not an instance of ILeftClickBypass");
+            Engine.logger().error("Failed to handle mouse click packet due to item in slot " + this.slotId + " is not an instance of ILeftClickBypass");
         }
     }
 }

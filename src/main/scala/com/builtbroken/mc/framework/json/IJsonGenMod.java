@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.json;
 
 import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.framework.mod.IMod;
 import net.minecraftforge.common.config.Configuration;
 
@@ -23,7 +24,7 @@ public interface IJsonGenMod extends IMod
      * Not all handlers need to be registered inside this
      * method but it does improve performance. As well
      * fixes issues with nested loaders such as
-     * {@link com.builtbroken.mc.api.tile.listeners.ITileEventListener} loading which is only run
+     * {@link ITileEventListener} loading which is only run
      * once.
      */
     default void loadJsonContentHandlers()

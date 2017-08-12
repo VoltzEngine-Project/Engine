@@ -5,7 +5,7 @@ import com.builtbroken.jlib.data.vector.Pos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
-import com.builtbroken.mc.api.tile.listeners.IPlacementListener;
+import com.builtbroken.mc.framework.block.imp.IPlacementListener;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
@@ -195,7 +195,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
         }
         catch (Exception e)
         {
-            Engine.instance.logger().error("Failed to write description packet for " + this + "  ", e);
+            Engine.logger().error("Failed to write description packet for " + this + "  ", e);
         }
         return null;
     }
@@ -226,11 +226,6 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     //===========================
     //==== Helpers ==============
     //===========================
-
-    public double distance(Entity entity)
-    {
-        return distance(entity.posX, entity.posY, entity.posZ);
-    }
 
     public double distance(IPos3D pos)
     {
@@ -344,7 +339,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     {
         if (world() != null && isServer())
         {
-            Engine.instance.packetHandler.sendToAllAround(packet, world(), xi(), yi(), zi(), distance);
+            Engine.packetHandler.sendToAllAround(packet, world(), xi(), yi(), zi(), distance);
         }
     }
 
@@ -352,7 +347,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     {
         if (world() != null && isClient())
         {
-            Engine.instance.packetHandler.sendToServer(packet);
+            Engine.packetHandler.sendToServer(packet);
         }
     }
 
@@ -364,7 +359,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
             {
                 if (player instanceof EntityPlayerMP)
                 {
-                    Engine.instance.packetHandler.sendToPlayer(packet, (EntityPlayerMP) player);
+                    Engine.packetHandler.sendToPlayer(packet, (EntityPlayerMP) player);
                 }
             }
         }

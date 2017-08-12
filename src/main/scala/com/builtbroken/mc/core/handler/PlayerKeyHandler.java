@@ -56,14 +56,14 @@ public class PlayerKeyHandler
                     int newMode = ((IModeItem.IModeScrollItem) stack.getItem()).cycleMode(stack, player, e.dwheel / 120);
                     if (newMode != ((IModeItem.IModeScrollItem) stack.getItem()).getMode(stack))
                     {
-                        Engine.instance.packetHandler.sendToServer(new PacketPlayerItemMode(player.inventory.currentItem, newMode));
+                        Engine.packetHandler.sendToServer(new PacketPlayerItemMode(player.inventory.currentItem, newMode));
                     }
                     e.setCanceled(true);
                 }
             }
             else if (item instanceof IMouseButtonHandler && e.button != -1)
             {
-                Engine.instance.packetHandler.sendToServer(new PacketMouseClick(player.inventory.currentItem, e.button, e.buttonstate));
+                Engine.packetHandler.sendToServer(new PacketMouseClick(player.inventory.currentItem, e.button, e.buttonstate));
                 ((IMouseButtonHandler) item).mouseClick(stack, player, e.button, e.buttonstate);
                 if (((IMouseButtonHandler) item).shouldCancelMouseEvent(stack, player, e.button, e.buttonstate))
                 {

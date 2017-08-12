@@ -1,5 +1,6 @@
 package com.builtbroken.mc.testing.tile;
 
+import com.builtbroken.mc.abstraction.imp.EngineLoader;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.testing.junit.AbstractTest;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import org.junit.Test;
 
 /**
@@ -57,10 +59,17 @@ public abstract class AbstractTileEntityTest<T extends TileEntity, B extends Blo
         {
             throw new IllegalArgumentException("Block can not be null");
         }
-        if(Engine.instance == null)
+        if(Engine.loaderInstance == null)
         {
-            Engine.instance = new Engine();
-            Engine.instance.packetHandler.init();
+            Engine.loaderInstance = new EngineLoader()
+            {
+                @Override
+                public Configuration getConfig()
+                {
+                    return null;
+                }
+            };
+            Engine.packetHandler.init();
         }
     }
 

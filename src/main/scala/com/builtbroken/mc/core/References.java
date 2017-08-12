@@ -35,4 +35,11 @@ public final class References
     public static File GLOBAL_CONFIG_FOLDER;
     /** Config folder shared by all mods */
     public static File BBM_CONFIG_FOLDER;
+    /**
+     * Conversion ratio of ingot to fluid volume, based on Tinkers *in theory*
+     */
+    public static int INGOT_VOLUME = 144;
+
+    public static double TO_RF_RATIO = 500;
+    public static double TO_BC_RATIO = 50;
 }

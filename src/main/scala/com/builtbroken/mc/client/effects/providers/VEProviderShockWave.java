@@ -45,6 +45,6 @@ public class VEProviderShockWave extends VisualEffectProvider
         packet.otherData.setFloat("blue", blue);
         packet.otherData.setFloat("scale", scale);
         packet.otherData.setFloat("distance", distance);
-        Engine.instance.packetHandler.sendToAllAround(packet, world, x, y, z, 100);
+        Engine.packetHandler.sendToAllAround(packet, world, x, y, z, 100);
     }
 }

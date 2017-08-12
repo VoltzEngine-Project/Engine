@@ -21,7 +21,11 @@ public interface IMod
      *
      * @return
      */
-    ModManager getManager();
+    @Deprecated
+    default ModManager getManager()
+    {
+        return null;
+    }
 
     /**
      * Gets the config file

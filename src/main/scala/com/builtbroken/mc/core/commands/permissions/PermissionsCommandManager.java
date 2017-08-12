@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.commands.permissions;
 
+import com.builtbroken.mc.core.CommonProxy;
 import com.builtbroken.mc.core.Engine;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +23,7 @@ public class PermissionsCommandManager extends ServerCommandManager
 {
     public boolean hasPermissionForCommand(ICommandSender sender, ICommand command, String[] args)
     {
-        return sender instanceof EntityPlayer && Engine.isPlayerOpped((EntityPlayer) sender) || GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args);
+        return sender instanceof EntityPlayer && CommonProxy.isPlayerOpped((EntityPlayer) sender) || GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args);
     }
 
     @Override
@@ -137,7 +138,7 @@ public class PermissionsCommandManager extends ServerCommandManager
             chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception");
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation);
-            Engine.instance.logger().error("Failed to process command: \'" + cmd + "\'", throwable);
+            Engine.logger().error("Failed to process command: \'" + cmd + "\'", throwable);
         }
 
         return j;

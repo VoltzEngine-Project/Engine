@@ -72,12 +72,12 @@ public class ModCreativeTab extends CreativeTabs
                                 }
                                 else
                                 {
-                                    Engine.instance.logger().error("Item: " + item + "  attempted to add a stack with a null item to creative tab " + this);
+                                    Engine.logger().error("Item: " + item + "  attempted to add a stack with a null item to creative tab " + this);
                                 }
                             }
                             else
                             {
-                                Engine.instance.logger().error("Item: " + item + "  attempted to add a non ItemStack to creative tab " + this);
+                                Engine.logger().error("Item: " + item + "  attempted to add a non ItemStack to creative tab " + this);
                             }
                         }
                     }
@@ -104,11 +104,11 @@ public class ModCreativeTab extends CreativeTabs
             //Display error for devs to see
             if (itemStack == null)
             {
-                Engine.instance.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " is null");
+                Engine.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " is null");
             }
             else
             {
-                Engine.instance.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " contains a null Item reference");
+                Engine.logger().error("ItemStack used for creative tab " + this.getTabLabel() + " contains a null Item reference");
             }
 
             //Attempt to use a random item in the tab

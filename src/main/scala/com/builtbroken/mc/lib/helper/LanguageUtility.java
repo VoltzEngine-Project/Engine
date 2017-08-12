@@ -34,7 +34,7 @@ public class LanguageUtility
         {
             if (Engine.runningAsDev)
             {
-                Engine.instance.logger().error("LanguageUtility.getLocal(" + key + ") - invalid key", new RuntimeException());
+                Engine.logger().error("LanguageUtility.getLocal(" + key + ") - invalid key", new RuntimeException());
             }
             return "error.key.empty";
         }
@@ -45,7 +45,7 @@ public class LanguageUtility
         {
             if (Engine.runningAsDev)
             {
-                Engine.instance.logger().error("LanguageUtility.getLocal(" + key + ") - no translation", new RuntimeException());
+                Engine.logger().error("LanguageUtility.getLocal(" + key + ") - no translation", new RuntimeException());
             }
             return key;
         }
@@ -65,7 +65,7 @@ public class LanguageUtility
         {
             if (Engine.runningAsDev)
             {
-                Engine.instance.logger().error("LanguageUtility.getLocalName(" + key + ")", new RuntimeException());
+                Engine.logger().error("LanguageUtility.getLocalName(" + key + ")", new RuntimeException());
             }
             return "error.key.empty";
         }
@@ -80,7 +80,7 @@ public class LanguageUtility
         {
             if (Engine.runningAsDev)
             {
-                Engine.instance.logger().error("LanguageUtility.getLocal(" + key + ") - no translation", new RuntimeException());
+                Engine.logger().error("LanguageUtility.getLocal(" + key + ") - no translation", new RuntimeException());
             }
             return key;
         }
@@ -111,7 +111,7 @@ public class LanguageUtility
             {
                 if (Engine.runningAsDev)
                 {
-                    Engine.instance.logger().error("LanguageUtility.getLangSetting(" + key + ")", e);
+                    Engine.logger().error("LanguageUtility.getLangSetting(" + key + ")", e);
                 }
             }
         }
@@ -132,7 +132,7 @@ public class LanguageUtility
         {
             if (Engine.runningAsDev)
             {
-                Engine.instance.logger().error("LanguageUtility.getLocalChat(" + key + ")", new RuntimeException());
+                Engine.logger().error("LanguageUtility.getLocalChat(" + key + ")", new RuntimeException());
             }
             return new ChatComponentText("error.translation.empty");
         }
@@ -155,7 +155,7 @@ public class LanguageUtility
         }
         else if (Engine.runningAsDev)
         {
-            Engine.instance.logger().error("LanguageUtility.addChatToPlayer(Null Player, " + key + ")", new RuntimeException());
+            Engine.logger().error("LanguageUtility.addChatToPlayer(Null Player, " + key + ")", new RuntimeException());
         }
     }
 

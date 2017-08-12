@@ -1,10 +1,11 @@
 package com.builtbroken.mc.lib.helper;
 
+import com.builtbroken.mc.abstraction.entity.IEntityData;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -56,8 +57,8 @@ public class BlockUtility
         }
         catch (Exception e)
         {
-            Engine.instance.logger().info("Failed to reflect into Block.class to get block resistance");
-            Engine.instance.logger().catching(e);
+            Engine.logger().info("Failed to reflect into Block.class to get block resistance");
+            Engine.logger().catching(e);
         }
         return 0;
     }
@@ -87,8 +88,8 @@ public class BlockUtility
         }
         catch (Exception e)
         {
-            Engine.instance.logger().info("Failed to reflect into Block.class to get block hardness");
-            Engine.instance.logger().catching(e);
+            Engine.logger().info("Failed to reflect into Block.class to get block hardness");
+            Engine.logger().catching(e);
         }
         return 0;
     }
@@ -211,23 +212,15 @@ public class BlockUtility
         }
     }
 
-    /**
-     * Gets the orientation from the entity in sides of a block
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param entityLiving
-     * @return 0-5 @see {@link ForgeDirection}
-     */
-    public static byte determineOrientation(int x, int y, int z, EntityLivingBase entityLiving)
+    @Deprecated
+    public static byte determineOrientation(int x, int y, int z, Entity entityLiving)
     {
         if (entityLiving != null)
         {
             //TODO see what the math function does
             if (MathUtility.func_154353_e(entityLiving.posX - x) < 2.0F && MathUtility.func_154353_e(entityLiving.posZ - z) < 2.0F)
             {
-                double var5 = entityLiving.posY + 1.82D - entityLiving.yOffset;
+                double var5 = entityLiving.posY + 1.82D - entityLiving.getYOffset();
                 if (var5 - y > 2.0D)
                 {
                     return 1;
@@ -263,33 +256,47 @@ public class BlockUtility
     }
 
     /**
-     * Gets the rotation from the entity in sides of a block
-     * ignores pitch of the entity so will never return 0 or 1
-     * unless invalid
+     * Gets the orientation from the entity in sides of a block
      *
+     * @param x
+     * @param y
+     * @param z
      * @param entityLiving
-     * @return 2-5 @see {@link ForgeDirection}
+     * @return 0-5 @see {@link ForgeDirection}
      */
-    public static byte determineRotation(EntityLivingBase entityLiving)
+    public static byte determineOrientation(int x, int y, int z, IEntityData entityLiving)
     {
         if (entityLiving != null)
         {
-            int rotation = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+            //TODO see what the math function does
+            if (MathUtility.func_154353_e(entityLiving.x() - x) < 2.0F && MathUtility.func_154353_e(entityLiving.z() - z) < 2.0F)
+            {
+                double var5 = entityLiving.y() + 1.82D - entityLiving.getYOffset();
+                if (var5 - y > 2.0D)
+                {
+                    return 1;
+                }
+                if (y - var5 > 0.0D)
+                {
+                    return 0;
+                }
+            }
+            final int rotation = MathHelper.floor_double(entityLiving.yaw() * 4.0F / 360.0F + 0.5D) & 3;
             if (rotation == 0)
-            {
-                return 3;
-            }
-            else if (rotation == 1)
-            {
-                return 4;
-            }
-            else if (rotation == 2)
             {
                 return 2;
             }
-            else if (rotation == 3)
+            else if (rotation == 1)
             {
                 return 5;
+            }
+            else if (rotation == 2)
+            {
+                return 3;
+            }
+            else if (rotation == 3)
+            {
+                return 4;
             }
             else
             {
@@ -300,14 +307,47 @@ public class BlockUtility
     }
 
     /**
+     * Gets the rotation from the entity in sides of a block
+     * ignores pitch of the entity so will never return 0 or 1
+     * unless invalid
+     *
+     * @param rotationYaw - rotation of the object
+     * @return 2-5 @see {@link ForgeDirection}
+     */
+    public static byte determineRotation(double rotationYaw)
+    {
+        int rotation = MathHelper.floor_double(rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        if (rotation == 0)
+        {
+            return 3;
+        }
+        else if (rotation == 1)
+        {
+            return 4;
+        }
+        else if (rotation == 2)
+        {
+            return 2;
+        }
+        else if (rotation == 3)
+        {
+            return 5;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
      * Gets the forge direction from the facing value of the entity
      *
      * @param entityLiving
      * @return {@link ForgeDirection#NORTH} {@link ForgeDirection#SOUTH} {@link ForgeDirection#EAST} {@link ForgeDirection#WEST}
      */
-    public static ForgeDirection determineForgeDirection(EntityLivingBase entityLiving)
+    public static ForgeDirection determineForgeDirection(IEntityData entityLiving)
     {
-        return ForgeDirection.getOrientation(determineRotation(entityLiving));
+        return ForgeDirection.getOrientation(determineRotation(entityLiving.yaw()));
     }
 
     /**
@@ -325,11 +365,11 @@ public class BlockUtility
      *                     the entity's head position. Instead it is calculated from delta Y
      * @return forge direction
      */
-    public static ForgeDirection determineForgeDirection(int x, int y, int z, EntityLivingBase entityLiving, boolean ignorePitch)
+    public static ForgeDirection determineForgeDirection(int x, int y, int z, IEntityData entityLiving, boolean ignorePitch)
     {
         if (ignorePitch)
         {
-            return ForgeDirection.getOrientation(determineRotation(entityLiving));
+            return ForgeDirection.getOrientation(determineRotation(entityLiving.yaw()));
         }
         return ForgeDirection.getOrientation(determineOrientation(x, y, z, entityLiving));
     }

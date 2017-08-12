@@ -4,14 +4,16 @@ import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.network.packet.PacketSpawnParticle;
 import com.builtbroken.mc.core.network.packet.PacketSpawnStream;
 import com.builtbroken.mc.core.network.packet.callback.PacketAudio;
-import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.framework.mod.AbstractProxy;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 
 import java.awt.*;
 
@@ -22,6 +24,28 @@ import java.awt.*;
  */
 public class CommonProxy extends AbstractProxy
 {
+    public static CommonProxy proxy;
+
+    //config files
+    @Deprecated //Will be replaced by an encapsulated system later
+    public static Configuration heatDataConfig;
+    @Deprecated //Will be replaced by an encapsulated system later
+    public static Configuration explosiveConfig;
+
+    @Deprecated //Temp until rewrite is finished
+    public static Configuration configuration;
+
+    public static boolean isPlayerOpped(EntityPlayer player)
+    {
+        return player instanceof EntityPlayerMP && isPlayerOpped((EntityPlayerMP) player);
+    }
+
+    public static boolean isPlayerOpped(EntityPlayerMP player)
+    {
+        //Taken from EntityPlayerMP#canCommandSenderUseCommand(Integer, String)
+        return player.mcServer.getConfigurationManager().func_152596_g(player.getGameProfile()) && player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
+    }
+
     public boolean isPaused()
     {
         return false;
@@ -36,7 +60,7 @@ public class CommonProxy extends AbstractProxy
     public void init()
     {
         EntityRegistry.registerGlobalEntityID(EntityExCreeper.class, "ExCreeper", EntityRegistry.findGlobalUniqueEntityId());
-        EntityRegistry.registerModEntity(EntityExCreeper.class, "ExCreeper", 55, Engine.instance, 100, 1, true);
+        EntityRegistry.registerModEntity(EntityExCreeper.class, "ExCreeper", 55, Engine.loaderInstance, 100, 1, true);
     }
 
     public int getPlayerDim()
@@ -62,7 +86,7 @@ public class CommonProxy extends AbstractProxy
     {
         if (!world.isRemote)
         {
-            Engine.instance.packetHandler.sendToAllAround(new PacketSpawnParticle(name, world.provider.dimensionId, x, y, z, xx, yy, zz), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 64));
+            Engine.packetHandler.sendToAllAround(new PacketSpawnParticle(name, world.provider.dimensionId, x, y, z, xx, yy, zz), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 64));
         }
     }
 
@@ -83,7 +107,7 @@ public class CommonProxy extends AbstractProxy
         if (!world.isRemote)
         {
             //TODO do a proper distance check as the 90 default is not going to work for very long range laser renders
-            Engine.instance.packetHandler.sendToAllAround(new PacketSpawnStream(world.provider.dimensionId, start, end, 0), new NetworkRegistry.TargetPoint(world.provider.dimensionId, start.x(), start.y(), start.z(), 90));
+            Engine.packetHandler.sendToAllAround(new PacketSpawnStream(world.provider.dimensionId, start, end, 0), new NetworkRegistry.TargetPoint(world.provider.dimensionId, start.x(), start.y(), start.z(), 90));
         }
     }
 
@@ -92,7 +116,7 @@ public class CommonProxy extends AbstractProxy
         if (world != null && !world.isRemote)
         {
             PacketAudio packetAudio = new PacketAudio(world, audioKey, x, y, z, pitch, volume);
-            Engine.instance.packetHandler.sendToAllAround(packetAudio, world, x, y, z, 100);
+            Engine.packetHandler.sendToAllAround(packetAudio, world, x, y, z, 100);
         }
     }
 
@@ -103,7 +127,7 @@ public class CommonProxy extends AbstractProxy
             PacketSpawnParticle packet = new PacketSpawnParticle("JSON_" + key, world.provider.dimensionId, x, y, z, mx, my, mz);
             packet.otherData = nbt;
             packet.endPoint = endPoint;
-            Engine.instance.packetHandler.sendToAllAround(packet, world, x, y, z, 100);
+            Engine.packetHandler.sendToAllAround(packet, world, x, y, z, 100);
         }
     }
 }

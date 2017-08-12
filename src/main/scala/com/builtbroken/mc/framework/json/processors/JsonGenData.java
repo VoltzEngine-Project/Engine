@@ -3,7 +3,7 @@ package com.builtbroken.mc.framework.json.processors;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
-import com.builtbroken.mc.framework.json.processors.recipe.JsonItemEntry;
+import com.builtbroken.mc.framework.json.data.JsonItemEntry;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

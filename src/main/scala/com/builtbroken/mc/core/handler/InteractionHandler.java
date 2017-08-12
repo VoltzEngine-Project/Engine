@@ -132,7 +132,7 @@ public class InteractionHandler
                             }
                         } catch (Exception e)
                         {
-                            Engine.instance.logger().error("Failed to pick up block using event system");
+                            Engine.logger().error("Failed to pick up block using event system");
                             e.printStackTrace();
                         }
                     }

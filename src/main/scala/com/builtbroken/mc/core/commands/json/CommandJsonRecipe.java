@@ -5,7 +5,6 @@ import com.builtbroken.jlib.type.Pair;
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.json.conversion.JsonConverterNBT;
-import com.builtbroken.mc.framework.json.processors.recipe.crafting.JsonCraftingRecipeData;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.google.gson.*;
 import net.minecraft.block.Block;
@@ -55,7 +54,7 @@ public class CommandJsonRecipe extends SubCommand
                 if (args.length > 1)
                 {
                     String entryID = args[1];
-                    ItemStack stack = new JsonCraftingRecipeData(null, null, null, false, false).toStack(entryID);
+                    ItemStack stack = null; //new JsonCraftingRecipeData(null, null, null, false, false).toStack(entryID); TODO fix
                     if (stack != null)
                     {
                         List<IRecipe> recipes = entryID.contains("#") ? InventoryUtility.getRecipesWithOutput(stack) : InventoryUtility.getRecipesWithOutput(stack.getItem());

@@ -7,6 +7,8 @@ import com.builtbroken.mc.api.explosive.IExplosive;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.IExplosiveHolder;
 import com.builtbroken.mc.api.items.explosives.IExplosiveItem;
+import com.builtbroken.mc.core.CommonProxy;
+import com.builtbroken.mc.core.ConfigValues;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
@@ -99,7 +101,7 @@ public final class ExplosiveRegistry
     public static boolean registerExplosive(final String modID, final String id_r, final IExplosiveHandler ex, boolean canDisable, boolean canConfigScale)
     {
         final String id = id_r.toLowerCase();
-        if (Engine.explosiveConfig == null || canDisable && Engine.explosiveConfig.getBoolean("enable_" + id, modID, true, ""))
+        if (CommonProxy.explosiveConfig == null || canDisable && CommonProxy.explosiveConfig.getBoolean("enable_" + id, modID, true, ""))
         {
             if (!isRegistered(ex) && !idToExplosiveMap.containsKey(id))
             {
@@ -121,14 +123,14 @@ public final class ExplosiveRegistry
                 modToExplosiveMap.put(modID, list);
 
                 //Generate log to console
-                if (Engine.log_registering_explosives)
+                if (ConfigValues.log_registering_explosives)
                 {
-                    Engine.instance.logger().info("ExplosiveRegistry> Mod: " + modID + "  Registered explosive instance " + ex);
+                    Engine.logger().info("ExplosiveRegistry> Mod: " + modID + "  Registered explosive instance " + ex);
                 }
 
-                if (canConfigScale && Engine.explosiveConfig != null)
+                if (canConfigScale && CommonProxy.explosiveConfig != null)
                 {
-                    explosiveConfigScale.put(ex, Engine.explosiveConfig.getFloat("scale_" + id, modID, 1f, 0, 100, "Changes the size of the explosive, 0 = nothing, 1 = 100% (same radius), 2 = 200%(2x size/radius, 4x blocks destroyed)"));
+                    explosiveConfigScale.put(ex, CommonProxy.explosiveConfig.getFloat("scale_" + id, modID, 1f, 0, 100, "Changes the size of the explosive, 0 = nothing, 1 = 100% (same radius), 2 = 200%(2x size/radius, 4x blocks destroyed)"));
                 }
                 return true;
             }

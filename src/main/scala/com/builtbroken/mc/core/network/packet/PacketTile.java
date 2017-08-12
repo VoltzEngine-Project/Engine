@@ -130,11 +130,11 @@ public class PacketTile extends PacketType
         sender_$eq(player);
         if (tile == null)
         {
-            Engine.instance.logger().error(new PacketTileReadException(location, "Null tile"));
+            Engine.logger().error(new PacketTileReadException(location, "Null tile"));
         }
         else if (tile.isInvalid())
         {
-            Engine.instance.logger().error(new PacketTileReadException(location, "Invalidated tile"));
+            Engine.logger().error(new PacketTileReadException(location, "Invalidated tile"));
         }
         else if (tile instanceof IPacketIDReceiver)
         {
@@ -152,30 +152,30 @@ public class PacketTile extends PacketType
                     }
                     catch (IndexOutOfBoundsException ex)
                     {
-                        Engine.instance.logger().error(new PacketIDException(location));
+                        Engine.logger().error(new PacketIDException(location));
                         return;
                     }
                     receiver.read(buf, id, player, this);
                 }
                 catch (IndexOutOfBoundsException e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
-                    Engine.instance.logger().error("Error: ", e);
+                    Engine.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
+                    Engine.logger().error("Error: ", e);
                 }
                 catch (NullPointerException e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Null pointer while reading data", e));
-                    Engine.instance.logger().error("Error: ", e);
+                    Engine.logger().error(new PacketTileReadException(location, "Null pointer while reading data", e));
+                    Engine.logger().error("Error: ", e);
                 }
                 catch (Exception e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
-                    Engine.instance.logger().error("Error: ", e);
+                    Engine.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
+                    Engine.logger().error("Error: ", e);
                 }
             }
             else
             {
-                Engine.instance.logger().error("Error: " + tile + " rejected packet " + this + " due to invalid conditions.");
+                Engine.logger().error("Error: " + tile + " rejected packet " + this + " due to invalid conditions.");
             }
         }
         else if (tile instanceof IPacketReceiver)
@@ -189,22 +189,22 @@ public class PacketTile extends PacketType
                 }
                 catch (IndexOutOfBoundsException e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
+                    Engine.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
                 }
                 catch (Exception e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
+                    Engine.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
                     e.printStackTrace();
                 }
             }
             else
             {
-                Engine.instance.logger().error("Error: " + tile + " rejected packet " + this + " due to invalid conditions.");
+                Engine.logger().error("Error: " + tile + " rejected packet " + this + " due to invalid conditions.");
             }
         }
         else
         {
-            Engine.instance.logger().error(new PacketTileReadException(location, "Unsupported action for " + tile));
+            Engine.logger().error(new PacketTileReadException(location, "Unsupported action for " + tile));
         }
     }
 }

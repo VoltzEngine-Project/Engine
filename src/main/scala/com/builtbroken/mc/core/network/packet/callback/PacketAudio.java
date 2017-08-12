@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.network.packet.callback;
 
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.api.data.IPacket;
+import com.builtbroken.mc.core.CommonProxy;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -66,7 +66,7 @@ public class PacketAudio implements IPacket
     {
         if (Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.provider != null && Minecraft.getMinecraft().theWorld.provider.dimensionId == dim)
         {
-            Engine.proxy.playJsonAudio(Minecraft.getMinecraft().theWorld, audioKey, x, y, z, pitch, volume);
+            CommonProxy.proxy.playJsonAudio(Minecraft.getMinecraft().theWorld, audioKey, x, y, z, pitch, volume);
         }
     }
 }

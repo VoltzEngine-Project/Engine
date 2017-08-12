@@ -55,14 +55,14 @@ public class EngineModelLoader
         int i = name.lastIndexOf('.');
         if (i == -1)
         {
-            Engine.instance.logger().error("The resource name %s is not valid", resource);
+            Engine.logger().error("The resource name %s is not valid", resource);
             throw new IllegalArgumentException("The resource name is not valid");
         }
         String suffix = name.substring(i+1);
         IModelCustomLoader loader = instances.get(suffix);
         if (loader == null)
         {
-            Engine.instance.logger().error("The resource name %s is not supported", resource);
+            Engine.logger().error("The resource name %s is not supported", resource);
             throw new IllegalArgumentException("The resource name is not supported");
         }
 
@@ -74,7 +74,7 @@ public class EngineModelLoader
         IModelCustom model = loadModel(resource);
         if(!(model instanceof FixedTechneModel))
         {
-            Engine.instance.logger().error("The resource name %s is not a techne model", resource);
+            Engine.logger().error("The resource name %s is not a techne model", resource);
             throw new IllegalArgumentException("The resource name is not supported");
         }
         return (FixedTechneModel) model;

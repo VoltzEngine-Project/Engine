@@ -48,7 +48,7 @@ public class NBTUtility
         }
         catch (Exception e)
         {
-            Engine.instance.logger().fatal("Failed to save " + file.getName() + ".dat!");
+            Engine.logger().fatal("Failed to save " + file.getName() + ".dat!");
             e.printStackTrace();
             return false;
         }
@@ -78,18 +78,18 @@ public class NBTUtility
             }
             else
             {
-                Engine.instance.logger().info("Save file " + file + "\n\tdoes not exist in the save folder! Generating new NBT data in it's place.");
+                Engine.logger().info("Save file " + file + "\n\tdoes not exist in the save folder! Generating new NBT data in it's place.");
                 return new NBTTagCompound();
             }
         }
         catch (FileNotFoundException e)
         {
-            Engine.instance.logger().error("Save Loader Error, File not found " + file, e);
+            Engine.logger().error("Save Loader Error, File not found " + file, e);
             return new NBTTagCompound();
         }
         catch (IOException e)
         {
-            Engine.instance.logger().error("Save Loader Error, Failed to read " + file, e);
+            Engine.logger().error("Save Loader Error, Failed to read " + file, e);
             return new NBTTagCompound();
         }
     }

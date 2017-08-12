@@ -78,7 +78,7 @@ public abstract class ItemAbstractCraftingTool extends Item implements IItemTool
     @Override
     public void onRegistered()
     {
-        this.ENABLE_TOOL_DAMAGE = Engine.instance.getConfig().getBoolean("EnableToolDamage", configCat + "Content", true, "Enables tools taking damage in crafting recipes");
+        this.ENABLE_TOOL_DAMAGE = Engine.loaderInstance.getConfig().getBoolean("EnableToolDamage", configCat + "Content", true, "Enables tools taking damage in crafting recipes");
     }
 
     @Override

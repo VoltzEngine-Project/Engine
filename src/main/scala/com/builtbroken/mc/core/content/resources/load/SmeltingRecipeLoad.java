@@ -3,9 +3,9 @@ package com.builtbroken.mc.core.content.resources.load;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.GenMaterial;
-import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.framework.recipe.item.MRItemStack;
 import com.builtbroken.mc.framework.recipe.item.MRLoaderItemStack;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -16,6 +16,7 @@ import java.util.List;
  * Loadable that handles all machine recipes that crush items
  * Created by robert on 1/10/2015.
  */
+@Deprecated //TODO transition to JSON
 public class SmeltingRecipeLoad extends MRLoaderItemStack
 {
     public SmeltingRecipeLoad()

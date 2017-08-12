@@ -6,5 +6,5 @@ package com.builtbroken.mc.abstraction.tile;
  */
 public interface ITileData extends ITilePosition
 {
-
+    ITileMaterial getMaterial();
 }

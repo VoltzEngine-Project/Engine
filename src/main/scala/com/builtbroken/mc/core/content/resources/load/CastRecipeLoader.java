@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * Created by Dark on 6/23/2015.
  */
+@Deprecated //TODO transition to JSON
 public class CastRecipeLoader extends MachineRecipeLoader<CastingRecipe>
 {
     public CastRecipeLoader()
@@ -46,7 +47,7 @@ public class CastRecipeLoader extends MachineRecipeLoader<CastingRecipe>
                 ArrayList ores = OreDictionary.getOres(oreName);
                 if (ores == null || ores.size() == 0)
                 {
-                    Engine.instance.logger().error("[CastRecipeLoader]Attempted to create a recipe with an oreName[" + oreName + "] without an ItemStack.  Ores: " + ores);
+                    Engine.logger().error("[CastRecipeLoader]Attempted to create a recipe with an oreName[" + oreName + "] without an ItemStack.  Ores: " + ores);
                     continue;
                 }
                 String fluidName = oreName.replace("ingot", "").toLowerCase();
@@ -67,7 +68,7 @@ public class CastRecipeLoader extends MachineRecipeLoader<CastingRecipe>
                 ArrayList ores = OreDictionary.getOres(oreName);
                 if (ores == null || ores.size() == 0)
                 {
-                    Engine.instance.logger().error("[CastRecipeLoader]Attempted to create a recipe with an oreName[" + oreName + "] without an ItemStack.  Ores: " + ores);
+                    Engine.logger().error("[CastRecipeLoader]Attempted to create a recipe with an oreName[" + oreName + "] without an ItemStack.  Ores: " + ores);
                     continue;
                 }
                 String fluidName = oreName.replace("nugget", "").toLowerCase();

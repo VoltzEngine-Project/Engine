@@ -14,6 +14,7 @@ import java.util.List;
  * Loadable for fluid smelting machine recipes
  * Created by Dark on 6/21/2015.
  */
+@Deprecated //TODO transition to JSON
 public class FluidSmelterRecipeLoad extends MRLoaderFluidStack
 {
     public static boolean loaded = false;

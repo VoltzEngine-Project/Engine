@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.recipe.fluid;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.recipe.extend.MachineRecipeLoader;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -22,7 +23,7 @@ public class MRLoaderFluidStack extends MachineRecipeLoader<MRFluidStack>
 
     protected MRFluidStack newRecipe(Fluid fluid, int ingots, ItemStack input)
     {
-        MRFluidStack recipe = new MRFluidStack(type, new FluidStack(fluid, ingots * Engine.INGOT_VOLUME));
+        MRFluidStack recipe = new MRFluidStack(type, new FluidStack(fluid, ingots * References.INGOT_VOLUME));
         recipe.addInputOption(input);
         return recipe;
     }
@@ -39,7 +40,7 @@ public class MRLoaderFluidStack extends MachineRecipeLoader<MRFluidStack>
         Fluid fluid = new Fluid(name);
         if(!FluidRegistry.registerFluid(fluid) && FluidRegistry.getFluid(name) == null)
         {
-            Engine.instance.logger().error("Failed to register fluid " + name + " with no fluid registered to name");
+            Engine.logger().error("Failed to register fluid " + name + " with no fluid registered to name");
         }
         return FluidRegistry.getFluid(name);
     }
@@ -51,7 +52,7 @@ public class MRLoaderFluidStack extends MachineRecipeLoader<MRFluidStack>
         fluid.setLuminosity(12);
         if(!FluidRegistry.registerFluid(fluid) && FluidRegistry.getFluid(name) == null)
         {
-            Engine.instance.logger().error("Failed to register fluid " + name + " with no fluid registered to name");
+            Engine.logger().error("Failed to register fluid " + name + " with no fluid registered to name");
         }
 
         return FluidRegistry.getFluid(name);

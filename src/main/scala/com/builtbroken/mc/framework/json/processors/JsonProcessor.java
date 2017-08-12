@@ -8,7 +8,7 @@ import com.builtbroken.mc.framework.json.exceptions.JsonFormatException;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
-import com.builtbroken.mc.framework.json.processors.recipe.JsonItemEntry;
+import com.builtbroken.mc.framework.json.data.JsonItemEntry;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import cpw.mods.fml.common.Loader;

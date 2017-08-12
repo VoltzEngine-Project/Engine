@@ -22,6 +22,8 @@ public interface IWorld
      */
     ITileData getTileData(int x, int y, int z);
 
+    ITileData getTileData(ITilePosition position);
+
     /**
      * Get data about entities near a position
      *
@@ -39,4 +41,7 @@ public interface IWorld
      * @return
      */
     ITilePosition getTilePosition(int x, int y, int z);
+
+
+    IEntityData getEntityData(int id);
 }

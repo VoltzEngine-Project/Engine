@@ -66,30 +66,30 @@ public class PacketGui extends PacketType
                     }
                     catch (IndexOutOfBoundsException ex)
                     {
-                        Engine.instance.logger().error(new PacketIDException(location));
+                        Engine.logger().error(new PacketIDException(location));
                         return;
                     }
                     receiver.read(buf, id, player, this);
                 }
                 catch (IndexOutOfBoundsException e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
-                    Engine.instance.logger().error("Error: ", e);
+                    Engine.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
+                    Engine.logger().error("Error: ", e);
                 }
                 catch (NullPointerException e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Null pointer while reading data", e));
-                    Engine.instance.logger().error("Error: ", e);
+                    Engine.logger().error(new PacketTileReadException(location, "Null pointer while reading data", e));
+                    Engine.logger().error("Error: ", e);
                 }
                 catch (Exception e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
-                    Engine.instance.logger().error("Error: ", e);
+                    Engine.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
+                    Engine.logger().error("Error: ", e);
                 }
             }
             else
             {
-                Engine.instance.logger().error("Error: " + screen + " rejected packet " + this + " due to invalid conditions.");
+                Engine.logger().error("Error: " + screen + " rejected packet " + this + " due to invalid conditions.");
             }
         }
         else if (screen instanceof IPacketReceiver)
@@ -103,22 +103,22 @@ public class PacketGui extends PacketType
                 }
                 catch (IndexOutOfBoundsException e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
+                    Engine.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
                 }
                 catch (Exception e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
+                    Engine.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
                     e.printStackTrace();
                 }
             }
             else
             {
-                Engine.instance.logger().error("Error: " + screen + " rejected packet " + this + " due to invalid conditions.");
+                Engine.logger().error("Error: " + screen + " rejected packet " + this + " due to invalid conditions.");
             }
         }
         else
         {
-            Engine.instance.logger().error(new PacketTileReadException(location, "Unsupported action for " + screen));
+            Engine.logger().error(new PacketTileReadException(location, "Unsupported action for " + screen));
         }
     }
 
@@ -144,30 +144,30 @@ public class PacketGui extends PacketType
                     }
                     catch (IndexOutOfBoundsException ex)
                     {
-                        Engine.instance.logger().error(new PacketIDException(location));
+                        Engine.logger().error(new PacketIDException(location));
                         return;
                     }
                     receiver.read(buf, id, player, this);
                 }
                 catch (IndexOutOfBoundsException e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
-                    Engine.instance.logger().error("Error: ", e);
+                    Engine.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
+                    Engine.logger().error("Error: ", e);
                 }
                 catch (NullPointerException e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Null pointer while reading data", e));
-                    Engine.instance.logger().error("Error: ", e);
+                    Engine.logger().error(new PacketTileReadException(location, "Null pointer while reading data", e));
+                    Engine.logger().error("Error: ", e);
                 }
                 catch (Exception e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
-                    Engine.instance.logger().error("Error: ", e);
+                    Engine.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
+                    Engine.logger().error("Error: ", e);
                 }
             }
             else
             {
-                Engine.instance.logger().error("Error: " + container + " rejected packet " + this + " due to invalid conditions.");
+                Engine.logger().error("Error: " + container + " rejected packet " + this + " due to invalid conditions.");
             }
         }
         else if (container instanceof IPacketReceiver)
@@ -181,22 +181,22 @@ public class PacketGui extends PacketType
                 }
                 catch (IndexOutOfBoundsException e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
+                    Engine.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
                 }
                 catch (Exception e)
                 {
-                    Engine.instance.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
+                    Engine.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
                     e.printStackTrace();
                 }
             }
             else
             {
-                Engine.instance.logger().error("Error: " + container + " rejected packet " + this + " due to invalid conditions.");
+                Engine.logger().error("Error: " + container + " rejected packet " + this + " due to invalid conditions.");
             }
         }
         else
         {
-            Engine.instance.logger().error(new PacketTileReadException(location, "Unsupported action for " + container));
+            Engine.logger().error(new PacketTileReadException(location, "Unsupported action for " + container));
         }
     }
 }

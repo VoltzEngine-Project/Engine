@@ -152,7 +152,7 @@ public class ModManager
             }
             else
             {
-                Engine.instance.logger().warn(name() + " Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
+                Engine.logger().warn(name() + " Tile: " + spatial + " has no defined name to register with and could cause issues with world loading. In order to prevent the game from crashing we are falling back to using the class name.");
                 actual_name = LanguageUtility.decapitalizeFirst(spatial.getClass().getSimpleName().replace("Tile", ""));
             }
         }
@@ -352,7 +352,7 @@ public class ModManager
     {
         if (name == null || name.isEmpty())
         {
-            Engine.instance.logger().debug(name() + " Registry name was not provided for item " + item + " using class name to prevent game from crashing. This may cause world loading issues in the future.");
+            Engine.logger().debug(name() + " Registry name was not provided for item " + item + " using class name to prevent game from crashing. This may cause world loading issues in the future.");
             name = LanguageUtility.decapitalizeFirst(item.getClass().getSimpleName().replace("Item", ""));
         }
         proxy.registerItem(this, name, modPrefix, item);
@@ -433,7 +433,7 @@ public class ModManager
     {
         if (Engine.runningAsDev)
         {
-            Engine.instance.logger().info(name() + s);
+            Engine.logger().info(name() + s);
         }
     }
 }
