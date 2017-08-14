@@ -112,7 +112,7 @@ public class InteractionHandler
                         //Drop all items
                         try
                         {
-                            vec.world().removeTileEntity(vec.xi(), vec.yi(), vec.zi());
+                            vec.oldWorld().removeTileEntity(vec.xi(), vec.yi(), vec.zi());
                             vec.setBlock(Blocks.air);
 
                             if (drops != null && !drops.isEmpty())

@@ -1,5 +1,8 @@
-package com.builtbroken.mc.core;
+package com.builtbroken.mc.seven.server;
 
+import com.builtbroken.mc.core.CommonProxy;
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.core.commands.permissions.PermissionsCommandManager;

@@ -48,7 +48,7 @@ public final class WorldChangeHelper
         //No action handling, no action created
         if (action != null)
         {
-            if (action instanceof Blast && ((Blast) action).world() == null)
+            if (action instanceof Blast && ((Blast) action).oldWorld() == null)
             {
                 Engine.error("Error world is null in action object when attempting to trigger " + action);
                 return ChangeResult.FAILED;

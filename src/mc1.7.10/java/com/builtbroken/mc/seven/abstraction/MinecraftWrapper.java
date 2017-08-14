@@ -6,12 +6,10 @@ import com.builtbroken.mc.abstraction.tile.ITileMaterial;
 import com.builtbroken.mc.abstraction.world.IWorld;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.core.network.packet.PacketSpawnParticle;
 import com.builtbroken.mc.seven.abstraction.entity.EntityData;
 import com.builtbroken.mc.seven.abstraction.tile.TileMaterial;
 import com.builtbroken.mc.seven.abstraction.world.WorldWrapper;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -65,15 +63,6 @@ public class MinecraftWrapper implements IMinecraftInterface
             initMaterials();
         }
         return nameToMaterial.get(name);
-    }
-
-    @Override
-    public void spawnParticle(String name, World world, double x, double y, double z, double xx, double yy, double zz)
-    {
-        if (!world.isRemote)
-        {
-            Engine.packetHandler.sendToAllAround(new PacketSpawnParticle(name, world.provider.dimensionId, x, y, z, xx, yy, zz), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 64));
-        }
     }
 
     public ITileMaterial getTileMaterial(Material material)

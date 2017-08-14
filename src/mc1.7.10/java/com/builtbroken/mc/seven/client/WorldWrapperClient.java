@@ -1,0 +1,54 @@
+package com.builtbroken.mc.seven.client;
+
+import com.builtbroken.mc.abstraction.EffectInstance;
+import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.audio.AudioData;
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.seven.abstraction.world.WorldWrapper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.World;
+
+/**
+ * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
+ * Created by Dark(DarkGuardsman, Robert) on 8/14/2017.
+ */
+public class WorldWrapperClient extends WorldWrapper
+{
+    public WorldWrapperClient(World world)
+    {
+        super(world);
+    }
+
+    @Override
+    public void runEffect(EffectInstance effectInstance)
+    {
+
+    }
+
+    @Override
+    public void spawnParticle(String name, double x, double y, double z, double xx, double yy, double zz)
+    {
+        Minecraft.getMinecraft().renderGlobal.spawnParticle(name, x, y, z, (float) xx, (float) yy, (float) zz);
+    }
+
+
+    @Override
+    public void playAudio(String audioKey, double x, double y, double z, float pitch, float volume)
+    {
+        try
+        {
+            if (audioKey != null)
+            {
+                AudioData data = ClientDataHandler.INSTANCE.getAudio(audioKey);
+                if (data != null)
+                {
+                    data.play(x, y, z, pitch, volume);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Engine.logger().error("Unexpected error while playing audio from Key[" + audioKey + "]", e);
+        }
+    }
+}

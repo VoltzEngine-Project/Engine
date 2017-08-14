@@ -2,16 +2,17 @@ package com.builtbroken.mc.framework.logic;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.data.vector.Pos3D;
+import com.builtbroken.mc.abstraction.world.IWorld;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
-import com.builtbroken.mc.framework.block.imp.IPlacementListener;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
+import com.builtbroken.mc.framework.block.imp.IPlacementListener;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -56,6 +57,11 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
         this.host = host;
     }
 
+    public IWorld world()
+    {
+        return Engine.minecraft.getWorld(oldWorld().provider.dimensionId); //TODO replace with call to host once IWorld is implemented
+    }
+
     @Override
     public ITileNodeHost getHost()
     {
@@ -64,12 +70,12 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
 
     public final boolean isServer()
     {
-        return world() != null && !world().isRemote;
+        return oldWorld() != null && !oldWorld().isRemote;
     }
 
     public final boolean isClient()
     {
-        return world() != null && world().isRemote;
+        return oldWorld() != null && oldWorld().isRemote;
     }
 
     //=============================================
@@ -124,7 +130,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
 
     public final Location toLocation()
     {
-        return new Location(world(), x(), y(), z());
+        return new Location(oldWorld(), x(), y(), z());
     }
 
     //=============================================
@@ -337,15 +343,15 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
      */
     public void sendPacket(IPacket packet, double distance)
     {
-        if (world() != null && isServer())
+        if (oldWorld() != null && isServer())
         {
-            Engine.packetHandler.sendToAllAround(packet, world(), xi(), yi(), zi(), distance);
+            Engine.packetHandler.sendToAllAround(packet, oldWorld(), xi(), yi(), zi(), distance);
         }
     }
 
     public void sendPacketToServer(IPacket packet)
     {
-        if (world() != null && isClient())
+        if (oldWorld() != null && isClient())
         {
             Engine.packetHandler.sendToServer(packet);
         }

@@ -48,7 +48,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
     @Override
     public void getEffectedBlocks(final List<IWorldEdit> edits)
     {
-        RadarMap map = TileMapRegistry.getRadarMapForWorld(world);
+        RadarMap map = TileMapRegistry.getRadarMapForWorld(oldWorld);
         if (map != null)
         {
             LinkedList<Pos> tileLocations = new LinkedList();
@@ -74,7 +74,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
             while (!tileLocations.isEmpty())
             {
                 Pos pos = tileLocations.poll();
-                TileEntity tile = pos.getTileEntity(world);
+                TileEntity tile = pos.getTileEntity(oldWorld);
 
                 if (tile != null && !tile.isInvalid())
                 {
@@ -143,27 +143,27 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
     @Override
     public void doStartAudio()
     {
-        if (!world.isRemote)
+        if (!oldWorld.isRemote)
         {
-            world.playSoundEffect(x, y, z, START_AUDIO, 0.2F + world.rand.nextFloat() * 0.2F, 0.9F + world.rand.nextFloat() * 0.15F);
+            oldWorld.playSoundEffect(x, y, z, START_AUDIO, 0.2F + oldWorld.rand.nextFloat() * 0.2F, 0.9F + oldWorld.rand.nextFloat() * 0.15F);
         }
     }
 
     @Override
     public void doEndAudio()
     {
-        if (!world.isRemote)
+        if (!oldWorld.isRemote)
         {
-            world.playSoundEffect(x, y, z, END_AUDIO, 0.2F + world.rand.nextFloat() * 0.2F, 0.9F + world.rand.nextFloat() * 0.15F);
+            oldWorld.playSoundEffect(x, y, z, END_AUDIO, 0.2F + oldWorld.rand.nextFloat() * 0.2F, 0.9F + oldWorld.rand.nextFloat() * 0.15F);
         }
     }
 
     @Override
     public void playAudioForEdit(IWorldEdit blocks)
     {
-        if (!world.isRemote)
+        if (!oldWorld.isRemote)
         {
-            world.playSoundEffect(blocks.x(), blocks.y(), blocks.z(), EDIT_AUDIO, 0.2F + world.rand.nextFloat() * 0.2F, 0.9F + world.rand.nextFloat() * 0.15F);
+            oldWorld.playSoundEffect(blocks.x(), blocks.y(), blocks.z(), EDIT_AUDIO, 0.2F + oldWorld.rand.nextFloat() * 0.2F, 0.9F + oldWorld.rand.nextFloat() * 0.15F);
         }
     }
 
@@ -352,7 +352,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
                     //Only do power hit if we have power, keep pathing to remove tiles behind current
                     if (power > 0)
                     {
-                        power -= onPassThroughTile(world, pos, power, tileLocations, edits);
+                        power -= onPassThroughTile(oldWorld, pos, power, tileLocations, edits);
                     }
                 }
             }

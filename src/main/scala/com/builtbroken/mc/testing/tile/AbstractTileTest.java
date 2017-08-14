@@ -183,7 +183,7 @@ public abstract class AbstractTileTest<T extends Tile> extends AbstractTileEntit
         FakeWorld world = FakeWorld.newWorld("TestWorld");
         world.setBlock(0, 0, 0, block);
         Tile tile = (Tile) world.getTileEntity(0, 0, 0);
-        assertTrue(tile.world() == world);
+        assertTrue(tile.oldWorld() == world);
     }
 
     @Test

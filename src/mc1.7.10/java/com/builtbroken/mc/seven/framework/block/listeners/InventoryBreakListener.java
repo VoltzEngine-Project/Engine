@@ -21,7 +21,7 @@ public class InventoryBreakListener extends TileListener implements IDestroyedLi
     @Override
     public void breakBlock(Block block, int meta)
     {
-        Object tile = world().getTileEntity(xi(), yi(), zi());
+        Object tile = oldWorld().getTileEntity(xi(), yi(), zi());
         IInventory inventory = null;
         while (tile != null && inventory == null)
         {
@@ -49,7 +49,7 @@ public class InventoryBreakListener extends TileListener implements IDestroyedLi
             InventoryIterator iterator = new InventoryIterator(inventory, true);
             for (ItemStack stack : iterator)
             {
-                InventoryUtility.dropItemStack(world(), xi(), yi(), zi(), stack, 0, 0);
+                InventoryUtility.dropItemStack(oldWorld(), xi(), yi(), zi(), stack, 0, 0);
                 inventory.setInventorySlotContents(iterator.slot(), null);
             }
         }

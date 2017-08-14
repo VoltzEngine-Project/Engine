@@ -69,9 +69,9 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         if (ticks == 0 && buildFirstTick)
         {
             layoutKey = layoutKey != null ? layoutKey.toLowerCase() : "";
-            if (MultiBlockHelper.canBuild(world(), getMultiTileHost(), true))
+            if (MultiBlockHelper.canBuild(oldWorld(), getMultiTileHost(), true))
             {
-                MultiBlockHelper.buildMultiBlock(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
+                MultiBlockHelper.buildMultiBlock(oldWorld(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
             }
             else
             {
@@ -80,7 +80,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         }
         else if (offsetTick % 200 == 0)
         {
-            MultiBlockHelper.buildMultiBlock(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
+            MultiBlockHelper.buildMultiBlock(oldWorld(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
         }
     }
 
@@ -151,7 +151,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         {
             return ((IActivationListener) tileEntity).onPlayerActivated(player, side, xHit, yHit, zHit);
         }
-        return getBlock().onBlockActivated(world(), xi(), yi(), zi(), player, side, xHit, yHit, zHit);
+        return getBlock().onBlockActivated(oldWorld(), xi(), yi(), zi(), player, side, xHit, yHit, zHit);
     }
 
     @Override
@@ -231,13 +231,13 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public ActionResponse canPlaceAt()
     {
-        return (doRotation || MultiBlockHelper.canBuild(world(), getMultiTileHost() != null ? getMultiTileHost() : this, true)) ? ActionResponse.DO : ActionResponse.CANCEL;
+        return (doRotation || MultiBlockHelper.canBuild(oldWorld(), getMultiTileHost() != null ? getMultiTileHost() : this, true)) ? ActionResponse.DO : ActionResponse.CANCEL;
     }
 
     @Override
     public ActionResponse canPlaceAt(IEntityData entity)
     {
-        return (!doRotation ||MultiBlockHelper.canBuild(world(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineForgeDirection(entity)), true)) ? ActionResponse.DO : ActionResponse.CANCEL;
+        return (!doRotation ||MultiBlockHelper.canBuild(oldWorld(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineForgeDirection(entity)), true)) ? ActionResponse.DO : ActionResponse.CANCEL;
     }
 
     @Override

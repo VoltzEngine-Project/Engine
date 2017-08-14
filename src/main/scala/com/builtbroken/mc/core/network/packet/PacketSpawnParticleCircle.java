@@ -39,7 +39,7 @@ public class PacketSpawnParticleCircle extends PacketType
 
     public PacketSpawnParticleCircle(String name, IWorldPosition pos, double distance)
     {
-        this(name, pos.world().provider.dimensionId, pos.x(), pos.y(), pos.z(), distance, 0, 0, 0);
+        this(name, pos.oldWorld().provider.dimensionId, pos.x(), pos.y(), pos.z(), distance, 0, 0, 0);
     }
 
     public PacketSpawnParticleCircle(String name, int dim, IPos3D pos, double distance)

@@ -1,5 +1,7 @@
 package com.builtbroken.mc.abstraction.world;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.abstraction.EffectInstance;
 import com.builtbroken.mc.abstraction.entity.IEntityData;
 import com.builtbroken.mc.abstraction.tile.ITileData;
 import com.builtbroken.mc.abstraction.tile.ITilePosition;
@@ -44,4 +46,26 @@ public interface IWorld
 
 
     IEntityData getEntityData(int id);
+
+    /**
+     * Creates a new effect instance
+     *
+     * @param pos
+     * @return
+     */
+    EffectInstance newEffect(String key, IPos3D pos);
+
+    /**
+     * Handles the effect
+     * <p>
+     * IF server, converts to packet for network sync
+     * IF client, runs the effect
+     *
+     * @param effectInstance
+     */
+    void runEffect(EffectInstance effectInstance);
+
+    void spawnParticle(String name, double x, double y, double z, double xx, double yy, double zz);
+
+    void playAudio(String audioKey, double x, double y, double z, float pitch, float volume);
 }

@@ -274,11 +274,13 @@ public final class JsonContentLoader extends AbstractLoadable
             final List<JsonEntry> entries = jsonEntries.get(processorKey);
             if (entries != null)
             {
+                debug.log("Entries: " + entries);
                 final Iterator<JsonEntry> it = entries.iterator();
                 //Process all loaded elements
                 while (it.hasNext())
                 {
                     final JsonEntry entry = it.next();
+                    debug.log("Entry: " + entry);
                     try
                     {
                         List<IJsonGenObject> objects = new ArrayList();
@@ -341,6 +343,10 @@ public final class JsonContentLoader extends AbstractLoadable
                 jsonEntries.put(processorKey, entries);
             }
         }
+        else
+        {
+            debug.log("No entries for key");
+        }
     }
 
     /**
@@ -356,7 +362,9 @@ public final class JsonContentLoader extends AbstractLoadable
             //Loop threw processors in order
             for (final String processorKey : sortingProcessorList)
             {
+                debug.start("processEntries()","Handling: " + processorKey, Engine.runningAsDev);
                 process(processorKey);
+                debug.end();
             }
         }
     }

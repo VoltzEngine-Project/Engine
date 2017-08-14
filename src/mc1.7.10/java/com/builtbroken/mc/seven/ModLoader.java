@@ -131,7 +131,10 @@ public class ModLoader extends EngineLoader
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        Engine.loaderInstance = this;
         CommonProxy.proxy = proxy;
+        proxy.loadModManager();
+
         //Init API values
         VoltzEngineAPI.massRegistry = new MassRegistry();
 

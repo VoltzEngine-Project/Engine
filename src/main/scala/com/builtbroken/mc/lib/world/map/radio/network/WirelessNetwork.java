@@ -166,7 +166,7 @@ public class WirelessNetwork implements IWirelessNetwork
             //================================
             //Get all receivers in range
             Cube range = hub.getWirelessCoverageArea();
-            RadioMap map = RadioRegistry.getRadioMapForWorld(hub.world());
+            RadioMap map = RadioRegistry.getRadioMapForWorld(hub.oldWorld());
             List<IRadioWaveReceiver> receivers = map.getReceiversInRange(range, hub instanceof IRadioWaveReceiver ? (IRadioWaveReceiver) hub : null);
             //Loop threw receivers
             if (!receivers.isEmpty())

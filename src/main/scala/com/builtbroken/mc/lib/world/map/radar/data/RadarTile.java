@@ -25,7 +25,7 @@ public class RadarTile extends RadarObject<TileEntity>
     }
 
     @Override
-    public World world()
+    public World oldWorld()
     {
         return tile != null ? tile.getWorldObj() : null;
     }

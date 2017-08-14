@@ -36,14 +36,14 @@ public final class RadioRegistry
      */
     public static boolean add(IRadioWaveReceiver tile)
     {
-        return getRadarMapForDim(tile.world().provider.dimensionId).add(tile);
+        return getRadarMapForDim(tile.oldWorld().provider.dimensionId).add(tile);
     }
 
     public static boolean addOrUpdate(IRadioWaveReceiver receiver)
     {
         if (!add(receiver))
         {
-            RadioMap map = getRadarMapForDim(receiver.world().provider.dimensionId);
+            RadioMap map = getRadarMapForDim(receiver.oldWorld().provider.dimensionId);
             if (map.receive_to_chunks.containsKey(receiver))
             {
                 map.update(receiver);
@@ -62,9 +62,9 @@ public final class RadioRegistry
      */
     public static boolean remove(IRadioWaveReceiver tile)
     {
-        if (RADIO_MAPS.containsKey(tile.world().provider.dimensionId))
+        if (RADIO_MAPS.containsKey(tile.oldWorld().provider.dimensionId))
         {
-            RadioMap map = getRadarMapForDim(tile.world().provider.dimensionId);
+            RadioMap map = getRadarMapForDim(tile.oldWorld().provider.dimensionId);
             return map.remove(tile);
         }
         return false;

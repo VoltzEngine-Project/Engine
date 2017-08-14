@@ -1,7 +1,6 @@
 package com.builtbroken.mc.seven.client;
 
 import com.builtbroken.mc.client.ExplosiveRegistryClient;
-import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.effects.providers.VEProviderLaserBeam;
 import com.builtbroken.mc.client.effects.providers.VEProviderRocketTrail;
@@ -9,7 +8,6 @@ import com.builtbroken.mc.client.effects.providers.VEProviderShockWave;
 import com.builtbroken.mc.client.effects.providers.VEProviderSmokeStream;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
-import com.builtbroken.mc.client.json.audio.AudioData;
 import com.builtbroken.mc.client.json.audio.AudioJsonProcessor;
 import com.builtbroken.mc.client.json.effects.EffectJsonProcessor;
 import com.builtbroken.mc.client.json.effects.EffectListJsonProcessor;
@@ -31,15 +29,15 @@ import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.core.network.packet.callback.chunk.PacketRequestData;
+import com.builtbroken.mc.core.registry.ClientRegistryProxy;
+import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.access.global.gui.GuiAccessSystem;
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.multiblock.MultiBlockRenderHelper;
-import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
-import com.builtbroken.mc.lib.render.fx.FxBeam;
 import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
 import com.builtbroken.mc.lib.world.map.data.ChunkData;
 import com.builtbroken.mc.seven.client.json.tile.TileRenderHandler;
@@ -66,15 +64,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +78,11 @@ import java.util.List;
  */
 public class ClientProxy extends CommonProxy
 {
+    public void loadModManager()
+    {
+        ModManager.proxy = new ClientRegistryProxy();
+    }
+
     @Override
     public void preInit()
     {
@@ -337,35 +337,6 @@ public class ClientProxy extends CommonProxy
         }
     }
 
-    @Override
-    public void playJsonAudio(World world, String audioKey, double x, double y, double z, float pitch, float volume)
-    {
-        super.playJsonAudio(world, audioKey, x, y, z, pitch, volume);
-        try
-        {
-            if (audioKey != null)
-            {
-                AudioData data = ClientDataHandler.INSTANCE.getAudio(audioKey);
-                if (data != null)
-                {
-                    data.play(x, y, z, pitch, volume);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Engine.logger().error("Unexpected error while playing audio from Key[" + audioKey + "]", e);
-        }
-    }
-
-    @Override
-    public void playJsonEffect(World world, String key, double x, double y, double z, double mx, double my, double mz, boolean endPoint, NBTTagCompound nbt)
-    {
-        super.playJsonEffect(world, key, x, y, z, mx, my, mz, endPoint, nbt);
-        //Handled by packet
-    }
-
-
     public boolean isPaused()
     {
         if (FMLClientHandler.instance().getClient().isSingleplayer() && !FMLClientHandler.instance().getClient().getIntegratedServer().getPublic())
@@ -394,13 +365,5 @@ public class ClientProxy extends CommonProxy
     public EntityClientPlayerMP getClientPlayer()
     {
         return Minecraft.getMinecraft().thePlayer;
-    }
-
-
-    @Override
-    public void spawnBeamFx(ResourceLocation location, World world, Pos start, Pos end, Color color, int ticksToLive)
-    {
-        FxBeam beam = new FxBeam(SharedAssets.GREY_TEXTURE, world, start, end, color, 5);
-        FMLClientHandler.instance().getClient().effectRenderer.addEffect(beam);
     }
 }

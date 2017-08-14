@@ -26,7 +26,7 @@ public abstract class TileListener implements ITileEventListener
     protected int metaCheck = -1;
 
     @Override
-    public World world()
+    public World oldWorld()
     {
         return world;
     }
@@ -146,7 +146,7 @@ public abstract class TileListener implements ITileEventListener
 
     protected IBlockAccess getBlockAccess()
     {
-        return world() != null ? world() : blockAccess;
+        return oldWorld() != null ? oldWorld() : blockAccess;
     }
 
     protected boolean isServer()

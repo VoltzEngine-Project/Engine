@@ -58,9 +58,9 @@ public class AdjacentPlacementListener extends TileListener implements IPlacemen
     @Override
     public void onBlockChanged()
     {
-        if (doBreakCheck && world() != null && isValidTileAtLocation() && this.canBlockStay() == ActionResponse.CANCEL)
+        if (doBreakCheck && oldWorld() != null && isValidTileAtLocation() && this.canBlockStay() == ActionResponse.CANCEL)
         {
-            world().func_147480_a(xi(), yi(), zi(), true);
+            oldWorld().func_147480_a(xi(), yi(), zi(), true);
         }
     }
 
@@ -109,7 +109,7 @@ public class AdjacentPlacementListener extends TileListener implements IPlacemen
     {
         //Loops checking for connections
         final Pos center = new Pos(this);
-        IBlockAccess access = world() != null ? world() : blockAccess;
+        IBlockAccess access = oldWorld() != null ? oldWorld() : blockAccess;
         for (ForgeDirection direction : supportedDirections == null ? ForgeDirection.VALID_DIRECTIONS : supportedDirections)
         {
             Pos pos = center.add(direction);

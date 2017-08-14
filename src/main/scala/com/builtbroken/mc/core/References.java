@@ -29,6 +29,10 @@ public final class References
     public static final String MODEL_PATH = "models/";
     public static final String MODEL_DIRECTORY = DIRECTORY + MODEL_PATH;
 
+
+    //Efects
+    public static final String LASER_EFFECT = "VEP_laser";
+
     /** Main run folder for everything MC */
     public static File ROOT_FOLDER;
     /** Config folder shared by all mods */

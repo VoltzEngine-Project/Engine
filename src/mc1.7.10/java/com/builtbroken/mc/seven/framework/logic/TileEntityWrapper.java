@@ -84,7 +84,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
                         {
                             if (listener instanceof IBlockListener)
                             {
-                                ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                                ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
                             }
                             ((IUpdateListener) listener).update(ticks);
                         }
@@ -312,7 +312,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {
@@ -389,10 +389,10 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
      */
     protected void toStringData(StringBuilder builder)
     {
-        if (world() != null)
+        if (oldWorld() != null)
         {
             //Out client or server
-            if (world().isRemote)
+            if (oldWorld().isRemote)
             {
                 builder.append("client, ");
             }
@@ -404,17 +404,17 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
 
         //Out world
         builder.append("world = ");
-        if (world() != null)
+        if (oldWorld() != null)
         {
-            if (world().provider != null)
+            if (oldWorld().provider != null)
             {
                 builder.append("dim@");
-                builder.append(world().provider.dimensionId);
+                builder.append(oldWorld().provider.dimensionId);
                 builder.append(", ");
             }
             else
             {
-                builder.append(world());
+                builder.append(oldWorld());
                 builder.append(", ");
             }
         }
@@ -442,7 +442,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     //=============================================
 
     @Override
-    public World world()
+    public World oldWorld()
     {
         return worldObj;
     }
@@ -503,11 +503,11 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
 
     public boolean isServer()
     {
-        return world() != null && !world().isRemote;
+        return oldWorld() != null && !oldWorld().isRemote;
     }
 
     public boolean isClient()
     {
-        return world() != null && world().isRemote;
+        return oldWorld() != null && oldWorld().isRemote;
     }
 }

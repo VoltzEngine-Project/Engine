@@ -11,6 +11,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -33,6 +34,11 @@ public class PacketSpawnParticle extends PacketType
     public PacketSpawnParticle()
     {
         //Needed for forge to construct the packet
+    }
+
+    public PacketSpawnParticle(String name, World world, double x, double y, double z, double vx, double vy, double vz)
+    {
+
     }
 
     public PacketSpawnParticle(String name, int dim, double x, double y, double z, double vx, double vy, double vz)

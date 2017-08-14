@@ -341,7 +341,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     @Override
     public int hashCode()
     {
-        int result = 31 + (world() != null && world().provider != null ? world().provider.dimensionId : 0);
+        int result = 31 + (oldWorld() != null && oldWorld().provider != null ? oldWorld().provider.dimensionId : 0);
         result = 31 * result + xi();
         result = 31 * result + yi();
         result = 31 * result + zi();
@@ -367,7 +367,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
 
     public String toString()
     {
-        return "BlockEdit[ " + (world() != null && world().provider != null ? world().provider.dimensionId : null) + "d, " + xi() + "x, " + yi() + "y, " + zi() + "z]";
+        return "BlockEdit[ " + (oldWorld() != null && oldWorld().provider != null ? oldWorld().provider.dimensionId : null) + "d, " + xi() + "x, " + yi() + "y, " + zi() + "z]";
     }
 
     public BlockEdit setNotificationLevel(int notificationlevel)
