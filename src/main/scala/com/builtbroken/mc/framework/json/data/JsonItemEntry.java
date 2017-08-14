@@ -34,7 +34,7 @@ public class JsonItemEntry
                 try
                 {
                     meta = Integer.parseInt(damage);
-                    if (meta <= 0)
+                    if (meta < 0)
                     {
                         throw new IllegalArgumentException("RecipeItemEntry: damage value must be zero or more.");
                     }
