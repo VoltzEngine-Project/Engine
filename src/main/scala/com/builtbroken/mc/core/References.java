@@ -16,7 +16,7 @@ public final class References
     public static final String BUILD_VERSION = "@BUILD@";
     public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION + "." + BUILD_VERSION;
 
-    public static final String DOMAIN = "voltzengine";
+    public static final String DOMAIN = ID;
     public static final String PREFIX = DOMAIN + ":";
 
     public static final String DIRECTORY = "/assets/" + DOMAIN + "/";

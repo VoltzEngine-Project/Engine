@@ -142,7 +142,7 @@ public class TestJsonLoader extends AbstractTest
         list.add("clip@after:ammoType");
         list.add("gun@after:ammoType");
 
-        List<String> list2 = JsonContentLoader.sortSortingValues(list);
+        List<String> list2 = JsonContentLoader.INSTANCE.sortSortingValues(list);
         assertEquals("block", list2.get(0));
         assertEquals("item", list2.get(1));
         assertEquals("ammoType", list2.get(2));

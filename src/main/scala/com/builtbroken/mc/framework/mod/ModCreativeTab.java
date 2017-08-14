@@ -159,7 +159,15 @@ public class ModCreativeTab extends CreativeTabs
     {
         if (block != null)
         {
-            block.getSubBlocks(Item.getItemFromBlock(block), this, list);
+            Item item = Item.getItemFromBlock(block);
+            if (item != null)
+            {
+                block.getSubBlocks(item, this, list);
+            }
+            else if (Engine.runningAsDev)
+            {
+                Engine.logger().error("Block: " + block + " does not have an item so can not be displayed in creative tab");
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.json;
 
 import com.builtbroken.jlib.lang.DebugPrinter;
+import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.ILoadComplete;
@@ -362,7 +363,7 @@ public final class JsonContentLoader extends AbstractLoadable
             //Loop threw processors in order
             for (final String processorKey : sortingProcessorList)
             {
-                debug.start("processEntries()","Handling: " + processorKey, Engine.runningAsDev);
+                debug.start("processEntries()", "Handling: " + processorKey, Engine.runningAsDev);
                 process(processorKey);
                 debug.end();
             }
@@ -463,55 +464,73 @@ public final class JsonContentLoader extends AbstractLoadable
     /**
      * Creates a map of entries used for sorting loaded files later
      *
-     * @param sortingValues - values to sort, entries in list are consumed
+     * @param values - values to sort, entries in list are consumed
      * @return Map of keys to sorting index values
      */
-    public static List<String> sortSortingValues(List<String> sortingValues)
+    public List<String> sortSortingValues(List<String> values)
     {
+        long start = System.nanoTime();
+        debug.start("ProcessorKeySorter", "Sorting processor keys", Engine.runningAsDev);
         //Run a basic sorter on the list to order it values, after:value, before:value:
-        Collections.sort(sortingValues, new ProcessorKeySorter());
-
+        Collections.sort(values, new ProcessorKeySorter());
 
         final LinkedList<String> sortedValues = new LinkedList();
-        while (!sortingValues.isEmpty())
+        while (!values.isEmpty())
         {
             //Sort out list
-            sortSortingValues(sortingValues, sortedValues);
+            sortSortingValues(values, sortedValues);
 
             //Exit point, prevents inf loop by removing bad entries and adding them to the end of the sorting list
-            if (!sortingValues.isEmpty())
+            if (!values.isEmpty())
             {
                 //Loop threw what entries we have left
-                final Iterator<String> it = sortingValues.iterator();
+                final Iterator<String> it = values.iterator();
                 while (it.hasNext())
                 {
                     final String entry = it.next();
+                    debug.log("E: " + entry);
                     if (entry.contains("@"))
                     {
                         String[] split = entry.split("@");
                         final String name = entry.split("@")[0];
+
+                        debug.log("\tName: " + name);
 
                         if (split[1].contains(":"))
                         {
                             split = split[1].split(":");
                             boolean found = false;
 
+                            debug.log("\t" + split[0] + "  " + split[1]);
+
                             //Try too see if we have a valid entry left in our sorting list that might just contain a after: or before: preventing it from adding
-                            for (final String v : sortingValues)
+                            debug.start("Check A");
+                            for (final String v : values)
                             {
-                                if (!v.equals(entry) && v.contains(split[1]))
+                                debug.log("" + v + "  " + v.startsWith(split[1]));
+                                if (!v.equals(entry) && v.startsWith(split[1]))
                                 {
+                                    debug.log("\tFound entry");
                                     found = true;
                                     break;
                                 }
                             }
-                            for (final String v : sortedValues)
+                            debug.end();
+
+                            if (!found)
                             {
-                                if (!v.equals(entry) && v.contains(split[1]))
+                                debug.start("Check B");
+                                for (final String v : sortedValues)
                                 {
-                                    found = true;
-                                    break;
+                                    debug.log("" + v + "  " + v.equals(split[1]));
+                                    if (!v.equals(entry) && v.equals(split[1]))
+                                    {
+                                        debug.log("\tB:" + found);
+                                        found = true;
+                                        break;
+                                    }
                                 }
+                                debug.end();
                             }
 
                             //If we have no category for the sorting entry add it to the master list
@@ -539,6 +558,7 @@ public final class JsonContentLoader extends AbstractLoadable
                 }
             }
         }
+        debug.end("Done.... " + StringHelpers.formatTimeDifference(start, System.nanoTime()));
         return sortedValues;
     }
 

@@ -15,11 +15,6 @@ import net.minecraftforge.client.model.ModelFormatException;
 public final class SharedAssets
 {
 
-    /** Model for the tool table */
-    public static IModelCustom TOOL_TABLE;
-    /** Texture for the tool table */
-    public static ResourceLocation TOOL_TABLE_TEXTURE;
-
     /** Simple grey texture to use as a place holder */
     public static ResourceLocation GREY_TEXTURE = new ResourceLocation(References.DOMAIN, References.TEXTURE_DIRECTORY + "grey.png");
     /** Simple grey texture to use as a place holder, has a 40%~ish occupancy to work with alpha objects better */
@@ -50,13 +45,7 @@ public final class SharedAssets
      */
     public static void loadResources()
     {
-        if (!loaded)
-        {
-            loaded = true;
-            TOOL_TABLE = model("tool-table.obj");
 
-            TOOL_TABLE_TEXTURE = texture("tool-table");
-        }
     }
 
     /**
