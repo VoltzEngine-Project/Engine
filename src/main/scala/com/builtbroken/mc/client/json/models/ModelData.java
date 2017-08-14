@@ -36,9 +36,17 @@ public class ModelData extends JsonGenData
 
     public IModelCustom getModel()
     {
-        if (model == null)
+        if (model == null && !errorLock)
         {
-            model = EngineModelLoader.loadModel(new ResourceLocation(domain, "models/" + name));
+            try
+            {
+                model = EngineModelLoader.loadModel(new ResourceLocation(domain, "models/" + name));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                errorLock = true;
+            }
         }
         return model;
     }
