@@ -365,7 +365,7 @@ public class ClientProxy extends CommonProxy
         //Handled by packet
     }
 
-    @Override
+
     public boolean isPaused()
     {
         if (FMLClientHandler.instance().getClient().isSingleplayer() && !FMLClientHandler.instance().getClient().getIntegratedServer().getPublic())
@@ -396,22 +396,6 @@ public class ClientProxy extends CommonProxy
         return Minecraft.getMinecraft().thePlayer;
     }
 
-    public World getClientWorld()
-    {
-        return getClientPlayer() != null ? getClientPlayer().worldObj : null;
-    }
-
-    @Override
-    public int getPlayerDim()
-    {
-        return getClientWorld() != null ? getClientWorld().provider.dimensionId : 0;
-    }
-
-    @Override
-    public void spawnParticle(String name, World world, double x, double y, double z, double xx, double yy, double zz)
-    {
-        Minecraft.getMinecraft().renderGlobal.spawnParticle(name, x, y, z, (float) xx, (float) yy, (float) zz);
-    }
 
     @Override
     public void spawnBeamFx(ResourceLocation location, World world, Pos start, Pos end, Color color, int ticksToLive)

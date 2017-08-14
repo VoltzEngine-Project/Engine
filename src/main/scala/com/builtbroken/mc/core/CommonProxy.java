@@ -9,7 +9,6 @@ import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -24,6 +23,7 @@ import java.awt.*;
  */
 public class CommonProxy extends AbstractProxy
 {
+    @Deprecated
     public static CommonProxy proxy;
 
     //config files
@@ -35,22 +35,7 @@ public class CommonProxy extends AbstractProxy
     @Deprecated //Temp until rewrite is finished
     public static Configuration configuration;
 
-    public static boolean isPlayerOpped(EntityPlayer player)
-    {
-        return player instanceof EntityPlayerMP && isPlayerOpped((EntityPlayerMP) player);
-    }
-
-    public static boolean isPlayerOpped(EntityPlayerMP player)
-    {
-        //Taken from EntityPlayerMP#canCommandSenderUseCommand(Integer, String)
-        return player.mcServer.getConfigurationManager().func_152596_g(player.getGameProfile()) && player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
-    }
-
-    public boolean isPaused()
-    {
-        return false;
-    }
-
+    @Deprecated
     public EntityPlayer getClientPlayer()
     {
         return null;
@@ -59,35 +44,10 @@ public class CommonProxy extends AbstractProxy
     @Override
     public void init()
     {
-        EntityRegistry.registerGlobalEntityID(EntityExCreeper.class, "ExCreeper", EntityRegistry.findGlobalUniqueEntityId());
+        //EntityRegistry.registerGlobalEntityID(EntityExCreeper.class, "ExCreeper", EntityRegistry.findGlobalUniqueEntityId());
+
+        //TODO move to JSON
         EntityRegistry.registerModEntity(EntityExCreeper.class, "ExCreeper", 55, Engine.loaderInstance, 100, 1, true);
-    }
-
-    public int getPlayerDim()
-    {
-        throw new UnsupportedOperationException("This method can not be called server side");
-    }
-
-    /**
-     * Called to spawn a particle in the world.
-     * <p>
-     * Server side this will send a packet to the client
-     *
-     * @param name  - name of the particle, this needs to be specific or it will not work
-     * @param world - world to spawn the particle inside
-     * @param x     - location
-     * @param y     - location
-     * @param z     - location
-     * @param xx    - velocity, in some cases this is used as extra data
-     * @param yy    - velocity, in some cases this is used as extra data
-     * @param zz    - velocity, in some cases this is used as extra data
-     */
-    public void spawnParticle(String name, World world, double x, double y, double z, double xx, double yy, double zz)
-    {
-        if (!world.isRemote)
-        {
-            Engine.packetHandler.sendToAllAround(new PacketSpawnParticle(name, world.provider.dimensionId, x, y, z, xx, yy, zz), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 64));
-        }
     }
 
     /**
@@ -102,6 +62,7 @@ public class CommonProxy extends AbstractProxy
      * @param color       - color of the laser
      * @param ticksToLive - how long to spawn the effect
      */
+    @Deprecated
     public void spawnBeamFx(ResourceLocation location, World world, Pos start, Pos end, Color color, int ticksToLive)
     {
         if (!world.isRemote)
@@ -111,6 +72,7 @@ public class CommonProxy extends AbstractProxy
         }
     }
 
+    @Deprecated
     public void playJsonAudio(World world, String audioKey, double x, double y, double z, float pitch, float volume)
     {
         if (world != null && !world.isRemote)
@@ -120,6 +82,7 @@ public class CommonProxy extends AbstractProxy
         }
     }
 
+    @Deprecated
     public void playJsonEffect(World world, String key, double x, double y, double z, double mx, double my, double mz, boolean endPoint, NBTTagCompound nbt)
     {
         if (world != null && !world.isRemote)

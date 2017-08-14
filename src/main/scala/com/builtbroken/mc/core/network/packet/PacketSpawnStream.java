@@ -4,6 +4,7 @@ package com.builtbroken.mc.core.network.packet;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.core.CommonProxy;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -121,7 +122,7 @@ public class PacketSpawnStream extends PacketType
                     double d7 = vx + (x - vx) * d6 + (rand.nextDouble() - 0.5D) * 5.0D;
                     double d8 = vy + (y - vy) * d6 + (rand.nextDouble() - 0.5D) * 5.0D;
                     double d9 = vz + (z - vz) * d6 + (rand.nextDouble() - 0.5D) * 5.0D;
-                    CommonProxy.proxy.spawnParticle("portal", player.worldObj, d7, d8, d9, (double) f, (double) f1, (double) f2);
+                    Engine.minecraft.spawnParticle("portal", player.worldObj, d7, d8, d9, (double) f, (double) f1, (double) f2);
                 }
             }
             else if (type == 1)

@@ -13,12 +13,11 @@ import com.builtbroken.mc.api.event.blast.BlastEventBlockRemoved;
 import com.builtbroken.mc.api.event.blast.BlastEventBlockReplaced;
 import com.builtbroken.mc.api.explosive.IBlast;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
-import com.builtbroken.mc.core.CommonProxy;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
-import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import io.netty.buffer.ByteBuf;
@@ -402,8 +401,8 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
 
             Pos pos = randomMotion(posX, posY, posZ);
             //Spawn particles
-            CommonProxy.proxy.spawnParticle("explode", world, (posX + x * 1.0D) / 2.0D, (posY + y * 1.0D) / 2.0D, (posZ + z * 1.0D) / 2.0D, pos.x(), pos.y(), pos.z());
-            CommonProxy.proxy.spawnParticle("smoke", world, posX, posY, posZ, pos.x(), pos.y(), pos.z());
+            Engine.minecraft.spawnParticle("explode", world, (posX + x * 1.0D) / 2.0D, (posY + y * 1.0D) / 2.0D, (posZ + z * 1.0D) / 2.0D, pos.x(), pos.y(), pos.z());
+            Engine.minecraft.spawnParticle("smoke", world, posX, posY, posZ, pos.x(), pos.y(), pos.z());
         }
     }
 
@@ -448,11 +447,11 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
         {
             if (this.size >= 2.0F)
             {
-                CommonProxy.proxy.spawnParticle("hugeexplosion", world, x, y, z, 1.0D, 0.0D, 0.0D);
+                Engine.minecraft.spawnParticle("hugeexplosion", world, x, y, z, 1.0D, 0.0D, 0.0D);
             }
             else
             {
-                CommonProxy.proxy.spawnParticle("largeexplode", world, x, y, z, 1.0D, 0.0D, 0.0D);
+                Engine.minecraft.spawnParticle("largeexplode", world, x, y, z, 1.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -465,11 +464,11 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
         {
             if (this.size >= 2.0F)
             {
-                CommonProxy.proxy.spawnParticle("hugeexplosion", world, x, y, z, 1.0D, 0.0D, 0.0D);
+                Engine.minecraft.spawnParticle("hugeexplosion", world, x, y, z, 1.0D, 0.0D, 0.0D);
             }
             else
             {
-                CommonProxy.proxy.spawnParticle("largeexplode", world, x, y, z, 1.0D, 0.0D, 0.0D);
+                Engine.minecraft.spawnParticle("largeexplode", world, x, y, z, 1.0D, 0.0D, 0.0D);
             }
         }
     }

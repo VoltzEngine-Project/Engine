@@ -1,6 +1,5 @@
 package com.builtbroken.mc.core.commands.permissions;
 
-import com.builtbroken.mc.core.CommonProxy;
 import com.builtbroken.mc.core.Engine;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +22,18 @@ public class PermissionsCommandManager extends ServerCommandManager
 {
     public boolean hasPermissionForCommand(ICommandSender sender, ICommand command, String[] args)
     {
-        return sender instanceof EntityPlayer && CommonProxy.isPlayerOpped((EntityPlayer) sender) || GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args);
+        return sender instanceof EntityPlayer && isPlayerOpped((EntityPlayer) sender) || GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args);
+    }
+
+    public static boolean isPlayerOpped(EntityPlayer player)
+    {
+        return player instanceof EntityPlayerMP && isPlayerOpped((EntityPlayerMP) player);
+    }
+
+    public static boolean isPlayerOpped(EntityPlayerMP player)
+    {
+        //Taken from EntityPlayerMP#canCommandSenderUseCommand(Integer, String)
+        return player.mcServer.getConfigurationManager().func_152596_g(player.getGameProfile()) && player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
     }
 
     @Override

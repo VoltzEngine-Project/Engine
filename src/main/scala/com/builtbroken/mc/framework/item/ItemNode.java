@@ -44,7 +44,7 @@ public class ItemNode implements IItemEventListener
         this.id = id;
     }
 
-    public boolean isHasSubTypes()
+    public boolean hasSubTypes()
     {
         return hasSubTypes;
     }
