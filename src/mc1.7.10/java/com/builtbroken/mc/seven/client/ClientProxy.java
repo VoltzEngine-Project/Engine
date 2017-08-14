@@ -17,7 +17,7 @@ import com.builtbroken.mc.client.json.render.item.ItemJsonRenderer;
 import com.builtbroken.mc.client.json.render.processor.RenderJsonProcessor;
 import com.builtbroken.mc.client.json.render.tile.TileRenderData;
 import com.builtbroken.mc.client.json.texture.TextureJsonProcessor;
-import com.builtbroken.mc.core.CommonProxy;
+import com.builtbroken.mc.seven.CommonProxy;
 import com.builtbroken.mc.core.ConfigValues;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
@@ -78,9 +78,10 @@ import java.util.List;
  */
 public class ClientProxy extends CommonProxy
 {
-    public void loadModManager()
+    public void onLoad()
     {
         ModManager.proxy = new ClientRegistryProxy();
+        Engine.minecraft = new MinecraftWrapperClient();
     }
 
     @Override

@@ -28,4 +28,6 @@ public interface IMinecraftInterface
      * @return material, or null if it doesn't exist
      */
     ITileMaterial getTileMaterial(String name);
+
+    boolean isShiftHeld();
 }

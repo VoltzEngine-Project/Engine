@@ -1,5 +1,7 @@
 package com.builtbroken.mc.core;
 
+import net.minecraftforge.common.config.Configuration;
+
 import java.io.File;
 
 /**
@@ -46,4 +48,11 @@ public final class References
 
     public static double TO_RF_RATIO = 500;
     public static double TO_BC_RATIO = 50;
+    //config files
+    @Deprecated //Will be replaced by an encapsulated system later
+    public static Configuration heatDataConfig;
+    @Deprecated //Will be replaced by an encapsulated system later
+    public static Configuration explosiveConfig;
+    @Deprecated //Temp until rewrite is finished
+    public static Configuration configuration;
 }

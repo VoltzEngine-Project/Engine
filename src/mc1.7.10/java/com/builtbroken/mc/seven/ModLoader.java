@@ -6,7 +6,6 @@ import com.builtbroken.mc.api.VoltzEngineAPI;
 import com.builtbroken.mc.api.event.TriggerCauseRegistry;
 import com.builtbroken.mc.api.process.IWorkerThread;
 import com.builtbroken.mc.api.recipe.MachineRecipeType;
-import com.builtbroken.mc.core.CommonProxy;
 import com.builtbroken.mc.core.ConfigValues;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
@@ -132,8 +131,7 @@ public class ModLoader extends EngineLoader
     public void preInit(FMLPreInitializationEvent event)
     {
         Engine.loaderInstance = this;
-        CommonProxy.proxy = proxy;
-        proxy.loadModManager();
+        proxy.onLoad();
 
         //Init API values
         VoltzEngineAPI.massRegistry = new MassRegistry();
@@ -144,20 +142,20 @@ public class ModLoader extends EngineLoader
         References.BBM_CONFIG_FOLDER = new File(event.getModConfigurationDirectory(), "bbm");
 
         //Load config files
-        config = CommonProxy.configuration = new Configuration(new File(References.BBM_CONFIG_FOLDER, "ve/VoltzEngine.cfg"));
-        CommonProxy.heatDataConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/HeatMap.cfg"));
-        CommonProxy.explosiveConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
+        config = References.configuration = new Configuration(new File(References.BBM_CONFIG_FOLDER, "ve/VoltzEngine.cfg"));
+        References.heatDataConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/HeatMap.cfg"));
+        References.explosiveConfig = new Configuration(new File(event.getModConfigurationDirectory(), "bbm/ve/Explosives.cfg"));
 
         manager = new ModManager().setPrefix(References.DOMAIN).setTab(CreativeTabs.tabAllSearch);
 
         config.load();
-        CommonProxy.heatDataConfig.load();
-        CommonProxy.explosiveConfig.load();
+        References.heatDataConfig.load();
+        References.explosiveConfig.load();
 
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, CommonProxy.proxy);
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(CommonProxy.proxy);
+        MinecraftForge.EVENT_BUS.register(proxy);
         MinecraftForge.EVENT_BUS.register(SaveManager.instance());
         MinecraftForge.EVENT_BUS.register(new InteractionHandler());
 
@@ -170,13 +168,13 @@ public class ModLoader extends EngineLoader
         FMLCommonHandler.instance().bus().register(new WorldActionQue());
         FMLCommonHandler.instance().bus().register(TileTaskTickHandler.INSTANCE);
 
-        FMLCommonHandler.instance().bus().register(CommonProxy.proxy);
+        FMLCommonHandler.instance().bus().register(proxy);
 
         //Load heat configs
-        enabledHeatMap = CommonProxy.heatDataConfig.getBoolean("EnabledHeatMap", Configuration.CATEGORY_GENERAL, true, "Heat map handles interaction of heat based energy and the world. Disable only if it causes issues or you want to reduce world file size. If disabled it can prevent machines from working.");
+        enabledHeatMap = References.heatDataConfig.getBoolean("EnabledHeatMap", Configuration.CATEGORY_GENERAL, true, "Heat map handles interaction of heat based energy and the world. Disable only if it causes issues or you want to reduce world file size. If disabled it can prevent machines from working.");
 
         //Load explosive configs
-        ConfigValues.log_registering_explosives = CommonProxy.explosiveConfig.getBoolean("EnableRegisterLogging", Configuration.CATEGORY_GENERAL, false, "Adds debug each time a mod registers an explosive handler. Should only be enabled to figure out which mod is overriding another mod's explosive");
+        ConfigValues.log_registering_explosives = References.explosiveConfig.getBoolean("EnableRegisterLogging", Configuration.CATEGORY_GENERAL, false, "Adds debug each time a mod registers an explosive handler. Should only be enabled to figure out which mod is overriding another mod's explosive");
 
         MachineRecipeType.ITEM_SMELTER.setHandler(new MRSmelterHandler());
         MachineRecipeType.ITEM_GRINDER.setHandler(new MRHandlerItemStack(MachineRecipeType.ITEM_GRINDER.INTERNAL_NAME));
@@ -434,7 +432,7 @@ public class ModLoader extends EngineLoader
         //All blocks should be loaded before post init so we can init things that need to iterate over the block list
         if (enabledHeatMap)
         {
-            HeatedBlockRegistry.init(CommonProxy.heatDataConfig);
+            HeatedBlockRegistry.init(References.heatDataConfig);
         }
 
         loader.postInit();
@@ -468,8 +466,8 @@ public class ModLoader extends EngineLoader
         actionProcessorThreads = getConfig().getInt("WorldActionThreads", "Multi-Threading", Runtime.getRuntime().availableProcessors() - 1, 0, 100, "Creates the number of threads to be used for processing changes to the world. Used by mods like ICBM to calculate explosives before removing blocks from the world. Try to keep this one less than the number of processors you have. This way minecraft is not chocked out for CPU time.");
 
         //Save configs as this is our last chance
-        CommonProxy.heatDataConfig.save();
-        CommonProxy.explosiveConfig.save();
+        References.heatDataConfig.save();
+        References.explosiveConfig.save();
         getConfig().save();
     }
 
@@ -575,7 +573,7 @@ public class ModLoader extends EngineLoader
 
     public AbstractProxy getProxy()
     {
-        return CommonProxy.proxy;
+        return proxy;
     }
 
     public Configuration getConfig()

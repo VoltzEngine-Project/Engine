@@ -1,6 +1,6 @@
 package com.builtbroken.mc.seven.server;
 
-import com.builtbroken.mc.core.CommonProxy;
+import com.builtbroken.mc.seven.CommonProxy;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.commands.CommandVE;
@@ -29,7 +29,7 @@ public class ServerProxy extends CommonProxy
         ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "Emp", new ExEmp());
 
         //Handle command system
-        GroupProfileHandler.enablePermissions = configuration.getBoolean("EnablePermissionSystem", "Commands", Engine.runningAsDev, "Enabled Voltz Engine built in command permission system that works much like Bukkit's PermissionEx Plugin");
+        GroupProfileHandler.enablePermissions = References.configuration.getBoolean("EnablePermissionSystem", "Commands", Engine.runningAsDev, "Enabled Voltz Engine built in command permission system that works much like Bukkit's PermissionEx Plugin");
         if (GroupProfileHandler.enablePermissions)
         {
             Engine.logger().info("Overriding MC's CommandManager");

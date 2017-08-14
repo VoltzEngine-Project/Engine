@@ -1,12 +1,13 @@
-package com.builtbroken.mc.core;
+package com.builtbroken.mc.seven;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.core.registry.CommonRegistryProxy;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.mod.AbstractProxy;
+import com.builtbroken.mc.seven.abstraction.MinecraftWrapper;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.config.Configuration;
 
 /**
  * The Voltz Engine common proxy
@@ -16,26 +17,15 @@ import net.minecraftforge.common.config.Configuration;
 public class CommonProxy extends AbstractProxy
 {
     @Deprecated
-    public static CommonProxy proxy;
-
-    //config files
-    @Deprecated //Will be replaced by an encapsulated system later
-    public static Configuration heatDataConfig;
-    @Deprecated //Will be replaced by an encapsulated system later
-    public static Configuration explosiveConfig;
-
-    @Deprecated //Temp until rewrite is finished
-    public static Configuration configuration;
-
-    @Deprecated
     public EntityPlayer getClientPlayer()
     {
         return null;
     }
 
-    public void loadModManager()
+    public void onLoad()
     {
         ModManager.proxy = new CommonRegistryProxy();
+        Engine.minecraft = new MinecraftWrapper();
     }
 
     @Override

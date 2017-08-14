@@ -318,6 +318,11 @@ public class Engine
 
     public static IWorld getWorld(int dim)
     {
-        return minecraft.getWorld(dim);
+        return minecraft != null ? minecraft.getWorld(dim) : null;
+    }
+
+    public static boolean isShiftHeld()
+    {
+        return minecraft.isShiftHeld();
     }
 }

@@ -47,12 +47,17 @@ public class MinecraftWrapper implements IMinecraftInterface
             World world = DimensionManager.getWorld(dim);
             if (world != null)
             {
-                worldWrapper = new WorldWrapper(world);
+                worldWrapper = newWorldWrapper(world);
                 worldToWrapper.put(dim, worldWrapper);
                 return worldWrapper;
             }
         }
         return null;
+    }
+
+    protected WorldWrapper newWorldWrapper(World world)
+    {
+        return new WorldWrapper(world);
     }
 
     @Override
@@ -63,6 +68,12 @@ public class MinecraftWrapper implements IMinecraftInterface
             initMaterials();
         }
         return nameToMaterial.get(name);
+    }
+
+    @Override
+    public boolean isShiftHeld()
+    {
+        return false;
     }
 
     public ITileMaterial getTileMaterial(Material material)
