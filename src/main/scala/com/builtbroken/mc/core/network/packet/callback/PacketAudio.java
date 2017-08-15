@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.network.packet.callback;
 
-import com.builtbroken.mc.abstraction.world.IWorld;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.common.network.ByteBufUtils;

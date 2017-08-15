@@ -86,7 +86,7 @@ public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBuff
     {
         if (getTileNode() instanceof ITileConnection)
         {
-            TileEntity connector = toPos().add(from).getTileEntity(oldWorld());
+            TileEntity connector = toPos().add(from).getTileEntity(worldObj);
             if (((ITileConnection) getTileNode()).canConnect(connector, ConnectionType.RF_POWER, from))
             {
                 return true;

@@ -1,8 +1,8 @@
 package com.builtbroken.mc.core;
 
-import com.builtbroken.mc.abstraction.imp.EngineLoader;
-import com.builtbroken.mc.abstraction.imp.IMinecraftInterface;
-import com.builtbroken.mc.abstraction.world.IWorld;
+import com.builtbroken.mc.abstraction.EngineLoader;
+import com.builtbroken.mc.api.abstraction.imp.IMinecraftInterface;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
 import com.builtbroken.mc.core.content.resources.gems.GemTypes;
 import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;

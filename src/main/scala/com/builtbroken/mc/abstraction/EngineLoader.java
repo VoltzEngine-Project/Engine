@@ -1,4 +1,4 @@
-package com.builtbroken.mc.abstraction.imp;
+package com.builtbroken.mc.abstraction;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;

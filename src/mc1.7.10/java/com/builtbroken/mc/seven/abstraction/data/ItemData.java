@@ -1,6 +1,6 @@
 package com.builtbroken.mc.seven.abstraction.data;
 
-import com.builtbroken.mc.abstraction.data.IItemData;
+import com.builtbroken.mc.api.abstraction.data.IItemData;
 import net.minecraft.item.Item;
 
 /**
@@ -14,5 +14,11 @@ public class ItemData implements IItemData
     public ItemData(Item item)
     {
         this.item = item;
+    }
+
+    @Override
+    public Item unwrap()
+    {
+        return item;
     }
 }

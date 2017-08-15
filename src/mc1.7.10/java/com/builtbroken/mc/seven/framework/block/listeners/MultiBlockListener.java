@@ -1,7 +1,7 @@
 package com.builtbroken.mc.seven.framework.block.listeners;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.abstraction.entity.IEntityData;
+import com.builtbroken.mc.api.abstraction.entity.IEntityData;
 import com.builtbroken.mc.api.data.ActionResponse;
 import com.builtbroken.mc.api.tile.access.IRotation;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
@@ -69,18 +69,18 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         if (ticks == 0 && buildFirstTick)
         {
             layoutKey = layoutKey != null ? layoutKey.toLowerCase() : "";
-            if (MultiBlockHelper.canBuild(oldWorld(), getMultiTileHost(), true))
+            if (MultiBlockHelper.canBuild(world().unwrap(), getMultiTileHost(), true))
             {
-                MultiBlockHelper.buildMultiBlock(oldWorld(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
+                MultiBlockHelper.buildMultiBlock(world().unwrap(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
             }
             else
             {
-                Engine.logger().error("Can not build multiblock structure at location " + new Location(this) + " for " + getMultiTileHost());
+                Engine.logger().error("Can not build multiblock structure at location " + new Location(world().unwrap(), xi(), yi(), zi()) + " for " + getMultiTileHost());
             }
         }
         else if (offsetTick % 200 == 0)
         {
-            MultiBlockHelper.buildMultiBlock(oldWorld(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
+            MultiBlockHelper.buildMultiBlock(world().unwrap(), getMultiTileHost() != null ? getMultiTileHost() : this, true, true);
         }
     }
 
@@ -151,7 +151,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         {
             return ((IActivationListener) tileEntity).onPlayerActivated(player, side, xHit, yHit, zHit);
         }
-        return getBlock().onBlockActivated(oldWorld(), xi(), yi(), zi(), player, side, xHit, yHit, zHit);
+        return getBlock().onBlockActivated(world().unwrap(), xi(), yi(), zi(), player, side, xHit, yHit, zHit);
     }
 
     @Override
@@ -231,13 +231,13 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public ActionResponse canPlaceAt()
     {
-        return (doRotation || MultiBlockHelper.canBuild(oldWorld(), getMultiTileHost() != null ? getMultiTileHost() : this, true)) ? ActionResponse.DO : ActionResponse.CANCEL;
+        return (doRotation || MultiBlockHelper.canBuild(world().unwrap(), getMultiTileHost() != null ? getMultiTileHost() : this, true)) ? ActionResponse.DO : ActionResponse.CANCEL;
     }
 
     @Override
     public ActionResponse canPlaceAt(IEntityData entity)
     {
-        return (!doRotation ||MultiBlockHelper.canBuild(oldWorld(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineForgeDirection(entity)), true)) ? ActionResponse.DO : ActionResponse.CANCEL;
+        return (!doRotation ||MultiBlockHelper.canBuild(world().unwrap(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineForgeDirection(entity)), true)) ? ActionResponse.DO : ActionResponse.CANCEL;
     }
 
     @Override

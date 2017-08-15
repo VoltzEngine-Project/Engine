@@ -18,10 +18,7 @@ import com.google.gson.JsonObject;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Load generic block data from a json
@@ -31,7 +28,6 @@ import java.util.Map;
  */
 public class JsonBlockProcessor extends JsonProcessor<BlockBase>
 {
-    public static final String KEY = "block";
     /** Map of processors to run on unknown json object entries, used to process recipes and registry calls */
     public final HashMap<String, IJsonBlockSubProcessor> subProcessors = new HashMap();
 
@@ -53,12 +49,14 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         blockFields.add("material");
 
         MinecraftForge.EVENT_BUS.register(this);
+
+        addSubProcessor(References.JSON_LISTENER_KEY, new JsonBlockListenerProcessor());
     }
 
     @SubscribeEvent
     public void onJsonProcessorRegister(JsonProcessorRegistryEvent event)
     {
-        if(event instanceof IJsonBlockSubProcessor)
+        if (event instanceof IJsonBlockSubProcessor)
         {
             addSubProcessor(event.processor.getJsonKey(), (IJsonBlockSubProcessor) event.processor);
         }
@@ -73,7 +71,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
     @Override
     public String getJsonKey()
     {
-        return KEY;
+        return References.JSON_BLOCK_KEY;
     }
 
     @Override
@@ -103,14 +101,17 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
         BlockPropertyData blockPropertyData = new BlockPropertyData(this, id, mod, name);
 
         //Load block property data TODO setup system to do before and after block created loading
-        for (Map.Entry<String, JsonElement> entry : blockData.entrySet())
+        Iterator<Map.Entry<String, JsonElement>> it = blockData.entrySet().iterator();
+        while (it.hasNext())
         {
+            Map.Entry<String, JsonElement> entry = it.next(); //TODO remove any key used by block prop to avoid firing sub processors
             if (blockPropDataHandler.handle(blockPropertyData, entry.getKey().toLowerCase(), entry.getValue()))
             {
                 if (Engine.runningAsDev)
                 {
                     debugPrinter.log("Injected Key: " + entry.getKey());
                 }
+                it.remove();
             }
         }
 

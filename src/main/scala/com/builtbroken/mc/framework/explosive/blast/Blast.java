@@ -2,7 +2,7 @@ package com.builtbroken.mc.framework.explosive.blast;
 
 import com.builtbroken.jlib.data.network.IByteBufReader;
 import com.builtbroken.jlib.data.network.IByteBufWriter;
-import com.builtbroken.mc.abstraction.world.IWorld;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.edit.IWorldChangeAudio;

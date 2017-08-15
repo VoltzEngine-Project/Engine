@@ -1,19 +1,17 @@
 package com.builtbroken.mc.seven.abstraction;
 
-import com.builtbroken.mc.abstraction.data.IItemData;
-import com.builtbroken.mc.abstraction.data.ITileData;
-import com.builtbroken.mc.abstraction.entity.IEntityData;
-import com.builtbroken.mc.abstraction.imp.IMinecraftInterface;
-import com.builtbroken.mc.abstraction.tile.ITileMaterial;
-import com.builtbroken.mc.abstraction.world.IWorld;
+import com.builtbroken.mc.api.abstraction.data.IItemData;
+import com.builtbroken.mc.api.abstraction.data.ITileData;
+import com.builtbroken.mc.api.abstraction.entity.IEntityData;
+import com.builtbroken.mc.api.abstraction.imp.IMinecraftInterface;
+import com.builtbroken.mc.api.abstraction.tile.ITileMaterial;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.seven.abstraction.data.ItemData;
 import com.builtbroken.mc.seven.abstraction.data.TileData;
 import com.builtbroken.mc.seven.abstraction.entity.EntityData;
 import com.builtbroken.mc.seven.abstraction.tile.TileMaterial;
 import com.builtbroken.mc.seven.abstraction.world.WorldWrapper;
-import cpw.mods.fml.common.SidedProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -42,8 +40,6 @@ public class MinecraftWrapper implements IMinecraftInterface
     public HashMap<Item, ItemData> itemToWrapper = new HashMap();
     public HashMap<Block, TileData> blockToWrapper = new HashMap();
 
-
-    @SidedProxy(modId = References.DOMAIN, clientSide = "com.builtbroken.mc.seven.client.MinecraftWrapperClient", serverSide = "com.builtbroken.mc.seven.abstraction.MinecraftWrapper")
     public static MinecraftWrapper INSTANCE;
 
     @Override

@@ -1,9 +1,7 @@
 package com.builtbroken.mc.seven.framework.json.recipe.crafting;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.framework.json.exceptions.JsonFormatException;
 import com.builtbroken.mc.seven.framework.block.IJsonBlockSubProcessor;
-import com.builtbroken.mc.seven.framework.json.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.seven.framework.json.recipe.JsonRecipeProcessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -23,8 +21,6 @@ import java.util.Map;
  */
 public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftingRecipeData> implements IJsonBlockSubProcessor
 {
-    public static final String KEY = "craftingGridRecipe";
-
     @Override
     public String getMod()
     {
@@ -34,17 +30,17 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
     @Override
     public String getJsonKey()
     {
-        return KEY;
+        return References.JSON_CRAFTING_GRID_KEY;
     }
 
     @Override
     public String getLoadOrder()
     {
-        return "after:" + JsonOreNameProcessor.KEY;
+        return "after:" + References.JSON_ORENAME_KEY;
     }
 
     @Override
-    public JsonCraftingRecipeData process(final Object out, final JsonElement element) throws JsonFormatException
+    public JsonCraftingRecipeData process(final Object out, final JsonElement element)
     {
         final JsonObject recipeData = element.getAsJsonObject();
 
@@ -88,7 +84,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                     }
                     else
                     {
-                        throw new JsonFormatException("Recipe array must contain only string values of characters representing items.");
+                        throw new RuntimeException("Recipe array must contain only string values of characters representing items.");
                     }
                 }
             }
@@ -105,14 +101,14 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                     char c = entry.getKey().charAt(0);
                     if (c == '.' || Character.isWhitespace(c))
                     {
-                        throw new JsonFormatException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "]. Each entry must be a single character that is not a space or a '.' which is used in place of a space.");
+                        throw new RuntimeException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "]. Each entry must be a single character that is not a space or a '.' which is used in place of a space.");
 
                     }
                     items.put(c, getItemFromJson(entry.getValue()));
                 }
                 else
                 {
-                    throw new JsonFormatException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "] each item must be represented by a single character.");
+                    throw new RuntimeException("File contains invalid recipe data for item entry in recipe [" + entry.getKey() + " -> " + entry.getValue() + "] each item must be represented by a single character.");
                 }
             }
 
@@ -134,7 +130,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                 //Invalid recipe
                 if (size > 0 && l != size)
                 {
-                    throw new JsonFormatException("Crafting grid row[" + i + "] is not the same size of " + size + " as previous grid rows. This will prevent the recipe from loading correctly and needs to be fixed.");
+                    throw new RuntimeException("Crafting grid row[" + i + "] is not the same size of " + size + " as previous grid rows. This will prevent the recipe from loading correctly and needs to be fixed.");
                 }
                 //Increase size smaller, use for validation
                 if (l > size)
@@ -156,7 +152,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                     {
                         if (!items.containsKey(c))
                         {
-                            throw new JsonFormatException("File is missing an entry for item linked to '" + c + "' for crafting grid row[" + i + "] index[" + charIndex + "] in recipe data -> " + recipeData);
+                            throw new RuntimeException("File is missing an entry for item linked to '" + c + "' for crafting grid row[" + i + "] index[" + charIndex + "] in recipe data -> " + recipeData);
                         }
                     }
                 }
@@ -199,7 +195,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
         }
         else
         {
-            throw new JsonFormatException("File is contains an unknown grid recipe type of " + recipeType + " that is not supported.");
+            throw new RuntimeException("File is contains an unknown grid recipe type of " + recipeType + " that is not supported.");
         }
     }
 }

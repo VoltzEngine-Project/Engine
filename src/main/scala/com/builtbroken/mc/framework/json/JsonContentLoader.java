@@ -21,6 +21,7 @@ import com.builtbroken.mc.framework.json.processors.multiblock.JsonMultiBlockLay
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.framework.mod.loadable.ILoadable;
 import com.google.gson.JsonElement;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -28,12 +29,15 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -174,7 +178,7 @@ public final class JsonContentLoader extends AbstractLoadable
         //===========================================================================
         debug.start("Process Run[1]");
         processEntries();
-        debug.end("Done...");
+        debug.end("Done... " + jsonEntries.size() + " entries left");
 
         //---------------------------------------------------------------------------
         debug.end("Done...");
@@ -186,7 +190,7 @@ public final class JsonContentLoader extends AbstractLoadable
         debug.start("Phase: Init");
         debug.start("Process Run[2]");
         processEntries();
-        debug.end("Done...");
+        debug.end("Done... " + jsonEntries.size() + " entries left");
         debug.end("Done...");
     }
 
@@ -205,7 +209,7 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             handlePostCalls(generatedObjects.get(proccessorKey));
         }
-        debug.end("Done...");
+        debug.end("Done... " + jsonEntries.size() + " entries left");
 
         debug.end("Done...");
     }
@@ -229,6 +233,39 @@ public final class JsonContentLoader extends AbstractLoadable
             }
         }
         debug.log("Clearing data");
+
+        if (jsonEntries.size() > 0 && Engine.runningAsDev && !GraphicsEnvironment.isHeadless())
+        {
+            boolean processorExists = true;
+            Engine.logger().info("Failed to process all JSON entries. This is most likely a bug if the count is high.");
+            for (Map.Entry<String, List<JsonEntry>> set : jsonEntries.entrySet())
+            {
+                boolean exists = processors.containsKey(set.getKey());
+                if (exists)
+                {
+                    processorExists = exists;
+                }
+                Engine.logger().info("\tProcessor: " + set.getKey() + " has register processor '" + exists + "'");
+                for (JsonEntry entry : set.getValue())
+                {
+                    Engine.logger().info("\t\tEntry: " + entry + "\n");
+                }
+            }
+
+            if (processorExists)
+            {
+                int option = JOptionPane.showConfirmDialog(null, "Not all JSON entries have been processed. " +
+                                "\n JsonEntries left = " + jsonEntries.size() +
+                                "\n Do you want to continue loading?",
+                        "JsonContentLoader Error", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+
+                if (option != JOptionPane.OK_OPTION)
+                {
+                    FMLCommonHandler.instance().exitJava(-1, false);
+                }
+            }
+        }
+
         clear();
         debug.end("Done...");
     }

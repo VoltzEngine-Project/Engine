@@ -1,9 +1,9 @@
 package com.builtbroken.mc.seven.abstraction.tile;
 
-import com.builtbroken.mc.abstraction.data.ITileData;
-import com.builtbroken.mc.abstraction.tile.ITile;
-import com.builtbroken.mc.abstraction.tile.ITileMaterial;
-import com.builtbroken.mc.abstraction.world.IWorld;
+import com.builtbroken.mc.api.abstraction.data.ITileData;
+import com.builtbroken.mc.api.abstraction.tile.ITile;
+import com.builtbroken.mc.api.abstraction.tile.ITileMaterial;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.seven.abstraction.MinecraftWrapper;
 import com.builtbroken.mc.seven.abstraction.world.TilePosition;
 import net.minecraft.block.Block;

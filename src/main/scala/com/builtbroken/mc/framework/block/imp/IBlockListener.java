@@ -1,7 +1,7 @@
 package com.builtbroken.mc.framework.block.imp;
 
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 /**
  * Applied to {@link ITileEventListener} that listen directly for the block even and not the tile version of the event.
@@ -22,7 +22,7 @@ public interface IBlockListener
      * @param y
      * @param z
      */
-    void inject(World world, int x, int y, int z);
+    void inject(IWorld world, int x, int y, int z);
 
     void inject(IBlockAccess world, int x, int y, int z);
 

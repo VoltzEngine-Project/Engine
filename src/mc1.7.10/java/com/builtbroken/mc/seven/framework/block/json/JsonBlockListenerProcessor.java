@@ -23,7 +23,6 @@ import java.util.Map;
  */
 public class JsonBlockListenerProcessor extends JsonBlockSubProcessor
 {
-    public static final String KEY = "listeners";
     public static HashMap<String, ITileEventListenerBuilder> builders = new HashMap();
     private static HashMap<Class, JsonProcessorInjectionMap> injectionMaps = new HashMap();
 

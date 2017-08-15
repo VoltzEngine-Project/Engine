@@ -10,9 +10,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * The Voltz Engine common proxy
- *
- * @author Calclavia
+ * Shared loading functionality
  */
 public class CommonProxy extends AbstractProxy
 {
@@ -25,7 +23,7 @@ public class CommonProxy extends AbstractProxy
     public void onLoad()
     {
         ModManager.proxy = new CommonRegistryProxy();
-        Engine.minecraft = new MinecraftWrapper();
+        Engine.minecraft = MinecraftWrapper.INSTANCE = new MinecraftWrapper();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.seven.abstraction.data;
 
-import com.builtbroken.mc.abstraction.data.ITileData;
+import com.builtbroken.mc.api.abstraction.data.ITileData;
 import net.minecraft.block.Block;
 
 /**

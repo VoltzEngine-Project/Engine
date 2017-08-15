@@ -1,6 +1,8 @@
 package com.builtbroken.mc.seven.framework.block.listeners;
 
 import com.builtbroken.mc.api.IModObject;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
@@ -13,9 +15,9 @@ import net.minecraft.world.World;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/3/2017.
  */
-public abstract class TileListener implements ITileEventListener
+public class TileListener implements ITileEventListener
 {
-    private World world;
+    private IWorld world;
     protected IBlockAccess blockAccess;
     private int x, y, z;
 
@@ -26,7 +28,7 @@ public abstract class TileListener implements ITileEventListener
     protected int metaCheck = -1;
 
     @Override
-    public World oldWorld()
+    public IWorld world()
     {
         return world;
     }
@@ -67,7 +69,7 @@ public abstract class TileListener implements ITileEventListener
         return z;
     }
 
-    public void inject(World world, int x, int y, int z)
+    public void inject(IWorld world, int x, int y, int z)
     {
         this.world = world;
         this.x = x;
@@ -80,7 +82,7 @@ public abstract class TileListener implements ITileEventListener
         this.blockAccess = world;
         if (world instanceof World)
         {
-            this.world = (World) world;
+            this.world = Engine.minecraft.getWorld(((World) world).provider.dimensionId);
         }
         else
         {
@@ -95,7 +97,7 @@ public abstract class TileListener implements ITileEventListener
     {
         if (world != null)
         {
-            return world.getTileEntity(x, y, z);
+            return world.unwrap().getTileEntity(x, y, z);
         }
         else if (blockAccess != null)
         {
@@ -113,7 +115,7 @@ public abstract class TileListener implements ITileEventListener
     {
         if (world != null)
         {
-            return world.getBlock(x, y, z);
+            return world.unwrap().getBlock(x, y, z);
         }
         else if (blockAccess != null)
         {
@@ -126,7 +128,7 @@ public abstract class TileListener implements ITileEventListener
     {
         if (world != null)
         {
-            return world.getBlockMetadata(x, y, z);
+            return world.unwrap().getBlockMetadata(x, y, z);
         }
         else if (blockAccess != null)
         {
@@ -139,19 +141,14 @@ public abstract class TileListener implements ITileEventListener
     {
         if (world != null)
         {
-            return world.setBlockMetadataWithNotify(x, y, z, meta, flag);
+            return world.unwrap().setBlockMetadataWithNotify(x, y, z, meta, flag);
         }
         return false;
     }
 
     protected IBlockAccess getBlockAccess()
     {
-        return oldWorld() != null ? oldWorld() : blockAccess;
-    }
-
-    protected boolean isServer()
-    {
-        return world != null && !world.isRemote;
+        return world() != null ? world().unwrap() : blockAccess;
     }
 
     @Override

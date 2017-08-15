@@ -1,5 +1,7 @@
 package com.builtbroken.mc.seven.framework.logic;
 
+import com.builtbroken.mc.api.abstraction.world.IWorld;
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.api.event.tile.TileEvent;
 import com.builtbroken.mc.api.tile.ITile;
 import com.builtbroken.mc.api.tile.node.ITileNode;
@@ -20,7 +22,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -54,6 +55,8 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
 
     private AxisAlignedBB renderBoundCache;
 
+    private IWorld _worldCache;
+
     /**
      * @param controller - tile, passed in by child class wrapper
      */
@@ -84,7 +87,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
                         {
                             if (listener instanceof IBlockListener)
                             {
-                                ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
+                                ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
                             }
                             ((IUpdateListener) listener).update(ticks);
                         }
@@ -219,6 +222,18 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
         return new PacketTile(this, data);
     }
 
+    @Override
+    public void sendPacketToClient(IPacket packet, double range)
+    {
+
+    }
+
+    @Override
+    public void sendPacketToServer(IPacket packet)
+    {
+
+    }
+
     //=============================================
     //============== wrapper calls ================
     //=============================================
@@ -312,7 +327,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {
@@ -389,10 +404,10 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
      */
     protected void toStringData(StringBuilder builder)
     {
-        if (oldWorld() != null)
+        if (world() != null)
         {
             //Out client or server
-            if (oldWorld().isRemote)
+            if (world().isClient())
             {
                 builder.append("client, ");
             }
@@ -404,19 +419,11 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
 
         //Out world
         builder.append("world = ");
-        if (oldWorld() != null)
+        if (world() != null)
         {
-            if (oldWorld().provider != null)
-            {
-                builder.append("dim@");
-                builder.append(oldWorld().provider.dimensionId);
-                builder.append(", ");
-            }
-            else
-            {
-                builder.append(oldWorld());
-                builder.append(", ");
-            }
+            builder.append("dim@");
+            builder.append(world().getDimID());
+            builder.append(", ");
         }
         else
         {
@@ -442,9 +449,9 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     //=============================================
 
     @Override
-    public World oldWorld()
+    public IWorld world()
     {
-        return worldObj;
+        return null;
     }
 
     @Override
@@ -499,15 +506,5 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     public float zf()
     {
         return zCoord + 0.5f;
-    }
-
-    public boolean isServer()
-    {
-        return oldWorld() != null && !oldWorld().isRemote;
-    }
-
-    public boolean isClient()
-    {
-        return oldWorld() != null && oldWorld().isRemote;
     }
 }

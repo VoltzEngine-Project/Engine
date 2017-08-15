@@ -1,6 +1,6 @@
 package com.builtbroken.test.prefab.inventory;
 
-import com.builtbroken.mc.abstraction.imp.EngineLoader;
+import com.builtbroken.mc.abstraction.EngineLoader;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.prefab.inventory.BasicInventory;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;

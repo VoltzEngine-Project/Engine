@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.helper;
 
-import com.builtbroken.mc.abstraction.entity.IEntityData;
+import com.builtbroken.mc.api.abstraction.entity.IEntityData;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.relauncher.ReflectionHelper;

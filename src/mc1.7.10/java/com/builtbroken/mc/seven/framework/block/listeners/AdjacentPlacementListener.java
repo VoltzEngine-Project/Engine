@@ -1,6 +1,6 @@
 package com.builtbroken.mc.seven.framework.block.listeners;
 
-import com.builtbroken.mc.abstraction.entity.IEntityData;
+import com.builtbroken.mc.api.abstraction.entity.IEntityData;
 import com.builtbroken.mc.api.IModObject;
 import com.builtbroken.mc.api.data.ActionResponse;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
@@ -58,9 +58,9 @@ public class AdjacentPlacementListener extends TileListener implements IPlacemen
     @Override
     public void onBlockChanged()
     {
-        if (doBreakCheck && oldWorld() != null && isValidTileAtLocation() && this.canBlockStay() == ActionResponse.CANCEL)
+        if (doBreakCheck && world() != null && isValidTileAtLocation() && this.canBlockStay() == ActionResponse.CANCEL)
         {
-            oldWorld().func_147480_a(xi(), yi(), zi(), true);
+            world().unwrap().func_147480_a(xi(), yi(), zi(), true);
         }
     }
 
@@ -109,7 +109,7 @@ public class AdjacentPlacementListener extends TileListener implements IPlacemen
     {
         //Loops checking for connections
         final Pos center = new Pos(this);
-        IBlockAccess access = oldWorld() != null ? oldWorld() : blockAccess;
+        IBlockAccess access = getBlockAccess();
         for (ForgeDirection direction : supportedDirections == null ? ForgeDirection.VALID_DIRECTIONS : supportedDirections)
         {
             Pos pos = center.add(direction);

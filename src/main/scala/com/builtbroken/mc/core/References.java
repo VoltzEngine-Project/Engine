@@ -9,8 +9,18 @@ import java.io.File;
  */
 public final class References
 {
+    //=============================================
+    //============== IDS ==========================
+    //=============================================
+
     public static final String ID = "voltzengine";
     public static final String NAME = "Voltz Engine";
+    public static final String DOMAIN = ID;
+    public static final String PREFIX = DOMAIN + ":";
+
+    //=============================================
+    //============== Version ====================
+    //=============================================
 
     public static final String MAJOR_VERSION = "@MAJOR@";
     public static final String MINOR_VERSION = "@MINOR@";
@@ -18,8 +28,9 @@ public final class References
     public static final String BUILD_VERSION = "@BUILD@";
     public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION + "." + BUILD_VERSION;
 
-    public static final String DOMAIN = ID;
-    public static final String PREFIX = DOMAIN + ":";
+    //=============================================
+    //============== Resources ====================
+    //=============================================
 
     public static final String DIRECTORY = "/assets/" + DOMAIN + "/";
     public static final String CHANNEL = "voltzengine";
@@ -32,8 +43,15 @@ public final class References
     public static final String MODEL_DIRECTORY = DIRECTORY + MODEL_PATH;
 
 
-    //Efects
+    //=============================================
+    //============== VEP keys ====================
+    //=============================================
+
     public static final String LASER_EFFECT = "VEP_laser";
+
+    //=============================================
+    //============== File System ==================
+    //=============================================
 
     /** Main run folder for everything MC */
     public static File ROOT_FOLDER;
@@ -41,6 +59,21 @@ public final class References
     public static File GLOBAL_CONFIG_FOLDER;
     /** Config folder shared by all mods */
     public static File BBM_CONFIG_FOLDER;
+
+    //=============================================
+    //============== JSON keys ====================
+    //=============================================
+
+    public static final String JSON_BLOCK_KEY = "block";
+    public static final String JSON_ITEM_KEY = "item";
+    public static final String JSON_ORENAME_KEY = "oreName";
+    public static final String JSON_FURNACE_RECIPE_KEY = "furnaceRecipe";
+    public static final String JSON_CRAFTING_GRID_KEY = "craftingGridRecipe";
+    public static final String JSON_LISTENER_KEY = "listeners";
+
+    //=============================================
+    //============== Settings =====================
+    //=============================================
     /**
      * Conversion ratio of ingot to fluid volume, based on Tinkers *in theory*
      */
@@ -48,6 +81,11 @@ public final class References
 
     public static double TO_RF_RATIO = 500;
     public static double TO_BC_RATIO = 50;
+
+
+    //=============================================
+    //============== Temp Junk ====================
+    //=============================================
     //config files
     @Deprecated //Will be replaced by an encapsulated system later
     public static Configuration heatDataConfig;

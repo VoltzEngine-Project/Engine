@@ -2,7 +2,7 @@ package com.builtbroken.mc.core.network.packet;
 
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.abstraction.world.IWorld;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.core.Engine;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

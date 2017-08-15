@@ -66,15 +66,18 @@ public class TestJsonLoader extends AbstractTest
 
         for (int i = 0; i < 13; i++)
         {
-            JsonLoader.loadJsonElement("file" + i, createTestElement("ammo", "ammo" + i), loader.jsonEntries);
+            List<JsonEntry> entries = JsonLoader.loadJsonElement("file" + i, createTestElement("ammo", "ammo" + i), loader.jsonEntries);
+            assertEquals(1, entries.size());
         }
         for (int i = 0; i < 5; i++)
         {
-            JsonLoader.loadJsonElement("file" + (13 + i), createTestElement("ammoType", "ammoType" + i), loader.jsonEntries);
+            List<JsonEntry> entries = JsonLoader.loadJsonElement("file" + (13 + i), createTestElement("ammoType", "ammoType" + i), loader.jsonEntries);
+            assertEquals(1, entries.size());
         }
         for (int i = 0; i < 3; i++)
         {
-            JsonLoader.loadJsonElement("file" + (13 + 5 + i), createTestElement("clip", "clip" + i), loader.jsonEntries);
+            List<JsonEntry> entries = JsonLoader.loadJsonElement("file" + (13 + 5 + i), createTestElement("clip", "clip" + i), loader.jsonEntries);
+            assertEquals(1, entries.size());
         }
 
         loader.init();

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.seven.abstraction.world;
 
-import com.builtbroken.mc.abstraction.EffectInstance;
+import com.builtbroken.mc.api.abstraction.EffectInstance;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.audio.AudioData;
 import com.builtbroken.mc.core.Engine;

@@ -46,7 +46,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {
@@ -78,7 +78,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                         {
                             if (listener instanceof IBlockListener)
                             {
-                                ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
+                                ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                             }
                             if (listener.isValidForTile())
                             {
@@ -115,7 +115,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                         {
                             if (listener instanceof IBlockListener)
                             {
-                                ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
+                                ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                             }
                             if (listener.isValidForTile())
                             {
@@ -146,7 +146,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {
@@ -179,7 +179,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {
@@ -212,7 +212,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(oldWorld(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {

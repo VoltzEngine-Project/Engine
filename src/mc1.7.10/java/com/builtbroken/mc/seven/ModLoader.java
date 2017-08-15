@@ -1,7 +1,7 @@
 package com.builtbroken.mc.seven;
 
 import com.builtbroken.jlib.lang.StringHelpers;
-import com.builtbroken.mc.abstraction.imp.EngineLoader;
+import com.builtbroken.mc.abstraction.EngineLoader;
 import com.builtbroken.mc.api.VoltzEngineAPI;
 import com.builtbroken.mc.api.event.TriggerCauseRegistry;
 import com.builtbroken.mc.api.process.IWorkerThread;
@@ -67,8 +67,15 @@ import com.builtbroken.mc.lib.world.map.radar.RadarRegistry;
 import com.builtbroken.mc.lib.world.map.radio.RadioRegistry;
 import com.builtbroken.mc.prefab.tile.item.ItemBlockMetadata;
 import com.builtbroken.mc.seven.framework.block.json.JsonBlockListenerProcessor;
+import com.builtbroken.mc.seven.framework.block.json.JsonBlockProcessor;
+import com.builtbroken.mc.seven.framework.block.json.JsonBlockTileProcessor;
 import com.builtbroken.mc.seven.framework.block.listeners.*;
-import com.builtbroken.mc.seven.framework.json.JsonModule;
+import com.builtbroken.mc.seven.framework.json.extra.JsonOreNameProcessor;
+import com.builtbroken.mc.seven.framework.json.item.JsonItemProcessor;
+import com.builtbroken.mc.seven.framework.json.recipe.crafting.JsonCraftingRecipeProcessor;
+import com.builtbroken.mc.seven.framework.json.recipe.replace.JsonRecipeReplacementProcessor;
+import com.builtbroken.mc.seven.framework.json.recipe.smelting.JsonFurnaceRecipeProcessor;
+import com.builtbroken.mc.seven.framework.json.world.JsonWorldOreGenProcessor;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ModMetadata;
@@ -161,10 +168,13 @@ public class ModLoader extends EngineLoader
 
         MinecraftForge.EVENT_BUS.register(RadarRegistry.INSTANCE);
         FMLCommonHandler.instance().bus().register(RadarRegistry.INSTANCE);
+
         MinecraftForge.EVENT_BUS.register(TileMapRegistry.INSTANCE);
         FMLCommonHandler.instance().bus().register(TileMapRegistry.INSTANCE);
+
         MinecraftForge.EVENT_BUS.register(RadioRegistry.INSTANCE);
         FMLCommonHandler.instance().bus().register(RadioRegistry.INSTANCE);
+
         FMLCommonHandler.instance().bus().register(new WorldActionQue());
         FMLCommonHandler.instance().bus().register(TileTaskTickHandler.INSTANCE);
 
@@ -196,7 +206,6 @@ public class ModLoader extends EngineLoader
         }
         loader.applyModule(getProxy());
         loader.applyModule(Engine.packetHandler);
-        loader.applyModule(JsonModule.class);
 
         loadHandler();
 
@@ -286,6 +295,19 @@ public class ModLoader extends EngineLoader
     @Override
     public void loadJsonContentHandlers()
     {
+        JsonContentLoader.INSTANCE.add(new JsonBlockProcessor());
+        JsonContentLoader.INSTANCE.add(new JsonBlockTileProcessor());
+
+        JsonContentLoader.INSTANCE.add(new JsonItemProcessor());
+        //TODO load entities
+
+        JsonContentLoader.INSTANCE.add(new JsonOreNameProcessor());
+        JsonContentLoader.INSTANCE.add(new JsonWorldOreGenProcessor());
+
+        JsonContentLoader.INSTANCE.add(new JsonCraftingRecipeProcessor());
+        JsonContentLoader.INSTANCE.add(new JsonFurnaceRecipeProcessor());
+        JsonContentLoader.INSTANCE.add(new JsonRecipeReplacementProcessor());
+
         JsonBlockListenerProcessor.addBuilder(new RotatableListener.Builder());
         JsonBlockListenerProcessor.addBuilder(new MultiBlockListener.Builder());
         JsonBlockListenerProcessor.addBuilder(new WrenchRotationListener.Builder());

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.seven.abstraction.world;
 
-import com.builtbroken.mc.abstraction.tile.ITilePosition;
+import com.builtbroken.mc.api.abstraction.tile.ITilePosition;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.

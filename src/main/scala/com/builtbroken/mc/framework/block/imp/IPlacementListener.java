@@ -1,6 +1,6 @@
 package com.builtbroken.mc.framework.block.imp;
 
-import com.builtbroken.mc.abstraction.entity.IEntityData;
+import com.builtbroken.mc.api.abstraction.entity.IEntityData;
 import com.builtbroken.mc.api.data.ActionResponse;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;

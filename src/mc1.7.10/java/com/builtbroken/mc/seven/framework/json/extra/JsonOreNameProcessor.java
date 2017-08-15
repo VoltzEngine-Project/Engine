@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class JsonOreNameProcessor extends JsonProcessor<JsonOreNameData> implements IJsonBlockSubProcessor
 {
-    public static final String KEY = "oreName";
     @Override
     public String getMod()
     {
@@ -30,13 +29,13 @@ public class JsonOreNameProcessor extends JsonProcessor<JsonOreNameData> impleme
     @Override
     public String getJsonKey()
     {
-        return KEY;
+        return References.JSON_ORENAME_KEY;
     }
 
     @Override
     public String getLoadOrder()
     {
-        return "after:item";
+        return "after:" + References.JSON_ITEM_KEY;
     }
 
     @Override

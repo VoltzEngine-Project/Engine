@@ -1,25 +1,22 @@
 package com.builtbroken.mc.seven.abstraction.world;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.abstraction.EffectInstance;
-import com.builtbroken.mc.abstraction.data.ITileData;
-import com.builtbroken.mc.abstraction.entity.IEntityData;
-import com.builtbroken.mc.abstraction.tile.ITile;
-import com.builtbroken.mc.abstraction.tile.ITilePosition;
-import com.builtbroken.mc.abstraction.world.IWorld;
+import com.builtbroken.mc.api.abstraction.EffectInstance;
+import com.builtbroken.mc.api.abstraction.data.ITileData;
+import com.builtbroken.mc.api.abstraction.entity.IEntityData;
+import com.builtbroken.mc.api.abstraction.tile.ITile;
+import com.builtbroken.mc.api.abstraction.tile.ITilePosition;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketSpawnParticle;
 import com.builtbroken.mc.core.network.packet.callback.PacketAudio;
 import com.builtbroken.mc.seven.abstraction.entity.EntityData;
 import com.builtbroken.mc.seven.abstraction.tile.TileInstance;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,38 +27,23 @@ import java.util.Map;
  */
 public class WorldWrapper implements IWorld
 {
-    private WeakReference<World> _worldCache;
+    private World world;
     private int dim;
 
     public WorldWrapper(World world)
     {
         dim = world.provider.dimensionId;
-        _worldCache = new WeakReference<World>(world);
+        this.world = world;
     }
 
     public World getWorld()
     {
-        World world = _worldCache != null ? _worldCache.get() : null;
-
-        if (world == null)
-        {
-            world = DimensionManager.getWorld(dim);
-            if (world != null)
-            {
-                _worldCache = new WeakReference<World>(world);
-            }
-            else if (_worldCache != null)
-            {
-                _worldCache.clear();
-                _worldCache = null;
-            }
-        }
         return world;
     }
 
     public boolean isValid()
     {
-        return _worldCache != null && getWorld() != null;
+        return world != null; //TODO add is loaded check
     }
 
     @Override
@@ -94,7 +76,7 @@ public class WorldWrapper implements IWorld
     {
         if (data != null)
         {
-            return getWorld().setBlock(x, y, z, (Block) data.unwrap());
+            return getWorld().setBlock(x, y, z, data.unwrap());
         }
         return false;
     }
@@ -207,5 +189,17 @@ public class WorldWrapper implements IWorld
     public boolean isServer()
     {
         return !getWorld().isRemote;
+    }
+
+    @Override
+    public int getDimID()
+    {
+        return dim;
+    }
+
+    @Override
+    public World unwrap()
+    {
+        return getWorld();
     }
 }

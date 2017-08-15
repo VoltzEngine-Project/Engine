@@ -7,7 +7,6 @@ import com.builtbroken.mc.framework.item.ItemNode;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
-import com.builtbroken.mc.seven.framework.block.json.JsonBlockProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -22,7 +21,6 @@ import java.util.Map;
  */
 public class JsonItemProcessor extends JsonProcessor<ItemBase>
 {
-    public static final String KEY = "item";
 
     protected final JsonProcessorInjectionMap itemPropDataHandler;
 
@@ -41,13 +39,13 @@ public class JsonItemProcessor extends JsonProcessor<ItemBase>
     @Override
     public String getJsonKey()
     {
-        return KEY;
+        return References.JSON_ITEM_KEY;
     }
 
     @Override
     public String getLoadOrder()
     {
-        return "after:" + JsonBlockProcessor.KEY;
+        return "after:" + References.JSON_BLOCK_KEY;
     }
 
     @Override

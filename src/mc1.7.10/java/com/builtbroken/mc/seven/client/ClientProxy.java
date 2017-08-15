@@ -17,7 +17,6 @@ import com.builtbroken.mc.client.json.render.item.ItemJsonRenderer;
 import com.builtbroken.mc.client.json.render.processor.RenderJsonProcessor;
 import com.builtbroken.mc.client.json.render.tile.TileRenderData;
 import com.builtbroken.mc.client.json.texture.TextureJsonProcessor;
-import com.builtbroken.mc.seven.CommonProxy;
 import com.builtbroken.mc.core.ConfigValues;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
@@ -40,13 +39,14 @@ import com.builtbroken.mc.framework.multiblock.MultiBlockRenderHelper;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
 import com.builtbroken.mc.lib.world.map.data.ChunkData;
+import com.builtbroken.mc.seven.CommonProxy;
+import com.builtbroken.mc.seven.abstraction.MinecraftWrapper;
 import com.builtbroken.mc.seven.abstraction.MinecraftWrapperClient;
 import com.builtbroken.mc.seven.client.json.tile.TileRenderHandler;
 import com.builtbroken.mc.seven.client.listeners.blocks.JsonIconListener;
 import com.builtbroken.mc.seven.client.listeners.blocks.RotatableIconListener;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.seven.framework.block.json.JsonBlockListenerProcessor;
-import com.builtbroken.mc.seven.framework.block.json.JsonBlockProcessor;
 import com.builtbroken.mc.seven.framework.block.listeners.RotatableListener;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -82,7 +82,7 @@ public class ClientProxy extends CommonProxy
     public void onLoad()
     {
         ModManager.proxy = new ClientRegistryProxy();
-        Engine.minecraft = new MinecraftWrapperClient();
+        Engine.minecraft = MinecraftWrapper.INSTANCE = new MinecraftWrapperClient();
     }
 
     @Override
@@ -168,7 +168,7 @@ public class ClientProxy extends CommonProxy
         //Item that uses a model for all states
         registerItemJsonRenders(new ItemJsonRenderer(), "VE-Item", "item", "tile", "block");
 
-        List<IJsonGenObject> objects = JsonContentLoader.INSTANCE.generatedObjects.get(JsonBlockProcessor.KEY);
+        List<IJsonGenObject> objects = JsonContentLoader.INSTANCE.generatedObjects.get(References.JSON_ITEM_KEY);
         if (objects != null && !objects.isEmpty())
         {
             for (IJsonGenObject object : objects)

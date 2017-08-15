@@ -1,6 +1,5 @@
 package com.builtbroken.mc.seven.framework.json.recipe;
 
-import com.builtbroken.mc.framework.json.exceptions.JsonFormatException;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
@@ -22,17 +21,10 @@ public abstract class JsonRecipeProcessor<D extends IJsonGenObject> extends Json
     @Override
     public boolean process(JsonElement element, List<IJsonGenObject> objects)
     {
-        try
+        D data = process(null, element);
+        if (data != null)
         {
-            D data = process(null, element);
-            if (data != null)
-            {
-                objects.add(data);
-            }
-        }
-        catch (JsonFormatException e)
-        {
-            throw new RuntimeException(e);
+            objects.add(data);
         }
         return true;
     }
@@ -44,39 +36,25 @@ public abstract class JsonRecipeProcessor<D extends IJsonGenObject> extends Json
      * @param element - data containing the recipe
      * @return recipe data
      */
-    public abstract D process(final Object out, final JsonElement element) throws JsonFormatException;
+    public abstract D process(final Object out, final JsonElement element);
 
     @Override
     public void process(BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
-        try
+        D object = process(block, element);
+        if (object != null)
         {
-            D object = process(block, element);
-            if (object != null)
-            {
-                objectList.add(object);
-            }
-        }
-        catch (JsonFormatException e)
-        {
-            throw new RuntimeException(e);
+            objectList.add(object);
         }
     }
 
     @Override
     public void process(MetaData data, BlockBase block, JsonElement element, List<IJsonGenObject> objectList)
     {
-        try
+        D object = process(new ItemStack(block, 1, data.index), element);
+        if (object != null)
         {
-            D object = process(new ItemStack(block, 1, data.index), element);
-            if (object != null)
-            {
-                objectList.add(object);
-            }
-        }
-        catch (JsonFormatException e)
-        {
-            throw new RuntimeException(e);
+            objectList.add(object);
         }
     }
 }

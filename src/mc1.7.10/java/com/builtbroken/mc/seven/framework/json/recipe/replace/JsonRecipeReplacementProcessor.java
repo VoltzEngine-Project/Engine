@@ -6,7 +6,6 @@ import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
-import com.builtbroken.mc.seven.framework.json.extra.JsonOreNameProcessor;
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -42,7 +41,7 @@ public class JsonRecipeReplacementProcessor extends AbstractLoadable implements 
     @Override
     public String getLoadOrder()
     {
-        return "after:" + JsonOreNameProcessor.KEY;
+        return "after:" + References.JSON_ORENAME_KEY;
     }
 
     @Override

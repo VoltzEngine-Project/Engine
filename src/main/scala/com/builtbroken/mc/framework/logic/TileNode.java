@@ -2,7 +2,6 @@ package com.builtbroken.mc.framework.logic;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.data.vector.Pos3D;
-import com.builtbroken.mc.abstraction.world.IWorld;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.api.tile.IPlayerUsing;
@@ -57,25 +56,10 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
         this.host = host;
     }
 
-    public IWorld world()
-    {
-        return Engine.minecraft.getWorld(oldWorld().provider.dimensionId); //TODO replace with call to host once IWorld is implemented
-    }
-
     @Override
     public ITileNodeHost getHost()
     {
         return host;
-    }
-
-    public final boolean isServer()
-    {
-        return oldWorld() != null && !oldWorld().isRemote;
-    }
-
-    public final boolean isClient()
-    {
-        return oldWorld() != null && oldWorld().isRemote;
     }
 
     //=============================================
@@ -123,14 +107,16 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     //========== Position data ====================
     //=============================================
 
+    @Deprecated
     public final Pos toPos()
     {
         return new Pos(x(), y(), z());
     }
 
+    @Deprecated
     public final Location toLocation()
     {
-        return new Location(oldWorld(), x(), y(), z());
+        return new Location(world().unwrap(), x(), y(), z());
     }
 
     //=============================================
@@ -316,45 +302,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
      */
     public void sendDescPacket()
     {
-        sendPacket(getDescPacket());
-    }
-
-    public IPacket getPacketForData(Object... data)
-    {
-        return getHost().getPacketForData(data);
-    }
-
-
-    /**
-     * Sends the packet to all players around this tile
-     *
-     * @param packet - packet to send
-     */
-    public void sendPacket(IPacket packet)
-    {
-        sendPacket(packet, 64);
-    }
-
-    /**
-     * Sends the packet to all players around this tile
-     *
-     * @param packet   - packet to send
-     * @param distance - distance in blocks to search for players
-     */
-    public void sendPacket(IPacket packet, double distance)
-    {
-        if (oldWorld() != null && isServer())
-        {
-            Engine.packetHandler.sendToAllAround(packet, oldWorld(), xi(), yi(), zi(), distance);
-        }
-    }
-
-    public void sendPacketToServer(IPacket packet)
-    {
-        if (oldWorld() != null && isClient())
-        {
-            Engine.packetHandler.sendToServer(packet);
-        }
+        sendPacketToClient(getDescPacket());
     }
 
     public void sendPacketToGuiUsers(IPacket packet)

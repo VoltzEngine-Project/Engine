@@ -1,6 +1,6 @@
 package com.builtbroken.mc.seven.abstraction.tile;
 
-import com.builtbroken.mc.abstraction.tile.ITileMaterial;
+import com.builtbroken.mc.api.abstraction.tile.ITileMaterial;
 import net.minecraft.block.material.Material;
 
 /**
@@ -22,5 +22,11 @@ public class TileMaterial implements ITileMaterial
     public String getName()
     {
         return name;
+    }
+
+    @Override
+    public Material unwrap()
+    {
+        return material;
     }
 }

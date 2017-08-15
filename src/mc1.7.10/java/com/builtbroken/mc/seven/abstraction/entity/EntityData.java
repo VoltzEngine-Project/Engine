@@ -1,9 +1,9 @@
 package com.builtbroken.mc.seven.abstraction.entity;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.abstraction.entity.IEntityData;
-import com.builtbroken.mc.abstraction.world.IPosWorld;
-import com.builtbroken.mc.abstraction.world.IWorld;
+import com.builtbroken.mc.api.abstraction.entity.IEntityData;
+import com.builtbroken.mc.api.abstraction.world.IPosWorld;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.entity.Entity;
@@ -54,7 +54,7 @@ public class EntityData implements IEntityData
     }
 
     @Override
-    public IWorld getWorld()
+    public IWorld world()
     {
         return Engine.getWorld(entity.worldObj.provider.dimensionId);
     }
@@ -125,5 +125,11 @@ public class EntityData implements IEntityData
     public double roll()
     {
         return 0;
+    }
+
+    @Override
+    public Entity unwrap()
+    {
+        return entity;
     }
 }
