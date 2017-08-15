@@ -1,5 +1,7 @@
 package com.builtbroken.mc.abstraction.imp;
 
+import com.builtbroken.mc.abstraction.data.IItemData;
+import com.builtbroken.mc.abstraction.data.ITileData;
 import com.builtbroken.mc.abstraction.tile.ITileMaterial;
 import com.builtbroken.mc.abstraction.world.IWorld;
 
@@ -19,8 +21,6 @@ public interface IMinecraftInterface
      */
     IWorld getWorld(int dim);
 
-    ///TODO get ITEM, BLOCK, MATERIAL, etc
-
     /**
      * Called to get a tile material by name
      *
@@ -29,5 +29,22 @@ public interface IMinecraftInterface
      */
     ITileMaterial getTileMaterial(String name);
 
+    /**
+     * Gets the data for the item by name
+     *
+     * @param key - registry name of the item
+     * @return item or null if not found
+     */
+    IItemData getItemData(String key);
+
+    /**
+     * Gets the data for the tile by name
+     *
+     * @param key - registry name of the item
+     * @return tile or null if not found
+     */
+    ITileData getTileData(String key);
+
+    //TODO move to keyboard helper?
     boolean isShiftHeld();
 }

@@ -1,7 +1,7 @@
-package com.builtbroken.mc.seven.client;
+package com.builtbroken.mc.seven.abstraction;
 
-import com.builtbroken.mc.seven.abstraction.MinecraftWrapper;
 import com.builtbroken.mc.seven.abstraction.world.WorldWrapper;
+import com.builtbroken.mc.seven.abstraction.world.WorldWrapperClient;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 

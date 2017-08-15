@@ -30,9 +30,9 @@ public interface ITilePosition
     //====== Helper / Wrapper methods =====================
     //=====================================================
 
-    default ITileData getTileData()
+    default ITile getTileData()
     {
-        return getWorld().getTileData(xCoord(), yCoord(), zCoord());
+        return getWorld().getTile(xCoord(), yCoord(), zCoord());
     }
 
     default List<IEntityData> getEntitiesInRange(double range)

@@ -40,6 +40,7 @@ import com.builtbroken.mc.framework.multiblock.MultiBlockRenderHelper;
 import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
 import com.builtbroken.mc.lib.world.map.data.ChunkData;
+import com.builtbroken.mc.seven.abstraction.MinecraftWrapperClient;
 import com.builtbroken.mc.seven.client.json.tile.TileRenderHandler;
 import com.builtbroken.mc.seven.client.listeners.blocks.JsonIconListener;
 import com.builtbroken.mc.seven.client.listeners.blocks.RotatableIconListener;

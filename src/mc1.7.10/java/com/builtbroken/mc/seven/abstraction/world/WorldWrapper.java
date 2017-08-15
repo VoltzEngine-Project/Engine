@@ -2,18 +2,21 @@ package com.builtbroken.mc.seven.abstraction.world;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.abstraction.EffectInstance;
+import com.builtbroken.mc.abstraction.data.ITileData;
 import com.builtbroken.mc.abstraction.entity.IEntityData;
-import com.builtbroken.mc.abstraction.tile.ITileData;
+import com.builtbroken.mc.abstraction.tile.ITile;
 import com.builtbroken.mc.abstraction.tile.ITilePosition;
 import com.builtbroken.mc.abstraction.world.IWorld;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketSpawnParticle;
 import com.builtbroken.mc.core.network.packet.callback.PacketAudio;
 import com.builtbroken.mc.seven.abstraction.entity.EntityData;
-import com.builtbroken.mc.seven.abstraction.tile.TileData;
+import com.builtbroken.mc.seven.abstraction.tile.TileInstance;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
 import java.lang.ref.WeakReference;
@@ -62,22 +65,48 @@ public class WorldWrapper implements IWorld
     }
 
     @Override
-    public ITileData getTileData(int x, int y, int z)
+    public ITile getTile(int x, int y, int z)
     {
-        return getTileData(getTilePosition(x, y, z));
+        return getTile(getTilePosition(x, y, z));
     }
 
     @Override
-    public ITileData getTileData(ITilePosition position)
+    public ITile getTile(ITilePosition position)
     {
         if (position instanceof TilePosition)
         {
-            return new TileData((TilePosition) position);
+            return new TileInstance((TilePosition) position);
         }
         else
         {
-            return getTileData(position.xCoord(), position.yCoord(), position.zCoord());
+            return getTile(position.xCoord(), position.yCoord(), position.zCoord());
         }
+    }
+
+    @Override
+    public boolean setTile(String key, int x, int y, int z)
+    {
+        return setTile(Engine.minecraft.getTileData(key), x, y, z);
+    }
+
+    @Override
+    public boolean setTile(ITileData data, int x, int y, int z)
+    {
+        if (data != null)
+        {
+            return getWorld().setBlock(x, y, z, (Block) data.unwrap());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isLocationLoaded(int x, int y, int z)
+    {
+        if (getWorld() instanceof WorldServer)
+        {
+            return ((WorldServer) getWorld()).theChunkProviderServer.chunkExists(x >> 4, z >> 4) && getWorld().getChunkFromBlockCoords(x, z).isChunkLoaded;
+        }
+        return getWorld().getChunkProvider().chunkExists(x >> 4, z >> 4) && getWorld().getChunkFromBlockCoords(x, z).isChunkLoaded;
     }
 
     @Override

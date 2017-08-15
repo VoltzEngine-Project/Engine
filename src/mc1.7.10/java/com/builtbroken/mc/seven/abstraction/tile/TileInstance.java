@@ -1,6 +1,7 @@
 package com.builtbroken.mc.seven.abstraction.tile;
 
-import com.builtbroken.mc.abstraction.tile.ITileData;
+import com.builtbroken.mc.abstraction.data.ITileData;
+import com.builtbroken.mc.abstraction.tile.ITile;
 import com.builtbroken.mc.abstraction.tile.ITileMaterial;
 import com.builtbroken.mc.abstraction.world.IWorld;
 import com.builtbroken.mc.seven.abstraction.MinecraftWrapper;
@@ -12,11 +13,11 @@ import net.minecraft.world.World;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 8/12/2017.
  */
-public class TileData implements ITileData
+public class TileInstance implements ITile
 {
     private final TilePosition position;
 
-    public TileData(TilePosition position)
+    public TileInstance(TilePosition position)
     {
         this.position = position;
     }
@@ -54,6 +55,12 @@ public class TileData implements ITileData
             return MinecraftWrapper.INSTANCE.getTileMaterial(block.getMaterial());
         }
         return null;
+    }
+
+    @Override
+    public ITileData getData()
+    {
+        return MinecraftWrapper.INSTANCE.getTileData(getBlock());
     }
 
     public Block getBlock()

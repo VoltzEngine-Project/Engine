@@ -2,8 +2,9 @@ package com.builtbroken.mc.abstraction.world;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.abstraction.EffectInstance;
+import com.builtbroken.mc.abstraction.data.ITileData;
 import com.builtbroken.mc.abstraction.entity.IEntityData;
-import com.builtbroken.mc.abstraction.tile.ITileData;
+import com.builtbroken.mc.abstraction.tile.ITile;
 import com.builtbroken.mc.abstraction.tile.ITilePosition;
 
 import java.util.List;
@@ -17,14 +18,58 @@ public interface IWorld
     /**
      * Get information about a tile from the location
      *
+     * @param x - location in the world
+     * @param y - location in the world
+     * @param z - location in the world
+     * @return
+     */
+    ITile getTile(int x, int y, int z);
+
+    /**
+     * Get information about a tile from the location
+     *
+     * @param position - location in the world
+     * @return
+     */
+    ITile getTile(ITilePosition position);
+
+    /**
+     * Sets a tile using it's name
+     *
+     * @param key
      * @param x
      * @param y
      * @param z
      * @return
      */
-    ITileData getTileData(int x, int y, int z);
+    boolean setTile(String key, int x, int y, int z);
 
-    ITileData getTileData(ITilePosition position);
+    /**
+     * Sets a tile using it's data instance
+     *
+     * @param data
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    boolean setTile(ITileData data, int x, int y, int z);
+
+    //TODO create setTile with state data
+
+    /**
+     * Checks if the location is loaded
+     * <p>
+     * Should be run before any world action to
+     * prevent generating new world areas or loading
+     * areas not currently in use
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @return true if area is loaded
+     */
+    boolean isLocationLoaded(int x, int y, int z);
 
     /**
      * Get data about entities near a position
