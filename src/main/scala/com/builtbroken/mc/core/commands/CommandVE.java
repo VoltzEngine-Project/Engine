@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core.commands;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.commands.debug.CommandDebugChunk;
 import com.builtbroken.mc.core.commands.debug.CommandDebugItem;
 import com.builtbroken.mc.core.commands.debug.CommandDebugMap;
 import com.builtbroken.mc.core.commands.debug.CommandDebugRecipes;
@@ -70,6 +71,7 @@ public class CommandVE extends ModularCommand
             addToDebugCommand(new CommandDebugRecipes());
             addToDebugCommand(new CommandDebugItem());
             addToDebugCommand(new CommandDebugMap());
+            addToDebugCommand(new CommandDebugChunk());
         }
 
         addToJsonCommand(new CommandJsonRecipe());

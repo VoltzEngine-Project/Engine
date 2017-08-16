@@ -14,7 +14,6 @@ import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.content.blast.tnt.ExplosiveHandlerTNT;
 import com.builtbroken.mc.core.content.blocks.BlockHeatedStone;
 import com.builtbroken.mc.core.content.debug.ItemDevData;
-import com.builtbroken.mc.core.content.debug.ItemInstaHole;
 import com.builtbroken.mc.core.content.debug.TileInfInv;
 import com.builtbroken.mc.core.content.parts.ItemCircuits;
 import com.builtbroken.mc.core.content.parts.ItemCraftingParts;
@@ -257,10 +256,6 @@ public class ModLoader extends EngineLoader
         /**
          * Multiblock Handling
          */
-        if (getConfig().get("Content", "LoadInstantHole", Engine.runningAsDev, "This is a developer tool for checking if ores generated correctly. It creates a chunk sized hole in the ground replacing stone with air, and air with glass. Never enable or give this to normal users as it can be used for greifing.").getBoolean(Engine.runningAsDev))
-        {
-            Engine.instaHole = contentRegistry.newItem("ve.instanthole", new ItemInstaHole());
-        }
         if (getConfig().get("Content", "LoadDevDataTool", Engine.runningAsDev, "This is a developer tool for checking data on blocks and tile").getBoolean(Engine.runningAsDev))
         {
             Engine.itemDevTool = contentRegistry.newItem("ve.devTool", new ItemDevData());

@@ -55,8 +55,6 @@ public class Engine
     @Deprecated
     public static Item itemSheetMetal;
     @Deprecated
-    public static Item instaHole;
-    @Deprecated
     public static Item itemCircuits;
     @Deprecated
     public static Item itemDevTool;
