@@ -393,6 +393,12 @@ public class ModLoader extends EngineLoader
         {
             Engine.itemSheetMetalTools = getManager().newItem("veSheetMetalTools", ItemSheetMetalTools.class);
             Engine.itemSheetMetal = getManager().newItem("veSheetMetal", ItemSheetMetal.class);
+
+            OreDictionary.registerOre("itemSheetMetal", Engine.itemSheetMetal);
+            for(ItemSheetMetal.SheetMetal metal : ItemSheetMetal.SheetMetal.values())
+            {
+                OreDictionary.registerOre(metal.oreName, metal.stack());
+            }
         }
 
         if (Engine.circuitsRequested || forceLoadCircuits)
@@ -475,6 +481,7 @@ public class ModLoader extends EngineLoader
         loader.postInit();
         getManager().firePostInit();
 
+        //TODO move to JSON
         if (Engine.metallicOresRequested)
         {
             for (MetallicOres ore : MetallicOres.values())

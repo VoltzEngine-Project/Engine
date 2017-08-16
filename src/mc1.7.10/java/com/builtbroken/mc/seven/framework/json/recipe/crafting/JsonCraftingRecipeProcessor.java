@@ -1,8 +1,13 @@
 package com.builtbroken.mc.seven.framework.json.recipe.crafting;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.seven.framework.block.IJsonBlockSubProcessor;
 import com.builtbroken.mc.seven.framework.json.recipe.JsonRecipeProcessor;
+import com.builtbroken.mc.seven.framework.json.recipe.crafting.shaped.JsonShapedRecipeData;
+import com.builtbroken.mc.seven.framework.json.recipe.crafting.shaped.JsonSheetMetalRecipeData;
+import com.builtbroken.mc.seven.framework.json.recipe.crafting.shaped.JsonToolRecipeData;
+import com.builtbroken.mc.seven.framework.json.recipe.crafting.shapeless.JsonShapelessRecipeData;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -46,6 +51,11 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
 
         //Ensure mandatory objects exist
         ensureValuesExist(recipeData, "type");
+        String subType = null;
+        if (recipeData.has("subType"))
+        {
+            subType = recipeData.getAsJsonPrimitive("subType").getAsString();
+        }
 
         //Get output if missing
         Object output = out;
@@ -172,8 +182,24 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                 data[i++] = entry.getValue();
             }
 
+            if(subType != null)
+            {
+                //TODO replace with registry
+                if (subType.equalsIgnoreCase("tool"))
+                {
+                    return new JsonToolRecipeData(this, output, data, largeGrid);
+                }
+                else if (subType.equalsIgnoreCase("sheetmetal"))
+                {
+                    return new JsonSheetMetalRecipeData(this, output, data, largeGrid);
+                }
+                else
+                {
+                    Engine.logger().error("JsonCraftingRecipeProcessor: could not ID subtype '" + subType + "' for crafting grid recipe, will default to normal recipe");
+                }
+            }
             //New recipe data
-            return new JsonCraftingRecipeData(this, output, data, true, largeGrid);
+            return new JsonShapedRecipeData(this, output, data, largeGrid);
         }
         else if (recipeType.equalsIgnoreCase("shapeless"))
         {
@@ -183,15 +209,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
             String[] items = recipeData.getAsJsonPrimitive("items").getAsString().split(",");
 
             //New recipe data
-            return new JsonCraftingRecipeData(this, output, items, false, items.length > 9);
-        }
-        else if (recipeType.equalsIgnoreCase("sheetmetal")) //TODO make into reg object
-        {
-            return null; //TODO implement
-        }
-        else if (recipeType.equalsIgnoreCase("tools")) //TODO make into reg object
-        {
-            return null;//TODO implement
+            return new JsonShapelessRecipeData(this, output, items, items.length > 9);
         }
         else
         {
