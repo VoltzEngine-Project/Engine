@@ -6,6 +6,8 @@ import com.builtbroken.mc.core.Engine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.List;
 public class GuiJsonDebug extends JFrame
 {
     JList dataLogList;
-    List<DebugData> data = new ArrayList();
+    List<DebugData> debugData = new ArrayList();
     DefaultListModel<DebugData> model = new DefaultListModel();
 
     public void init()
@@ -42,18 +44,33 @@ public class GuiJsonDebug extends JFrame
         dataLogList = new JList(model);
         dataLogList.setLayoutOrientation(JList.VERTICAL);
         dataLogList.setCellRenderer(new CellRenderer());
-        dataLogList.setPreferredSize(new Dimension(getWidth() - 100, getHeight() - 100));
-        dataLogList.setMinimumSize(new Dimension(getWidth() - 100, getHeight() - 100));
+
 
         //Create scroll panel
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(dataLogList);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(getWidth() - 100, getHeight() - 100));
+        scrollPane.setMinimumSize(new Dimension(getWidth() - 100, getHeight() - 100));
         add(scrollPane, BorderLayout.CENTER);
 
         //Menu
         JPanel menuPanel = new JPanel();
         menuPanel.setMaximumSize(new Dimension(-1, 100));
-        menuPanel.add(new Button("ONE"));
+        Button button = new Button("Reload");
+        button.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                model.removeAllElements();
+                for (DebugData data : debugData)
+                {
+                    model.addElement(data);
+                }
+            }
+        });
+        menuPanel.add(button);
         menuPanel.add(new Button("TWO"));
         menuPanel.add(new Button("THREE"));
         add(menuPanel, BorderLayout.NORTH);
@@ -65,7 +82,7 @@ public class GuiJsonDebug extends JFrame
         data.msg = msg;
         data.lines = lines;
         model.addElement(data);
-        this.data.add(data);
+        this.debugData.add(data);
     }
 
     public static class DebugListener implements IDebugPrintListener
@@ -180,6 +197,11 @@ public class GuiJsonDebug extends JFrame
         catch (Exception e)
         {
             printer.error("Some error 2", e);
+        }
+
+        for (int i = 0; i < 1000; i++)
+        {
+            printer.log("--i: " + i);
         }
 
         while (window.isVisible())
