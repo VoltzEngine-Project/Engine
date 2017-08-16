@@ -41,7 +41,10 @@ import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.framework.explosive.TriggerNBTBuilder;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.override.JsonOverrideProcessor;
 import com.builtbroken.mc.framework.json.processors.event.JsonMissingMapEventProcessor;
+import com.builtbroken.mc.framework.json.processors.explosive.JsonProcessorExplosive;
+import com.builtbroken.mc.framework.json.processors.multiblock.JsonMultiBlockLayoutProcessor;
 import com.builtbroken.mc.framework.mod.AbstractProxy;
 import com.builtbroken.mc.framework.multiblock.BlockMultiblock;
 import com.builtbroken.mc.framework.multiblock.EnumMultiblock;
@@ -297,17 +300,29 @@ public class ModLoader extends EngineLoader
     {
         JsonContentLoader.INSTANCE.add(new JsonBlockProcessor());
         JsonContentLoader.INSTANCE.add(new JsonBlockTileProcessor());
+        JsonContentLoader.INSTANCE.add(new JsonMultiBlockLayoutProcessor());
 
+        //==============================================================
         JsonContentLoader.INSTANCE.add(new JsonItemProcessor());
+        JsonContentLoader.INSTANCE.add(new JsonOreNameProcessor());
+
+        //==============================================================
         //TODO load entities
 
-        JsonContentLoader.INSTANCE.add(new JsonOreNameProcessor());
-        JsonContentLoader.INSTANCE.add(new JsonWorldOreGenProcessor());
-
+        //==============================================================
         JsonContentLoader.INSTANCE.add(new JsonCraftingRecipeProcessor());
         JsonContentLoader.INSTANCE.add(new JsonFurnaceRecipeProcessor());
         JsonContentLoader.INSTANCE.add(new JsonRecipeReplacementProcessor());
 
+        //==============================================================
+        JsonContentLoader.INSTANCE.add(new JsonWorldOreGenProcessor());
+        JsonContentLoader.INSTANCE.add(new JsonOverrideProcessor());
+        JsonContentLoader.INSTANCE.add(new JsonMissingMapEventProcessor());
+        JsonContentLoader.INSTANCE.add(new JsonProcessorExplosive());
+        //TODO add machine recipes
+
+
+        //==============================================================
         JsonBlockListenerProcessor.addBuilder(new RotatableListener.Builder());
         JsonBlockListenerProcessor.addBuilder(new MultiBlockListener.Builder());
         JsonBlockListenerProcessor.addBuilder(new WrenchRotationListener.Builder());

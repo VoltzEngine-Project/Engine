@@ -1,6 +1,6 @@
 package com.builtbroken.mc.framework.json;
 
-import com.builtbroken.jlib.lang.DebugPrinter;
+import com.builtbroken.jlib.debug.DebugPrinter;
 import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
@@ -8,16 +8,13 @@ import com.builtbroken.mc.core.registry.implement.ILoadComplete;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.framework.json.debug.GuiJsonDebug;
 import com.builtbroken.mc.framework.json.event.JsonProcessorRegistryEvent;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonEntry;
 import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import com.builtbroken.mc.framework.json.loading.ProcessorKeySorter;
-import com.builtbroken.mc.framework.json.override.JsonOverrideProcessor;
-import com.builtbroken.mc.framework.json.processors.event.JsonMissingMapEventProcessor;
-import com.builtbroken.mc.framework.json.processors.explosive.JsonProcessorExplosive;
-import com.builtbroken.mc.framework.json.processors.multiblock.JsonMultiBlockLayoutProcessor;
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.framework.mod.loadable.ILoadable;
 import com.google.gson.JsonElement;
@@ -28,6 +25,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
+import org.lwjgl.opengl.Display;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,6 +76,8 @@ public final class JsonContentLoader extends AbstractLoadable
     /** Object used to wrap the logger to produce clearner debug messages */
     public DebugPrinter debug;
 
+    public GuiJsonDebug debugWindow;
+
     /**
      * Left public for JUnit testing
      * use {@link #INSTANCE} to access system
@@ -112,9 +112,24 @@ public final class JsonContentLoader extends AbstractLoadable
         debug.end();
     }
 
+    protected void displayDebug(String msg)
+    {
+        if(debugWindow != null)
+        {
+            debugWindow.addData(msg);
+        }
+    }
+
     @Override
     public void preInit()
     {
+        if (Engine.runningAsDev && !GraphicsEnvironment.isHeadless())
+        {
+            debugWindow = new GuiJsonDebug();
+            debugWindow.init();
+            debugWindow.setVisible(true);
+            debug.add(new GuiJsonDebug.DebugListener(debugWindow));
+        }
         debug.start("Phase: Pre-Init");
         //---------------------------------------------------------------------------
 
@@ -123,22 +138,6 @@ public final class JsonContentLoader extends AbstractLoadable
         externalContentFolder = new File(References.BBM_CONFIG_FOLDER, "json");
         //Validate data
         validateFilePaths();
-        debug.end("Done...");
-
-        //===========================================================================
-        debug.start("Registering default processors");
-        //Load processors
-        //add(blockProcessor);
-        //blockProcessor.addSubProcessor(JsonBlockTileProcessor.KEY, new JsonBlockTileProcessor());
-        //blockProcessor.addSubProcessor(JsonBlockListenerProcessor.KEY, new JsonBlockListenerProcessor());
-
-
-        add(new JsonOverrideProcessor());
-        add(new JsonMultiBlockLayoutProcessor());
-        add(new JsonMissingMapEventProcessor());
-        add(new JsonProcessorExplosive());
-        //TODO add machine recipes
-
         debug.end("Done...");
         //===========================================================================
         debug.start("Registering mod processors");
@@ -254,7 +253,7 @@ public final class JsonContentLoader extends AbstractLoadable
 
             if (processorExists)
             {
-                int option = JOptionPane.showConfirmDialog(null, "Not all JSON entries have been processed. " +
+                int option = JOptionPane.showConfirmDialog(Display.getParent(), "Not all JSON entries have been processed. " +
                                 "\n JsonEntries left = " + jsonEntries.size() +
                                 "\n Do you want to continue loading?",
                         "JsonContentLoader Error", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);

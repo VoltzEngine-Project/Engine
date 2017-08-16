@@ -1,6 +1,6 @@
 package com.builtbroken.mc.framework.json.processors;
 
-import com.builtbroken.jlib.lang.DebugPrinter;
+import com.builtbroken.jlib.debug.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.json.conversion.JsonConverterNBT;
