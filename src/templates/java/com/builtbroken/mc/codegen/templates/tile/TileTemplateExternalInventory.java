@@ -2,7 +2,6 @@ package com.builtbroken.mc.codegen.templates.tile;
 
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
-import com.builtbroken.mc.codegen.annotations.ExternalInventoryWrapped;
 import com.builtbroken.mc.codegen.processor.TileWrappedTemplate;
 import com.builtbroken.mc.seven.framework.logic.TileEntityWrapper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,12 +10,12 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 
 /**
- * Injector template for {@link ExternalInventoryWrapped}
+ * Injector template for External Inventory Handling
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2017.
  */
-@TileWrappedTemplate(annotationName = "ExternalInventoryWrapped")
+@TileWrappedTemplate(annotationName = "ExternalInventory")
 public class TileTemplateExternalInventory extends TileEntityWrapper implements IInventoryProvider, ISidedInventory
 {
     public TileTemplateExternalInventory(ITileNode controller)

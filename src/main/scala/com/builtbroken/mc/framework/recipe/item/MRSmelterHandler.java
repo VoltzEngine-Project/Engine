@@ -22,7 +22,7 @@ public class MRSmelterHandler extends MRHandlerItemStack
             ItemStack result = super.getRecipe(items, extraChance, failureChance);
             if (result == null && items.length == 1 && items[0] instanceof ItemStack)
             {
-                result = FurnaceRecipes.smelting().getSmeltingResult((ItemStack) items[0]);
+                result = FurnaceRecipes.smelting().getSmeltingResult((ItemStack) items[0]); //TODO cache
             }
             if (result != null)
             {

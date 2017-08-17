@@ -16,7 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/1/2017.
  */
-@TileWrappedTemplate(annotationName = "EnergyWrapped")
+@TileWrappedTemplate(annotationName = "Energy")
 public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBufferProvider, IEnergyHandler
 {
     public TileTemplateEnergy(ITileNode controller)

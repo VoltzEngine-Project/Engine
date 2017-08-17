@@ -28,11 +28,25 @@ public class ProcessorTileNode extends Processor
     public void handleFile(File outputFolder, BuildData data, String spacer) throws IOException
     {
         String[] annotationData = data.annotations.get(annotationKey).split(",");
+        List<String> wrapperKeys = new ArrayList();
         for (String s : annotationData)
         {
             if (s.contains(CLASS_KEY))
             {
                 data.outputClassName = s.split("=")[1].replace("\"", "").trim();
+            }
+            else if (s.contains("wrappers"))
+            {
+                String wrappers = s.split("=")[1].replace("\"", "").trim(); //Remove spaces
+                String[] split = wrappers.split(";"); //Split to get contents
+                for (String w : split)
+                {
+                    String wrapperKey = w.trim(); //Remove " "
+                    if (!wrapperKey.isEmpty())
+                    {
+                        wrapperKeys.add(wrapperKey);
+                    }
+                }
             }
         }
         //Ensure we have a class name
@@ -44,6 +58,13 @@ public class ProcessorTileNode extends Processor
         //Get template processors for this file
         List<Template> templates = new ArrayList();
         for (String key : data.annotations.keySet())
+        {
+            if (templateMap.containsKey(key))
+            {
+                templates.add(templateMap.get(key));
+            }
+        }
+        for (String key : wrapperKeys)
         {
             if (templateMap.containsKey(key))
             {
