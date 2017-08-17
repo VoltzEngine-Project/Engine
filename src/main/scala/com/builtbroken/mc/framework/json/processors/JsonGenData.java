@@ -1,9 +1,9 @@
 package com.builtbroken.mc.framework.json.processors;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.framework.json.data.JsonItemEntry;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
-import com.builtbroken.mc.framework.json.processors.recipe.JsonItemEntry;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -77,7 +77,11 @@ public abstract class JsonGenData implements IJsonGenObject
         else if (object instanceof String)
         {
             String in = (String) object;
-            if (in.startsWith("ore@"))
+            if (in.startsWith("tool@"))
+            {
+                return in;
+            }
+            else if (in.startsWith("ore@"))
             {
                 String oreName = in.substring(4, in.length());
                 if (!OreDictionary.doesOreNameExist(oreName))

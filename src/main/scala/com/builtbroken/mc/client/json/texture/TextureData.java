@@ -19,6 +19,8 @@ public class TextureData extends JsonGenData
     public final Type type;
 
     private ResourceLocation cachedLocation;
+
+    @Deprecated //Move to cache outside of this class
     private IIcon icon;
 
     public TextureData(IJsonProcessor processor, String key, String domain, String name, Type type)

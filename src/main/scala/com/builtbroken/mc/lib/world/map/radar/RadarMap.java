@@ -1,6 +1,6 @@
 package com.builtbroken.mc.lib.world.map.radar;
 
-import com.builtbroken.jlib.lang.DebugPrinter;
+import com.builtbroken.jlib.debug.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarEntity;

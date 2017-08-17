@@ -123,7 +123,7 @@ public class JsonLoader
      * @param element - the element to process
      * @param entries - list to populate with new entries
      */
-    public static void loadJsonElement(String file, JsonElement element, HashMap<String, List<JsonEntry>> entries)
+    public static List<JsonEntry> loadJsonElement(String file, JsonElement element, HashMap<String, List<JsonEntry>> entries)
     {
         if (element.isJsonObject())
         {
@@ -139,9 +139,10 @@ public class JsonLoader
                     helpSite = authorData.get("site").getAsString();
                 }
             }
+            List<JsonEntry> processedEntries = new ArrayList();
             for (Map.Entry<String, JsonElement> entry : object.entrySet())
             {
-                if (!entry.getKey().equalsIgnoreCase("author"))
+                if (!entry.getKey().equalsIgnoreCase("author") && !entry.getKey().startsWith("_")) //Ignore author and _comments
                 {
                     String key = entry.getKey();
                     if (key.contains(":"))
@@ -158,8 +159,11 @@ public class JsonLoader
                     }
                     list.add(jsonEntry);
                     entries.put(jsonEntry.jsonKey, list);
+                    processedEntries.add(jsonEntry);
                 }
             }
+            return processedEntries;
         }
+        return null;
     }
 }

@@ -23,7 +23,7 @@ public class RadarEntity extends RadarObject<Entity>
     }
 
     @Override
-    public World world()
+    public World oldWorld()
     {
         return entity != null ? entity.worldObj : null;
     }

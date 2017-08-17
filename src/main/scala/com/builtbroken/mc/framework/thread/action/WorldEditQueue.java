@@ -100,7 +100,7 @@ public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldActi
                         }
                         catch (Exception e)
                         {
-                            Engine.instance.logger().error("Failed to place block for change action"
+                            Engine.logger().error("Failed to place block for change action"
                                             + "\nSide: " + side
                                             + "\nChangeAction: " + action
                                             + "\nEdit: " + edit
@@ -125,7 +125,7 @@ public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldActi
             }
             catch (Exception e)
             {
-                Engine.instance.logger().error("Crash while processing world change " + action, e);
+                Engine.logger().error("Crash while processing world change " + action, e);
             }
         }
         return -1;

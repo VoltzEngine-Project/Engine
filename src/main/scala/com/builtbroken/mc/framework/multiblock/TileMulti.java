@@ -57,7 +57,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         }
         if (!worldObj.isRemote)
         {
-            Engine.instance.packetHandler.sendToAllAround(getDescPacket(), this);
+            Engine.packetHandler.sendToAllAround(getDescPacket(), this);
         }
     }
 
@@ -162,7 +162,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     @Override
     public Packet getDescriptionPacket()
     {
-        return Engine.instance.packetHandler.toMCPacket(getDescPacket());
+        return Engine.packetHandler.toMCPacket(getDescPacket());
     }
 
     public PacketTile getDescPacket()

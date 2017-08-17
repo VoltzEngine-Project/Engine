@@ -2,7 +2,7 @@ package com.builtbroken.mc.codegen.templates.tile;
 
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.codegen.processor.TileWrappedTemplate;
-import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
+import com.builtbroken.mc.seven.framework.logic.TileEntityWrapper;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.

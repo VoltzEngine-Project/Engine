@@ -69,7 +69,7 @@ public class PacketRequestData implements IPacket
 
             if (data != null)
             {
-                Engine.instance.packetHandler.sendToPlayer(new PacketSendData(dim, x, z, type, data), (EntityPlayerMP) player);
+                Engine.packetHandler.sendToPlayer(new PacketSendData(dim, x, z, type, data), (EntityPlayerMP) player);
             }
         }
     }

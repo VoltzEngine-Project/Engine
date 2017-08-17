@@ -19,6 +19,6 @@ public class ModProxy extends AbstractLoadable
     @Override
     public boolean shouldLoad()
     {
-        return Engine.instance.getConfig().getBoolean("Load_" + mod.mod_id, "Mod_Support", true, "");
+        return Engine.loaderInstance.getConfig().getBoolean("Load_" + mod.mod_id, "Mod_Support", true, "");
     }
 }

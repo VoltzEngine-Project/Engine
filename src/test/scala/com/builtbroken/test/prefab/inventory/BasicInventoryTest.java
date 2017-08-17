@@ -1,5 +1,6 @@
 package com.builtbroken.test.prefab.inventory;
 
+import com.builtbroken.mc.abstraction.EngineLoader;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.prefab.inventory.BasicInventory;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
@@ -30,12 +31,12 @@ public class BasicInventoryTest extends AbstractTest
     public void testSetAndGetSlots()
     {
         BasicInventory inv = new BasicInventory(10);
-        Engine engine = Engine.instance;
-        Engine.instance = null;
+        EngineLoader engine = Engine.loaderInstance;
+        Engine.loaderInstance = null;
         try
         {
             inv.setInventorySlotContents(-1, new ItemStack(Items.record_11));
-            if (Engine.instance != null)
+            if (Engine.loaderInstance != null)
             {
                 System.out.println("Engine instance should have been null");
             }
@@ -103,7 +104,7 @@ public class BasicInventoryTest extends AbstractTest
         {
 
         }
-        Engine.instance = engine;
+        Engine.loaderInstance = engine;
     }
 
     @Test

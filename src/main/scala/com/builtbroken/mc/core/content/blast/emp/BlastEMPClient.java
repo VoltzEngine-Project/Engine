@@ -29,7 +29,7 @@ public class BlastEMPClient extends BlastEMP
     @Override
     public void displayEffectForEdit(IWorldEdit blocks)
     {
-        if (!world.isRemote)
+        if (!oldWorld.isRemote)
         {
             //TODO render sparks around machine that was drained
             //TODO render parts flying around machine that was destroyed

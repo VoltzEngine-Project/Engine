@@ -147,13 +147,13 @@ public class TestBlastSimplePath extends AbstractTest
         @Override
         public IWorldEdit changeBlock(BlockPos location)
         {
-            return new BlockEdit(world, location).set(Blocks.gold_block);
+            return new BlockEdit(oldWorld, location).set(Blocks.gold_block);
         }
 
         @Override
         protected boolean shouldKillAction()
         {
-            return killExplosion || world == null;
+            return killExplosion || oldWorld == null;
         }
     }
 }

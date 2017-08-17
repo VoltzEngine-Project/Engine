@@ -15,6 +15,7 @@ import java.util.List;
  * Loadable that handles dust recipes for machines
  * Created by robert on 1/10/2015.
  */
+@Deprecated //TODO transition to JSON
 public class GrinderRecipeLoad extends MRLoaderItemStack
 {
     public GrinderRecipeLoad()

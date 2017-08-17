@@ -38,7 +38,7 @@ public class PacketPlayerItemMode extends PacketPlayerItem
         }
         else
         {
-            Engine.instance.logger().error("Failed to handle setMode packet due to item in slot " + this.slotId + " is not an instance of IModeItem");
+            Engine.logger().error("Failed to handle setMode packet due to item in slot " + this.slotId + " is not an instance of IModeItem");
         }
     }
 }

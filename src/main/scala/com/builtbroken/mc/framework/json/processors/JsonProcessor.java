@@ -1,14 +1,13 @@
 package com.builtbroken.mc.framework.json.processors;
 
-import com.builtbroken.jlib.lang.DebugPrinter;
+import com.builtbroken.jlib.debug.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.json.conversion.JsonConverterNBT;
-import com.builtbroken.mc.framework.json.exceptions.JsonFormatException;
+import com.builtbroken.mc.framework.json.data.JsonItemEntry;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
-import com.builtbroken.mc.framework.json.processors.recipe.JsonItemEntry;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import cpw.mods.fml.common.Loader;
@@ -79,10 +78,6 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
 
             keyHandler.enforceRequired(objectToInject);
         }
-        catch (JsonFormatException e)
-        {
-            throw new RuntimeException("JsonProcessor: Failed to inject JSON data", e);
-        }
         catch (IllegalAccessException e)
         {
             e.printStackTrace(); //Technically can't happen
@@ -132,7 +127,7 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
     }
 
 
-    public static Object getItemFromJson(JsonElement element) throws JsonFormatException
+    public static Object getItemFromJson(JsonElement element)
     {
         if (element.isJsonObject())
         {
@@ -142,10 +137,10 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
         {
             return element.getAsString();
         }
-        throw new JsonFormatException("Could not convert json element into item entry >> '" + element + "'");
+        throw new RuntimeException("Could not convert json element into item entry >> '" + element + "'");
     }
 
-    public static JsonItemEntry fromJson(JsonObject itemStackObject) throws JsonFormatException
+    public static JsonItemEntry fromJson(JsonObject itemStackObject)
     {
         //Convert and check types
         ensureValuesExist(itemStackObject, "item");
@@ -170,11 +165,11 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
             entry.count = itemStackObject.getAsJsonPrimitive("count").getAsInt();
             if (entry.count < 0)
             {
-                throw new JsonFormatException("Recipe output count must be above zero");
+                throw new RuntimeException("Recipe output count must be above zero");
             }
             else if (entry.count > 64)
             {
-                throw new JsonFormatException("Recipe output count must be below 64 as this is the max stacksize for this version of Minecraft.");
+                throw new RuntimeException("Recipe output count must be below 64 as this is the max stacksize for this version of Minecraft.");
             }
         }
 

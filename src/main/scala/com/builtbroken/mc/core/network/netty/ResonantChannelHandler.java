@@ -63,11 +63,11 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<IPac
         {
             if (!silenceStackTrace)
             {
-                Engine.instance.logger().error("Failed to encode packet " + packet, e);
+                Engine.logger().error("Failed to encode packet " + packet, e);
             }
             else
             {
-                Engine.instance.logger().error("Failed to encode packet " + packet + " E: " + e.getMessage());
+                Engine.logger().error("Failed to encode packet " + packet + " E: " + e.getMessage());
             }
         }
     }
@@ -83,11 +83,11 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<IPac
         {
             if (!silenceStackTrace)
             {
-                Engine.instance.logger().error("Failed to decode packet " + packet, e);
+                Engine.logger().error("Failed to decode packet " + packet, e);
             }
             else
             {
-                Engine.instance.logger().error("Failed to decode packet " + packet + " E: " + e.getMessage());
+                Engine.logger().error("Failed to decode packet " + packet + " E: " + e.getMessage());
             }
         }
     }

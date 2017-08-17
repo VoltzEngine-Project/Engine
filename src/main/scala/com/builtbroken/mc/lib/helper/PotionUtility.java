@@ -43,10 +43,10 @@ public class PotionUtility
                 nextPotionID++;
             }
         }
-        if (!Engine.instance.getConfig().hasCategory("potionIDs"))
+        if (!Engine.loaderInstance.getConfig().hasCategory("potionIDs"))
         {
-            Engine.instance.getConfig().addCustomCategoryComment("potionIDs", "This category is used by several mods to set potion IDs with minimal conflict. If a conflict happens adjust the settings below to remove the conflict. Keep in mind changing the ID may cause a different potion to be loaded from save files.");
+            Engine.loaderInstance.getConfig().addCustomCategoryComment("potionIDs", "This category is used by several mods to set potion IDs with minimal conflict. If a conflict happens adjust the settings below to remove the conflict. Keep in mind changing the ID may cause a different potion to be loaded from save files.");
         }
-        return Engine.instance.getConfig().getInt(potionName, "potionIDs", nextPotionID, 0, Potion.potionTypes.length - 1, "ID used to save the potion");
+        return Engine.loaderInstance.getConfig().getInt(potionName, "potionIDs", nextPotionID, 0, Potion.potionTypes.length - 1, "ID used to save the potion");
     }
 }

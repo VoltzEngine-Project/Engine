@@ -161,7 +161,7 @@ public class PacketManager extends AbstractLoadable
 
     public void sendToAllAround(IPacket message, IWorldPosition point, double range)
     {
-        sendToAllAround(message, point.world(), point.x(), point.y(), point.z(), range);
+        sendToAllAround(message, point.oldWorld(), point.x(), point.y(), point.z(), range);
     }
 
     public void sendToAllAround(IPacket message, World world, IPos3D point, double range)

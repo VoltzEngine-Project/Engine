@@ -91,7 +91,7 @@ public class TestAbstractLocation extends AbstractTest
         locations.add(new TLocation(new IWorldPosition()
         {
             @Override
-            public World world()
+            public World oldWorld()
             {
                 return world;
             }
@@ -337,11 +337,11 @@ public class TestAbstractLocation extends AbstractTest
         assertNotNull(location.getChunk());
     }
 
-    /** Tests {@link AbstractLocation#world() */
+    /** Tests {@link AbstractLocation#oldWorld() */
     public void testWorld()
     {
         TLocation location = new TLocation(world, 20, 10, 10);
-        assertSame(location.world(), world);
+        assertSame(location.oldWorld(), world);
     }
 
     /** Tests {@link AbstractLocation#getWorld() */
@@ -457,7 +457,7 @@ public class TestAbstractLocation extends AbstractTest
         @Override
         public TLocation newPos(double x, double y, double z)
         {
-            return new TLocation(world(), x, y, z);
+            return new TLocation(oldWorld(), x, y, z);
         }
     }
 }

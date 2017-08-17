@@ -132,7 +132,7 @@ public class HeatedBlockRegistry
     {
         if (warm_up_conversion.containsKey(block.block()))
         {
-            Engine.instance.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.block()) + " is being replaced by " + result);
+            Engine.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.block()) + " is being replaced by " + result);
 
         }
         warm_up_conversion.put(block.block(), new BlockConversionData(block, result, kelvin));
@@ -152,7 +152,7 @@ public class HeatedBlockRegistry
     {
         if (cool_down_conversion.containsKey(block.block()))
         {
-            Engine.instance.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.block()) + " is being replaced by " + result);
+            Engine.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.block()) + " is being replaced by " + result);
 
         }
         cool_down_conversion.put(block.block(), new BlockConversionData(block, result, kelvin));
@@ -293,12 +293,12 @@ public class HeatedBlockRegistry
                             }
                             else
                             {
-                                Engine.instance.logger().error("Error c_obj is not an instance of a block");
+                                Engine.logger().error("Error c_obj is not an instance of a block");
                             }
                         }
                         else
                         {
-                            Engine.instance.logger().error("Config entry for heat conversion " + name + " has an invalid conversion of " + conversion);
+                            Engine.logger().error("Config entry for heat conversion " + name + " has an invalid conversion of " + conversion);
                         }
                     }
                 }

@@ -76,7 +76,7 @@ public class ReflectionUtility extends ReflectionHelper
             setMCField(clazz, instance, fieldName, fieldName2, newValue);
         } catch (NoSuchFieldException | IllegalAccessException e)
         {
-            Engine.instance.logger().catching(Level.ERROR, e);
+            Engine.logger().catching(Level.ERROR, e);
         }
     }
 
@@ -196,14 +196,14 @@ public class ReflectionUtility extends ReflectionHelper
         } catch (NoSuchMethodException e)
         {
             if (Engine.runningAsDev)
-                Engine.instance.logger().error("A: Failed to find declared method " + method);
+                Engine.logger().error("A: Failed to find declared method " + method);
             try
             {
                 method = clazz.getDeclaredMethod(name, args);
             } catch (NoSuchMethodException e2)
             {
                 if (Engine.runningAsDev)
-                    Engine.instance.logger().error("B: Failed to find declared method " + method);
+                    Engine.logger().error("B: Failed to find declared method " + method);
             }
         }
         return method;
@@ -269,7 +269,7 @@ public class ReflectionUtility extends ReflectionHelper
             } catch (NoSuchFieldException e)
             {
                 if (Engine.runningAsDev)
-                    Engine.instance.logger().error(i + ": Failed to find " + ((i == 1 || i == 3) ? "declaried" : "") + " field " + ((i == 0 || i == 1) ? "" + fieldName : "" + fieldName2));
+                    Engine.logger().error(i + ": Failed to find " + ((i == 1 || i == 3) ? "declaried" : "") + " field " + ((i == 0 || i == 1) ? "" + fieldName : "" + fieldName2));
             }
         }
         if (f != null)

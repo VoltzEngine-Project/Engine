@@ -59,7 +59,7 @@ public class WorkerThread extends Thread implements IWorkerThread
                     }
                     catch (IllegalMonitorStateException e)
                     {
-                        Engine.instance.logger().error(this + " has failed and is terminating...", e);
+                        Engine.logger().error(this + " has failed and is terminating...", e);
                         kill = true;
                     }
                     catch (InterruptedException e)
@@ -70,17 +70,17 @@ public class WorkerThread extends Thread implements IWorkerThread
         }
         catch (Exception e)
         {
-            Engine.instance.logger().error("World Change action thread[" + this + "] has failed to execute correctly.", e);
+            Engine.logger().error("World Change action thread[" + this + "] has failed to execute correctly.", e);
         }
         finally
         {
             //Clean up to prevent currentProcess from running after world has closed
             if (queue.size() > 0)
             {
-                Engine.instance.logger().info("Killing " + this + " with processes left to run...");
+                Engine.logger().info("Killing " + this + " with processes left to run...");
                 for (IThreadProcess process : queue)
                 {
-                    Engine.instance.logger().info("\t" + process);
+                    Engine.logger().info("\t" + process);
                     process.killAction();
                 }
             }

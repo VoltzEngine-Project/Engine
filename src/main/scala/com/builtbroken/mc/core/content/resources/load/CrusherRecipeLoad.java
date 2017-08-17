@@ -16,6 +16,7 @@ import java.util.List;
  * Loadable that handles all machine recipes that crush items
  * Created by robert on 1/10/2015.
  */
+@Deprecated //TODO transition to JSON
 public class CrusherRecipeLoad extends MRLoaderItemStack
 {
     public CrusherRecipeLoad()

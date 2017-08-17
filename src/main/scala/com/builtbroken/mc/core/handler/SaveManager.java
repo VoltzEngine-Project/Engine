@@ -205,8 +205,8 @@ public class SaveManager
                     }
                     catch (Exception e)
                     {
-                        Engine.instance.logger().catching(Level.FATAL, e);
-                        Engine.instance.logger().fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
+                        Engine.logger().catching(Level.FATAL, e);
+                        Engine.logger().fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
                         obj = null;
                     }
                 }

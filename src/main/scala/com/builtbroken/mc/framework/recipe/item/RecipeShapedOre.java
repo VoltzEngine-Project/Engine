@@ -62,6 +62,8 @@ public class RecipeShapedOre extends ShapedOreRecipe
      * @param in - object
      * @return new ItemStack instance or null if it couldn't be converted
      */
+    //TODO implement
+    @Deprecated
     protected ItemStack toItemStack(Object in)
     {
         if (in instanceof ItemStack)

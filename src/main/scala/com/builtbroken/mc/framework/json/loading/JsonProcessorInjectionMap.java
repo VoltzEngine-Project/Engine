@@ -2,7 +2,6 @@ package com.builtbroken.mc.framework.json.loading;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
-import com.builtbroken.mc.framework.json.exceptions.JsonFormatException;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.override.JsonOverride;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
@@ -534,7 +533,7 @@ public class JsonProcessorInjectionMap<O extends Object>
         return false;
     }
 
-    public <D extends IJsonGenObject> void enforceRequired(D objectToInject) throws IllegalAccessException, JsonFormatException
+    public <D extends IJsonGenObject> void enforceRequired(D objectToInject) throws IllegalAccessException
     {
         for (Field field : injectionFields.values())
         {
@@ -555,7 +554,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                             Object object = field.get(objectToInject);
                             if(object == null)
                             {
-                                throw new JsonFormatException("JsonProcessorInjectionMap: Missing required value from JSON file '" + ((JsonProcessorData) annotation).value() + "'");
+                                throw new RuntimeException("JsonProcessorInjectionMap: Missing required value from JSON file '" + ((JsonProcessorData) annotation).value() + "'");
                             }
                         }
                     }

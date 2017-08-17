@@ -2,6 +2,7 @@ package com.builtbroken.mc.framework.mod;
 
 import com.builtbroken.mc.api.tile.access.IGuiTile;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
+import com.builtbroken.mc.framework.block.imp.ITileEventListenerBuilder;
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -125,7 +126,7 @@ public abstract class AbstractProxy extends AbstractLoadable implements IGuiHand
     }
 
     /**
-     * Called to register {@link com.builtbroken.mc.api.tile.listeners.ITileEventListenerBuilder}s
+     * Called to register {@link ITileEventListenerBuilder}s
      */
     public void loadJsonContentHandlers()
     {

@@ -7,8 +7,8 @@ import com.builtbroken.mc.api.tile.ConnectionType;
 import com.builtbroken.mc.api.tile.ITileConnection;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.codegen.processor.TileWrappedTemplate;
-import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
 import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
+import com.builtbroken.mc.seven.framework.logic.TileEntityWrapper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -16,7 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/1/2017.
  */
-@TileWrappedTemplate(annotationName = "EnergyWrapped")
+@TileWrappedTemplate(annotationName = "Energy")
 public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBufferProvider, IEnergyHandler
 {
     public TileTemplateEnergy(ITileNode controller)
@@ -86,7 +86,7 @@ public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBuff
     {
         if (getTileNode() instanceof ITileConnection)
         {
-            TileEntity connector = toPos().add(from).getTileEntity(world());
+            TileEntity connector = toPos().add(from).getTileEntity(worldObj);
             if (((ITileConnection) getTileNode()).canConnect(connector, ConnectionType.RF_POWER, from))
             {
                 return true;

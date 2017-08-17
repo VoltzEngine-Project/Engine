@@ -40,7 +40,6 @@ public class TestJsonLoader extends AbstractTest
     {
         JsonContentLoader loader = new JsonContentLoader();
         assertTrue(loader.extensionsToLoad.contains("json"));
-        assertNotNull(loader.blockProcessor);
     }
 
     /**
@@ -60,25 +59,6 @@ public class TestJsonLoader extends AbstractTest
         assertEquals("json", loader.externalContentFolder.getName());
         assertEquals("file", loader.externalContentFolder.getParentFile().getName());
 
-        //Check number of processors loaded
-        //assertEquals(10, loader.processors.size());
-
-        //Check block is loaded, and its sub processors are loaded
-        assertSame(loader.blockProcessor, loader.processors.get("block"));
-        assertEquals(6, loader.blockProcessor.subProcessors.size());
-        assertSame(loader.craftingRecipeProcessor, loader.blockProcessor.subProcessors.get("craftingGridRecipe"));
-        assertSame(loader.furnaceRecipeProcessor, loader.blockProcessor.subProcessors.get("furnaceRecipe"));
-        assertSame(loader.worldOreGenProcessor, loader.blockProcessor.subProcessors.get("worldGenerator"));
-
-        //Check that item is loaded
-        assertSame(loader.itemProcessor, loader.processors.get("item"));
-
-        //Check that crafting is loaded
-        assertSame(loader.craftingRecipeProcessor, loader.processors.get("craftingGridRecipe"));
-
-        //Check that furnace is loaded
-        assertSame(loader.furnaceRecipeProcessor, loader.processors.get("furnaceRecipe"));
-
         //Call init and setup data it needs
         loader.add(new FakeProcessor("ammo", "after:ammoType"));
         loader.add(new FakeProcessor("clip", "after:ammoType"));
@@ -86,15 +66,18 @@ public class TestJsonLoader extends AbstractTest
 
         for (int i = 0; i < 13; i++)
         {
-            JsonLoader.loadJsonElement("file" + i, createTestElement("ammo", "ammo" + i), loader.jsonEntries);
+            List<JsonEntry> entries = JsonLoader.loadJsonElement("file" + i, createTestElement("ammo", "ammo" + i), loader.jsonEntries);
+            assertEquals(1, entries.size());
         }
         for (int i = 0; i < 5; i++)
         {
-            JsonLoader.loadJsonElement("file" + (13 + i), createTestElement("ammoType", "ammoType" + i), loader.jsonEntries);
+            List<JsonEntry> entries = JsonLoader.loadJsonElement("file" + (13 + i), createTestElement("ammoType", "ammoType" + i), loader.jsonEntries);
+            assertEquals(1, entries.size());
         }
         for (int i = 0; i < 3; i++)
         {
-            JsonLoader.loadJsonElement("file" + (13 + 5 + i), createTestElement("clip", "clip" + i), loader.jsonEntries);
+            List<JsonEntry> entries = JsonLoader.loadJsonElement("file" + (13 + 5 + i), createTestElement("clip", "clip" + i), loader.jsonEntries);
+            assertEquals(1, entries.size());
         }
 
         loader.init();
@@ -162,7 +145,7 @@ public class TestJsonLoader extends AbstractTest
         list.add("clip@after:ammoType");
         list.add("gun@after:ammoType");
 
-        List<String> list2 = JsonContentLoader.sortSortingValues(list);
+        List<String> list2 = JsonContentLoader.INSTANCE.sortSortingValues(list);
         assertEquals("block", list2.get(0));
         assertEquals("item", list2.get(1));
         assertEquals("ammoType", list2.get(2));

@@ -22,7 +22,18 @@ public class PermissionsCommandManager extends ServerCommandManager
 {
     public boolean hasPermissionForCommand(ICommandSender sender, ICommand command, String[] args)
     {
-        return sender instanceof EntityPlayer && Engine.isPlayerOpped((EntityPlayer) sender) || GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args);
+        return sender instanceof EntityPlayer && isPlayerOpped((EntityPlayer) sender) || GroupProfileHandler.GLOBAL.canExecuteCommand(sender, command, args);
+    }
+
+    public static boolean isPlayerOpped(EntityPlayer player)
+    {
+        return player instanceof EntityPlayerMP && isPlayerOpped((EntityPlayerMP) player);
+    }
+
+    public static boolean isPlayerOpped(EntityPlayerMP player)
+    {
+        //Taken from EntityPlayerMP#canCommandSenderUseCommand(Integer, String)
+        return player.mcServer.getConfigurationManager().func_152596_g(player.getGameProfile()) && player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
     }
 
     @Override
@@ -137,7 +148,7 @@ public class PermissionsCommandManager extends ServerCommandManager
             chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception");
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation);
-            Engine.instance.logger().error("Failed to process command: \'" + cmd + "\'", throwable);
+            Engine.logger().error("Failed to process command: \'" + cmd + "\'", throwable);
         }
 
         return j;

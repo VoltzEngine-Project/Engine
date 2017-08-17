@@ -377,11 +377,11 @@ public class MultiBlockHelper
                     {
                         pos = pos.add(center);
                     }
-                    TileEntity tile = pos.getTileEntity(center.world());
+                    TileEntity tile = pos.getTileEntity(center.oldWorld());
                     if (tile instanceof IMultiTile)
                     {
                         ((IMultiTile) tile).setHost(null);
-                        pos.setBlockToAir(center.world());
+                        pos.setBlockToAir(center.oldWorld());
                     }
                 }
                 if (doDrops)
@@ -390,7 +390,7 @@ public class MultiBlockHelper
                 }
                 else if (killHost)
                 {
-                    center.world().setBlockToAir(center.xi(), center.yi(), center.zi());
+                    center.oldWorld().setBlockToAir(center.xi(), center.yi(), center.zi());
                 }
             }
             else

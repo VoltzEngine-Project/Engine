@@ -32,7 +32,7 @@ public class MachineRecipeLoader<I extends IMachineRecipe> extends AbstractLoada
             RecipeRegisterResult result = MachineRecipeType.getHandler(type).registerRecipe(recipe);
             if(result != RecipeRegisterResult.REGISTERED)
             {
-                Engine.instance.logger().error("" + this.getClass().getSimpleName() +" failed to register recipe " + recipe + "  ErrorCode:"+ result);
+                Engine.logger().error("" + this.getClass().getSimpleName() +" failed to register recipe " + recipe + "  ErrorCode:"+ result);
             }
         }
     }
@@ -45,6 +45,6 @@ public class MachineRecipeLoader<I extends IMachineRecipe> extends AbstractLoada
     @Override
     public boolean shouldLoad()
     {
-        return Engine.instance.getConfig().getBoolean("Generator" + LanguageUtility.capitalizeFirst(type) + "Recipes", "AutoGenerator", true, "Disables the auto generator, which in turns prevents recipes from generating");
+        return Engine.loaderInstance.getConfig().getBoolean("Generator" + LanguageUtility.capitalizeFirst(type) + "Recipes", "AutoGenerator", true, "Disables the auto generator, which in turns prevents recipes from generating");
     }
 }

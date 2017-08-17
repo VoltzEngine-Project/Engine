@@ -13,10 +13,8 @@ import com.builtbroken.mc.core.network.IPacketReceiver;
 import com.builtbroken.mc.core.network.packet.PacketPlayerItem;
 import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.core.registry.ModManager;
-import com.builtbroken.mc.framework.item.logic.ItemNode;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
-import com.builtbroken.mc.framework.json.processors.item.processor.JsonItemProcessor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -457,7 +455,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @Override
     public String getLoader()
     {
-        return JsonItemProcessor.KEY;
+        return "item";
     }
 
     @Override

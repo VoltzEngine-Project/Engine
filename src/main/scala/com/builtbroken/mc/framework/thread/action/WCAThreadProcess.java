@@ -100,7 +100,7 @@ public class WCAThreadProcess implements IThreadProcess
         }
         catch (Exception e)
         {
-            Engine.instance.logger().error("World Change action thread[" + this + "] has failed to execute correctly.", e);
+            Engine.logger().error("World Change action thread[" + this + "] has failed to execute correctly.", e);
         }
     }
 

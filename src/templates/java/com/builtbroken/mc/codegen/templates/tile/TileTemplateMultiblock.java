@@ -1,13 +1,13 @@
 package com.builtbroken.mc.codegen.templates.tile;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.mc.api.tile.listeners.IBlockListener;
-import com.builtbroken.mc.api.tile.listeners.ITileEventListener;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.codegen.processor.TileWrappedTemplate;
-import com.builtbroken.mc.framework.logic.wrapper.TileEntityWrapper;
+import com.builtbroken.mc.framework.block.imp.IBlockListener;
+import com.builtbroken.mc.framework.block.imp.ITileEventListener;
+import com.builtbroken.mc.seven.framework.logic.TileEntityWrapper;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/1/2017.
  */
-@TileWrappedTemplate(annotationName = "MultiBlockWrapped")
+@TileWrappedTemplate(annotationName = "MultiBlock")
 public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiTileHost
 {
     public TileTemplateMultiblock(ITileNode controller)
@@ -46,7 +46,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {
@@ -78,7 +78,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                         {
                             if (listener instanceof IBlockListener)
                             {
-                                ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                                ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                             }
                             if (listener.isValidForTile())
                             {
@@ -115,7 +115,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                         {
                             if (listener instanceof IBlockListener)
                             {
-                                ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                                ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                             }
                             if (listener.isValidForTile())
                             {
@@ -146,7 +146,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {
@@ -179,7 +179,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {
@@ -212,7 +212,7 @@ public class TileTemplateMultiblock extends TileEntityWrapper implements IMultiT
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(worldObj, xi(), yi(), zi());
                         }
                         if (listener.isValidForTile())
                         {

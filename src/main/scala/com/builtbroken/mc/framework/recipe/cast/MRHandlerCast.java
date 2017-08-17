@@ -2,7 +2,7 @@ package com.builtbroken.mc.framework.recipe.cast;
 
 import com.builtbroken.mc.api.items.crafting.ICastItem;
 import com.builtbroken.mc.api.recipe.*;
-import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -71,7 +71,7 @@ public class MRHandlerCast implements IMachineRecipeHandler<ItemStack, ICastingR
 
     public int getVolumeForCast(String type)
     {
-        return cast_volume_map.containsKey(type) ? cast_volume_map.get(type) : Engine.INGOT_VOLUME;
+        return cast_volume_map.containsKey(type) ? cast_volume_map.get(type) : References.INGOT_VOLUME;
     }
 
     protected RecipeRegisterResult isValidRecipe(ICastingRecipe recipe)

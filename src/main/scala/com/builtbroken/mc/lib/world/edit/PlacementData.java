@@ -44,7 +44,7 @@ public class PlacementData extends Pair<Block, Integer>
      */
     public BlockEditResult place(final IWorldPosition location, boolean simulate)
     {
-        return place(location.world(), (int) location.x(), (int) location.y(), (int) location.z(), simulate);
+        return place(location.oldWorld(), (int) location.x(), (int) location.y(), (int) location.z(), simulate);
     }
 
     /**
