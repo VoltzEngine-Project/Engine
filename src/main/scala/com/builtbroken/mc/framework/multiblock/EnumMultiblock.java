@@ -1,10 +1,9 @@
 package com.builtbroken.mc.framework.multiblock;
 
-import com.builtbroken.mc.framework.multiblock.types.*;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.HashMap;
 
@@ -26,66 +25,17 @@ public enum EnumMultiblock
             return new TileMulti();
         }
     }),
-    /* 1 */TANK("veTileMultiTank", TileMultiTank.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMultiTank();
-        }
-    }),
-    /* 2 */INVENTORY("veTileMultiInv", TileMultiInv.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMultiInv();
-        }
-    }),
+    /* 1 */TANK("veTileMultiTank"),
+    /* 2 */INVENTORY("veTileMultiInv"),
     /* Energy Types */
     /* 3 */ENERGY_RF("rfTileMulti"), //RF code is setup in a proxy class
     /* 4 */ENERGY_EU("euTileMulti"),//TODO implement
-    /* 5 */ENERGY("veTileMultiEnergy", TileMultiEnergy.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMultiEnergy();
-        }
-    }),  //TODO implement universal energy version
+    /* 5 */ENERGY("veTileMultiEnergy"),  //TODO implement universal energy version
     /* Combinations */
-    /* 6 */TANK_INV("veTileMultiTankInv", TileMultiTankInv.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMultiTankInv();
-        }
-    }),
-    /* 7 */TANK_ENERGY("veTileMultiTankEnergy", TileMultiTankEnergy.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMultiTankEnergy();
-        }
-    }),//TODO implement universal energy version
-    /* 8 */INV_ENERGY("veTileMultiInvEnergy", TileMultiInvEnergy.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMultiInvEnergy();
-        }
-    }),//TODO implement universal energy version
-    /* 9 */TANK_INV_ENERGY("veTileMultiTankInvEnergy", TileMultiTankInvEnergy.class, new ITileEntityProvider()
-    {
-        @Override
-        public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
-        {
-            return new TileMultiTankInvEnergy();
-        }
-    });  //TODO implement universal energy version
+    /* 6 */TANK_INV("veTileMultiTankInv"),
+    /* 7 */TANK_ENERGY("veTileMultiTankEnergy"),//TODO implement universal energy version
+    /* 8 */INV_ENERGY("veTileMultiInvEnergy"),//TODO implement universal energy version
+    /* 9 */TANK_INV_ENERGY("veTileMultiTankInvEnergy");  //TODO implement universal energy version
 
     /** Registered name of the TileEntity.class and the reference name of the multi-block */
     public final String name;

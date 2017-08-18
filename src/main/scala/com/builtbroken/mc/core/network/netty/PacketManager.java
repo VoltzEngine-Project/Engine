@@ -2,25 +2,25 @@ package com.builtbroken.mc.core.network.netty;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.api.data.IPacket;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketEntity;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
-import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.EnumMap;
 
@@ -59,9 +59,9 @@ public class PacketManager extends AbstractLoadable
         return null;
     }
 
-    public Packet toMCPacket(IPacket packet)
+    public SPacketUpdateTileEntity toMCPacket(IPacket packet)
     {
-        return channelEnumMap.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
+        return (SPacketUpdateTileEntity) channelEnumMap.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class PacketManager extends AbstractLoadable
 
     public void sendToAllInDimension(IPacket packet, World world)
     {
-        sendToAllInDimension(packet, world.provider.dimensionId);
+        sendToAllInDimension(packet, world.provider.getDimension());
     }
 
     /**
@@ -176,13 +176,13 @@ public class PacketManager extends AbstractLoadable
 
     public void sendToAllAround(IPacket message, TileEntity tile, double range)
     {
-        sendToAllAround(message, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord, range);
+        sendToAllAround(message, tile.getWorld(), tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), range);
     }
 
     public void sendToAllAround(IPacket message, World world, double x, double y, double z, double range)
     {
         if (world != null)
-            sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, range));
+            sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.getDimension(), x, y, z, range));
     }
 
     @SideOnly(Side.CLIENT)

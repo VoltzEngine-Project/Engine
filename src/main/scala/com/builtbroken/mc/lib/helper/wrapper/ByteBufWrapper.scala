@@ -1,15 +1,16 @@
 package com.builtbroken.mc.lib.helper.wrapper
 
-import com.builtbroken.jlib.data.network.{IByteBufWriter, IByteBufReader}
+import com.builtbroken.jlib.data.network.{IByteBufReader, IByteBufWriter}
 import com.builtbroken.mc.api.ISave
 import com.builtbroken.mc.core.{Engine, References}
-import com.builtbroken.mc.imp.transform.vector.{Pos, Point}
-import cpw.mods.fml.common.network.ByteBufUtils
+import com.builtbroken.mc.data.Direction
+import com.builtbroken.mc.imp.transform.vector.{Point, Pos}
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{FluidStack, FluidTank}
+import net.minecraftforge.fml.common.network.ByteBufUtils
 
 /**
  * Some alias methods to make packets more pleasant.
@@ -95,7 +96,8 @@ object ByteBufWrapper {
           case x: FluidTank => buf <<< x
           case x: ISave => buf <<< x
           case x: ItemStack => ByteBufUtils.writeItemStack(buf, x)
-          case x: ForgeDirection => x.ordinal().asInstanceOf[Byte]
+          case x: EnumFacing => x.ordinal().asInstanceOf[Byte]
+          case x: Direction => x.ordinal().asInstanceOf[Byte]
           case _ => throw new IllegalArgumentException(References.NAME + ": ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
         }
       }

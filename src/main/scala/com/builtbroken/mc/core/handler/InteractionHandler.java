@@ -34,7 +34,7 @@ public class InteractionHandler
         MovingObjectPosition m = getMouseOverClient();
         if (m != null && m.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
         {
-            return new Location(Minecraft.getMinecraft().theWorld, m.blockX, m.blockY, m.blockZ).getBlock();
+            return new Location(Minecraft.getMinecraft().theWorld, m.blockX, m.blockY, m.blockZ).getBlockState();
         }
         return null;
     }

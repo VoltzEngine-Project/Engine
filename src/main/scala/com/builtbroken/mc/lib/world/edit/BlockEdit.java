@@ -8,15 +8,17 @@ import com.builtbroken.mc.imp.transform.vector.AbstractLocation;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -32,17 +34,13 @@ import java.util.List;
 public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit, IPos3D, IWorldPosition
 {
     /** Block that was at the location */
-    public Block prev_block = Blocks.air;
-    /** 0-15 meta that was at the location */
-    public int prev_meta = 0;
+    public IBlockState prev_block = Blocks.AIR.getDefaultState();
 
     /** Cached to get drops at time of call */
     public List<ItemStack> drops;
 
     /** Block to place */
-    public Block newBlock = Blocks.air;
-    /** 0-15 meta value to place */
-    public int newMeta = 0;
+    public IBlockState newBlock = Blocks.AIR.getDefaultState();
 
     /** Force energy used to place it */
     public float energy = 0;
@@ -93,13 +91,13 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     public BlockEdit(IWorldPosition vec, Block block)
     {
         super(vec);
-        set(block, 0, false, true);
+        set(block.getDefaultState(), false, true);
     }
 
-    public BlockEdit(IWorldPosition vec, Block block, int meta)
+    public BlockEdit(IWorldPosition vec, IBlockState state)
     {
         super(vec);
-        set(block, meta, false, true);
+        set(state, false, true);
     }
 
     public BlockEdit(World world, IPos3D vector)
@@ -107,12 +105,12 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
         super(world, vector);
     }
 
-    public BlockEdit(World world, Vec3 vec)
+    public BlockEdit(World world, Vec3d vec)
     {
         super(world, vec);
     }
 
-    public BlockEdit(World world, MovingObjectPosition target)
+    public BlockEdit(World world, RayTraceResult target)
     {
         super(world, target);
     }
@@ -120,16 +118,14 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     /**
      * Sets placement data and additional checks
      *
-     * @param block
-     * @param meta
+     * @param state
      * @param doDrop
      * @param checkEquals
      * @return
      */
-    public BlockEdit set(Block block, int meta, boolean doDrop, boolean checkEquals)
+    public BlockEdit set(IBlockState state, boolean doDrop, boolean checkEquals)
     {
-        this.newBlock = block;
-        this.newMeta = meta;
+        this.newBlock = state;
         this.doItemDrop = doDrop;
         this.checkForPrevBlockEquals = checkEquals;
         logPrevBlock();
@@ -144,18 +140,18 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
      */
     public BlockEdit set(Block block)
     {
-        return set(block, 0, false, true);
+        return set(block.getDefaultState(), false, true);
     }
 
     /**
      * Sets placement data
      *
-     * @param block
+     * @param state
      * @return this
      */
-    public BlockEdit set(Block block, int meta)
+    public BlockEdit set(IBlockState state)
     {
-        return set(block, meta, false, true);
+        return set(state, false, true);
     }
 
     /**
@@ -165,7 +161,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
      */
     public BlockEdit setAir()
     {
-        return set(Blocks.air, 0, false, true);
+        return set(Blocks.AIR.getDefaultState(), false, true);
     }
 
     /**
@@ -218,8 +214,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
         checkForPrevBlockEquals = true;
         if (world != null)
         {
-            prev_block = getBlock();
-            prev_meta = getBlockMetadata();
+            prev_block = getBlockState();
         }
         return this;
     }
@@ -229,7 +224,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     {
         if (bounds == null)
         {
-            this.bounds = AxisAlignedBB.getBoundingBox(xi(), yi(), zi(), xi() + 1, yi() + 1, zi() + 1);
+            this.bounds = new AxisAlignedBB(xi(), yi(), zi(), xi() + 1, yi() + 1, zi() + 1);
         }
         return bounds;
     }
@@ -241,13 +236,12 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
         if (world != null)
         {
             //Check if the chunk exists and is loaded to prevent loading/creating new chunks
-            Chunk chunk = world.getChunkFromBlockCoords(xi(), zi());
-            if (chunk != null && chunk.isChunkLoaded)
+            Chunk chunk = world.getChunkFromBlockCoords(toBlockPos());
+            if (chunk != null && chunk.isLoaded())
             {
                 //Check if the prev_block still exists
-                Block currentBlock = getBlock();
-                int currentMeta = getBlockMetadata();
-                if (checkForPrevBlockEquals && prev_block != currentBlock && prev_meta != currentMeta)
+                IBlockState currentBlock = getBlockState();
+                if (checkForPrevBlockEquals && prev_block != currentBlock)
                 {
                     return BlockEditResult.PREV_BLOCK_CHANGED;
                 }
@@ -277,7 +271,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     protected BlockEditResult doPlace()
     {
         //Check if it was already placed to prevent item lose if this is being used by a schematic
-        if (getBlock() == newBlock && getBlockMetadata() == newMeta)
+        if (getBlockState() == newBlock)
         {
             return BlockEditResult.ALREADY_PLACED;
         }
@@ -287,17 +281,17 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
             InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), false);
         }
         //Place the block and check if the world says its placed
-        if (super.setBlock(world, newBlock, newMeta, placementNotification))
+        if (super.setBlock(world, newBlock, placementNotification))
         {
             //Checks if the block can stay to fix block issues (crops, plants, doors, plates, redstone)
-            if (!newBlock.canBlockStay(world, xi(), yi(), zi()))
+            if (!newBlock.getBlock().canPlaceBlockAt(world, toBlockPos()))
             {
                 //Drops the block
                 InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
             }
             //Check to make blocks above this block are removed if invalid
-            Block block = world.getBlock(xi(), yi() + 1, zi());
-            if (!block.canBlockStay(world, xi(), yi() + 1, zi()))
+            IBlockState block = world.getBlockState(toBlockPos().up());
+            if (!block.getBlock().canPlaceBlockAt(world, toBlockPos().up()))
             {
                 InventoryUtility.dropBlockAsItem(world, xi(), yi() + 1, zi(), true);
             }
@@ -315,7 +309,10 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     {
         if (doItemDrop)
         {
-            return getBlock().getDrops(world, xi(), yi(), zi(), getBlockMetadata(), f);
+            IBlockState state = getBlockState();
+            NonNullList<ItemStack> items = NonNullList.create();
+            state.getBlock().getDrops(items, world, toBlockPos(), state, f);
+            return items;
         }
         return new ArrayList();
     }
@@ -323,25 +320,20 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     @Override
     public boolean hasChanged()
     {
-        return prev_block != newBlock || prev_meta != newMeta;
+        return prev_block != newBlock;
     }
 
     @Override
-    public Block getNewBlock()
+    public IBlockState getNewBlockState()
     {
         return newBlock;
     }
 
-    @Override
-    public int getNewMeta()
-    {
-        return newMeta;
-    }
 
     @Override
     public int hashCode()
     {
-        int result = 31 + (oldWorld() != null && oldWorld().provider != null ? oldWorld().provider.dimensionId : 0);
+        int result = 31 + (oldWorld() != null && oldWorld().provider != null ? oldWorld().provider.getDimension() : 0);
         result = 31 * result + xi();
         result = 31 * result + yi();
         result = 31 * result + zi();
@@ -367,7 +359,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
 
     public String toString()
     {
-        return "BlockEdit[ " + (oldWorld() != null && oldWorld().provider != null ? oldWorld().provider.dimensionId : null) + "d, " + xi() + "x, " + yi() + "y, " + zi() + "z]";
+        return "BlockEdit[ " + (oldWorld() != null && oldWorld().provider != null ? oldWorld().provider.getDimension() : null) + "d, " + xi() + "x, " + yi() + "y, " + zi() + "z]";
     }
 
     public BlockEdit setNotificationLevel(int notificationlevel)

@@ -10,10 +10,9 @@ import com.builtbroken.mc.core.network.packet.callback.chunk.PacketRequestData;
 import com.builtbroken.mc.core.network.packet.callback.chunk.PacketSendData;
 import com.builtbroken.mc.core.network.packet.user.PacketMouseClick;
 import com.builtbroken.mc.core.network.packet.user.PacketPlayerItemMode;
-import com.builtbroken.mc.framework.access.global.packets.PacketAccessGui;
-import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import net.minecraftforge.fml.common.network.FMLIndexedMessageToMessageCodec;
 
 /**
  * @author tgame14
@@ -42,7 +41,7 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<IPac
         addPacket(PacketAudio.class);
         addPacket(PacketOpenGUI.class);
         addPacket(PacketGui.class);
-        addPacket(PacketAccessGui.class);
+        //addPacket(PacketAccessGui.class); TODO re-add when access system is added
         addPacket(PacketSendData.class);
         addPacket(PacketRequestData.class);
     }

@@ -7,15 +7,14 @@ import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
+import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -33,7 +32,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
 
     public int ticks = 0;
 
-    public HashMap<ForgeDirection, Block> connectedBlocks = new HashMap();
+    public HashMap<Direction, Block> connectedBlocks = new HashMap();
 
     @Override
     public IMultiTileHost getHost()
@@ -42,20 +41,14 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     }
 
     @Override
-    public boolean canUpdate()
-    {
-        return DimensionManager.getWorld(0) != null;
-    }
-
-    @Override
     public void setHost(IMultiTileHost host)
     {
         this.hostWeakReference = new WeakReference(host);
-        if (host == null && worldObj != null && !worldObj.loadedTileEntityList.contains(this))
+        if (host == null && world != null && !world.loadedTileEntityList.contains(this))
         {
-            worldObj.addTileEntity(this);
+            world.addTileEntity(this);
         }
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
         {
             Engine.packetHandler.sendToAllAround(getDescPacket(), this);
         }
@@ -71,21 +64,19 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         super.invalidate();
     }
 
-    @Override
-    public void updateEntity()
+    public void update() //TODO trigger from tick handler
     {
-        super.updateEntity();
         if (ticks == 0)
         {
             updateConnections();
         }
-        if (!worldObj.isRemote && ticks % 20 == 0)
+        if (!world.isRemote && ticks % 20 == 0)
         {
             if (getHost() == null)
             {
-                getWorldObj().setBlockToAir(xCoord, yCoord, zCoord);
+                world.setBlockToAir(pos);
             }
-            else if (getWorldObj().loadedTileEntityList.contains(this))
+            else if (world.loadedTileEntityList.contains(this))
             {
                 TileTaskTickHandler.INSTANCE.addTileToBeRemoved(this);
             }
@@ -95,10 +86,10 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
 
     public void updateConnections()
     {
-        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+        for (Direction dir : Direction.DIRECTIONS)
         {
             Pos pos = new Pos(this).add(dir);
-            Block b = pos.getBlock(getWorldObj());
+            Block b = pos.getBlock(world);
             if (connectedBlocks.containsKey(dir))
             {
                 //TODO notify that a block has changed
@@ -107,7 +98,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
                     connectedBlocks.remove(dir);
                 }
             }
-            if (b != null && !b.isAir(getWorldObj(), xCoord, yCoord, zCoord))
+            if (!pos.isAirBlock(world))
             {
                 connectedBlocks.put(dir, b);
             }
@@ -117,7 +108,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     @Override
     public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type)
     {
-        if (worldObj.isRemote)
+        if (world.isRemote)
         {
             if (id == 1)
             {
@@ -129,7 +120,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
                 }
                 else
                 {
-                    TileEntity tile = pos.getTileEntity(worldObj);
+                    TileEntity tile = pos.getTileEntity(world);
                     if (tile instanceof IMultiTileHost)
                     {
                         this.setHost((IMultiTileHost) tile);
@@ -151,7 +142,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
 
                 if (prev != shouldRenderBlock)
                 {
-                    worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+                    world.markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
                 }
                 return true;
             }
@@ -160,7 +151,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     }
 
     @Override
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
         return Engine.packetHandler.toMCPacket(getDescPacket());
     }
@@ -181,6 +172,6 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     @Override
     public String toString()
     {
-        return getClass().getSimpleName() + "[ DIM@" + (worldObj != null && worldObj.provider != null ? worldObj.provider.dimensionId + " " : "null ") + xCoord + "x " + yCoord + "y " + zCoord + "z " + "]@" + hashCode();
+        return getClass().getSimpleName() + "[ DIM@" + (world != null && world.provider != null ? world.provider.getDimension() + " " : "null ") + getPos().getX() + "x " + getPos().getY() + "y " + getPos().getZ() + "z " + "]@" + hashCode();
     }
 }

@@ -2,13 +2,13 @@ package com.builtbroken.mc.core.network.netty;
 
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.core.Engine;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 /**
  * @author tgame14
@@ -30,7 +30,7 @@ public class ResonantPacketHandler extends SimpleChannelInboundHandler<IPacket>
                     packet.handleClientSide();
                     break;
                 case SERVER:
-                    packet.handleServerSide(((NetHandlerPlayServer) netHandler).playerEntity);
+                    packet.handleServerSide(((NetHandlerPlayServer) netHandler).player);
                     break;
                 default:
                     break;

@@ -22,7 +22,7 @@ public class PacketTileReadException extends RuntimeException
         super(message);
         this.location = location;
         this.tile = location.getTileEntity();
-        this.block = location.getBlock();
+        this.block = location.getBlockState();
         this.meta = location.getBlockMetadata();
     }
 
@@ -31,7 +31,7 @@ public class PacketTileReadException extends RuntimeException
         super(message, cause);
         this.location = location;
         this.tile = location.getTileEntity();
-        this.block = location.getBlock();
+        this.block = location.getBlockState();
         this.meta = location.getBlockMetadata();
     }
 
