@@ -3,11 +3,15 @@ package com.builtbroken.mc.framework.item;
 import com.builtbroken.mc.api.items.listeners.IItemEventListener;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
+import com.builtbroken.mc.framework.json.processors.JsonProcessor;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -37,6 +41,9 @@ public class ItemNode implements IItemEventListener
     private boolean hasSubTypes = false;
     private int maxStackSize = 64;
     private String unlocalizedName;
+
+    //Subtypes of the item
+    private HashMap<Integer, ItemNodeSubType> subTypeHashMap = new HashMap();
 
     public ItemNode(String owner, String id)
     {
@@ -77,9 +84,42 @@ public class ItemNode implements IItemEventListener
     {
         this.unlocalizedName = name;
         item.setUnlocalizedName(owner + ":" + name);
-        if (item.iconString == null)
+    }
+
+    @JsonProcessorData(value = "subTypes")
+    public void setSubTypes(JsonObject data)
+    {
+        if (data.isJsonArray())
         {
-            item.setTextureName(owner + ":" + name);
+            for (JsonElement element : data.getAsJsonArray())
+            {
+                JsonObject itemData = element.getAsJsonObject();
+                if (element.isJsonObject()) //TODO move to JSON processor?
+                {
+                    JsonProcessor.ensureValuesExist(itemData, "id", "name", "index");
+                    String id = itemData.getAsJsonPrimitive("id").getAsString();
+                    String name = itemData.getAsJsonPrimitive("name").getAsString();
+                    int index = itemData.getAsJsonPrimitive("index").getAsInt();
+
+                    ItemNodeSubType subType = new ItemNodeSubType(id, name, index);
+
+                    if (subTypeHashMap.containsKey(index))
+                    {
+                        throw new IllegalArgumentException("ItemNode#setSubTypes(data) >> process subtypes >> duplicate index used for " + subType + " and " + subTypeHashMap.get(index));
+                    }
+                    subTypeHashMap.put(index, subType);
+
+                    //TODO process extra data using JSON injection handler
+                }
+                else
+                {
+                    throw new IllegalArgumentException("ItemNode#setSubTypes(data) >> process subtypes >> sub type entries must be a JsonObject, " + element);
+                }
+            }
+        }
+        else
+        {
+            throw new IllegalArgumentException("ItemNode#setSubTypes(data) requires that the input from JSON be a json array matching '\"subType\":[{values1}, {value2}]");
         }
     }
 
