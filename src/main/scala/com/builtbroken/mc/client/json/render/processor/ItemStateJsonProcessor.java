@@ -2,6 +2,7 @@ package com.builtbroken.mc.client.json.render.processor;
 
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.state.TextureState;
+import com.builtbroken.mc.client.json.texture.TextureData;
 import com.google.gson.JsonObject;
 
 /**
@@ -10,6 +11,11 @@ import com.google.gson.JsonObject;
  */
 public class ItemStateJsonProcessor extends RenderJsonSubProcessor
 {
+    public ItemStateJsonProcessor()
+    {
+        super(TextureData.Type.ITEM);
+    }
+
     @Override
     public IRenderState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
     {

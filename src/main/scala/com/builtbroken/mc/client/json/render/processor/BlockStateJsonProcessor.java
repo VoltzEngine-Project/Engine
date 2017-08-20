@@ -2,6 +2,7 @@ package com.builtbroken.mc.client.json.render.processor;
 
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.block.BlockState;
+import com.builtbroken.mc.client.json.texture.TextureData;
 import com.google.gson.JsonObject;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -11,6 +12,11 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public class BlockStateJsonProcessor extends RenderJsonSubProcessor
 {
+    public BlockStateJsonProcessor()
+    {
+        super(TextureData.Type.BLOCK);
+    }
+
     @Override
     public IRenderState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
     {

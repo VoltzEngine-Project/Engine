@@ -3,6 +3,7 @@ package com.builtbroken.mc.client.json.render.processor;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.state.ModelState;
 import com.builtbroken.mc.client.json.render.tile.TileState;
+import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.framework.json.conversion.JsonConverterPos;
@@ -20,6 +21,11 @@ import java.util.List;
  */
 public class ModelStateJsonProcessor extends RenderJsonSubProcessor
 {
+    public ModelStateJsonProcessor()
+    {
+        super(TextureData.Type.MODEL);
+    }
+
     @Override
     public IRenderState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
     {

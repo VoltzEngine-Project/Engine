@@ -20,6 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -32,6 +33,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +75,37 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     {
         this(new ItemNode(owner, id));
         node.setUnlocalizedName(name);
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack)
+    {
+        if (getHasSubtypes())
+        {
+            if (node.subTypeHashMap.containsKey(stack.getItemDamage()))
+            {
+                return "item." + this.unlocalizedName + "." + node.subTypeHashMap.get(stack.getItemDamage()).unlocalizedName;
+            }
+            return "item." + this.unlocalizedName + "." + stack.getItemDamage();
+        }
+        return "item." + this.unlocalizedName;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(Item item, CreativeTabs tab, List items)
+    {
+        if (getHasSubtypes())
+        {
+            for (ItemNodeSubType type : node.subTypeHashMap.values())
+            {
+                items.add(new ItemStack(item, 1, type.index));
+            }
+        }
+        else
+        {
+            items.add(new ItemStack(item, 1, 0));
+        }
     }
 
     @Override
@@ -155,13 +188,14 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
     {
-        String gunState = getRenderKey(stack, player, useRemaining);
-        if (gunState != null)
+        final String contentID = getRenderContentID(stack);
+        final RenderData data = ClientDataHandler.INSTANCE.getRenderData(contentID);
+        if (data != null)
         {
-            RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(stack));
-            if (data != null)
+            final String renderKey = getRenderKey(stack, player, useRemaining);
+            if (renderKey != null)
             {
-                IRenderState state = data.getState(RenderData.INVENTORY_RENDER_KEY + "." + gunState);
+                IRenderState state = data.getState(RenderData.INVENTORY_RENDER_KEY + "." + renderKey);  //TODO add render pass & use remaining
                 if (state != null)
                 {
                     IIcon icon = state.getIcon(renderPass);
@@ -172,27 +206,48 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
                 }
             }
         }
-        return getIconFromDamageForRenderPass(stack.getItemDamage(), renderPass);
+        return getIcon(stack, renderPass);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int pass)
     {
-        RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(stack));
+        //Attempt to render using stack -> content ID
+        final String contentID = getRenderContentID(stack);
+        final RenderData data = ClientDataHandler.INSTANCE.getRenderData(contentID);
         if (data != null)
         {
-            String renderKey = getRenderKey(stack);
-            IRenderState state = data.getState(RenderData.INVENTORY_RENDER_KEY + (renderKey != null ? "." + renderKey : ""));
-            if (state != null)
+            //Build key set to attempt to get icon TODO cache to improve performance
+            List<String> keys = new ArrayList();
+            String recommendedKey = getRenderKey(stack);
+            if (recommendedKey != null && !recommendedKey.isEmpty())
             {
-                IIcon icon = state.getIcon(pass);
-                if (icon != null)
+                keys.add(RenderData.INVENTORY_RENDER_KEY + "." + recommendedKey + "." + pass);
+                keys.add(RenderData.INVENTORY_RENDER_KEY + "." + recommendedKey);
+                keys.add(recommendedKey);
+            }
+            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + pass);
+            keys.add(RenderData.INVENTORY_RENDER_KEY);
+
+            //Loop through keys until we find a valid match
+            for (String key : keys)
+            {
+                IRenderState state = data.getState(key);
+                if (state != null)
                 {
-                    return icon;
+                    if (state != null)
+                    {
+                        IIcon icon = state.getIcon(pass);
+                        if (icon != null)
+                        {
+                            return icon;
+                        }
+                    }
                 }
             }
         }
+        //If all else fails fall back to using metadata
         return getIconFromDamageForRenderPass(stack.getItemDamage(), pass);
     }
 
@@ -207,8 +262,13 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
      * @param stack - stack being rendered
      * @return key for the render ID
      */
+
     public String getRenderKey(ItemStack stack)
     {
+        if (getHasSubtypes() && node.subTypeHashMap.containsKey(stack.getItemDamage()))
+        {
+            return node.subTypeHashMap.get(stack.getItemDamage()).id;
+        }
         return null;
     }
 
@@ -242,28 +302,34 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     {
         if (data != null)
         {
-            //Attempt to get meta
-            IRenderState state = data.getState(RenderData.INVENTORY_RENDER_KEY + "." + meta);
-            if (state != null)
+            //TODO cache list for faster runtime
+            List<String> keys = new ArrayList();
+            if (node.hasSubTypes() && node.subTypeHashMap.containsKey(meta))
             {
-                state = data.getState(RenderData.INVENTORY_RENDER_KEY);
+                keys.add(RenderData.INVENTORY_RENDER_KEY + "." + node.subTypeHashMap.get(meta).id + "." + pass);
+                keys.add(RenderData.INVENTORY_RENDER_KEY + "." + node.subTypeHashMap.get(meta).id);
+                keys.add(node.subTypeHashMap.get(meta).id);
+            }
+            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + meta + "." + pass);
+            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + meta);
+            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + pass);
+            keys.add(RenderData.INVENTORY_RENDER_KEY);
+
+            //Attempt to get meta
+            for (String key : keys)
+            {
+                IRenderState state = data.getState(key);
                 if (state != null)
                 {
-                    IIcon icon = state.getIcon(pass);
-                    if (icon != null)
+                    state = data.getState(RenderData.INVENTORY_RENDER_KEY);
+                    if (state != null)
                     {
-                        return icon;
+                        IIcon icon = state.getIcon(pass);
+                        if (icon != null)
+                        {
+                            return icon;
+                        }
                     }
-                }
-            }
-            //Attempt to do non-meta
-            state = data.getState(RenderData.INVENTORY_RENDER_KEY);
-            if (state != null)
-            {
-                IIcon icon = state.getIcon(0);
-                if (icon != null)
-                {
-                    return icon;
                 }
             }
         }
@@ -459,7 +525,19 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         {
             registered = true;
             manager.newItem(node.id, this);
-            Engine.logger().info(this + " has been claimed by " + mod);
+            Engine.logger().info(this + " has been registered to " + mod);
+
+            //Handle subtype ore names
+            if (node.hasSubTypes())
+            {
+                for (ItemNodeSubType type : node.subTypeHashMap.values())
+                {
+                    if (type.oreName != null && !type.oreName.isEmpty())
+                    {
+                        OreDictionary.registerOre(type.oreName, new ItemStack(this, 1, type.index));
+                    }
+                }
+            }
         }
     }
 
@@ -488,7 +566,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
 
     public String getRenderContentID(int meta)
     {
-        return getMod() + ":" + node.id;
+        return getMod() + ":" + node.getRenderContentID(meta);
     }
 
     //=============================================

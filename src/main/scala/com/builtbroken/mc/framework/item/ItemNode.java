@@ -43,7 +43,7 @@ public class ItemNode implements IItemEventListener
     private String unlocalizedName;
 
     //Subtypes of the item
-    private HashMap<Integer, ItemNodeSubType> subTypeHashMap = new HashMap();
+    public HashMap<Integer, ItemNodeSubType> subTypeHashMap = new HashMap();
 
     public ItemNode(String owner, String id)
     {
@@ -60,6 +60,7 @@ public class ItemNode implements IItemEventListener
     public void setHasSubTypes(boolean hasSubTypes)
     {
         this.hasSubTypes = hasSubTypes;
+        this.item.setHasSubtypes(hasSubTypes);
     }
 
     public int getMaxStackSize()
@@ -87,7 +88,7 @@ public class ItemNode implements IItemEventListener
     }
 
     @JsonProcessorData(value = "subTypes")
-    public void setSubTypes(JsonObject data)
+    public void setSubTypes(JsonElement data)
     {
         if (data.isJsonArray())
         {
@@ -101,7 +102,7 @@ public class ItemNode implements IItemEventListener
                     String name = itemData.getAsJsonPrimitive("name").getAsString();
                     int index = itemData.getAsJsonPrimitive("index").getAsInt();
 
-                    ItemNodeSubType subType = new ItemNodeSubType(id, name, index);
+                    ItemNodeSubType subType = new ItemNodeSubType(this.item, this, id, name, index);
 
                     if (subTypeHashMap.containsKey(index))
                     {
@@ -136,5 +137,10 @@ public class ItemNode implements IItemEventListener
         {
             throw new RuntimeException("Received packet on item without being coded to handle packets.");
         }
+    }
+
+    public String getRenderContentID(int meta)
+    {
+        return id; //TODO add JSON option to return different render ID per sub type to allow overriding render settings (render pass count)
     }
 }

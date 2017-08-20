@@ -81,15 +81,22 @@ public class TextureJsonProcessor extends JsonProcessor<TextureData>
         return true;
     }
 
+    /**
+     * Handles loading a texture instance from JSON
+     * @param object
+     * @return
+     */
     protected TextureData handle(JsonObject object)
     {
+        //IF changed update RenderJsonSubProcessor
         ensureValuesExist(object, "domain", "name", "key", "type");
 
         String domain = object.get("domain").getAsString();
         String name = object.get("name").getAsString();
         String key = object.get("key").getAsString();
-        String typeKey = object.get("type").getAsString();
 
+        //Get texture type
+        String typeKey = object.get("type").getAsString();
         TextureData.Type type = TextureData.Type.get(typeKey);
         if (type == null)
         {

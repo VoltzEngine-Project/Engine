@@ -4,7 +4,12 @@ import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.state.RenderState;
 import com.builtbroken.mc.client.json.render.state.TextureState;
+import com.builtbroken.mc.client.json.texture.TextureData;
+import com.builtbroken.mc.framework.json.processors.JsonProcessor;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.Map;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -12,6 +17,13 @@ import com.google.gson.JsonObject;
  */
 public abstract class RenderJsonSubProcessor
 {
+    public final TextureData.Type textureType;
+
+    public RenderJsonSubProcessor(TextureData.Type textureType)
+    {
+        this.textureType = textureType;
+    }
+
     public abstract IRenderState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType);
 
     /**
@@ -37,9 +49,52 @@ public abstract class RenderJsonSubProcessor
 
             if (state instanceof TextureState)
             {
+                //Legacy way to register textures
                 if (renderStateObject.has("textureID"))
                 {
                     ((TextureState) state).textureID = renderStateObject.get("textureID").getAsString();
+                }
+
+                //TODO add error state if textures are being loaded without being used
+                //Load all textures (mainly for blocks)
+                for (Map.Entry<String, JsonElement> elementEntry : renderStateObject.entrySet())
+                {
+                    //Lazy way to register textures
+                    if (elementEntry.getKey().equalsIgnoreCase("texture")
+                            || elementEntry.getKey().contains(":") && elementEntry.getKey().split(":")[0].equalsIgnoreCase("texture"))
+                    {
+                        //Get data
+                        JsonObject textureData = elementEntry.getValue().getAsJsonObject();
+
+                        //Enforce minimal values
+                        JsonProcessor.ensureValuesExist(textureData, "domain", "name");
+
+                        //Read minimal values
+                        String domain = textureData.getAsJsonPrimitive("domain").getAsString();
+                        String name = textureData.getAsJsonPrimitive("name").getAsString();
+
+                        //Get key
+                        String key;
+
+                        //Get key in case it doesn't match texture name
+                        if (textureData.has("key"))
+                        {
+                            key = textureData.getAsJsonPrimitive("key").getAsString();
+                        }
+                        else
+                        {
+                            key = domain + ":" + name;
+                        }
+
+                        //Init texture ID
+                        if (((TextureState) state).textureID == null)
+                        {
+                            ((TextureState) state).textureID = key;
+                        }
+
+                        //Create and register texture
+                        new TextureData(null, key, domain, name, textureType).register();
+                    }
                 }
             }
         }
