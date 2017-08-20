@@ -76,6 +76,17 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     }
 
     @Override
+    public Item setUnlocalizedName(String name)
+    {
+        this.unlocalizedName = name;
+        if (iconString == null)
+        {
+            setTextureName(name);
+        }
+        return this;
+    }
+
+    @Override
     public List<IItemEventListener> getItemListeners(String key)
     {
         return listeners.get(key);
