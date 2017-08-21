@@ -451,7 +451,11 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     @Override
     public IWorld world()
     {
-        return null;
+        if(_worldCache == null)
+        {
+            _worldCache = Engine.minecraft.getWorld(worldObj.provider.dimensionId);
+        }
+        return _worldCache;
     }
 
     @Override
