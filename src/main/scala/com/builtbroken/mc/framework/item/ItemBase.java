@@ -136,6 +136,24 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
             list.add("RenderID: " + getRenderContentID(stack));
             list.add("RenderS: " + getRenderKey(stack));
             list.add("RenderE: " + getRenderKey(stack, player, player.getItemInUseCount()));
+
+            int[] ids = OreDictionary.getOreIDs(stack);
+            boolean first = true;
+            if (ids != null && ids.length > 0)
+            {
+                for (int id : ids)
+                {
+                    if (first)
+                    {
+                        first = false;
+                        list.add("Ore: " + Colors.GREY.code + OreDictionary.getOreName(id));
+                    }
+                    else
+                    {
+                        list.add("     " + Colors.GREY.code + OreDictionary.getOreName(id));
+                    }
+                }
+            }
         }
         //TODO add listener support
     }
