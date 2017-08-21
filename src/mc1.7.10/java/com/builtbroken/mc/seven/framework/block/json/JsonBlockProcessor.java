@@ -56,7 +56,7 @@ public class JsonBlockProcessor extends JsonProcessor<BlockBase>
     @SubscribeEvent
     public void onJsonProcessorRegister(JsonProcessorRegistryEvent event)
     {
-        if (event instanceof IJsonBlockSubProcessor)
+        if (event.processor instanceof IJsonBlockSubProcessor)
         {
             addSubProcessor(event.processor.getJsonKey(), (IJsonBlockSubProcessor) event.processor);
         }
