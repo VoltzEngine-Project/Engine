@@ -5,7 +5,7 @@ import com.builtbroken.mc.api.process.IWorkerThread;
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -33,7 +33,7 @@ public class CommandThreadClear extends SubCommand
             {
                 int process = thread.containedProcesses();
                 thread.clearProcesses();
-                sender.addChatMessage(new ChatComponentText("Cleared " + process + " process from thread " + thread.toString()));
+                sender.sendMessage(new TextComponentString("Cleared " + process + " process from thread " + thread.toString()));
             }
         }
         return true;

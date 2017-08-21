@@ -5,7 +5,7 @@ import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.TextComponentString;
 
 import java.util.List;
 
@@ -47,23 +47,23 @@ public class CommandRemoveGroup extends SubCommand
                                 g.setToExtend(group.getExtendGroup());
                             }
                         }
-                        sender.addChatMessage(new ChatComponentText(i + " groups updated"));
+                        sender.addChatMessage(new TextComponentString(i + " groups updated"));
                     }
-                    sender.addChatMessage(new ChatComponentText("Group \'" + name + "\' removed"));
+                    sender.addChatMessage(new TextComponentString("Group \'" + name + "\' removed"));
                 }
                 else
                 {
-                    sender.addChatMessage(new ChatComponentText("Error removing group"));
+                    sender.addChatMessage(new TextComponentString("Error removing group"));
                 }
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Group \'" + name +"\' not found"));
+                sender.addChatMessage(new TextComponentString("Group \'" + name +"\' not found"));
             }
         }
         else
         {
-            sender.addChatMessage(new ChatComponentText("Missing group name"));
+            sender.addChatMessage(new TextComponentString("Missing group name"));
         }
         return true;
     }

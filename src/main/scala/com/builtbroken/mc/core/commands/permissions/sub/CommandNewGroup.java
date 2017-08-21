@@ -5,7 +5,7 @@ import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class CommandNewGroup extends SubCommand
                     }
                     if (toExtend == null)
                     {
-                        sender.addChatMessage(new ChatComponentText("Error: Unknown group to extend"));
+                        sender.sendMessage(new TextComponentString("Error: Unknown group to extend"));
                         return true;
                     }
                 }
@@ -55,21 +55,21 @@ public class CommandNewGroup extends SubCommand
                 }
                 if (GroupProfileHandler.GLOBAL.getAccessProfile().addGroup(group))
                 {
-                    sender.addChatMessage(new ChatComponentText("Group added"));
+                    sender.sendMessage(new TextComponentString("Group added"));
                 }
                 else
                 {
-                    sender.addChatMessage(new ChatComponentText("Error adding group"));
+                    sender.sendMessage(new TextComponentString("Error adding group"));
                 }
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("A Group by that name already exists"));
+                sender.sendMessage(new TextComponentString("A Group by that name already exists"));
             }
         }
         else
         {
-            sender.addChatMessage(new ChatComponentText("Missing group name"));
+            sender.sendMessage(new TextComponentString("Missing group name"));
         }
         return true;
     }

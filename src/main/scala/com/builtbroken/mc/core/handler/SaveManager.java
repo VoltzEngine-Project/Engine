@@ -6,12 +6,12 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
@@ -25,6 +25,9 @@ import java.util.LinkedHashSet;
  *
  * @author Darkguardsman
  */
+@Deprecated
+//http://mcforge.readthedocs.io/en/latest/datastorage/worldsaveddata/
+//https://github.com/gigaherz/Ender-Rift/tree/master/src/main/java/gigaherz/enderRift/rift/storage
 public class SaveManager
 {
     /**
@@ -317,7 +320,7 @@ public class SaveManager
     {
         for (IVirtualObject ref : instance().objects)
         {
-            if (ref.shouldSaveForWorld(evt.world))
+            if (ref.shouldSaveForWorld(evt.getWorld()))
             {
                 saveObject(ref);
             }
@@ -326,7 +329,7 @@ public class SaveManager
         while (it.hasNext())
         {
             IVirtualObject ref = it.next();
-            if (ref.shouldSaveForWorld(evt.world))
+            if (ref.shouldSaveForWorld(evt.getWorld()))
             {
                 saveObject(ref);
             }

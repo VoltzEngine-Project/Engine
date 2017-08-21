@@ -5,11 +5,10 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Point;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
-import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.io.*;
 import java.util.UUID;
@@ -61,7 +60,12 @@ public class NBTUtility
 
     public static boolean saveData(String filename, NBTTagCompound data)
     {
-        return saveData(getSaveDirectory(MinecraftServer.getServer().getFolderName()), filename, data);
+        return saveData(getSaveDirectory(), filename, data);
+    }
+
+    public static File getSaveDirectory()
+    {
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory(); //TODO test to ensure it works
     }
 
     public static NBTTagCompound loadData(File file)
@@ -106,12 +110,7 @@ public class NBTUtility
 
     public static NBTTagCompound loadData(String filename)
     {
-        return loadData(getSaveDirectory(MinecraftServer.getServer().getFolderName()), filename);
-    }
-
-    public static File getSaveDirectory()
-    {
-        return getSaveDirectory(MinecraftServer.getServer().getFolderName());
+        return loadData(getSaveDirectory(), filename);
     }
 
     public static File getSaveDirectory(String worldName)
