@@ -235,7 +235,7 @@ public final class JsonContentLoader extends AbstractLoadable
 
         if (jsonEntries.size() > 0 && Engine.runningAsDev && !GraphicsEnvironment.isHeadless())
         {
-            boolean processorExists = true;
+            boolean processorExists = false;
             Engine.logger().info("Failed to process all JSON entries. This is most likely a bug if the count is high.");
             for (Map.Entry<String, List<JsonEntry>> set : jsonEntries.entrySet())
             {
