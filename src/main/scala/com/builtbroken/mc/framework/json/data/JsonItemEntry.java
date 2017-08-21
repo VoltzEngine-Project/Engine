@@ -1,5 +1,7 @@
 package com.builtbroken.mc.framework.json.data;
 
+import com.builtbroken.mc.framework.item.ItemBase;
+import com.builtbroken.mc.framework.item.ItemNodeSubType;
 import com.builtbroken.mc.framework.json.imp.IJSONMetaConvert;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -87,9 +89,24 @@ public class JsonItemEntry
                     if (object instanceof IJSONMetaConvert)
                     {
                         meta = ((IJSONMetaConvert) object).getMetaForValue(damage);
+
+                        //Error state
                         if (meta == -1)
                         {
-                            return null;
+                            return null; //TODO output debug
+                        }
+                    }
+                    else if (object instanceof ItemBase && ((ItemBase) object).node.hasSubTypes())
+                    {
+                        ItemNodeSubType type = ((ItemBase) object).node.nameToSubType.get(damage.toLowerCase());
+                        if (type != null)
+                        {
+                            meta = type.index;
+                        }
+                        //Error state
+                        else
+                        {
+                            return null; //TODO output debug
                         }
                     }
                     else
