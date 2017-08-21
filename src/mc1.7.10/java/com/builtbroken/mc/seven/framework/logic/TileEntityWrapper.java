@@ -225,13 +225,19 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     @Override
     public void sendPacketToClient(IPacket packet, double range)
     {
-
+        if (packet != null)
+        {
+            Engine.packetHandler.sendToAllAround(packet, this, range);
+        }
     }
 
     @Override
     public void sendPacketToServer(IPacket packet)
     {
-
+        if (packet != null)
+        {
+            Engine.packetHandler.sendToServer(packet);
+        }
     }
 
     //=============================================
@@ -404,40 +410,49 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
      */
     protected void toStringData(StringBuilder builder)
     {
-        if (world() != null)
+        //During registration the wrapper will be toString() for debug
+        if (Engine.minecraft != null)
         {
-            //Out client or server
-            if (world().isClient())
+            if (world() != null)
             {
-                builder.append("client, ");
+                //Out client or server
+                if (world().isClient())
+                {
+                    builder.append("client, ");
+                }
+                else
+                {
+                    builder.append("server, ");
+                }
+            }
+
+            //Out world
+            builder.append("world = ");
+            if (world() != null)
+            {
+                builder.append("dim@");
+                builder.append(world().getDimID());
+                builder.append(", ");
             }
             else
             {
-                builder.append("server, ");
+                builder.append("null, ");
             }
-        }
 
-        //Out world
-        builder.append("world = ");
-        if (world() != null)
-        {
-            builder.append("dim@");
-            builder.append(world().getDimID());
-            builder.append(", ");
+            //Out position
+            builder.append(xi());
+            builder.append("x, ");
+
+            builder.append(yi());
+            builder.append("y, ");
+
+            builder.append(zi());
+            builder.append("z, ");
         }
         else
         {
-            builder.append("null, ");
+            builder.append(" <dead tile> ");
         }
-        //Out position
-        builder.append(xi());
-        builder.append("x, ");
-
-        builder.append(yi());
-        builder.append("y, ");
-
-        builder.append(zi());
-        builder.append("z, ");
 
         //Out tile
         builder.append("tile = ");
@@ -451,9 +466,9 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     @Override
     public IWorld world()
     {
-        if(_worldCache == null)
+        if (_worldCache == null && worldObj != null)
         {
-            _worldCache = Engine.minecraft.getWorld(worldObj.provider.dimensionId);
+            _worldCache = Engine.getWorld(worldObj.provider.dimensionId);
         }
         return _worldCache;
     }

@@ -1,7 +1,9 @@
 package com.builtbroken.mc.seven.abstraction;
 
-import com.builtbroken.mc.seven.abstraction.world.WorldWrapper;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.seven.abstraction.world.WorldWrapperClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
@@ -11,10 +13,38 @@ import org.lwjgl.input.Keyboard;
  */
 public class MinecraftWrapperClient extends MinecraftWrapper
 {
+    WorldWrapperClient worldWrapperClient;
+
     @Override
-    protected WorldWrapper newWorldWrapper(World world)
+    public IWorld getWorld(int dim)
     {
-        return new WorldWrapperClient(world);
+        if (Minecraft.getMinecraft().theWorld != null)
+        {
+            if (dim != Minecraft.getMinecraft().theWorld.provider.dimensionId)
+            {
+                if (Engine.runningAsDev) //TODO remove if we load other worlds on the client in the future
+                {
+                    Engine.logger().error("Something is trying to access a world on the client that is not the world the player is currently inside");
+                    return null;
+                }
+            }
+            if (worldWrapperClient == null || worldWrapperClient.getWorld() != Minecraft.getMinecraft().theWorld)
+            {
+                worldWrapperClient = newWorldWrapper(Minecraft.getMinecraft().theWorld);
+            }
+            return worldWrapperClient; //Only 1 world exists on the client
+        }
+        return null;
+    }
+
+    @Override
+    protected WorldWrapperClient newWorldWrapper(World world)
+    {
+        if (world != null)
+        {
+            return new WorldWrapperClient(world);
+        }
+        return null;
     }
 
     @Override
