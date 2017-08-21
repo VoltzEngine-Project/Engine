@@ -123,8 +123,11 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
 
     public B setLocation(final World world, double x, double y, double z)
     {
-        this.oldWorld = world;
-        this.world = Engine.minecraft.getWorld(this.oldWorld.provider.dimensionId); //TODO replace when converted to IWorld
+        if(world != null)
+        {
+            this.oldWorld = world;
+            this.world = Engine.getWorld(this.oldWorld.provider.dimensionId);
+        }
         this.x = x;
         this.y = y;
         this.z = z;
