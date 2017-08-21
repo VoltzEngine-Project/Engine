@@ -3,7 +3,6 @@ package com.builtbroken.mc.framework.item;
 import com.builtbroken.mc.api.items.listeners.IItemEventListener;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
-import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
@@ -44,6 +43,7 @@ public class ItemNode implements IItemEventListener
 
     //Subtypes of the item
     public HashMap<Integer, ItemNodeSubType> subTypeHashMap = new HashMap();
+    public HashMap<String, ItemNodeSubType> nameToSubType = new HashMap();
 
     public ItemNode(String owner, String id)
     {
@@ -87,7 +87,7 @@ public class ItemNode implements IItemEventListener
         item.setUnlocalizedName(owner + ":" + name);
     }
 
-    @JsonProcessorData(value = "subTypes")
+    @JsonProcessorData(value = "subTypes") //TODO find cleaner way to init
     public void setSubTypes(JsonElement data)
     {
         if (data.isJsonArray())
@@ -97,18 +97,21 @@ public class ItemNode implements IItemEventListener
                 JsonObject itemData = element.getAsJsonObject();
                 if (element.isJsonObject()) //TODO move to JSON processor?
                 {
-                    JsonProcessor.ensureValuesExist(itemData, "id", "name", "index");
-                    String id = itemData.getAsJsonPrimitive("id").getAsString();
-                    String name = itemData.getAsJsonPrimitive("name").getAsString();
-                    int index = itemData.getAsJsonPrimitive("index").getAsInt();
+                    ItemNodeSubType subType = new ItemNodeSubType(this.item, this, itemData);
 
-                    ItemNodeSubType subType = new ItemNodeSubType(this.item, this, id, name, index);
-
-                    if (subTypeHashMap.containsKey(index))
+                    //Error checks, can't have duplicate entries
+                    if (subTypeHashMap.containsKey(subType.index))
                     {
-                        throw new IllegalArgumentException("ItemNode#setSubTypes(data) >> process subtypes >> duplicate index used for " + subType + " and " + subTypeHashMap.get(index));
+                        throw new IllegalArgumentException("ItemNode#setSubTypes(data) >> process subtypes >> duplicate index used for " + subType + " and " + subTypeHashMap.get(subType.index));
                     }
-                    subTypeHashMap.put(index, subType);
+                    if (nameToSubType.containsKey(subType.id))
+                    {
+                        throw new IllegalArgumentException("ItemNode#setSubTypes(data) >> process subtypes >> duplicate id used for " + subType + " and " + nameToSubType.get(subType.id));
+                    }
+
+                    //Cache data for use
+                    subTypeHashMap.put(subType.index, subType);
+                    nameToSubType.put(subType.id, subType);
 
                     //TODO process extra data using JSON injection handler
                 }
