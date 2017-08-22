@@ -189,7 +189,8 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
     @Override
     public boolean shouldSaveForWorld(World world)
     {
-        return dimID == world.provider.dimensionId;
+        //Client version will have a null manager and should not be saved
+        return mapManager != null && dimID == world.provider.dimensionId && !world.isRemote;
     }
 
     @Override
