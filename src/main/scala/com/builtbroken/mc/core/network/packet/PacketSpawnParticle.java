@@ -38,11 +38,15 @@ public class PacketSpawnParticle extends PacketType
 
     public PacketSpawnParticle(String name, World world, double x, double y, double z, double vx, double vy, double vz)
     {
-
+        this(name, world.provider.dimensionId, x, y, z, vx, vy, vz);
     }
 
     public PacketSpawnParticle(String name, int dim, double x, double y, double z, double vx, double vy, double vz)
     {
+        if(name == null && Engine.runningAsDev)
+        {
+            Engine.logger().error("PacketSpawnParticle >> Something created a packet with a null packet name", new RuntimeException());
+        }
         this.name = name;
         this.dim = dim;
         this.x = x;
@@ -56,7 +60,7 @@ public class PacketSpawnParticle extends PacketType
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
-        ByteBufUtils.writeUTF8String(buffer, name);
+        ByteBufUtils.writeUTF8String(buffer, name == null ? "null" : name);
         buffer.writeInt(dim);
         buffer.writeDouble(x);
         buffer.writeDouble(y);
