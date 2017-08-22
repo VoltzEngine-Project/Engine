@@ -4,7 +4,7 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
-import com.builtbroken.mc.seven.framework.block.IJsonBlockSubProcessor;
+import com.builtbroken.mc.seven.framework.block.json.IJsonBlockSubProcessor;
 import com.builtbroken.mc.seven.framework.block.meta.MetaData;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -2,20 +2,13 @@ package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.mc.api.abstraction.entity.IEntityData;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.imp.transform.vector.Pos;
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import com.builtbroken.mc.data.Direction;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.math.MathHelper;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 
 /**
@@ -106,112 +99,6 @@ public class BlockUtility
         return getBlockHardness(Block.getBlockFromItem(stack.getItem()));
     }
 
-    /**
-     * Sets a block in a sneaky way to bypass some restraints.
-     */
-    public static void setBlockSneaky(World world, Pos position, Block block, int metadata, TileEntity tileEntity)
-    {
-        if (block != null && world != null)
-        {
-            Chunk chunk = world.getChunkFromChunkCoords(position.xi() >> 4, position.zi() >> 4);
-            Pos chunkPosition = new Pos(position.xi() & 0xF, position.yi() & 0xF, position.zi() & 0xF);
-
-            int heightMapIndex = chunkPosition.zi() << 4 | chunkPosition.xi();
-
-            if (position.yi() >= chunk.precipitationHeightMap[heightMapIndex] - 1)
-            {
-                chunk.precipitationHeightMap[heightMapIndex] = -999;
-            }
-
-            int heightMapValue = chunk.heightMap[heightMapIndex];
-
-            world.removeTileEntity(position.xi(), position.yi(), position.zi());
-
-            ExtendedBlockStorage extendedBlockStorage = chunk.getBlockStorageArray()[position.yi() >> 4];
-
-            if (extendedBlockStorage == null)
-            {
-                extendedBlockStorage = new ExtendedBlockStorage((position.yi() >> 4) << 4, !world.provider.hasNoSky);
-
-                chunk.getBlockStorageArray()[position.yi() >> 4] = extendedBlockStorage;
-            }
-
-            extendedBlockStorage.func_150818_a(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), block);
-            extendedBlockStorage.setExtBlockMetadata(chunkPosition.xi(), chunkPosition.yi(), chunkPosition.zi(), metadata);
-
-            if (position.yi() >= heightMapValue)
-            {
-                chunk.generateSkylightMap();
-            }
-            else
-            {
-                //chunk.getBlockLightOpacity(chunkPosition.xi(), position.yi(), chunkPosition.zi())
-                if (chunk.getBlockLightValue(chunkPosition.xi(), position.yi(), chunkPosition.zi(), 0) > 0)
-                {
-                    if (position.yi() >= heightMapValue)
-                    {
-                        relightBlock(chunk, chunkPosition.clone().add(new Pos(0, 1, 0)));
-                    }
-                }
-                else if (position.yi() == heightMapValue - 1)
-                {
-                    relightBlock(chunk, chunkPosition);
-                }
-
-                propagateSkylightOcclusion(chunk, chunkPosition);
-            }
-
-            chunk.isModified = true;
-            //updateAllLightTypes
-            world.func_147451_t(position.xi(), position.yi(), position.zi());
-
-            if (tileEntity != null)
-            {
-                world.setTileEntity(position.xi(), position.yi(), position.zi(), tileEntity);
-            }
-
-            world.markBlockForUpdate(position.xi(), position.yi(), position.zi());
-        }
-    }
-
-    /**
-     * Re-lights the block in a specific position.
-     *
-     * @param chunk
-     * @param position
-     */
-    public static void relightBlock(Chunk chunk, Pos position)
-    {
-        try
-        {
-            Method m = ReflectionHelper.findMethod(Chunk.class, null, CHUNK_RELIGHT_BLOCK, int.class, int.class, int.class);
-            m.invoke(chunk, position.xi(), position.yi(), position.zi());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Propogates skylight occlusion in a specific chunk's position.
-     *
-     * @param chunk
-     * @param position
-     */
-    public static void propagateSkylightOcclusion(Chunk chunk, Pos position)
-    {
-        try
-        {
-            Method m = ReflectionHelper.findMethod(Chunk.class, null, CHUNK_PROPOGATE_SKY_LIGHT_OCCLUSION, int.class, int.class);
-            m.invoke(chunk, position.xi(), position.zi());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     @Deprecated
     public static byte determineOrientation(int x, int y, int z, Entity entityLiving)
     {
@@ -230,7 +117,7 @@ public class BlockUtility
                     return 0;
                 }
             }
-            final int rotation = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+            final int rotation = MathHelper.floor(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
             if (rotation == 0)
             {
                 return 2;
@@ -262,7 +149,7 @@ public class BlockUtility
      * @param y
      * @param z
      * @param entityLiving
-     * @return 0-5 @see {@link ForgeDirection}
+     * @return 0-5 @see {@link Direction}
      */
     public static byte determineOrientation(int x, int y, int z, IEntityData entityLiving)
     {
@@ -281,7 +168,7 @@ public class BlockUtility
                     return 0;
                 }
             }
-            final int rotation = MathHelper.floor_double(entityLiving.yaw() * 4.0F / 360.0F + 0.5D) & 3;
+            final int rotation = MathHelper.floor(entityLiving.yaw() * 4.0F / 360.0F + 0.5D) & 3;
             if (rotation == 0)
             {
                 return 2;
@@ -312,11 +199,11 @@ public class BlockUtility
      * unless invalid
      *
      * @param rotationYaw - rotation of the object
-     * @return 2-5 @see {@link ForgeDirection}
+     * @return 2-5 @see {@link Direction}
      */
     public static byte determineRotation(double rotationYaw)
     {
-        int rotation = MathHelper.floor_double(rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int rotation = MathHelper.floor(rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         if (rotation == 0)
         {
             return 3;
@@ -343,34 +230,34 @@ public class BlockUtility
      * Gets the forge direction from the facing value of the entity
      *
      * @param entityLiving
-     * @return {@link ForgeDirection#NORTH} {@link ForgeDirection#SOUTH} {@link ForgeDirection#EAST} {@link ForgeDirection#WEST}
+     * @return {@link Direction#NORTH} {@link Direction#SOUTH} {@link Direction#EAST} {@link Direction#WEST}
      */
-    public static ForgeDirection determineForgeDirection(IEntityData entityLiving)
+    public static Direction determineDirection(IEntityData entityLiving)
     {
-        return ForgeDirection.getOrientation(determineRotation(entityLiving.yaw()));
+        return Direction.getOrientation(determineRotation(entityLiving.yaw()));
     }
 
     /**
      * Gets the forge direction for the facing direction of the entity
      * <p>
-     * If vars are invalid it will return {@link ForgeDirection#NORTH} due
+     * If vars are invalid it will return {@link Direction#NORTH} due
      * to method calls return zero
      *
      * @param x
      * @param y
      * @param z
      * @param entityLiving
-     * @param ignorePitch  - will not return {@link ForgeDirection#UP} or {@link ForgeDirection#DOWN} if true as
+     * @param ignorePitch  - will not return {@link Direction#UP} or {@link Direction#DOWN} if true as
      *                     these depend on the pitch of the entity's view. Pitch is not actually calculated from
      *                     the entity's head position. Instead it is calculated from delta Y
      * @return forge direction
      */
-    public static ForgeDirection determineForgeDirection(int x, int y, int z, IEntityData entityLiving, boolean ignorePitch)
+    public static Direction determineDirection(int x, int y, int z, IEntityData entityLiving, boolean ignorePitch)
     {
         if (ignorePitch)
         {
-            return ForgeDirection.getOrientation(determineRotation(entityLiving.yaw()));
+            return Direction.getOrientation(determineRotation(entityLiving.yaw()));
         }
-        return ForgeDirection.getOrientation(determineOrientation(x, y, z, entityLiving));
+        return Direction.getOrientation(determineOrientation(x, y, z, entityLiving));
     }
 }

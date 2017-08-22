@@ -6,7 +6,7 @@ import com.builtbroken.mc.core.registry.CommonRegistryProxy;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.mod.AbstractProxy;
 import com.builtbroken.mc.seven.abstraction.MinecraftWrapper;
-import cpw.mods.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**

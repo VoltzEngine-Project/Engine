@@ -2,12 +2,13 @@ package com.builtbroken.mc.seven.framework.block.listeners;
 
 import com.builtbroken.mc.api.IModObject;
 import com.builtbroken.mc.api.abstraction.world.IWorld;
+import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
-import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -19,13 +20,10 @@ public class TileListener implements ITileEventListener
 {
     private IWorld world;
     protected IBlockAccess blockAccess;
-    private int x, y, z;
+    public BlockPos pos;
 
     @JsonProcessorData("contentUseID")
     protected String contentUseID = null;
-
-    @JsonProcessorData(value = "metadata", type = "int")
-    protected int metaCheck = -1;
 
     @Override
     public IWorld world()
@@ -36,114 +34,88 @@ public class TileListener implements ITileEventListener
     @Override
     public double x()
     {
-        return x;
+        return pos.getX();
     }
 
     @Override
     public double y()
     {
-        return y;
+        return pos.getY();
     }
 
     @Override
     public double z()
     {
-        return z;
+        return pos.getZ();
     }
 
     @Override
     public int xi()
     {
-        return x;
+        return pos.getX();
     }
 
     @Override
     public int yi()
     {
-        return y;
+        return pos.getY();
     }
 
     @Override
     public int zi()
     {
-        return z;
+        return pos.getZ();
     }
 
-    public void inject(IWorld world, int x, int y, int z)
+    public void inject(IWorld world, BlockPos pos)
     {
         this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.pos = pos;
     }
 
-    public void inject(IBlockAccess world, int x, int y, int z)
+    public void inject(IBlockAccess world, BlockPos pos)
     {
         this.blockAccess = world;
         if (world instanceof World)
         {
-            this.world = Engine.minecraft.getWorld(((World) world).provider.dimensionId);
+            this.world = Engine.minecraft.getWorld(((World) world).provider.getDimension());
         }
         else
         {
             this.world = null;
         }
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.pos = pos;
     }
 
     protected TileEntity getTileEntity()
     {
         if (world != null)
         {
-            return world.unwrap().getTileEntity(x, y, z);
+            return world.unwrap().getTileEntity(pos);
         }
         else if (blockAccess != null)
         {
-            return blockAccess.getTileEntity(x, y, z);
+            return blockAccess.getTileEntity(pos);
         }
         return null;
     }
 
-    protected Block getBlock()
+    protected IBlockState getBlockState()
     {
-        return getBlock(x, y, z);
+        return getBlockState(pos);
     }
 
-    protected Block getBlock(int x, int y, int z)
+    protected IBlockState getBlockState(BlockPos pos)
     {
         if (world != null)
         {
-            return world.unwrap().getBlock(x, y, z);
+            return world.unwrap().getBlockState(pos);
         }
         else if (blockAccess != null)
         {
-            return blockAccess.getBlock(x, y, z);
+            return blockAccess.getBlockState(pos);
         }
         return null;
-    }
-
-    protected int getBlockMeta()
-    {
-        if (world != null)
-        {
-            return world.unwrap().getBlockMetadata(x, y, z);
-        }
-        else if (blockAccess != null)
-        {
-            return blockAccess.getBlockMetadata(x, y, z);
-        }
-        return 0;
-    }
-
-    protected boolean setMeta(int meta, int flag)
-    {
-        if (world != null)
-        {
-            return world.unwrap().setBlockMetadataWithNotify(x, y, z, meta, flag);
-        }
-        return false;
     }
 
     protected IBlockAccess getBlockAccess()
@@ -194,7 +166,7 @@ public class TileListener implements ITileEventListener
                 }
                 return false;
             }
-            return metaCheck == -1 || getBlockMeta() == metaCheck;
+            return true;
         }
         return false;
     }

@@ -8,6 +8,7 @@ import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
@@ -15,7 +16,6 @@ import com.builtbroken.mc.seven.framework.block.listeners.ListenerIterator;
 import com.builtbroken.mc.seven.framework.block.listeners.client.ITileRenderListener;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
@@ -27,12 +27,12 @@ import java.util.Set;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/4/2017.
  */
-public class TileRenderHandler extends TileEntitySpecialRenderer
+public class TileRenderHandler extends TileEntitySpecialRenderer<TileEntity>
 {
     private static Map<Class, String> classToNameMap = new HashMap();
 
     @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f)
+    public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
     {
         GL11.glPushMatrix();
         try
@@ -67,7 +67,7 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
         //If BlockBase, iterate listeners
         if (tile.getBlockType() instanceof BlockBase)
         {
-            ListenerIterator it = new ListenerIterator(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord, (BlockBase) tile.getBlockType(), "tilerender");
+            ListenerIterator it = new ListenerIterator(tile.getWorld(), tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), (BlockBase) tile.getBlockType(), "tilerender");
             while (it.hasNext())
             {
                 ITileEventListener next = it.next();
@@ -76,7 +76,7 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
                     GL11.glPushMatrix();
                     try
                     {
-                        ((ITileRenderListener) next).renderDynamic(tile, x, y, z, f);
+                        ((ITileRenderListener) next).renderDynamic(tile, x, y, z, partialTicks);
                     }
                     catch (Exception e)
                     {
@@ -121,14 +121,14 @@ public class TileRenderHandler extends TileEntitySpecialRenderer
 
     protected String getRenderStateKey(TileEntity tile)
     {
-        if (tile instanceof IRotation && ((IRotation) tile).getDirection() != ForgeDirection.UNKNOWN && ((IRotation) tile).getDirection() != null)
+        if (tile instanceof IRotation && ((IRotation) tile).getDirection() != Direction.UNKNOWN && ((IRotation) tile).getDirection() != null)
         {
             return "tile." + ((IRotation) tile).getDirection().name().toLowerCase();
         }
         else if (tile instanceof ITileNodeHost)
         {
             ITileNode node = ((ITileNodeHost) tile).getTileNode();
-            if (node instanceof IRotation && ((IRotation) node).getDirection() != ForgeDirection.UNKNOWN && ((IRotation) node).getDirection() != null)
+            if (node instanceof IRotation && ((IRotation) node).getDirection() != Direction.UNKNOWN && ((IRotation) node).getDirection() != null)
             {
                 return "tile." + ((IRotation) node).getDirection().name().toLowerCase();
             }

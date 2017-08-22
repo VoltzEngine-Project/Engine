@@ -22,7 +22,7 @@ public class ItemBlockMulti extends ItemBlock
     {
         if (stack.getItem() == this)
         {
-            stack.stackSize = 0;
+            stack.setCount(0);
             if (entity instanceof EntityPlayer)
             {
                 ((EntityPlayer) entity).inventory.setInventorySlotContents(slot, null);

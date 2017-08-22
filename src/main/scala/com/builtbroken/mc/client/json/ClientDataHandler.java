@@ -6,8 +6,8 @@ import com.builtbroken.mc.client.json.models.ModelData;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.core.Engine;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import java.awt.*;

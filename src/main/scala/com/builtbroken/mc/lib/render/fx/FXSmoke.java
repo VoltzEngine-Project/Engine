@@ -1,8 +1,8 @@
 package com.builtbroken.mc.lib.render.fx;
 
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;

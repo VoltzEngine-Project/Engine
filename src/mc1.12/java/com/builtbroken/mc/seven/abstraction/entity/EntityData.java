@@ -9,6 +9,7 @@ import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 
 import java.util.UUID;
 
@@ -56,7 +57,7 @@ public class EntityData implements IEntityData
     @Override
     public IWorld world()
     {
-        return Engine.getWorld(entity.worldObj.provider.dimensionId);
+        return Engine.getWorld(entity.world.provider.getDimension());
     }
 
     @Override
@@ -80,7 +81,7 @@ public class EntityData implements IEntityData
     @Override
     public String getUniqueName()
     {
-        return getEntity().getCommandSenderName();
+        return getEntity().getName();
     }
 
     @Override
@@ -104,7 +105,7 @@ public class EntityData implements IEntityData
     {
         if(getEntity() instanceof EntityPlayer)
         {
-            return ((EntityPlayer) getEntity()).getHeldItem();
+            return ((EntityPlayer) getEntity()).getHeldItem(EnumHand.OFF_HAND);
         }
         return null;
     }

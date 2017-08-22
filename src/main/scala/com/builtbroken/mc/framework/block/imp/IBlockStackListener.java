@@ -1,10 +1,11 @@
 package com.builtbroken.mc.framework.block.imp;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.RayTraceResult;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface IBlockStackListener extends ITileEventListener
      * @param player
      * @return
      */
-    default ItemStack getPickBlock(MovingObjectPosition target, EntityPlayer player)
+    default ItemStack getPickBlock(RayTraceResult target, EntityPlayer player)
     {
         return toStack();
     }
@@ -43,12 +44,11 @@ public interface IBlockStackListener extends ITileEventListener
 
     /**
      * Gets the items to drop when the block is broken
-     *
-     * @param drops
-     * @param metadata
+     *  @param drops
+     * @param block
      * @param fortune
      */
-    default void collectDrops(List<ItemStack> drops, int metadata, int fortune)
+    default void collectDrops(List<ItemStack> drops, IBlockState block, int fortune)
     {
 
     }
@@ -58,21 +58,8 @@ public interface IBlockStackListener extends ITileEventListener
      * Gets the block to show int he creative tab
      * This is a client only method
      *
-     * @param item
-     * @param creativeTabs
-     * @param list
      */
-    default void getSubBlocks(Item item, CreativeTabs creativeTabs, List list)
-    {
-
-    }
-
-    /**
-     * Called to drop the block as an item
-     *
-     * @param itemStack
-     */
-    default void dropBlockAsItem(ItemStack itemStack)
+    default void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
     {
 
     }

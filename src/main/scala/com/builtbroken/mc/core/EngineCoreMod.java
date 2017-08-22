@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core;
 
 import com.builtbroken.mc.core.deps.DepDownloader;
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

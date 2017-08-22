@@ -1,6 +1,6 @@
 package com.builtbroken.mc.framework.block.imp;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.Explosion;
 
@@ -23,10 +23,8 @@ public interface IDestroyedListener extends ITileEventListener
     /**
      * Called when the tile is broken
      *
-     * @param block
-     * @param meta
      */
-    default void breakBlock(Block block, int meta)
+    default void breakBlock(IBlockState state)
     {
 
     }

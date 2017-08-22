@@ -7,7 +7,7 @@ import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import com.builtbroken.mc.lib.world.generator.OreGenReplace;
 import com.builtbroken.mc.lib.world.generator.OreGeneratorSettings;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 

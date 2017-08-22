@@ -14,14 +14,15 @@ import com.builtbroken.mc.framework.block.imp.*;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 
@@ -38,7 +39,7 @@ import java.util.*;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/30/2017.
  */
-public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITileWithListeners, IPacketIDReceiver, ITile
+public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITileWithListeners, IPacketIDReceiver, ITile, ITickable
 {
     /** Object that controls all logic for the tile and some logic of the block */
     protected final ITileNode tile;
@@ -72,7 +73,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
      * as this is set final to ensure base functionality.
      */
     @Override
-    public final void updateEntity()
+    public final void update()
     {
         //Ticks listeners that require updates
         for (List<ITileEventListener> list : new List[]{getListeners("multiblock"), ((BlockBase) getBlockType()).listeners.get("multiblock")})
@@ -87,7 +88,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
                         {
                             if (listener instanceof IBlockListener)
                             {
-                                ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                                ((IBlockListener) listener).inject(world(), pos);
                             }
                             ((IUpdateListener) listener).update(ticks);
                         }
@@ -143,17 +144,11 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     }
 
     @Override
-    public boolean canUpdate()
-    {
-        return getTileNode().requiresPerTickUpdate();
-    }
-
-    @Override
     public void invalidate()
     {
         super.invalidate();
         this.tileEntityInvalid = true;
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
         {
             TileEvent.onUnLoad(this);
         }
@@ -165,7 +160,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     {
         super.validate();
         this.tileEntityInvalid = false;
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
         {
             TileEvent.onLoad(this);
         }
@@ -193,7 +188,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     }
 
     @Override
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
         if (tile instanceof ITileDesc)
         {
@@ -210,10 +205,11 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt)
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
         nbt.setTag("tileData", tile.save(new NBTTagCompound()));
+        return nbt;
     }
 
     @Override
@@ -327,7 +323,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
                     {
                         if (listener instanceof IBlockListener)
                         {
-                            ((IBlockListener) listener).inject(world(), xi(), yi(), zi());
+                            ((IBlockListener) listener).inject(world(), pos);
                         }
                         if (listener.isValidForTile())
                         {
@@ -457,54 +453,54 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     @Override
     public double x()
     {
-        return xCoord + 0.5;
+        return pos.getX() + 0.5;
     }
 
     @Override
     public double y()
     {
-        return yCoord + 0.5;
+        return pos.getY() + 0.5;
     }
 
     @Override
     public double z()
     {
-        return zCoord + 0.5;
+        return pos.getZ() + 0.5;
     }
 
     @Override
     public int xi()
     {
-        return xCoord;
+        return pos.getX();
     }
 
     @Override
     public int yi()
     {
-        return yCoord;
+        return pos.getY();
     }
 
     @Override
     public int zi()
     {
-        return zCoord;
+        return pos.getZ();
     }
 
     @Override
     public float xf()
     {
-        return xCoord + 0.5f;
+        return pos.getX() + 0.5f;
     }
 
     @Override
     public float yf()
     {
-        return yCoord + 0.5f;
+        return pos.getY() + 0.5f;
     }
 
     @Override
     public float zf()
     {
-        return zCoord + 0.5f;
+        return pos.getZ() + 0.5f;
     }
 }

@@ -3,10 +3,11 @@ package com.builtbroken.mc.seven.client.listeners.blocks;
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.framework.block.imp.ITileEventListenerBuilder;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
-import com.builtbroken.mc.seven.framework.block.listeners.TileListener;
 import com.builtbroken.mc.seven.framework.block.listeners.client.IIconListener;
 import net.minecraft.block.Block;
-import net.minecraft.util.IIcon;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
 
 /**
  * Handles rotating textures on a block
@@ -14,36 +15,35 @@ import net.minecraft.util.IIcon;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/5/2017.
  */
-public class RotatableIconListener extends TileListener implements IIconListener
+public class RotatableIconListener extends JsonIconListener implements IIconListener
 {
-    public final BlockBase block;
-
     public RotatableIconListener(BlockBase block)
     {
-        this.block = block;
+        super(block);
     }
 
     @Override
-    public IIcon getTileIcon(int side, int meta)
+    public ResourceLocation getTileIcon(int side, IBlockState state)
     {
+        int meta = state.getValue(BlockBase.META);
         //South
         if (meta == 3)
         {
             if (side == 2)
             {
-                return block.getIconFromJson(3, meta);
+                return super.getTileIcon(3, state);
             }
             else if (side == 3)
             {
-                return block.getIconFromJson(2, meta);
+                return super.getTileIcon(2, state);
             }
             else if (side == 4)
             {
-                return block.getIconFromJson(5, meta);
+                return super.getTileIcon(5, state);
             }
             else if (side == 5)
             {
-                return block.getIconFromJson(4, meta);
+                return super.getTileIcon(4, state);
             }
         }
         //West
@@ -51,19 +51,19 @@ public class RotatableIconListener extends TileListener implements IIconListener
         {
             if (side == 2)
             {
-                return block.getIconFromJson(4, meta);
+                return super.getTileIcon(4, state);
             }
             else if (side == 3)
             {
-                return block.getIconFromJson(5, meta);
+                return super.getTileIcon(5, state);
             }
             else if (side == 4)
             {
-                return block.getIconFromJson(2, meta);
+                return super.getTileIcon(2, state);
             }
             else if (side == 5)
             {
-                return block.getIconFromJson(3, meta);
+                return super.getTileIcon(3, state);
             }
         }
         //East
@@ -71,22 +71,22 @@ public class RotatableIconListener extends TileListener implements IIconListener
         {
             if (side == 2)
             {
-                return block.getIconFromJson(5, meta);
+                return super.getTileIcon(5, state);
             }
             else if (side == 3)
             {
-                return block.getIconFromJson(4, meta);
+                return super.getTileIcon(4, state);
             }
             else if (side == 4)
             {
-                return block.getIconFromJson(3, meta);
+                return super.getTileIcon(3, state);
             }
             else if (side == 5)
             {
-                return block.getIconFromJson(2, meta);
+                return super.getTileIcon(2, state);
             }
         }
-        return block.getIconFromJson(side, meta);
+        return super.getTileIcon(side, state);
     }
 
     public static class Builder implements ITileEventListenerBuilder

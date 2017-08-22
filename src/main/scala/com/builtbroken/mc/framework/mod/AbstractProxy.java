@@ -4,9 +4,10 @@ import com.builtbroken.mc.api.tile.access.IGuiTile;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.framework.block.imp.ITileEventListenerBuilder;
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,7 +31,7 @@ public abstract class AbstractProxy extends AbstractLoadable implements IGuiHand
         {
             return getServerGuiElement(y, player, world.getEntityByID(x));
         }
-        return getServerGuiElement(ID, player, world.getTileEntity(x, y, z));
+        return getServerGuiElement(ID, player, world.getTileEntity(new BlockPos(x, y, z)));
     }
 
     public Object getServerGuiElement(int ID, EntityPlayer player, int slot)
@@ -80,7 +81,7 @@ public abstract class AbstractProxy extends AbstractLoadable implements IGuiHand
         {
             return getClientGuiElement(y, player, world.getEntityByID(x));
         }
-        return getClientGuiElement(ID, player, world.getTileEntity(x, y, z));
+        return getClientGuiElement(ID, player, world.getTileEntity(new BlockPos(x, y, z)));
     }
 
     public Object getClientGuiElement(int ID, EntityPlayer player, int slot)

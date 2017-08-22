@@ -9,8 +9,9 @@ import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
@@ -124,14 +125,15 @@ public class MultiBlockHelper
                         {
                             location = new Location((IWorldPosition) tile).add(location);
                         }
-                        TileEntity ent = world.getTileEntity(location.xi(), location.yi(), location.zi());
+                        BlockPos pos = new BlockPos(location.xi(), location.yi(), location.zi());
+                        TileEntity ent = world.getTileEntity(pos);
                         if (!validate || ent == null || enumType.clazz != ent.getClass())
                         {
-                            if (!world.setBlock(location.xi(), location.yi(), location.zi(), Engine.multiBlock, enumType.ordinal(), 3))
+                            if (!world.setBlockState(pos, Engine.multiBlock.getStateFromMeta(enumType.ordinal()), 3))
                             {
                                 logger.error("MultiBlockHelper: type[" + i + ", " + type + "] error block was not placed ");
                             }
-                            ent = world.getTileEntity(location.xi(), location.yi(), location.zi());
+                            ent = world.getTileEntity(pos);
                         }
 
                         if (ent instanceof IMultiTile)
@@ -206,14 +208,15 @@ public class MultiBlockHelper
                         {
                             location = new Location(world, x, y, z).add(location);
                         }
-                        Block block = world.getBlock(location.xi(), location.yi(), location.zi());
-                        if (!block.isAir(world, location.xi(), location.yi(), location.zi()) && !block.isReplaceable(world, location.xi(), location.yi(), location.zi()))
+                        BlockPos blockPos = new BlockPos(location.xi(), location.yi(), location.zi());
+                        IBlockState block = world.getBlockState(blockPos);
+                        if (!block.getBlock().isAir(block, world, blockPos) && !block.getBlock().isReplaceable(world, blockPos))
                         {
                             return false;
                         }
                         else if (block == Engine.multiBlock)
                         {
-                            TileEntity tileEntity = world.getTileEntity(location.xi(), location.yi(), location.zi());
+                            TileEntity tileEntity = world.getTileEntity(blockPos);
                             if (tileEntity instanceof IMultiTile && ((IMultiTile) tileEntity).getHost() != null)
                             {
                                 return false;
@@ -277,7 +280,7 @@ public class MultiBlockHelper
                                 }
                                 if (!failed)
                                 {
-                                    if (((TileMulti) ent).getWorldObj().isRemote)
+                                    if (((TileMulti) ent).getWorld().isRemote)
                                     {
                                         ((TileMulti) ent).overrideRenderBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
                                     }
@@ -354,15 +357,15 @@ public class MultiBlockHelper
             HashMap<IPos3D, String> map = host.getLayoutOfMultiBlock();
             if (map != null && !map.isEmpty())
             {
-                IWorldPosition center;
+                BlockPos center;
 
                 if (host instanceof TileEntity)
                 {
-                    center = new Location((TileEntity) host);
+                    center = ((TileEntity) host).getPos();
                 }
                 else if (host instanceof IWorldPosition)
                 {
-                    center = (IWorldPosition) host;
+                    center = new BlockPos(host.xi(), host.yi(), host.zi());
                 }
                 else
                 {
@@ -377,20 +380,20 @@ public class MultiBlockHelper
                     {
                         pos = pos.add(center);
                     }
-                    TileEntity tile = pos.getTileEntity(center.oldWorld());
+                    TileEntity tile = pos.getTileEntity(((TileEntity) host).getWorld());
                     if (tile instanceof IMultiTile)
                     {
                         ((IMultiTile) tile).setHost(null);
-                        pos.setBlockToAir(center.oldWorld());
+                        pos.setBlockToAir(((TileEntity) host).getWorld());
                     }
                 }
                 if (doDrops)
                 {
-                    InventoryUtility.dropBlockAsItem(center, killHost);
+                    InventoryUtility.dropBlockAsItem(((TileEntity) host).getWorld(), center, killHost);
                 }
                 else if (killHost)
                 {
-                    center.oldWorld().setBlockToAir(center.xi(), center.yi(), center.zi());
+                    ((TileEntity) host).getWorld().setBlockToAir(center);
                 }
             }
             else
@@ -423,9 +426,9 @@ public class MultiBlockHelper
         HashMap<IPos3D, String> map = host.getLayoutOfMultiBlock();
         if (map != null && !map.isEmpty())
         {
-            int x = ((TileEntity) host).xCoord;
-            int y = ((TileEntity) host).yCoord;
-            int z = ((TileEntity) host).zCoord;
+            int x = ((TileEntity) host).getPos().getX();
+            int y = ((TileEntity) host).getPos().getY();
+            int z = ((TileEntity) host).getPos().getZ();
             Pos center = new Pos(x, y, z);
 
             for (Map.Entry<IPos3D, String> entry : map.entrySet())
@@ -471,7 +474,7 @@ public class MultiBlockHelper
                 Location pos = new Location(world, entry.getKey());
                 if (offset)
                 {
-                    pos = pos.add(((TileEntity) host).xCoord, ((TileEntity) host).yCoord, ((TileEntity) host).zCoord);
+                    pos = pos.add(((TileEntity) host).getPos());
                 }
                 if (!chunks.contains(pos.getChunk()))
                 {

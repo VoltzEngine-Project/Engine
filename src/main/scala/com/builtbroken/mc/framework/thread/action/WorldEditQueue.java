@@ -6,7 +6,7 @@ import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.process.IWorldAction;
 import com.builtbroken.mc.core.Engine;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.world.World;
 
 import java.util.Collection;

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.framework.mod;
 
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * Enum of supported mods, mainly used to track mod ids.

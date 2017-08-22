@@ -1,21 +1,15 @@
 package com.builtbroken.mc.lib.render.fx;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
-
-import com.builtbroken.mc.lib.render.RenderUtility;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 
@@ -23,7 +17,7 @@ import java.awt.*;
  *
  * @author Calclavia, Azanor */
 @SideOnly(Side.CLIENT)
-public class FxBeam extends EntityFX
+public class FxBeam extends Particle
 {
     protected final ResourceLocation texture;
     double movX = 0.0D;
@@ -55,7 +49,7 @@ public class FxBeam extends EntityFX
         this.setRGB(red, green, blue);
 
         this.setSize(0.02F, 0.02F);
-        this.noClip = true;
+        this.canCollide = false;
         this.motionX = 0.0D;
         this.motionY = 0.0D;
         this.motionZ = 0.0D;
@@ -63,8 +57,8 @@ public class FxBeam extends EntityFX
         float xd = (float) (this.posX - this.target.x());
         float yd = (float) (this.posY - this.target.y());
         float zd = (float) (this.posZ - this.target.z());
-        this.length = (float) new Pos(this).distance(this.target);
-        double var7 = MathHelper.sqrt_double(xd * xd + zd * zd);
+        this.length = (float) new Pos(posX, posY, posZ).distance(this.target);
+        double var7 = MathHelper.sqrt(xd * xd + zd * zd);
         this.rotYaw = ((float) (Math.atan2(xd, zd) * 180.0D / 3.141592653589793D));
         this.rotPitch = ((float) (Math.atan2(yd, var7) * 180.0D / 3.141592653589793D));
         this.prevYaw = this.rotYaw;
@@ -73,7 +67,7 @@ public class FxBeam extends EntityFX
         this.particleMaxAge = age;
 
         /** Sets the particle age based on distance. */
-        EntityLivingBase renderentity = Minecraft.getMinecraft().renderViewEntity;
+        EntityPlayer renderentity = Minecraft.getMinecraft().player;
 
         int visibleDistance = 50;
 
@@ -101,16 +95,17 @@ public class FxBeam extends EntityFX
         float yd = (float) (this.posY - this.target.y());
         float zd = (float) (this.posZ - this.target.z());
 
-        this.length = MathHelper.sqrt_float(xd * xd + yd * yd + zd * zd);
+        this.length = MathHelper.sqrt(xd * xd + yd * yd + zd * zd);
 
-        double var7 = MathHelper.sqrt_double(xd * xd + zd * zd);
+        double var7 = MathHelper.sqrt(xd * xd + zd * zd);
 
         this.rotYaw = ((float) (Math.atan2(xd, zd) * 180.0D / 3.141592653589793D));
         this.rotPitch = ((float) (Math.atan2(yd, var7) * 180.0D / 3.141592653589793D));
 
         if (this.particleAge++ >= this.particleMaxAge)
         {
-            setDead();
+            //setDead(); //TODO see if there is a way to kill particle
+            //super.de
         }
     }
 
@@ -121,15 +116,16 @@ public class FxBeam extends EntityFX
         this.particleBlue = b;
     }
 
+    /**
     @Override
-    public void renderParticle(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5)
+    public void renderParticle(BufferBuilder buffer, Entity entityIn, float f, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {
-        tessellator.draw();
+        super.renderParticle();
 
         GL11.glPushMatrix();
         float var9 = 1.0F;
-        float slide = this.worldObj.getTotalWorldTime();
-        float rot = this.worldObj.provider.getWorldTime() % (360 / this.rotationSpeed) * this.rotationSpeed + this.rotationSpeed * f;
+        float slide = this.world.getTotalWorldTime();
+        float rot = this.world.provider.getWorldTime() % (360 / this.rotationSpeed) * this.rotationSpeed + this.rotationSpeed * f;
 
         float size = 1.0F;
         if (this.pulse)
@@ -154,7 +150,7 @@ public class FxBeam extends EntityFX
         float var11 = slide + f;
         if (this.reverse)
             var11 *= -1.0F;
-        float var12 = -var11 * 0.2F - MathHelper.floor_float(-var11 * 0.1F);
+        float var12 = -var11 * 0.2F - MathHelper.floor(-var11 * 0.1F);
 
         GL11.glEnable(3042);
         GL11.glBlendFunc(770, 1);
@@ -202,10 +198,8 @@ public class FxBeam extends EntityFX
         GL11.glEnable(2884);
 
         GL11.glPopMatrix();
-
-        tessellator.startDrawingQuads();
         this.prevSize = size;
 
         FMLClientHandler.instance().getClient().renderEngine.bindTexture(RenderUtility.PARTICLE_RESOURCE);
-    }
+    } */
 }

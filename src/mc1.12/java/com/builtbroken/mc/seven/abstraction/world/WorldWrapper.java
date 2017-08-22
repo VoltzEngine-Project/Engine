@@ -14,6 +14,8 @@ import com.builtbroken.mc.seven.abstraction.entity.EntityData;
 import com.builtbroken.mc.seven.abstraction.tile.TileInstance;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -32,7 +34,7 @@ public class WorldWrapper implements IWorld
 
     public WorldWrapper(World world)
     {
-        dim = world.provider.dimensionId;
+        dim = world.provider.getDimension();
         this.world = world;
     }
 
@@ -76,7 +78,7 @@ public class WorldWrapper implements IWorld
     {
         if (data != null)
         {
-            return getWorld().setBlock(x, y, z, data.unwrap());
+            return getWorld().setBlockState(new BlockPos(x, y, z), data.unwrap().getDefaultState());
         }
         return false;
     }
@@ -86,9 +88,9 @@ public class WorldWrapper implements IWorld
     {
         if (getWorld() instanceof WorldServer)
         {
-            return ((WorldServer) getWorld()).theChunkProviderServer.chunkExists(x >> 4, z >> 4) && getWorld().getChunkFromBlockCoords(x, z).isChunkLoaded;
+            return ((WorldServer) getWorld()).getChunkProvider().chunkExists(x >> 4, z >> 4) && getWorld().getChunkFromBlockCoords(new BlockPos(x, y, z)).isLoaded();
         }
-        return getWorld().getChunkProvider().chunkExists(x >> 4, z >> 4) && getWorld().getChunkFromBlockCoords(x, z).isChunkLoaded;
+        return getWorld().getChunkProvider().isChunkGeneratedAt(x >> 4, z >> 4) && getWorld().getChunkFromBlockCoords(new BlockPos(x, y, z)).isLoaded();
     }
 
     @Override
@@ -162,11 +164,11 @@ public class WorldWrapper implements IWorld
     }
 
     @Override
-    public void spawnParticle(String name, double x, double y, double z, double xx, double yy, double zz)
+    public void spawnParticle(EnumParticleTypes type, double x, double y, double z, double xx, double yy, double zz, int... params)
     {
         if (isServer())
         {
-            PacketSpawnParticle packet = new PacketSpawnParticle(name, getWorld(), x, y, z, xx, yy, zz);
+            PacketSpawnParticle packet = new PacketSpawnParticle("MC_" + type.getParticleName(), getWorld(), x, y, z, xx, yy, zz);
             Engine.packetHandler.sendToAllAround(packet, getWorld(), x, y, z, 100); //TODO be selective about players (use player settings to reduce bandwidth usage)
         }
     }

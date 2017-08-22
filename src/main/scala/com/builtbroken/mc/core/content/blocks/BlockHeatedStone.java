@@ -3,23 +3,16 @@ package com.builtbroken.mc.core.content.blocks;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.MathUtility;
 import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -30,52 +23,19 @@ public class BlockHeatedStone extends Block
 {
     public BlockHeatedStone()
     {
-        super(Material.rock);
+        super(Material.ROCK);
         this.setHardness(1.5f);
         this.setResistance(10.0f);
-        this.setBlockName(References.PREFIX + "hotrock");
+        this.setUnlocalizedName(References.PREFIX + "hotrock");
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister p_149651_1_)
-    {
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta)
-    {
-        return Blocks.stone.getIcon(side, meta);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
-    {
-        if (world instanceof World)
-        {
-            short blockID = ExtendedBlockDataManager.SERVER.getValue((World) world, x, y, z);
-            if (blockID != 0)
-            {
-                //MMMM BBBB BBBB BBBB
-                Block block = Block.getBlockById(blockID);
-                if (block != null)
-                {
-                    return block.getIcon(side, 0);
-                }
-            }
-        }
-        return Blocks.stone.getIcon(side, 0);
-    }
-
-    @Override
-    public void onBlockAdded(World world, int x, int y, int z)
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state)
     {
         //Sets the block to tick randomly so it can cool down
         if (world != null)
         {
-            world.scheduleBlockUpdate(x, y, z, this, getTicksForMeta(world.getBlockMetadata(x, y, z)));
+            world.scheduleBlockUpdate(pos, this, getTicksForMeta(getMetaFromState(state)), 1);
         }
     }
 
@@ -89,56 +49,57 @@ public class BlockHeatedStone extends Block
     }
 
     @Override
-    public void updateTick(World world, int x, int y, int z, Random rand)
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
     {
         //TODO handle meta change through heat map to reduce TPS problems & smooth transition
-        if (world.getBlockMetadata(x, y, z) > 0)
+        if (getMetaFromState(state) > 0)
         {
-            world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) - 1, 3);
-            world.scheduleBlockUpdate(x, y, z, this, getTicksForMeta(world.getBlockMetadata(x, y, z)));
+            world.setBlockState(pos, getStateFromMeta(getMetaFromState(state) - 1));
+            world.scheduleBlockUpdate(pos, this, getTicksForMeta(getMetaFromState(state)), 1);
         }
         else
         {
-            short blockID = ExtendedBlockDataManager.SERVER.getValue((World) world, x, y, z);
+            short blockID = ExtendedBlockDataManager.SERVER.getValue((World) world, pos.getX(), pos.getY(), pos.getZ());
             if (blockID != 0)
             {
                 //MMMM BBBB BBBB BBBB
                 Block block = Block.getBlockById(blockID);
                 if (block != null)
                 {
-                    world.setBlock(x, y, z, block);
+                    world.setBlockState(pos, block.getDefaultState());
                 }
                 else
                 {
-                    world.setBlock(x, y, z, Blocks.stone);
+                    world.setBlockState(pos, Blocks.STONE.getDefaultState());
                 }
             }
             else
             {
-                world.setBlock(x, y, z, Blocks.stone);
+                world.setBlockState(pos, Blocks.STONE.getDefaultState());
             }
         }
     }
 
     @Override
-    public void onEntityWalking(World world, int x, int y, int z, Entity entity)
+    public void onEntityWalk(World world, BlockPos pos, Entity entity)
     {
-        damageEntity(world, x, y, z, entity);
+        damageEntity(world, pos, entity);
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
     {
-        damageEntity(world, x, y, z, entity);
+        damageEntity(world, pos, entity);
     }
 
-    protected void damageEntity(World world, int x, int y, int z, Entity entity)
+    protected void damageEntity(World world, BlockPos pos, Entity entity)
     {
         //TODO switch to applied heat method and use heat map to handle damage
-        int meta = world.getBlockMetadata(x, y, z);
+        IBlockState state = world.getBlockState(pos);
+        int meta = getMetaFromState(state);
         if (entity instanceof EntityLivingBase)
         {
-            entity.attackEntityFrom(DamageSource.inFire, 0.1f * (meta / 16));
+            entity.attackEntityFrom(DamageSource.IN_FIRE, 0.1f * (meta / 16));
             if (world.rand.nextFloat() > ((16 - meta) / 16)) //meta 0 -> 100%, 16 -> 0%
             {
                 entity.setFire(5);
@@ -148,27 +109,17 @@ public class BlockHeatedStone extends Block
     }
 
     @Override
-    public void fillWithRain(World world, int x, int y, int z)
+    public void fillWithRain(World world, BlockPos pos)
     {
         if (world.rand.nextFloat() > 0.9)
         {
-            updateTick(world, x, y, z, world.rand);
+            updateTick(world, pos, world.getBlockState(pos), world.rand);
             //TODO add chance to crack stone
         }
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs tab, List items)
+    public int colorMultiplier(int meta)
     {
-        items.add(new ItemStack(item, 1, 15));
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockAccess world, int x, int y, int z)
-    {
-        int meta = world.getBlockMetadata(x, y, z);
         switch (meta)
         {
             //https://en.wikipedia.org/wiki/Color_temperature

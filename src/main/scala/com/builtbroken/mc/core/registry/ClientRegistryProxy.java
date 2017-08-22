@@ -4,7 +4,7 @@ import com.builtbroken.mc.api.items.ISimpleItemRenderer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.lib.render.block.ItemRenderHandler;
 import com.builtbroken.mc.lib.render.block.RenderTileDummy;
-import cpw.mods.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.Item;

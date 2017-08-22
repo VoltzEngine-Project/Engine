@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.block.imp;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Applied to objects that listen for block action events
@@ -20,7 +21,7 @@ public interface IActivationListener extends ITileEventListener
      * @param hitZ   - location on side hit
      * @return true if click is used
      */
-    default boolean onPlayerActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ)
+    default boolean onPlayerActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         return false;
     }

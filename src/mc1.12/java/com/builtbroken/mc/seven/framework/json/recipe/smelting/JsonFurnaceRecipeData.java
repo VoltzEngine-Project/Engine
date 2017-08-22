@@ -2,11 +2,11 @@ package com.builtbroken.mc.seven.framework.json.recipe.smelting;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
+import com.builtbroken.mc.framework.json.data.JsonRecipeData;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
-import com.builtbroken.mc.framework.json.data.JsonRecipeData;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Object used to temp hold data about a smelting recipe while we wait on blocks to be registered

@@ -1,6 +1,6 @@
 package com.builtbroken.mc.core.deps;
 
-import cpw.mods.fml.relauncher.FMLInjectionData;
+import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import javax.swing.*;

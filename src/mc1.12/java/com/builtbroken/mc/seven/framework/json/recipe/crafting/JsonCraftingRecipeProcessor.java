@@ -2,7 +2,7 @@ package com.builtbroken.mc.seven.framework.json.recipe.crafting;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.seven.framework.block.IJsonBlockSubProcessor;
+import com.builtbroken.mc.seven.framework.block.json.IJsonBlockSubProcessor;
 import com.builtbroken.mc.seven.framework.json.recipe.JsonRecipeProcessor;
 import com.builtbroken.mc.seven.framework.json.recipe.crafting.shaped.JsonShapedRecipeData;
 import com.builtbroken.mc.seven.framework.json.recipe.crafting.shaped.JsonSheetMetalRecipeData;

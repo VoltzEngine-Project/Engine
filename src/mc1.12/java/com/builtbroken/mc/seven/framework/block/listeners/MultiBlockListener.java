@@ -9,6 +9,7 @@ import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.framework.block.imp.*;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.framework.multiblock.MultiBlockHelper;
@@ -18,9 +19,11 @@ import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.helper.BlockUtility;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,14 +147,14 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     }
 
     @Override
-    public boolean onMultiTileActivated(IMultiTile tile, EntityPlayer player, int side, float xHit, float yHit, float zHit)
+    public boolean onMultiTileActivated(IMultiTile tile, EntityPlayer player, EnumHand hand, EnumFacing side, float xHit, float yHit, float zHit)
     {
         Object tileEntity = getMultiTileHost();
         if (tileEntity instanceof IActivationListener)
         {
             return ((IActivationListener) tileEntity).onPlayerActivated(player, side, xHit, yHit, zHit);
         }
-        return getBlock().onBlockActivated(world().unwrap(), xi(), yi(), zi(), player, side, xHit, yHit, zHit);
+        return getBlockState().getBlock().onBlockActivated(world().unwrap(), pos, getBlockState(), player, hand, side, xHit, yHit, zHit);
     }
 
     @Override
@@ -170,7 +173,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         if (doRotation)
         {
             TileEntity tileEntity = getTileEntity();
-            ForgeDirection dir = null;
+            Direction dir = null;
             if (tileEntity instanceof IRotation)
             {
                 dir = ((IRotation) tileEntity).getDirection();
@@ -184,9 +187,9 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
         return MultiBlockLayoutHandler.get(layoutKey);
     }
 
-    protected HashMap<IPos3D, String> getLayoutOfMultiBlock(ForgeDirection dir)
+    protected HashMap<IPos3D, String> getLayoutOfMultiBlock(Direction dir)
     {
-        if (dir != null && dir != ForgeDirection.UNKNOWN)
+        if (dir != null && dir != Direction.UNKNOWN)
         {
             final String key = layoutKey + "." + dir.name().toLowerCase();
             HashMap<IPos3D, String> directionalMap = MultiBlockLayoutHandler.get(key);
@@ -216,7 +219,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     }
 
     @Override
-    public void breakBlock(Block block, int meta)
+    public void breakBlock(IBlockState state)
     {
         MultiBlockHelper.destroyMultiBlockStructure(getMultiTileHost() != null ? getMultiTileHost() : this, true, true, false);
     }
@@ -237,7 +240,7 @@ public class MultiBlockListener extends TileListener implements IBlockListener, 
     @Override
     public ActionResponse canPlaceAt(IEntityData entity)
     {
-        return (!doRotation ||MultiBlockHelper.canBuild(world().unwrap(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineForgeDirection(entity)), true)) ? ActionResponse.DO : ActionResponse.CANCEL;
+        return (!doRotation ||MultiBlockHelper.canBuild(world().unwrap(), xi(), yi(), zi(), getLayoutOfMultiBlock(BlockUtility.determineDirection(entity)), true)) ? ActionResponse.DO : ActionResponse.CANCEL;
     }
 
     @Override

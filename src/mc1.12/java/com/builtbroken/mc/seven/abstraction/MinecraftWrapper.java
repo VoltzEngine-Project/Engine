@@ -17,6 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
@@ -88,7 +89,7 @@ public class MinecraftWrapper implements IMinecraftInterface
         }
 
         //Get entry if not cached
-        Object item = Item.itemRegistry.getObject(key);
+        Object item = Item.REGISTRY.getObject(new ResourceLocation(key));
         if (item instanceof Item)
         {
             ItemData data = new ItemData((Item) item);
@@ -102,18 +103,23 @@ public class MinecraftWrapper implements IMinecraftInterface
     @Override
     public ITileData getTileData(String key)
     {
+        return getTileData(new ResourceLocation(key));
+    }
+
+    public ITileData getTileData(ResourceLocation location)
+    {
         //Try cache
-        if (nameToTile.containsKey(key))
+        if (nameToTile.containsKey(location.toString()))
         {
-            return nameToTile.get(key);
+            return nameToTile.get(location.toString());
         }
 
         //Get entry if not cached
-        Object block = Block.blockRegistry.getObject(key);
-        if (block instanceof Block && block != Blocks.air)
+        Object block = Block.REGISTRY.getObject(location);
+        if (block instanceof Block && block != Blocks.AIR)
         {
             TileData data = new TileData((Block) block);
-            nameToTile.put(key, data);
+            nameToTile.put(location.toString(), data);
             blockToWrapper.put((Block) block, data);
             return data;
         }
@@ -141,16 +147,16 @@ public class MinecraftWrapper implements IMinecraftInterface
 
     public void initMaterials()
     {
-        addMaterial("air", Material.air);
-        addMaterial("grass", Material.grass);
-        addMaterial("ground", Material.ground);
-        addMaterial("wood", Material.wood);
-        addMaterial("rock", Material.rock);
-        addMaterial("stone", Material.rock);
-        addMaterial("iron", Material.iron);
-        addMaterial("metal", Material.iron);
-        addMaterial("anvil", Material.anvil);
-        addMaterial("water", Material.water);
+        addMaterial("air", Material.AIR);
+        addMaterial("grass", Material.GRASS);
+        addMaterial("ground", Material.GROUND);
+        addMaterial("wood", Material.WOOD);
+        addMaterial("rock", Material.ROCK);
+        addMaterial("stone", Material.ROCK);
+        addMaterial("iron", Material.IRON);
+        addMaterial("metal", Material.IRON);
+        addMaterial("anvil", Material.ANVIL);
+        addMaterial("water", Material.WATER);
     }
 
     public void addMaterial(String name, Material material)
@@ -186,7 +192,7 @@ public class MinecraftWrapper implements IMinecraftInterface
             {
                 return blockToWrapper.get(block);
             }
-            return getTileData(Block.blockRegistry.getNameForObject(block));
+            return getTileData(Block.REGISTRY.getNameForObject(block));
         }
         return null;
     }
@@ -199,7 +205,7 @@ public class MinecraftWrapper implements IMinecraftInterface
             {
                 return itemToWrapper.get(item);
             }
-            return getItemData(Item.itemRegistry.getNameForObject(item));
+            return getItemData(Item.REGISTRY.getNameForObject(item).toString());
         }
         return null;
     }

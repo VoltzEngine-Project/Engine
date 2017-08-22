@@ -9,14 +9,13 @@ import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.builtbroken.mc.framework.mod.loadable.ILoadable;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.seven.framework.block.BlockPropertyData;
-import com.builtbroken.mc.seven.framework.block.IJsonBlockSubProcessor;
 import com.builtbroken.mc.seven.framework.block.meta.BlockMeta;
 import com.builtbroken.mc.seven.framework.block.meta.MetaData;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.*;
 

@@ -1,12 +1,11 @@
 package com.builtbroken.mc.framework.recipe.fluid;
 
-import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import com.builtbroken.mc.framework.recipe.extend.MRHandler;
+import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
@@ -67,7 +66,7 @@ public class MRHandlerFluidStack extends MRHandler<FluidStack, ItemStackWrapper>
         }
         else if (result instanceof Fluid)
         {
-            return new FluidStack((Fluid) result, FluidContainerRegistry.BUCKET_VOLUME);
+            return new FluidStack((Fluid) result, Fluid.BUCKET_VOLUME);
         }
         return null;
     }

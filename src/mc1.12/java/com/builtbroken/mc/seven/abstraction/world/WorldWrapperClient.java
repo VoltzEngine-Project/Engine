@@ -4,7 +4,7 @@ import com.builtbroken.mc.api.abstraction.EffectInstance;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.audio.AudioData;
 import com.builtbroken.mc.core.Engine;
-import net.minecraft.client.Minecraft;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 /**
@@ -25,9 +25,9 @@ public class WorldWrapperClient extends WorldWrapper
     }
 
     @Override
-    public void spawnParticle(String name, double x, double y, double z, double xx, double yy, double zz)
+    public void spawnParticle(EnumParticleTypes type, double x, double y, double z, double xx, double yy, double zz, int... params)
     {
-        Minecraft.getMinecraft().renderGlobal.spawnParticle(name, x, y, z, (float) xx, (float) yy, (float) zz);
+        getWorld().spawnParticle(type, x, y, z, xx, yy, zz, params);
     }
 
 

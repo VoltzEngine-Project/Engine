@@ -4,20 +4,20 @@ import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.energy.IEMReceptiveDevice;
 import com.builtbroken.mc.api.energy.IVoltageTransmitter;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
+import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
+import com.builtbroken.mc.framework.explosive.blast.Blast;
 import com.builtbroken.mc.imp.transform.sorting.Vector3DistanceComparator;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
 import com.builtbroken.mc.lib.world.map.TileMapRegistry;
 import com.builtbroken.mc.lib.world.map.radar.RadarMap;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarObject;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarTile;
-import com.builtbroken.mc.framework.explosive.blast.Blast;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Collections;
@@ -90,7 +90,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
 
     protected double handle(TileEntity tile, double distance, double power, LinkedList<Pos> tileLocations, List<IWorldEdit> edits)
     {
-        power = rayTraceBlocks(toPos().toVec3(), Vec3.createVectorHelper(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5), power, tileLocations, edits);
+        power = rayTraceBlocks(toPos().toVec3d(), new Vec3d(tile.getPos().getX() + 0.5, tile.getPos().getY() + 0.5, tile.getPos().getZ() + 0.5), power, tileLocations, edits);
         if (power > 1)
         {
             IWorldEdit edit = null;
@@ -145,7 +145,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
     {
         if (!oldWorld.isRemote)
         {
-            oldWorld.playSoundEffect(x, y, z, START_AUDIO, 0.2F + oldWorld.rand.nextFloat() * 0.2F, 0.9F + oldWorld.rand.nextFloat() * 0.15F);
+            //oldWorld.playSoundEffect(x, y, z, START_AUDIO, 0.2F + oldWorld.rand.nextFloat() * 0.2F, 0.9F + oldWorld.rand.nextFloat() * 0.15F);
         }
     }
 
@@ -154,7 +154,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
     {
         if (!oldWorld.isRemote)
         {
-            oldWorld.playSoundEffect(x, y, z, END_AUDIO, 0.2F + oldWorld.rand.nextFloat() * 0.2F, 0.9F + oldWorld.rand.nextFloat() * 0.15F);
+            //oldWorld.playSoundEffect(x, y, z, END_AUDIO, 0.2F + oldWorld.rand.nextFloat() * 0.2F, 0.9F + oldWorld.rand.nextFloat() * 0.15F);
         }
     }
 
@@ -163,29 +163,32 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
     {
         if (!oldWorld.isRemote)
         {
-            oldWorld.playSoundEffect(blocks.x(), blocks.y(), blocks.z(), EDIT_AUDIO, 0.2F + oldWorld.rand.nextFloat() * 0.2F, 0.9F + oldWorld.rand.nextFloat() * 0.15F);
+            //oldWorld.playSoundEffect(blocks.x(), blocks.y(), blocks.z(), EDIT_AUDIO, 0.2F + oldWorld.rand.nextFloat() * 0.2F, 0.9F + oldWorld.rand.nextFloat() * 0.15F);
         }
     }
 
-    public double rayTraceBlocks(Vec3 start, Vec3 end, double power, LinkedList<Pos> tileLocations, List<IWorldEdit> edits)
+    public double rayTraceBlocks(Vec3d s, Vec3d end, double power, LinkedList<Pos> tileLocations, List<IWorldEdit> edits)
     {
-        if (!Double.isNaN(start.xCoord) && !Double.isNaN(start.yCoord) && !Double.isNaN(start.zCoord))
+        double start_x = s.x;
+        double start_y = s.y;
+        double start_z = s.z;
+        if (!Double.isNaN(start_x) && !Double.isNaN(start_y) && !Double.isNaN(start_z))
         {
-            if (!Double.isNaN(end.xCoord) && !Double.isNaN(end.yCoord) && !Double.isNaN(end.zCoord))
+            if (!Double.isNaN(end.x) && !Double.isNaN(end.y) && !Double.isNaN(end.z))
             {
-                int end_x = MathHelper.floor_double(end.xCoord);
-                int end_y = MathHelper.floor_double(end.yCoord);
-                int end_z = MathHelper.floor_double(end.zCoord);
+                int end_x = MathHelper.floor(end.x);
+                int end_y = MathHelper.floor(end.y);
+                int end_z = MathHelper.floor(end.z);
 
-                int xx = MathHelper.floor_double(start.xCoord);
-                int yy = MathHelper.floor_double(start.yCoord);
-                int zz = MathHelper.floor_double(start.zCoord);
+                int xx = MathHelper.floor(start_x);
+                int yy = MathHelper.floor(start_y);
+                int zz = MathHelper.floor(start_z);
 
                 int k1 = 200;
 
                 while (k1-- >= 0)
                 {
-                    if (Double.isNaN(start.xCoord) || Double.isNaN(start.yCoord) || Double.isNaN(start.zCoord))
+                    if (Double.isNaN(start_x) || Double.isNaN(start_y) || Double.isNaN(start_z))
                     {
                         return power;
                     }
@@ -247,24 +250,24 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
                     double d5 = 999.0D;
 
                     //Delta distance
-                    double d6 = end.xCoord - start.xCoord;
-                    double d7 = end.yCoord - start.yCoord;
-                    double d8 = end.zCoord - start.zCoord;
+                    double d6 = end.x - start_x;
+                    double d7 = end.y - start_y;
+                    double d8 = end.z - start_z;
 
                     //Normalization
                     if (flag6)
                     {
-                        d3 = (d0 - start.xCoord) / d6;
+                        d3 = (d0 - start_x) / d6;
                     }
 
                     if (flag3)
                     {
-                        d4 = (d1 - start.yCoord) / d7;
+                        d4 = (d1 - start_y) / d7;
                     }
 
                     if (flag4)
                     {
-                        d5 = (d2 - start.zCoord) / d8;
+                        d5 = (d2 - start_z) / d8;
                     }
 
                     boolean flag5 = false;
@@ -281,9 +284,9 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
                             b0 = 5;
                         }
 
-                        start.xCoord = d0;
-                        start.yCoord += d7 * d3;
-                        start.zCoord += d8 * d3;
+                        start_x = d0;
+                        start_y += d7 * d3;
+                        start_z += d8 * d3;
                     }
                     else if (d4 < d5)
                     {
@@ -296,9 +299,9 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
                             b0 = 1;
                         }
 
-                        start.xCoord += d6 * d4;
-                        start.yCoord = d1;
-                        start.zCoord += d8 * d4;
+                        start_x += d6 * d4;
+                        start_y = d1;
+                        start_z += d8 * d4;
                     }
                     else
                     {
@@ -311,34 +314,30 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
                             b0 = 3;
                         }
 
-                        start.xCoord += d6 * d5;
-                        start.yCoord += d7 * d5;
-                        start.zCoord = d2;
+                        start_x += d6 * d5;
+                        start_y += d7 * d5;
+                        start_z = d2;
                     }
 
-                    Vec3 vec32 = Vec3.createVectorHelper(start.xCoord, start.yCoord, start.zCoord);
-                    xx = (int) (vec32.xCoord = (double) MathHelper.floor_double(start.xCoord));
+                    xx = MathHelper.floor(start_x);
 
                     if (b0 == 5)
                     {
                         --xx;
-                        ++vec32.xCoord;
                     }
 
-                    yy = (int) (vec32.yCoord = (double) MathHelper.floor_double(start.yCoord));
+                    yy = MathHelper.floor(start_y);
 
                     if (b0 == 1)
                     {
                         --yy;
-                        ++vec32.yCoord;
                     }
 
-                    zz = (int) (vec32.zCoord = (double) MathHelper.floor_double(start.zCoord));
+                    zz = MathHelper.floor(start_z);
 
                     if (b0 == 3)
                     {
                         --zz;
-                        ++vec32.zCoord;
                     }
 
                     //Handle block location
@@ -362,9 +361,8 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
 
     protected double onPassThroughTile(World world, Pos pos, double power, LinkedList<Pos> tileLocations, List<IWorldEdit> edits)
     {
-        Block block = pos.getBlock(world);
-        int meta = pos.getBlockMetadata(world);
-        if (!canPassThrough(world, pos, block, meta))
+        IBlockState block = pos.getBlockState(world);
+        if (!canPassThrough(world, pos, block))
         {
             TileEntity tile = pos.getTileEntity(world);
             if (tile != null && !tile.isInvalid())
@@ -374,11 +372,11 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
 
             //https://en.wikipedia.org/wiki/Absorption_(electromagnetic_radiation) TODO figure out values
             Material material = block.getMaterial();
-            if (material == Material.iron)
+            if (material == Material.IRON)
             {
                 return 20; //TODO generate shocks if power is very high
             }
-            else if (material == Material.rock)
+            else if (material == Material.ROCK)
             {
                 return 5;
             }
@@ -387,10 +385,10 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
         return 0;
     }
 
-    protected boolean canPassThrough(World world, Pos pos, Block block, int meta)
+    protected boolean canPassThrough(World world, Pos pos, IBlockState state)
     {
         //TODO list of blocks we don't care about (grass, glass, trees, water, etc)
-        return !block.isOpaqueCube();
+        return !state.isOpaqueCube();
     }
 
     @Override

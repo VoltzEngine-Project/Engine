@@ -1,7 +1,7 @@
 package com.builtbroken.mc.framework.block.imp;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 

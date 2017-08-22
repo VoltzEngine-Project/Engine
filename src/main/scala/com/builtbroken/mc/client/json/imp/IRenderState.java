@@ -1,7 +1,7 @@
 package com.builtbroken.mc.client.json.imp;
 
 import com.builtbroken.mc.client.json.texture.TextureData;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -18,7 +18,7 @@ public interface IRenderState
      * @param side - side of the block or layer
      * @return icon, or null if no icon
      */
-    IIcon getIcon(int side);
+    ResourceLocation getIcon(int side);
 
     /**
      * Called to get the texture data for the side given.

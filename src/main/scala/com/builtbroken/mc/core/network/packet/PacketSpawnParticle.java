@@ -6,12 +6,13 @@ import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IEffectData;
 import com.builtbroken.mc.core.Engine;
-import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -38,7 +39,7 @@ public class PacketSpawnParticle extends PacketType
 
     public PacketSpawnParticle(String name, World world, double x, double y, double z, double vx, double vy, double vz)
     {
-
+        this(name, world.provider.getDimension(), x, y, z, vx, vy, vz);
     }
 
     public PacketSpawnParticle(String name, int dim, double x, double y, double z, double vx, double vy, double vz)
@@ -93,7 +94,7 @@ public class PacketSpawnParticle extends PacketType
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        if (player.worldObj.provider.dimensionId == dim)
+        if (player.world.provider.getDimension() == dim)
         {
             try
             {
@@ -123,9 +124,14 @@ public class PacketSpawnParticle extends PacketType
                         Engine.logger().error("Failed to find a visual effect provider for name '" + name + "'");
                     }
                 }
-                else
+                else if (name.startsWith("MC_"))
                 {
-                    player.worldObj.spawnParticle(name, x, y, z, vx, vy, vz);
+                    String key = name.substring(3, name.length());
+                    EnumParticleTypes type = EnumParticleTypes.getByName(key);
+                    if (type != null)
+                    {
+                        player.world.spawnParticle(type, x, y, z, vx, vy, vz);
+                    }
                 }
             }
             catch (Exception e)

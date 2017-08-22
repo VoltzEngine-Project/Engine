@@ -1,12 +1,12 @@
 package com.builtbroken.mc.seven.framework.block.listeners;
 
-import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
+import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
 import com.builtbroken.mc.framework.block.imp.IBlockListener;
 import com.builtbroken.mc.framework.block.imp.IDestroyedListener;
 import com.builtbroken.mc.prefab.inventory.InventoryIterator;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -19,9 +19,9 @@ import net.minecraft.item.ItemStack;
 public class InventoryBreakListener extends TileListener implements IDestroyedListener, IBlockListener
 {
     @Override
-    public void breakBlock(Block block, int meta)
+    public void breakBlock(IBlockState state)
     {
-        Object tile = world().unwrap().getTileEntity(xi(), yi(), zi());
+        Object tile = world().unwrap().getTileEntity(pos);
         IInventory inventory = null;
         while (tile != null && inventory == null)
         {

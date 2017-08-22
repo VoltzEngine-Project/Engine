@@ -77,10 +77,6 @@ public class ItemNode implements IItemEventListener
     {
         this.unlocalizedName = name;
         item.setUnlocalizedName(owner + ":" + name);
-        if (item.iconString == null)
-        {
-            item.setTextureName(owner + ":" + name);
-        }
     }
 
     /**

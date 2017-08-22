@@ -10,7 +10,7 @@ import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.List;

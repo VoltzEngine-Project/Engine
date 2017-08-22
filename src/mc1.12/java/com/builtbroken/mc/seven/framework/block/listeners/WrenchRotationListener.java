@@ -2,6 +2,7 @@ package com.builtbroken.mc.seven.framework.block.listeners;
 
 import com.builtbroken.mc.api.tile.IRotatable;
 import com.builtbroken.mc.api.tile.node.ITileNodeHost;
+import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.framework.block.imp.IBlockListener;
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.framework.block.imp.ITileEventListenerBuilder;
@@ -10,7 +11,7 @@ import com.builtbroken.mc.lib.helper.BlockUtility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
 public class WrenchRotationListener extends TileListener implements IBlockListener, IWrenchListener
 {
     @Override
-    public boolean onPlayerRightClickWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ)
+    public boolean onPlayerRightClickWrench(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         IRotatable rotatable = null;
         TileEntity tile = getTileEntity();
@@ -41,26 +42,26 @@ public class WrenchRotationListener extends TileListener implements IBlockListen
             {
                 if (!player.isSneaking())
                 {
-                    if (rotatable.getDirection() == ForgeDirection.NORTH)
+                    if (rotatable.getDirection() == Direction.NORTH)
                     {
-                        rotatable.setDirection(ForgeDirection.EAST);
+                        rotatable.setDirection(Direction.EAST);
                     }
-                    else if (rotatable.getDirection() == ForgeDirection.EAST)
+                    else if (rotatable.getDirection() == Direction.EAST)
                     {
-                        rotatable.setDirection(ForgeDirection.SOUTH);
+                        rotatable.setDirection(Direction.SOUTH);
                     }
-                    else if (rotatable.getDirection() == ForgeDirection.SOUTH)
+                    else if (rotatable.getDirection() == Direction.SOUTH)
                     {
-                        rotatable.setDirection(ForgeDirection.WEST);
+                        rotatable.setDirection(Direction.WEST);
                     }
-                    else if (rotatable.getDirection() == ForgeDirection.WEST)
+                    else if (rotatable.getDirection() == Direction.WEST)
                     {
-                        rotatable.setDirection(ForgeDirection.NORTH);
+                        rotatable.setDirection(Direction.NORTH);
                     }
                 }
                 else
                 {
-                    ForgeDirection direction = ForgeDirection.getOrientation(BlockUtility.determineRotation(player.rotationYaw));
+                    Direction direction = Direction.getOrientation(BlockUtility.determineRotation(player.rotationYaw));
                     if (rotatable.getDirection() == direction)
                     {
                         rotatable.setDirection(direction.getOpposite());

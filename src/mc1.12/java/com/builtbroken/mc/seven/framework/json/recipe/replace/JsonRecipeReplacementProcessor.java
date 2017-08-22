@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -104,13 +105,14 @@ public class JsonRecipeReplacementProcessor extends AbstractLoadable implements 
         }
 
         //Loop recipes and remove entries
-        it = CraftingManager.getInstance().getRecipeList().iterator();
+        it = CraftingManager.REGISTRY.getKeys().iterator();
         while (it.hasNext())
         {
-            Object r = it.next();
+            ResourceLocation key = (ResourceLocation) it.next();
+            IRecipe r = CraftingManager.REGISTRY.getObject(key);
             if (r instanceof IRecipe)
             {
-                final ItemStack result = ((IRecipe) r).getRecipeOutput();
+                final ItemStack result = r.getRecipeOutput();
                 if (result != null)
                 {
                     //Loop replacement data checking for match

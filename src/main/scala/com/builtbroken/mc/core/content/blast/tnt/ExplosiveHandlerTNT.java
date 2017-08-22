@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 /**
- * Preloaded handler for {@link net.minecraft.init.Blocks#tnt} based explosives. Also used for
+ * Preloaded handler for {@link net.minecraft.init.Blocks#TNT} based explosives. Also used for
  * gunpowder explosives as well. But both can be considered the same thing in vanilla minecraft code.
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.

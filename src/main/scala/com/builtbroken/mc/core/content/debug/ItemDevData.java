@@ -4,17 +4,19 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
 import com.builtbroken.mc.prefab.items.ItemAbstract;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -33,20 +35,19 @@ public class ItemDevData extends ItemAbstract
     {
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
-        this.setTextureName(References.PREFIX + "devDataTool");
         this.setUnlocalizedName(References.PREFIX + "devDataTool");
-        this.setCreativeTab(CreativeTabs.tabTools);
+        this.setCreativeTab(CreativeTabs.TOOLS);
     }
 
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return "item." + this.unlocalizedName + "." + stack.getItemDamage();
+        return this.getUnlocalizedName() + "." + stack.getItemDamage();
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b)
+    public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag)
     {
         list.add("Display data about a tile in chat");
     }
@@ -56,12 +57,12 @@ public class ItemDevData extends ItemAbstract
     {
         if (hit != null && player != null)
         {
-            if (player instanceof EntityPlayer && !player.worldObj.isRemote)
+            if (player instanceof EntityPlayer && !player.world.isRemote)
             {
-                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("Entity: " + hit));
-                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("ID: " + hit.getEntityId()));
-                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("Name: " + hit.getCommandSenderName()));
-                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("Class: " + hit.getClass()));
+                ((EntityPlayer) player).sendMessage(new TextComponentString("Entity: " + hit));
+                ((EntityPlayer) player).sendMessage(new TextComponentString("ID: " + hit.getEntityId()));
+                ((EntityPlayer) player).sendMessage(new TextComponentString("Name: " + hit.getName()));
+                ((EntityPlayer) player).sendMessage(new TextComponentString("Class: " + hit.getClass()));
             }
             return true;
         }
@@ -69,24 +70,23 @@ public class ItemDevData extends ItemAbstract
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand)
     {
+        ItemStack stack = player.getHeldItem(hand);
         if (!world.isRemote)
         {
-            Block block = world.getBlock(x, y, z);
-            int meta = world.getBlockMetadata(x, y, z);
-            TileEntity tile = world.getTileEntity(x, y, z);
+            IBlockState block = world.getBlockState(pos);
+            TileEntity tile = world.getTileEntity(pos);
 
             if (stack.getItemDamage() == 0)
             {
-                player.addChatComponentMessage(new ChatComponentText("Block: " + block));
-                player.addChatComponentMessage(new ChatComponentText(" Extended: " + ExtendedBlockDataManager.SERVER.getValue(world, x, y, z)));
-                player.addChatComponentMessage(new ChatComponentText(" Meta: " + meta));
-                player.addChatComponentMessage(new ChatComponentText(" Class: " + block.getClass()));
+                player.sendMessage(new TextComponentString("Block: " + block));
+                player.sendMessage(new TextComponentString(" Extended: " + ExtendedBlockDataManager.SERVER.getValue(world, pos.getX(), pos.getY(), pos.getZ())));
+                player.sendMessage(new TextComponentString(" Class: " + block.getClass()));
                 if (tile != null)
                 {
-                    player.addChatComponentMessage(new ChatComponentText(" Tile: " + tile));
-                    player.addChatComponentMessage(new ChatComponentText("  Class: " + tile.getClass()));
+                    player.sendMessage(new TextComponentString(" Tile: " + tile));
+                    player.sendMessage(new TextComponentString("  Class: " + tile.getClass()));
                 }
             }
             //Super tile data mode
@@ -105,10 +105,10 @@ public class ItemDevData extends ItemAbstract
                                 Object obj = field.get(tile);
                                 if (!(obj instanceof Collection))
                                 {
-                                    player.addChatComponentMessage(new ChatComponentText("Field[" + (i++) + ", " + field.getName() + "] = " + obj));
+                                    player.sendMessage(new TextComponentString("Field[" + (i++) + ", " + field.getName() + "] = " + obj));
                                     if (i % 5 == 0)
                                     {
-                                        player.addChatComponentMessage(new ChatComponentText(""));
+                                        player.sendMessage(new TextComponentString(""));
                                     }
                                 }
                             }
@@ -116,36 +116,38 @@ public class ItemDevData extends ItemAbstract
                     }
                     else
                     {
-                        player.addChatComponentMessage(new ChatComponentText("No tile to pull data from"));
+                        player.sendMessage(new TextComponentString("No tile to pull data from"));
                     }
                 }
                 catch (Exception e)
                 {
-                    player.addChatComponentMessage(new ChatComponentText("Failed to reflect data! see log for details! " + e.getMessage()));
+                    player.sendMessage(new TextComponentString("Failed to reflect data! see log for details! " + e.getMessage()));
                     e.printStackTrace();
                 }
             }
         }
-        return false;
+        return EnumActionResult.SUCCESS;
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xf, float yf, float zf)
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        return true;
+        return EnumActionResult.SUCCESS;
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
-        return stack;
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List list)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list)
     {
-        list.add(new ItemStack(item, 1, 0));
-        list.add(new ItemStack(item, 1, 1));
+        if (this.isInCreativeTab(tab))
+        {
+            list.add(new ItemStack(this, 1, 0));
+            list.add(new ItemStack(this, 1, 1));
+        }
     }
 }

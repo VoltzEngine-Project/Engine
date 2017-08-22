@@ -1,6 +1,6 @@
 package com.builtbroken.mc.framework.block.imp;
 
-import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Applied to objects that listen for changes to the block or around the block
@@ -13,21 +13,8 @@ public interface IChangeListener extends ITileEventListener
     /**
      * Called when a block near changes
      *
-     * @param block
      */
-    default void onNeighborBlockChange(Block block)
-    {
-        onBlockChanged();
-    }
-
-    /**
-     * Called when a block near this location changes
-     *
-     * @param tileX
-     * @param tileY
-     * @param tileZ
-     */
-    default void onNeighborChange(int tileX, int tileY, int tileZ)
+    default void onNeighborBlockChange(BlockPos pos)
     {
         onBlockChanged();
     }

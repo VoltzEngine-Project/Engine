@@ -1,9 +1,9 @@
 package com.builtbroken.mc.lib.render.fx;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.particle.EntityPortalFX;
 import net.minecraft.world.World;
 import com.builtbroken.mc.imp.transform.vector.Pos;

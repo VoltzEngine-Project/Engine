@@ -10,7 +10,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.framework.thread.action.WCAThreadProcess;
 import com.builtbroken.mc.framework.explosive.blast.Blast;
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 

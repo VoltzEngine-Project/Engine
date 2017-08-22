@@ -1,7 +1,7 @@
 package com.builtbroken.mc.seven.framework.json.recipe.smelting;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.seven.framework.block.IJsonBlockSubProcessor;
+import com.builtbroken.mc.seven.framework.block.json.IJsonBlockSubProcessor;
 import com.builtbroken.mc.seven.framework.json.recipe.JsonRecipeProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

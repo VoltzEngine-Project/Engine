@@ -4,7 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.DummyPlayer;
 import com.builtbroken.mc.imp.transform.rotation.Quaternion;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;

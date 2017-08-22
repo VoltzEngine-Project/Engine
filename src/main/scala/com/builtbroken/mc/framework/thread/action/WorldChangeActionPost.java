@@ -2,7 +2,7 @@ package com.builtbroken.mc.framework.thread.action;
 
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.process.IWorldAction;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.world.World;
 
 /**

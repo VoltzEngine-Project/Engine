@@ -1,13 +1,11 @@
 package com.builtbroken.mc.seven.framework.block;
 
-import com.builtbroken.mc.client.json.ClientDataHandler;
-import com.builtbroken.mc.seven.framework.block.tile.ITileProvider;
-import com.builtbroken.mc.imp.transform.region.Cube;
-import com.builtbroken.mc.lib.helper.MaterialDict;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import com.builtbroken.mc.imp.transform.region.Cube;
+import com.builtbroken.mc.lib.helper.MaterialDict;
+import com.builtbroken.mc.seven.framework.block.tile.ITileProvider;
 import net.minecraft.block.material.Material;
 
 /**
@@ -35,7 +33,7 @@ public class BlockPropertyData extends JsonGenData
     public BlockBase block;
 
     //Block data
-    private Material material = Material.clay;
+    private Material material = Material.CLAY;
     private String materialName = "clay";
     private boolean isOpaqueCube;
     private boolean renderAsNormalBlock = true;
@@ -44,7 +42,6 @@ public class BlockPropertyData extends JsonGenData
     private boolean isAlpha = false;
     private float hardness = 5;
     private float resistance = 5;
-    private int renderType = 0;
     private int color = -1;
     private int lightValue;
 
@@ -105,31 +102,6 @@ public class BlockPropertyData extends JsonGenData
     public void setResistance(float resistance)
     {
         this.resistance = resistance;
-    }
-
-    public int getRenderType()
-    {
-        return renderType;
-    }
-
-    @JsonProcessorData(value = "renderType", type = "int")
-    public void setRenderType(int renderType)
-    {
-        this.renderType = renderType;
-    }
-
-    @JsonProcessorData(value = "renderTypeName")
-    public void setRenderTypeName(String renderType)
-    {
-        ISimpleBlockRenderingHandler handler = ClientDataHandler.INSTANCE.getBlockRender(renderType);
-        if(handler != null)
-        {
-            setRenderType(handler.getRenderId());
-        }
-        else
-        {
-            throw new IllegalArgumentException("RenderType[" + renderType + "] was not registered and thus can't be used.");
-        }
     }
 
     public int getColor()
@@ -229,10 +201,6 @@ public class BlockPropertyData extends JsonGenData
     public void setBlockBounds(Cube blockBounds)
     {
         this.blockBounds = blockBounds;
-        if(block != null)
-        {
-            block.setBlockBounds(blockBounds.min().xf(), blockBounds.min().yf(), blockBounds.min().zf(), blockBounds.max().xf(), blockBounds.max().yf(), blockBounds.max().zf());
-        }
     }
 
     public Cube getSelectionBounds()

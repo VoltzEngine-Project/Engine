@@ -3,6 +3,7 @@ package com.builtbroken.mc.lib.world.map.heat;
 import com.builtbroken.jlib.data.science.units.TemperatureUnit;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.lib.data.heat.HeatedBlockRegistry;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class HeatDataManager
 
     public static HeatMap getMapForWorld(World world)
     {
-        return getMapForDim(world.provider.dimensionId);
+        return getMapForDim(world.provider.getDimension());
     }
 
     public static HeatMap getMapForDim(int dim)
@@ -31,13 +32,13 @@ public class HeatDataManager
 
     public static int getTempKelvin(Location location)
     {
-        return getTempKelvin(location.world, location.xi(), location.yi(), location.zi());
+        return getTempKelvin(location.world, location.toBlockPos());
     }
 
-    public static int getTempKelvin(World world, int x, int y, int z)
+    public static int getTempKelvin(World world, BlockPos pos)
     {
         //TODO get temp at location
-        return HeatedBlockRegistry.getDefaultTemp(world, world.getBlock(x, y, z));
+        return HeatedBlockRegistry.getDefaultTemp(world, world.getBlockState(pos));
     }
 
     public static int getTempFahrenheit(Location location)

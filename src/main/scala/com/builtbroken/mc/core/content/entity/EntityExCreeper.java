@@ -1,14 +1,20 @@
 package com.builtbroken.mc.core.content.entity;
 
 import com.builtbroken.mc.api.event.TriggerCause;
-import com.builtbroken.mc.api.explosive.IExCreeperHandler;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.IExplosiveHolder;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -26,6 +32,8 @@ import net.minecraft.world.World;
  */
 public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEntityAdditionalSpawnData
 {
+    private static final DataParameter<Integer> STATE = EntityDataManager.<Integer>createKey(EntityExCreeper.class, DataSerializers.VARINT);
+
     protected int fuseTicks = 30;
     protected double ex_size = 3;
     protected IExplosiveHandler ex;
@@ -35,11 +43,11 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
     {
         super(w);
         this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, false));
+        this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, false));
         this.tasks.addTask(5, new EntityAIWander(this, 0.8D));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(6, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+        this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true, true));
         this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
     }
 
@@ -59,31 +67,32 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
     {
         EntityExCreeper cex = new EntityExCreeper(new Location(creeper), ex, size, data);
         creeper.setDead();
-        creeper.worldObj.removeEntity(creeper);
-        cex.worldObj.spawnEntityInWorld(cex);
+        creeper.world.removeEntity(creeper);
+        cex.world.spawnEntity(cex);
     }
 
     @Override
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
     }
 
     @Override
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) -1));
+        this.dataManager.register(STATE, Integer.valueOf(-1));
     }
 
     @Override
-    public String getCommandSenderName()
+    public String getName()
     {
-        if (this.hasCustomNameTag())
+        if (this.hasCustomName())
         {
             return this.getCustomNameTag();
         }
+        /* TODO update
         else if (ex instanceof IExCreeperHandler)
         {
             String s = ((IExCreeperHandler) ex).getTranslationKey(this);
@@ -93,7 +102,7 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
                 if (translation != null && !translation.isEmpty())
                     return translation;
             }
-        }
+        }*/
         return LanguageUtility.getLocal("entity.creeper.name");
     }
 
@@ -106,7 +115,7 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
             //Play audio if fuse is active
             if (f > 0)
             {
-                this.playSound("creeper.primed", 1.0F, 0.5F);
+                this.playSound(SoundEvent.REGISTRY.getObject(new ResourceLocation("entity.creeper.primed")), 1.0F, 0.5F);
             }
 
             //Tick timer up if its close enough
@@ -165,12 +174,12 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
 
     protected void explode()
     {
-        if (!this.worldObj.isRemote)
+        if (!this.world.isRemote)
         {
-            boolean allow_mob_damage = this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing");
+            boolean allow_mob_damage = this.world.getGameRules().getBoolean("mobGriefing");
             if (ex == null)
             {
-                this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 3, allow_mob_damage);
+                this.world.createExplosion(this, this.posX, this.posY, this.posZ, 3, allow_mob_damage);
             }
             else
             {
@@ -244,35 +253,25 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
 
     public int getFuse()
     {
-        return this.dataWatcher.getWatchableObjectByte(16);
+        return ((Integer)this.dataManager.get(STATE)).intValue();
     }
 
-    public void setFuse(int f)
+    public void setFuse(int state)
     {
-        this.dataWatcher.updateObject(16, Byte.valueOf((byte) f));
+        this.dataManager.set(STATE, Integer.valueOf(state));
+    }
+
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+    {
+        return SoundEvents.ENTITY_CREEPER_HURT;
     }
 
     @Override
-    protected String getHurtSound()
+    protected SoundEvent getDeathSound()
     {
-        return "mob.creeper.say";
+        return SoundEvents.ENTITY_CREEPER_DEATH;
     }
 
-    @Override
-    protected String getDeathSound()
-    {
-        return "mob.creeper.death";
-    }
-
-    @Override
-    public boolean isAIEnabled()
-    {
-        return true;
-    }
-
-    @Override
-    public int getMaxSafePointTries()
-    {
-        return this.getAttackTarget() == null ? 3 : 3 + (int) (this.getHealth() - 1.0F);
-    }
 }

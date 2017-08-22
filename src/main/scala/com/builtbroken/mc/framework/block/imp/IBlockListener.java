@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.block.imp;
 
 import com.builtbroken.mc.api.abstraction.world.IWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -18,13 +19,10 @@ public interface IBlockListener
      * normal tile calls can be used.
      *
      * @param world
-     * @param x
-     * @param y
-     * @param z
      */
-    void inject(IWorld world, int x, int y, int z);
+    void inject(IWorld world, BlockPos pos);
 
-    void inject(IBlockAccess world, int x, int y, int z);
+    void inject(IBlockAccess world, BlockPos pos);
 
     default void eject()
     {

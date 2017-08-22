@@ -6,7 +6,8 @@ import com.builtbroken.mc.api.abstraction.tile.ITileMaterial;
 import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.seven.abstraction.MinecraftWrapper;
 import com.builtbroken.mc.seven.abstraction.world.TilePosition;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -49,7 +50,7 @@ public class TileInstance implements ITile
     @Override
     public ITileMaterial getMaterial()
     {
-        Block block = getBlock();
+        IBlockState block = getBlockState();
         if (block != null)
         {
             return MinecraftWrapper.INSTANCE.getTileMaterial(block.getMaterial());
@@ -60,12 +61,12 @@ public class TileInstance implements ITile
     @Override
     public ITileData getData()
     {
-        return MinecraftWrapper.INSTANCE.getTileData(getBlock());
+        return MinecraftWrapper.INSTANCE.getTileData(getBlockState().getBlock());
     }
 
-    public Block getBlock()
+    public IBlockState getBlockState()
     {
-        return world().getBlock(xCoord(), yCoord(), zCoord());
+        return world().getBlockState(new BlockPos(xCoord(), yCoord(), zCoord()));
     }
 
     private World world()

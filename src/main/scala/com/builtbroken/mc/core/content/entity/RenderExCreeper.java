@@ -1,14 +1,12 @@
 package com.builtbroken.mc.core.content.entity;
 
-import com.builtbroken.mc.api.explosive.IExCreeperHandler;
-import com.builtbroken.mc.api.explosive.IExplosive;
-import com.builtbroken.mc.api.explosive.IExplosiveHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelCreeper;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Copy of the creeper renderer without its flashing render code
@@ -19,14 +17,15 @@ public class RenderExCreeper extends RenderLiving
 {
     public static final ResourceLocation creeperTextures = new ResourceLocation("textures/entity/creeper/creeper.png");
 
-    public RenderExCreeper()
+    public RenderExCreeper(RenderManager rendermanagerIn)
     {
-        super(new ModelCreeper(), 0.5F);
+        super(rendermanagerIn, new ModelCreeper(), 0.5F);
     }
 
     @Override
     protected ResourceLocation getEntityTexture(Entity entity)
     {
+        /* TODO update
         if(entity instanceof IExplosive)
         {
             IExplosiveHandler ex = ((IExplosive) entity).getExplosive();
@@ -39,6 +38,7 @@ public class RenderExCreeper extends RenderLiving
                 }
             }
         }
+        */
         return creeperTextures;
     }
 }

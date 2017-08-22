@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.registry.implement;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /** Called after the object has been registered threw the ModManager
  * Created by robert on 2/6/2015.

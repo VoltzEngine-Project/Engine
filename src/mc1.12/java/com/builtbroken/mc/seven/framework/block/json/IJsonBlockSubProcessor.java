@@ -1,6 +1,7 @@
-package com.builtbroken.mc.seven.framework.block;
+package com.builtbroken.mc.seven.framework.block.json;
 
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
+import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.seven.framework.block.meta.MetaData;
 import com.google.gson.JsonElement;
 

@@ -15,8 +15,6 @@ import com.builtbroken.mc.framework.block.imp.IPlacementListener;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.FMLCommonHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,7 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.UUID;
@@ -255,24 +252,6 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
         return owner;
     }
 
-    public String getOwnerName()
-    {
-        GameProfile profile = getOwnerProfile();
-        if (profile != null)
-        {
-            return profile.getName();
-        }
-        return null;
-    }
-
-    public GameProfile getOwnerProfile()
-    {
-        if (FMLCommonHandler.instance().getEffectiveSide().isClient())
-        {
-            return null;
-        }
-        return MinecraftServer.getServer().func_152358_ax().func_152652_a(owner);
-    }
 
     public void setOwnerID(UUID id)
     {
@@ -284,7 +263,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
         if (player != null)
         {
             setOwnerID(player.getGameProfile().getId());
-            this.username = player.getCommandSenderName();
+            this.username = player.getName();
         }
         else
         {

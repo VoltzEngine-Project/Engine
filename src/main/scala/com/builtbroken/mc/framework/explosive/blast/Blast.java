@@ -20,7 +20,7 @@ import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.enchantment.EnchantmentProtection;

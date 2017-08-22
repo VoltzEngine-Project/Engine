@@ -1,9 +1,8 @@
 package com.builtbroken.mc.seven.framework.block.listeners.client;
 
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.util.IIcon;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -11,8 +10,7 @@ import net.minecraft.util.IIcon;
  */
 public interface IIconListener extends ITileEventListener
 {
-    @SideOnly(Side.CLIENT)
-    default IIcon getTileIcon(int side, int meta)
+    default ResourceLocation getTileIcon(int side, IBlockState state)
     {
         return null;
     }

@@ -2,8 +2,8 @@ package com.builtbroken.mc.lib.data;
 
 import com.builtbroken.jlib.type.Pair;
 import com.builtbroken.mc.core.Engine;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.LoaderState;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.LoaderState;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 

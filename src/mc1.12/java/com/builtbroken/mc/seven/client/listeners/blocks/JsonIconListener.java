@@ -11,8 +11,9 @@ import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.seven.framework.block.listeners.TileListener;
 import com.builtbroken.mc.seven.framework.block.listeners.client.IIconListener;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +34,9 @@ public class JsonIconListener extends TileListener implements IIconListener, IBl
     }
 
     @Override
-    public IIcon getTileIcon(int side, int meta)
+    public ResourceLocation getTileIcon(int side, IBlockState blockState)
     {
+        int meta = blockState.getValue(BlockBase.META);
         RenderData renderData = block.getRenderData(meta);
         if (renderData != null)
         {
@@ -68,7 +70,7 @@ public class JsonIconListener extends TileListener implements IIconListener, IBl
                 }
             }
         }
-        return block.getIconFromJson(side, meta);
+        return null;
     }
 
     @Override

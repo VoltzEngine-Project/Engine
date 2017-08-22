@@ -1,13 +1,14 @@
 package com.builtbroken.mc.seven.framework.json.recipe.crafting.shaped;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
-import com.builtbroken.mc.framework.recipe.item.grid.RecipeShapedOreLarge;
 import com.builtbroken.mc.seven.framework.json.recipe.crafting.JsonCraftingRecipeData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
@@ -79,33 +80,33 @@ public class JsonShapedRecipeData extends JsonCraftingRecipeData
             {
                 if (largeGrid)
                 {
-                    return new RecipeShapedOreLarge((Block) output, data);
+                    //return new RecipeShapedOreLarge((Block) output, data);
                 }
                 else
                 {
-                    return new ShapedOreRecipe((Block) output, data);
+                    return new ShapedOreRecipe(new ResourceLocation(References.DOMAIN, ((Block)output).getUnlocalizedName()), (Block) output, data);
                 }
             }
             else if (output instanceof Item)
             {
                 if (largeGrid)
                 {
-                    return new RecipeShapedOreLarge((Item) output, data);
+                    //return new RecipeShapedOreLarge((Item) output, data);
                 }
                 else
                 {
-                    return new ShapedOreRecipe((Item) output, data);
+                    return new ShapedOreRecipe(new ResourceLocation(References.DOMAIN, ((Item)output).getUnlocalizedName()), (Item) output, data);
                 }
             }
             else if (output instanceof ItemStack)
             {
                 if (largeGrid)
                 {
-                    return new RecipeShapedOreLarge((ItemStack) output, data);
+                    //return new RecipeShapedOreLarge((ItemStack) output, data);
                 }
                 else
                 {
-                    return new ShapedOreRecipe((ItemStack) output, data);
+                    return new ShapedOreRecipe(new ResourceLocation(References.DOMAIN, ((ItemStack)output).getUnlocalizedName()), (ItemStack) output, data);
                 }
             }
             else

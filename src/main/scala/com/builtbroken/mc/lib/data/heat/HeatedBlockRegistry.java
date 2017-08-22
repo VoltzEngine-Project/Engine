@@ -3,13 +3,13 @@ package com.builtbroken.mc.lib.data.heat;
 import com.builtbroken.jlib.data.science.units.TemperatureUnit;
 import com.builtbroken.mc.api.VoltzEngineAPI;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.imp.transform.vector.BlockPos;
 import com.builtbroken.mc.lib.world.edit.PlacementData;
 import com.builtbroken.mc.lib.world.map.heat.HeatDataManager;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 
@@ -48,23 +48,23 @@ public class HeatedBlockRegistry
         default_temp_dim.put(0, 293);
         default_temp_dim.put(-1, 227); //TODO loop worlds to apply default temp based on world type
 
-        default_melting_point_mat.put(Material.carpet, 600);
-        default_melting_point_mat.put(Material.cloth, 600);
-        default_melting_point_mat.put(Material.wood, 800);
-        default_melting_point_mat.put(Material.rock, 1200);
-        default_melting_point_mat.put(Material.clay, 2000);
-        default_melting_point_mat.put(Material.anvil, 1900);
-        default_melting_point_mat.put(Material.iron, 1900);
-        default_melting_point_mat.put(Material.water, 373);
-        default_melting_point_mat.put(Material.snow, 273);
-        default_melting_point_mat.put(Material.ice, 273);
-        default_melting_point_mat.put(Material.packedIce, 273);
-        default_melting_point_mat.put(Material.craftedSnow, 273);
+        default_melting_point_mat.put(Material.CARPET, 600);
+        default_melting_point_mat.put(Material.CLOTH, 600);
+        default_melting_point_mat.put(Material.WOOD, 800);
+        default_melting_point_mat.put(Material.ROCK, 1200);
+        default_melting_point_mat.put(Material.CLAY, 2000);
+        default_melting_point_mat.put(Material.ANVIL, 1900);
+        default_melting_point_mat.put(Material.IRON, 1900);
+        default_melting_point_mat.put(Material.WATER, 373);
+        default_melting_point_mat.put(Material.SNOW, 273);
+        default_melting_point_mat.put(Material.ICE, 273);
+        default_melting_point_mat.put(Material.PACKED_ICE, 273);
+        default_melting_point_mat.put(Material.CRAFTED_SNOW, 273);
 
-        default_temp_mat.put(Material.ice, 253); //slightly bellow freezing
-        default_temp_mat.put(Material.packedIce, 253);
-        default_temp_mat.put(Material.snow, 253);
-        default_temp_mat.put(Material.craftedSnow, 253);
+        default_temp_mat.put(Material.ICE, 253); //slightly bellow freezing
+        default_temp_mat.put(Material.PACKED_ICE, 253);
+        default_temp_mat.put(Material.SNOW, 253);
+        default_temp_mat.put(Material.CRAFTED_SNOW, 253);
     }
 
     /**
@@ -78,11 +78,11 @@ public class HeatedBlockRegistry
      */
     public static float getEnergyNeededToHeat(World world, BlockPos pos, int newTemp)
     {
-        Block block = pos.getBlock(world);
+        IBlockState block = world.getBlockState(pos);
         if (block != null)
         {
-            float mass = (float) VoltzEngineAPI.massRegistry.getMass(block);
-            int actual_temp = HeatDataManager.getTempKelvin(world, pos.x, pos.y, pos.z);
+            float mass = (float) VoltzEngineAPI.massRegistry.getMass(block.getBlock());
+            int actual_temp = HeatDataManager.getTempKelvin(world, pos);
             float change = TemperatureUnit.Celsius.conversion.fromKelvin(Math.abs(actual_temp - newTemp));
             if (change >= 1)
             {
@@ -158,11 +158,11 @@ public class HeatedBlockRegistry
         cool_down_conversion.put(block.block(), new BlockConversionData(block, result, kelvin));
     }
 
-    public static float getSpecificHeat(Block block)
+    public static float getSpecificHeat(IBlockState block)
     {
-        if (default_specific_heat_mat.containsKey(block.blockMaterial))
+        if (default_specific_heat_mat.containsKey(block.getMaterial()))
         {
-            return default_specific_heat_mat.get(block.blockMaterial);
+            return default_specific_heat_mat.get(block.getMaterial());
         }
         return 1;
     }
@@ -215,16 +215,16 @@ public class HeatedBlockRegistry
         return null;
     }
 
-    public static int getDefaultTemp(World world, Block block)
+    public static int getDefaultTemp(World world, IBlockState block)
     {
         Material mat = block.getMaterial();
         if (default_temp_mat.containsKey(mat))
         {
             return default_temp_mat.get(mat);
         }
-        else if (default_temp_dim.containsKey(world.provider.dimensionId))
+        else if (default_temp_dim.containsKey(world.provider.getDimension()))
         {
-            return default_temp_dim.get(world.provider.dimensionId);
+            return default_temp_dim.get(world.provider.getDimension());
         }
         return 293; //20c, 69f, room temp
     }
@@ -237,72 +237,13 @@ public class HeatedBlockRegistry
         //---------------------------------------------------------------------
 
         //Heating values
-        addNewHeatingConversion(Blocks.ice, Blocks.water, (int) TemperatureUnit.Fahrenheit.conversion.toKelvin(32));
-        addNewHeatingConversion(Blocks.obsidian, Blocks.lava, 1293);
-        addNewHeatingConversion(Blocks.grass, Blocks.dirt, 600); //Made up conversion
+        addNewHeatingConversion(Blocks.ICE, Blocks.WATER, (int) TemperatureUnit.Fahrenheit.conversion.toKelvin(32));
+        addNewHeatingConversion(Blocks.OBSIDIAN, Blocks.LAVA, 1293);
+        addNewHeatingConversion(Blocks.GRASS, Blocks.DIRT, 600); //Made up conversion
 
         //Cooling values
-        addNewCoolingConversion(Blocks.water, Blocks.ice, 273);
-        addNewCoolingConversion(Blocks.lava, Blocks.obsidian, 1200); //made up value
-
-        //---------------------------------------------------------------------
-
-        //Everything else not registered, init with default data to make life simple
-        if (Block.blockRegistry instanceof FMLControlledNamespacedRegistry)
-        {
-            FMLControlledNamespacedRegistry reg = ((FMLControlledNamespacedRegistry) Block.blockRegistry);
-            for (Object obj : reg.typeSafeIterable())
-            {
-                if (obj instanceof Block)
-                {
-                    String name = reg.getNameForObject(obj);
-                    Material mat = ((Block) obj).getMaterial();
-                    Block blockToConvertTo = Blocks.air;
-                    int temp = 0;
-
-                    if (mat.getCanBurn())
-                    {
-                        temp = 600;
-                    }
-                    else if (mat == Material.rock)
-                    {
-                        temp = 1293;
-                        blockToConvertTo = Blocks.lava;
-                    }
-
-                    if (temp > 0)
-                    {
-                        String conversion = config.getString(name, "Heat_Conversions", reg.getNameForObject(blockToConvertTo), "");
-
-                        if (reg.getObject(conversion) != null)
-                        {
-                            Object c_obj = reg.getObject(conversion);
-                            if (c_obj instanceof Block)
-                            {
-                                if (!warm_up_conversion.containsKey(obj))
-                                {
-                                    if (blockToConvertTo == Blocks.lava)
-                                    {
-                                        addNewHeatingConversion((Block) obj, new PlacementData(Blocks.cobblestone, 0), temp);
-                                    }
-                                    else
-                                    {
-                                        addNewHeatingConversion((Block) obj, (Block) c_obj, temp);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Engine.logger().error("Error c_obj is not an instance of a block");
-                            }
-                        }
-                        else
-                        {
-                            Engine.logger().error("Config entry for heat conversion " + name + " has an invalid conversion of " + conversion);
-                        }
-                    }
-                }
-            }
-        }
+        addNewCoolingConversion(Blocks.WATER, Blocks.ICE, 273);
+        addNewCoolingConversion(Blocks.LAVA, Blocks.OBSIDIAN, 1200); //made up value
+        //TODO re-add block config for heat values
     }
 }

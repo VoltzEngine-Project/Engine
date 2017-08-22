@@ -1,7 +1,7 @@
 package com.builtbroken.mc.framework.json.event;
 
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
  * Called when a new processor has been registered

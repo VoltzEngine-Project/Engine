@@ -7,6 +7,7 @@ import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.framework.block.imp.ITileEventListenerBuilder;
 import com.builtbroken.mc.lib.helper.BlockUtility;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
@@ -23,7 +24,8 @@ public class RotatableListener extends TileListener implements IPlacementListene
     public void onPlacedBy(EntityLivingBase entityLivingBase, ItemStack stack)
     {
         int rotation = BlockUtility.determineRotation(entityLivingBase.rotationYaw);
-        if (!setMeta(rotation, 3))
+        IBlockState state = getBlockState();
+        if (! world().unwrap().setBlockState(pos, state.getBlock().getStateFromMeta(rotation)))
         {
             Engine.logger().error("Failed to set rotation for block at " + x() + "x," + y() + "y," + z() + "z,");
         }

@@ -1,12 +1,14 @@
 package com.builtbroken.mc.seven.framework.json.recipe.crafting.shapeless;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.seven.framework.json.recipe.crafting.JsonCraftingRecipeData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
@@ -63,15 +65,15 @@ public class JsonShapelessRecipeData extends JsonCraftingRecipeData
         //Create recipe
         if (output instanceof Block)
         {
-            return new ShapelessOreRecipe((Block) output, data);
+            return new ShapelessOreRecipe(new ResourceLocation(References.DOMAIN, ((Block)output).getUnlocalizedName()), (Block) output, data);
         }
         else if (output instanceof Item)
         {
-            return  new ShapelessOreRecipe((Item) output, data);
+            return  new ShapelessOreRecipe(new ResourceLocation(References.DOMAIN, ((Item)output).getUnlocalizedName()),(Item) output, data);
         }
         else if (output instanceof ItemStack)
         {
-            return new ShapelessOreRecipe((ItemStack) output, data);
+            return new ShapelessOreRecipe(new ResourceLocation(References.DOMAIN, ((ItemStack)output).getUnlocalizedName()),(ItemStack) output, data);
         }
         else
         {

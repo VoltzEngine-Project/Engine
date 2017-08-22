@@ -1,15 +1,18 @@
 package com.builtbroken.mc.seven.framework.block;
 
-import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.prefab.items.ItemBlockAbstract;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,22 +21,13 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/20/2017.
  */
-public class ItemBlockBase extends ItemBlockAbstract implements IJsonRenderStateProvider
+public class ItemBlockBase extends ItemBlockAbstract
 {
     public ItemBlockBase(Block block)
     {
         super(block);
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public String getRenderContentID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered)
-    {
-        return getRenderContentID(0);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
     public List<String> getRenderContentIDs()
     {
         List<String> list = new ArrayList();
@@ -48,83 +42,44 @@ public class ItemBlockBase extends ItemBlockAbstract implements IJsonRenderState
 
     public BlockBase getBlockBase()
     {
-        return (BlockBase) field_150939_a;
+        return (BlockBase) block;
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xHit, float yHit, float zHit)
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        Block block = world.getBlock(x, y, z);
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        Block block = iblockstate.getBlock();
 
-        if (block == Blocks.snow_layer && (world.getBlockMetadata(x, y, z) & 7) < 1)
+        if (!block.isReplaceable(worldIn, pos))
         {
-            side = 1;
-        }
-        else if (block != Blocks.vine && block != Blocks.tallgrass && block != Blocks.deadbush && !block.isReplaceable(world, x, y, z))
-        {
-            if (side == 0)
-            {
-                --y;
-            }
-
-            if (side == 1)
-            {
-                ++y;
-            }
-
-            if (side == 2)
-            {
-                --z;
-            }
-
-            if (side == 3)
-            {
-                ++z;
-            }
-
-            if (side == 4)
-            {
-                --x;
-            }
-
-            if (side == 5)
-            {
-                ++x;
-            }
+            pos = pos.offset(facing);
         }
 
-        if (stack.stackSize == 0)
-        {
-            return false;
-        }
-        else if (!player.canPlayerEdit(x, y, z, side, stack))
-        {
-            return false;
-        }
-        else if (y == 255 && this.field_150939_a.getMaterial().isSolid())
-        {
-            return false;
-        }
-        else if (!getBlockBase().canPlaceBlockAt(player, world, x, y, z))
-        {
-            return false;
-        }
-        else if (world.canPlaceEntityOnSide(this.field_150939_a, x, y, z, false, side, player, stack))
-        {
-            int i1 = this.getMetadata(stack.getItemDamage());
-            int j1 = this.field_150939_a.onBlockPlaced(world, x, y, z, side, xHit, yHit, zHit, i1);
+        ItemStack itemstack = player.getHeldItem(hand);
 
-            if (placeBlockAt(stack, player, world, x, y, z, side, xHit, yHit, zHit, j1))
+        if (!itemstack.isEmpty() && player.canPlayerEdit(pos, facing, itemstack) && worldIn.mayPlace(this.block, pos, false, facing, (Entity) null))
+        {
+            if (!getBlockBase().canPlaceBlockAt(player, worldIn, pos))
             {
-                world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), this.field_150939_a.stepSound.func_150496_b(), (this.field_150939_a.stepSound.getVolume() + 1.0F) / 2.0F, this.field_150939_a.stepSound.getPitch() * 0.8F);
-                --stack.stackSize;
+                return EnumActionResult.FAIL;
+            }
+            int i = this.getMetadata(itemstack.getMetadata());
+            IBlockState iblockstate1 = this.block.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, i, player, hand);
+
+            if (placeBlockAt(itemstack, player, worldIn, pos, facing, hitX, hitY, hitZ, iblockstate1))
+            {
+                iblockstate1 = worldIn.getBlockState(pos);
+                SoundType soundtype = iblockstate1.getBlock().getSoundType(iblockstate1, worldIn, pos, player);
+                worldIn.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                itemstack.shrink(1);
             }
 
-            return true;
+            return EnumActionResult.SUCCESS;
         }
         else
         {
-            return false;
+            return EnumActionResult.FAIL;
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.block.imp;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.world.Explosion;
 
 /**
  * More of a getter than a listener, but provides a way to modify the default return of the provided methods.
@@ -31,12 +32,9 @@ public interface IResistanceListener extends ITileEventListener
      * changed to allow the user to invert this check.
      *
      * @param entity
-     * @param explosionX
-     * @param explosionY
-     * @param explosionZ
      * @return
      */
-    default float getExplosionResistance(Entity entity, double explosionX, double explosionY, double explosionZ)
+    default float getExplosionResistance(Entity entity, Explosion ex)
     {
         return getExplosionResistance(entity);
     }

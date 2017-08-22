@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.block.imp;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Applied to objects that listen for wrench actions on a block
@@ -20,7 +21,7 @@ public interface IWrenchListener extends ITileEventListener
      * @param hitZ
      * @return
      */
-    default boolean onPlayerRightClickWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ)
+    default boolean onPlayerRightClickWrench(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         return false;
     }

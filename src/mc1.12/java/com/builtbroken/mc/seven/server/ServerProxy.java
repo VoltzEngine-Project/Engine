@@ -10,7 +10,7 @@ import com.builtbroken.mc.core.commands.permissions.sub.*;
 import com.builtbroken.mc.core.content.blast.emp.ExEmp;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.server.MinecraftServer;
 
 import java.lang.reflect.Field;

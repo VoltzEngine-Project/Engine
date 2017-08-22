@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.asm;
 
 import com.builtbroken.mc.core.Engine;
 import com.google.common.base.Objects;
-import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.Remapper;

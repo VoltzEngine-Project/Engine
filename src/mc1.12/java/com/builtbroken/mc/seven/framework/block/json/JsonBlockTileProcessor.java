@@ -1,7 +1,6 @@
 package com.builtbroken.mc.seven.framework.block.json;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.seven.framework.block.IJsonBlockSubProcessor;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.builtbroken.mc.seven.framework.block.BlockBase;

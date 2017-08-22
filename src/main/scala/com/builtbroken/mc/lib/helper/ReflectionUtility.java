@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.mc.core.Engine;
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Level;
 
 import java.lang.annotation.Annotation;

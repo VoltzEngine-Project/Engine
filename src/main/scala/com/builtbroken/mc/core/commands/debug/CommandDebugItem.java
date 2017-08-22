@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.commands.debug;
 
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

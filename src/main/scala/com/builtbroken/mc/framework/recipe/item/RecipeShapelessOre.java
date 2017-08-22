@@ -1,14 +1,18 @@
 package com.builtbroken.mc.framework.recipe.item;
 
+import com.builtbroken.mc.core.References;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.ArrayList;
+import javax.annotation.Nonnull;
 import java.util.Iterator;
 
 /**
@@ -19,57 +23,54 @@ public class RecipeShapelessOre extends ShapelessOreRecipe
 {
     public RecipeShapelessOre(Block result, Object... recipe)
     {
-        super(result, recipe);
+        super(new ResourceLocation(References.DOMAIN, result.getUnlocalizedName()), result, recipe);
     }
 
     public RecipeShapelessOre(Item result, Object... recipe)
     {
-        super(result, recipe);
+        super(new ResourceLocation(References.DOMAIN, result.getUnlocalizedName()), result, recipe);
     }
 
     public RecipeShapelessOre(ItemStack result, Object... recipe)
     {
-        super(result, recipe);
+        super(new ResourceLocation(References.DOMAIN, result.getUnlocalizedName()), result, recipe);
     }
 
     @Override
-    public boolean matches(InventoryCrafting var1, World world)
+    public boolean matches(@Nonnull InventoryCrafting var1, @Nonnull World world)
     {
-        ArrayList<Object> required = new ArrayList<Object>(getInput());
+        NonNullList<Ingredient> required = NonNullList.create();
+        required.addAll(input);
 
         for (int x = 0; x < var1.getSizeInventory(); x++)
         {
             ItemStack slot = var1.getStackInSlot(x);
 
-            if (slot != null)
+            if (!slot.isEmpty())
             {
                 boolean inRecipe = false;
-                Iterator<Object> req = required.iterator();
+                Iterator<Ingredient> req = required.iterator();
 
                 while (req.hasNext())
                 {
-                    boolean match = false;
-
-                    Object next = req.next();
-
-                    if (next instanceof ItemStack)
-                    {
-                        match = itemMatches((ItemStack) next, slot, false);
-                    }
-                    else if (next instanceof ArrayList)
-                    {
-                        Iterator<ItemStack> itr = ((ArrayList<ItemStack>) next).iterator();
-                        while (itr.hasNext() && !match)
-                        {
-                            match = itemMatches(itr.next(), slot, false);
-                        }
-                    }
-
-                    if (match)
+                    Ingredient ingredient = req.next();
+                    if (ingredient.apply(slot))
                     {
                         inRecipe = true;
-                        required.remove(next);
+                        req.remove();
                         break;
+                    }
+                    else
+                    {
+                        for (ItemStack itemstack : ingredient.getMatchingStacks())
+                        {
+                            if (itemMatches(itemstack, slot, false))
+                            {
+                                inRecipe = true;
+                                req.remove();
+                                break;
+                            }
+                        }
                     }
                 }
 

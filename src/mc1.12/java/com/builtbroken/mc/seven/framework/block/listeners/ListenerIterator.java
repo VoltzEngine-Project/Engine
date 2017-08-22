@@ -6,6 +6,7 @@ import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.framework.block.imp.ITileWithListeners;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -21,9 +22,7 @@ public class ListenerIterator implements Iterator<ITileEventListener>, Iterable<
     private World world;
     private IBlockAccess access;
 
-    private int x;
-    private int y;
-    private int z;
+    private BlockPos pos;
 
     private int index = -1;
     private int nextIndex = -1;
@@ -33,22 +32,18 @@ public class ListenerIterator implements Iterator<ITileEventListener>, Iterable<
     private TileEntity tile;
     private String key;
 
-    public ListenerIterator(World world, int x, int y, int z, BlockBase blockBase, String key)
+    public ListenerIterator(World world, BlockPos pos, BlockBase blockBase, String key)
     {
         this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.pos = pos;
         this.blockBase = blockBase;
         this.key = key;
     }
 
-    public ListenerIterator(IBlockAccess world, int x, int y, int z, BlockBase blockBase, String key)
+    public ListenerIterator(IBlockAccess world, BlockPos pos, BlockBase blockBase, String key)
     {
         this.access = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.pos = pos;
         this.blockBase = blockBase;
         this.key = key;
     }
@@ -165,11 +160,11 @@ public class ListenerIterator implements Iterator<ITileEventListener>, Iterable<
             {
                 if(world != null)
                 {
-                    ((IBlockListener) re).inject(world, xi(), yi(), zi());
+                    ((IBlockListener) re).inject(world, pos);
                 }
                 else
                 {
-                    ((IBlockListener) re).inject(access, xi(), yi(), zi());
+                    ((IBlockListener) re).inject(access, pos);
                 }
             }
 
@@ -185,11 +180,11 @@ public class ListenerIterator implements Iterator<ITileEventListener>, Iterable<
         {
             if (world() != null)
             {
-                tile = world().getTileEntity(xi(), yi(), zi());
+                tile = world().getTileEntity(pos);
             }
             else if (access != null)
             {
-                tile = access.getTileEntity(xi(), yi(), zi());
+                tile = access.getTileEntity(pos);
             }
         }
         return tile;
@@ -206,16 +201,16 @@ public class ListenerIterator implements Iterator<ITileEventListener>, Iterable<
 
     public int xi()
     {
-        return x;
+        return pos.getX();
     }
 
     public int yi()
     {
-        return y;
+        return pos.getY();
     }
 
     public int zi()
     {
-        return z;
+        return pos.getZ();
     }
 }

@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.recipe.extend.MachineRecipeLoader;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -35,9 +36,9 @@ public class MRLoaderFluidStack extends MachineRecipeLoader<MRFluidStack>
         return recipe;
     }
 
-    protected Fluid registerFluid(String name)
+    protected Fluid registerFluid(String name, ResourceLocation still, ResourceLocation flowing)
     {
-        Fluid fluid = new Fluid(name);
+        Fluid fluid = new Fluid(name, still, flowing);
         if(!FluidRegistry.registerFluid(fluid) && FluidRegistry.getFluid(name) == null)
         {
             Engine.logger().error("Failed to register fluid " + name + " with no fluid registered to name");
@@ -45,9 +46,9 @@ public class MRLoaderFluidStack extends MachineRecipeLoader<MRFluidStack>
         return FluidRegistry.getFluid(name);
     }
 
-    protected Fluid registerMoltenFluid(String name)
+    protected Fluid registerMoltenFluid(String name, ResourceLocation still, ResourceLocation flowing)
     {
-        Fluid fluid = new Fluid(name);
+        Fluid fluid = new Fluid(name, still, flowing);
         fluid.setViscosity(16000);
         fluid.setLuminosity(12);
         if(!FluidRegistry.registerFluid(fluid) && FluidRegistry.getFluid(name) == null)

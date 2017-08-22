@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -132,7 +131,7 @@ public abstract class MachineRecipe<O extends Object, I extends Object> implemen
         if(object instanceof FluidStack)
             return (FluidStack) object;
         if(object instanceof Fluid)
-            return new FluidStack((Fluid) object, FluidContainerRegistry.BUCKET_VOLUME);
+            return new FluidStack((Fluid) object, Fluid.BUCKET_VOLUME);
         return null;
     }
 }

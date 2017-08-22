@@ -4,13 +4,12 @@ import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.seven.framework.block.BlockPropertyData;
 import com.builtbroken.mc.seven.framework.block.tile.ITileProvider;
 import com.builtbroken.mc.seven.framework.block.tile.TileProviderMeta;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.List;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -77,22 +76,22 @@ public class BlockMeta extends BlockBase
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs creativeTabs, List list)
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
     {
-        super.getSubBlocks(item, creativeTabs, list);
+        super.getSubBlocks(itemIn, items);
         for (MetaData meta : metaDataValues)
         {
             if (meta != null && meta.index != 0)
             {
-                list.add(new ItemStack(item, 1, meta.index));
+                items.add(new ItemStack(this, 1, meta.index));
             }
         }
     }
 
     @Override
-    public int damageDropped(int meta)
+    public int damageDropped(IBlockState state)
     {
-        return meta;
+        return state.getValue(BlockBase.META);
     }
 
     @Override

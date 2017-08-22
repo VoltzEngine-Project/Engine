@@ -8,7 +8,7 @@ import com.builtbroken.mc.client.json.models.ModelData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import org.lwjgl.opengl.GL11;
 
 /**
