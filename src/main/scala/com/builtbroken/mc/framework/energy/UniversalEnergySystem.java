@@ -59,26 +59,31 @@ public class UniversalEnergySystem
     {
         if (handler != null)
         {
+            //Tries to find the handler via an object instance
             if (objectHandlerMap.containsKey(handler))
             {
                 return true;
             }
-            //TODO move item stack handler to Item class map
-            Class clazz = handler instanceof ItemStack ? ((ItemStack) handler).getItem().getClass() : handler.getClass();
 
+            //Tries to find the handler via the class value
+            Class clazz = handler instanceof ItemStack ? ((ItemStack) handler).getItem().getClass() : handler.getClass();
             if (energyHandlerCache.containsKey(clazz))
             {
                 return true;
             }
 
+            //If it can't find the handler then it attemps to look at each module
             for (EnergyHandler module : loadedModules)
             {
+                //Asks the module if it supports the handler
                 if (dir != null ? module.doIsHandler(handler, dir) : module.doIsHandler(handler))
                 {
+                    //Cache by object if item or block
                     if (handler instanceof Item || handler instanceof Block)
                     {
                         objectHandlerMap.put(handler, module);
                     }
+                    //Cache by class
                     energyHandlerCache.put(clazz, module);
                     return true;
                 }
