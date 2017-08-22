@@ -140,6 +140,8 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
             //tile.doUpdateGuiUsers();
         }
 
+        //Temp fix for MC not wanting to save tiles
+        this.worldObj.markTileEntityChunkModified(this.xCoord, this.yCoord, this.zCoord, this); //TODO find a way to note if tile needs saved
     }
 
     @Override
