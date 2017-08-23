@@ -7,7 +7,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.TextComponentString;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
@@ -34,7 +34,7 @@ public class CommandVEButcher extends SubCommand
         {
             entity.setDead();
         }
-        entityPlayer.addChatComponentMessage(new ChatComponentText("Removed " + list.size() + " mobs entities within " + 100 + " block radius."));
+        entityPlayer.addChatComponentMessage(new TextComponentString("Removed " + list.size() + " mobs entities within " + 100 + " block radius."));
         return true;
     }
 
@@ -54,13 +54,13 @@ public class CommandVEButcher extends SubCommand
                 }
                 catch (NumberFormatException e)
                 {
-                    sender.addChatMessage(new ChatComponentText("Dim id needs to be an int"));
+                    sender.sendMessage(new TextComponentString("Dim id needs to be an int"));
                     return true;
                 }
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Right now only /ve butcher dim[#] is supported, ex /ve butcher dim0"));
+                sender.sendMessage(new TextComponentString("Right now only /ve butcher dim[#] is supported, ex /ve butcher dim0"));
                 return true;
             }
         }
@@ -97,11 +97,11 @@ public class CommandVEButcher extends SubCommand
                 }
             }
             time = System.nanoTime() - time;
-            sender.addChatMessage(new ChatComponentText("Removed " + entitiesKilled + "mobs over " + chunksSearched + " chunks in " + StringHelpers.formatNanoTime(time)));
+            sender.sendMessage(new TextComponentString("Removed " + entitiesKilled + "mobs over " + chunksSearched + " chunks in " + StringHelpers.formatNanoTime(time)));
         }
         else
         {
-            sender.addChatMessage(new ChatComponentText("World doesn't exist, this means it unloaded or the wrong id was provided."));
+            sender.sendMessage(new TextComponentString("World doesn't exist, this means it unloaded or the wrong id was provided."));
         }
         return true;
     }

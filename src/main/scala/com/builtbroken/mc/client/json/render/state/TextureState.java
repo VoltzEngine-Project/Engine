@@ -3,7 +3,8 @@ package com.builtbroken.mc.client.json.render.state;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.texture.TextureData;
-import net.minecraft.util.IIcon;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -19,12 +20,12 @@ public class TextureState extends RenderState implements IRenderState
     }
 
     @Override
-    public IIcon getIcon(int side)
+    public ResourceLocation getIcon(int side)
     {
         TextureData textureData = getTextureData(side);
-        if (textureData != null && textureData.getIcon() != null)
+        if (textureData != null && textureData.getLocation() != null)
         {
-            return textureData.getIcon();
+            return textureData.getLocation();
         }
         return null;
     }
@@ -37,5 +38,34 @@ public class TextureState extends RenderState implements IRenderState
             return ClientDataHandler.INSTANCE.getTexture(textureID);
         }
         return parentState != null ? parentState.getTextureData(side) : null;
+    }
+
+    @Override
+    public final ImmutableList<ResourceLocation> getTextures()
+    {
+        ImmutableList.Builder<ResourceLocation> builder = ImmutableList.builder();
+        populateTextures(builder);
+        return builder.build();
+    }
+
+    /**
+     * Recursive method to get textures
+     * @param builder
+     */
+    protected void populateTextures(ImmutableList.Builder<ResourceLocation> builder)
+    {
+        //If recursive method is too deep, switch to iterative
+        if (textureID != null)
+        {
+            TextureData data = ClientDataHandler.INSTANCE.getTexture(textureID);
+            if (data != null && data.getLocation() != null)
+            {
+                builder.add(data.getLocation());
+            }
+        }
+        if (parentState instanceof TextureState)
+        {
+            ((TextureState) parentState).populateTextures(builder);
+        }
     }
 }

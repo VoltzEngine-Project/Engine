@@ -1,7 +1,7 @@
 package com.builtbroken.mc.lib.world.map.radar.data;
 
 import com.builtbroken.mc.api.IWorldPosition;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 
 /**
  * Special type of weak reference used to track radar objects. This prevents the radar system from holding on to
@@ -19,8 +19,8 @@ public abstract class RadarObject<J> implements IWorldPosition
      */
     public abstract boolean isValid();
 
-    public ChunkCoordIntPair getChunkCoordIntPair()
+    public ChunkPos getChunkPos()
     {
-        return  new ChunkCoordIntPair((int)x() >> 4, (int)z() >> 4);
+        return  new ChunkPos((int)x() >> 4, (int)z() >> 4);
     }
 }

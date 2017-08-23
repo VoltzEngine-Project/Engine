@@ -1,6 +1,7 @@
 package com.builtbroken.mc.client.json.imp;
 
 import com.builtbroken.mc.client.json.texture.TextureData;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -32,4 +33,6 @@ public interface IRenderState
      * @return texture data, or null if none
      */
     TextureData getTextureData(int side);
+
+    ImmutableList<ResourceLocation> getTextures();
 }

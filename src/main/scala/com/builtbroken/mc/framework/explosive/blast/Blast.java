@@ -2,8 +2,8 @@ package com.builtbroken.mc.framework.explosive.blast;
 
 import com.builtbroken.jlib.data.network.IByteBufReader;
 import com.builtbroken.jlib.data.network.IByteBufWriter;
-import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.api.IWorldPosition;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.api.edit.IWorldChangeAction;
 import com.builtbroken.mc.api.edit.IWorldChangeAudio;
 import com.builtbroken.mc.api.edit.IWorldChangeGraphics;
@@ -15,28 +15,32 @@ import com.builtbroken.mc.api.event.blast.BlastEventBlockReplaced;
 import com.builtbroken.mc.api.explosive.IBlast;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.lib.world.edit.BlockEdit;
 import com.builtbroken.mc.prefab.explosive.blast.BlastBasic;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +50,7 @@ import java.util.List;
  */
 public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics, IBlast, IByteBufReader, IByteBufWriter
 {
+    public static final ResourceLocation EXPLOSION_SOUND = new ResourceLocation("minecraft","random.explode");
     @Deprecated
     public World oldWorld;
 
@@ -66,7 +71,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     public boolean killExplosion = false;
 
     /** Cause of the explosion */
-    public TriggerCause cause = new TriggerCause.TriggerCauseRedstone(ForgeDirection.UNKNOWN, 15);
+    public TriggerCause cause = new TriggerCause.TriggerCauseRedstone(Direction.UNKNOWN, 15);
     private NBTTagCompound additionBlastData;
 
     public final IExplosiveHandler explosiveHandler;
@@ -114,7 +119,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event)
     {
-        if (event.world == oldWorld)
+        if (event.getWorld() == oldWorld)
         {
             killAction(false);
             MinecraftForge.EVENT_BUS.unregister(this);
@@ -124,7 +129,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     public B setLocation(final World world, double x, double y, double z)
     {
         this.oldWorld = world;
-        this.world = Engine.minecraft.getWorld(this.oldWorld.provider.dimensionId); //TODO replace when converted to IWorld
+        this.world = Engine.minecraft.getWorld(this.oldWorld.provider.getDimension()); //TODO replace when converted to IWorld
         this.x = x;
         this.y = y;
         this.z = z;
@@ -227,13 +232,13 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
      */
     protected void postPlace(final IWorldEdit vec)
     {
-        if (vec.getNewBlock() == Blocks.air)
+        if (vec.getNewBlockState().getBlock() == Blocks.AIR)
         {
-            MinecraftForge.EVENT_BUS.post(new BlastEventBlockRemoved.Post(this, oldWorld, vec.getBlock(), vec.getBlockMetadata(), (int) vec.x(), (int) vec.y(), (int) vec.z()));
+            MinecraftForge.EVENT_BUS.post(new BlastEventBlockRemoved.Post(this, oldWorld, vec.getBlockState(), (int) vec.x(), (int) vec.y(), (int) vec.z()));
         }
         else
         {
-            MinecraftForge.EVENT_BUS.post(new BlastEventBlockReplaced.Post(this, oldWorld, vec.getBlock(), vec.getBlockMetadata(), vec.getNewBlock(), vec.getNewMeta(), (int) vec.x(), (int) vec.y(), (int) vec.z()));
+            MinecraftForge.EVENT_BUS.post(new BlastEventBlockReplaced.Post(this, oldWorld, vec.getBlockState(), vec.getNewBlockState(), (int) vec.x(), (int) vec.y(), (int) vec.z()));
         }
     }
 
@@ -247,19 +252,19 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     protected boolean prePlace(final IWorldEdit vec)
     {
         BlastEventBlockEdit event;
-        if (vec.getNewBlock() == Blocks.air)
+        if (vec.getNewBlockState().getBlock() == Blocks.AIR)
         {
-            event = new BlastEventBlockRemoved.Pre(this, oldWorld, vec.getBlock(), vec.getBlockMetadata(), (int) vec.x(), (int) vec.y(), (int) vec.z());
+            event = new BlastEventBlockRemoved.Pre(this, oldWorld, vec.getBlockState(), (int) vec.x(), (int) vec.y(), (int) vec.z());
         }
         else
         {
-            event = new BlastEventBlockReplaced.Pre(this, oldWorld, vec.getBlock(), vec.getBlockMetadata(), vec.getNewBlock(), vec.getNewMeta(), (int) vec.x(), (int) vec.y(), (int) vec.z());
+            event = new BlastEventBlockReplaced.Pre(this, oldWorld, vec.getBlockState(), vec.getNewBlockState(), (int) vec.x(), (int) vec.y(), (int) vec.z());
         }
 
         boolean result = MinecraftForge.EVENT_BUS.post(event);
         if (vec instanceof BlockEdit && event instanceof BlastEventBlockReplaced.Pre)
         {
-            ((BlockEdit) vec).set(((BlastEventBlockReplaced.Pre) event).newBlock, ((BlastEventBlockReplaced.Pre) event).newMeta);
+            ((BlockEdit) vec).set(((BlastEventBlockReplaced.Pre) event).newState);
         }
         return !result;
     }
@@ -296,7 +301,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
 
     protected void damageEntities(List<Entity> entities, DamageSource source, float damageScale)
     {
-        Vec3 vec3 = Vec3.createVectorHelper(x, y, z);
+        Vec3d vec3 = new Vec3d(x, y, z);
         for (Entity entity : entities)
         {
             double distanceScaled = entity.getDistance(x, y, z) / size;
@@ -306,20 +311,24 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
                 double deltaX = entity.posX - x;
                 double deltaY = entity.posY + (double) entity.getEyeHeight() - y;
                 double deltaZ = entity.posZ - z;
-                double mag = (double) MathHelper.sqrt_double(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+                double mag = (double) MathHelper.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
 
                 if (mag != 0.0D)
                 {
                     deltaX /= mag;
                     deltaY /= mag;
                     deltaZ /= mag;
-                    double blockDensity = (double) this.oldWorld.getBlockDensity(vec3, entity.boundingBox);
+                    double blockDensity = (double) this.oldWorld.getBlockDensity(vec3, entity.getEntityBoundingBox());
                     double force = (1.0D - distanceScaled) * blockDensity;
                     if (source != null)
                     {
                         entity.attackEntityFrom(source, (float) (((force * force + force) / 16 * size) * damageScale + 1.0D));
                     }
-                    double pushPercentage = EnchantmentProtection.func_92092_a(entity, force);
+                    double pushPercentage = 1;
+                    if (entities instanceof EntityLivingBase) //TODO see if there is a knock back enchantment
+                    {
+                        pushPercentage = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, force);
+                    }
                     entity.motionX += deltaX * pushPercentage;
                     entity.motionY += deltaY * pushPercentage;
                     entity.motionZ += deltaZ * pushPercentage;
@@ -341,7 +350,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
      */
     protected boolean shouldKillAction()
     {
-        return killExplosion || oldWorld == null || oldWorld.provider == null || DimensionManager.getWorld(oldWorld.provider.dimensionId) == null || !toLocation().isChunkLoaded();
+        return killExplosion || oldWorld == null || oldWorld.provider == null || DimensionManager.getWorld(oldWorld.provider.getDimension()) == null || !toLocation().isChunkLoaded();
     }
 
     @Override
@@ -381,7 +390,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
         //TODO get custom audio
         if (!oldWorld.isRemote)
         {
-            oldWorld.playSoundEffect(x, y, z, "random.explode", 4.0F, (float) ((1.0F + (oldWorld.rand.nextFloat() - oldWorld.rand.nextFloat()) * 0.2F) * size));
+            oldWorld.playSound(x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (float) ((1.0F + (oldWorld.rand.nextFloat() - oldWorld.rand.nextFloat()) * 0.2F) * size), true);
         }
     }
 
@@ -390,7 +399,6 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     {
     }
 
-    /** See {@link RenderGlobal#doSpawnParticle(String, double, double, double, double, double, double)} for a list of vanilla particles */
     @Override
     public void displayEffectForEdit(IWorldEdit blocks)
     {
@@ -407,8 +415,8 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
 
             Pos pos = randomMotion(posX, posY, posZ);
             //Spawn particles
-            oldWorld.spawnParticle("explode", (posX + x * 1.0D) / 2.0D, (posY + y * 1.0D) / 2.0D, (posZ + z * 1.0D) / 2.0D, pos.x(), pos.y(), pos.z());
-            oldWorld.spawnParticle("smoke", posX, posY, posZ, pos.x(), pos.y(), pos.z());
+            oldWorld.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (posX + x * 1.0D) / 2.0D, (posY + y * 1.0D) / 2.0D, (posZ + z * 1.0D) / 2.0D, pos.x(), pos.y(), pos.z());
+            oldWorld.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY, posZ, pos.x(), pos.y(), pos.z());
         }
     }
 
@@ -429,7 +437,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
         double deltaZ = posZ - z;
 
         //Convert the distance into a vector
-        double mag = (double) MathHelper.sqrt_double(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+        double mag = (double) MathHelper.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
         deltaX /= mag;
         deltaY /= mag;
         deltaZ /= mag;
@@ -453,11 +461,11 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
         {
             if (this.size >= 2.0F)
             {
-                world.spawnParticle("hugeexplosion", x, y, z, 1.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, x, y, z, 1.0D, 0.0D, 0.0D);
             }
             else
             {
-                world.spawnParticle("largeexplode", x, y, z, 1.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y, z, 1.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -470,11 +478,11 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
         {
             if (this.size >= 2.0F)
             {
-                world.spawnParticle("hugeexplosion", x, y, z, 1.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, x, y, z, 1.0D, 0.0D, 0.0D);
             }
             else
             {
-                world.spawnParticle("largeexplode", x, y, z, 1.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y, z, 1.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -543,8 +551,10 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
 
         public WrapperExplosion(Blast blast)
         {
-            super(blast.oldWorld(), blast.explosionBlameEntity, blast.x(), blast.y(), blast.z(), (float) blast.size);
+            super(blast.oldWorld(), blast.explosionBlameEntity, blast.x(), blast.y(), blast.z(), (float) blast.size, false, true); //TODO wrapper per since some explosion do not damage terrain
             this.blast = blast;
         }
+
+        //TODO add block destroyed to block list
     }
 }

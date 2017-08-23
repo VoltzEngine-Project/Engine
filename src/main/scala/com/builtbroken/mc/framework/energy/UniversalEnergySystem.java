@@ -1,10 +1,10 @@
 package com.builtbroken.mc.framework.energy;
 
+import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.framework.energy.data.EnergySides;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class UniversalEnergySystem
         loadedModules.add(module);
     }
 
-    public static EnergyHandler getHandler(Object handler, ForgeDirection dir)
+    public static EnergyHandler getHandler(Object handler, Direction dir)
     {
         if (isHandler(handler, dir))
         {
@@ -55,7 +55,7 @@ public class UniversalEnergySystem
      *
      * @return True if the handler can store energy. This can be for items and blocks.
      */
-    public static boolean isHandler(Object handler, ForgeDirection dir)
+    public static boolean isHandler(Object handler, Direction dir)
     {
         if (handler != null)
         {
@@ -127,7 +127,7 @@ public class UniversalEnergySystem
         return false;
     }
 
-    public static boolean canConnect(Object obj, ForgeDirection direction, Object source)
+    public static boolean canConnect(Object obj, Direction direction, Object source)
     {
         //TODO prioritize UE code to prevent inf loops (RF#canConnect -> UESystem#canConnect -> RF#CanConnect....)
         EnergyHandler module = getHandler(obj, direction);
@@ -143,7 +143,7 @@ public class UniversalEnergySystem
      * @param doReceive - true will actually give the energy, false will test
      * @return amount of energy received
      */
-    public static double fill(Object handler, ForgeDirection direction, double energy, boolean doReceive)
+    public static double fill(Object handler, Direction direction, double energy, boolean doReceive)
     {
         return receiveEnergy(handler, direction, energy, doReceive);
     }
@@ -157,7 +157,7 @@ public class UniversalEnergySystem
      * @param doReceive - true will actually give the energy, false will test
      * @return amount of energy received
      */
-    public static double receiveEnergy(Object handler, ForgeDirection direction, double energy, boolean doReceive)
+    public static double receiveEnergy(Object handler, Direction direction, double energy, boolean doReceive)
     {
         EnergyHandler module = getHandler(handler, direction);
         if (module != null)
@@ -167,7 +167,7 @@ public class UniversalEnergySystem
         return 0;
     }
 
-    public static double drain(Object handler, ForgeDirection direction, double energy, boolean doExtract)
+    public static double drain(Object handler, Direction direction, double energy, boolean doExtract)
     {
         return extractEnergy(handler, direction, energy, doExtract);
     }
@@ -191,7 +191,7 @@ public class UniversalEnergySystem
      * @param doExtract - true will actually take the energy, false will test
      * @return amount of energy taken
      */
-    public static double extractEnergy(Object handler, ForgeDirection direction, double energy, boolean doExtract)
+    public static double extractEnergy(Object handler, Direction direction, double energy, boolean doExtract)
     {
         EnergyHandler module = getHandler(handler, direction);
         if (module != null)
@@ -204,7 +204,7 @@ public class UniversalEnergySystem
     /**
      * Called to take an amount of energy from any side of a tile,
      * <p>
-     * use {@link #extractEnergy(Object, ForgeDirection, double, boolean)} when
+     * use {@link #extractEnergy(Object, Direction, double, boolean)} when
      * possible to ensure connection logic is maintained. Only use this
      * if there is no way to get the side being accessed.
      *
@@ -216,7 +216,7 @@ public class UniversalEnergySystem
     public static double extractEnergy(Object handler, double energy, boolean doExtract)
     {
         double energyLeft = energy;
-        for (ForgeDirection dir : ForgeDirection.values())
+        for (Direction dir : Direction.values())
         {
             if (energyLeft > 0)
             {
@@ -245,7 +245,7 @@ public class UniversalEnergySystem
     public static double getPotentialEnergy(Object handler)
     {
         double energyContained = 0;
-        for (ForgeDirection dir : ForgeDirection.values())
+        for (Direction dir : Direction.values())
         {
             EnergyHandler module = getHandler(handler, dir);
             if (module != null)
@@ -266,7 +266,7 @@ public class UniversalEnergySystem
     public static EnergySides getEnergySided(Object handler)
     {
         EnergySides sides = new EnergySides();
-        for (ForgeDirection dir : ForgeDirection.values())
+        for (Direction dir : Direction.values())
         {
             EnergyHandler module = getHandler(handler, dir);
             if (module != null)
@@ -350,7 +350,7 @@ public class UniversalEnergySystem
         return itemStack;
     }
 
-    public static double getEnergy(Object obj, ForgeDirection direction)
+    public static double getEnergy(Object obj, Direction direction)
     {
         EnergyHandler module = getHandler(obj, direction);
         if (module != null)
@@ -360,7 +360,7 @@ public class UniversalEnergySystem
         return 0;
     }
 
-    public static double getMaxEnergy(Object handler, ForgeDirection direction)
+    public static double getMaxEnergy(Object handler, Direction direction)
     {
         EnergyHandler module = getHandler(handler, direction);
         if (module != null)

@@ -6,10 +6,10 @@ import com.builtbroken.mc.api.items.energy.IEnergyBufferItem;
 import com.builtbroken.mc.api.items.energy.IEnergyItem;
 import com.builtbroken.mc.api.tile.ConnectionType;
 import com.builtbroken.mc.api.tile.ITileConnection;
+import com.builtbroken.mc.data.Direction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -23,7 +23,7 @@ public class UniversalEnergyHandler extends EnergyHandler
     }
 
     @Override
-    public double receiveEnergy(Object handler, ForgeDirection direction, double energy, boolean doReceive)
+    public double receiveEnergy(Object handler, Direction direction, double energy, boolean doReceive)
     {
         if (handler instanceof ItemStack)
         {
@@ -42,7 +42,7 @@ public class UniversalEnergyHandler extends EnergyHandler
     }
 
     @Override
-    public double extractEnergy(Object handler, ForgeDirection direction, double energy, boolean doExtract)
+    public double extractEnergy(Object handler, Direction direction, double energy, boolean doExtract)
     {
         if (handler instanceof ItemStack)
         {
@@ -128,7 +128,7 @@ public class UniversalEnergyHandler extends EnergyHandler
     }
 
     @Override
-    public boolean doIsHandler(Object obj, ForgeDirection dir)
+    public boolean doIsHandler(Object obj, Direction dir)
     {
         return doIsHandler(obj);
     }
@@ -164,7 +164,7 @@ public class UniversalEnergyHandler extends EnergyHandler
     }
 
     @Override
-    public boolean canConnect(Object obj, ForgeDirection direction, Object source)
+    public boolean canConnect(Object obj, Direction direction, Object source)
     {
         if (obj instanceof ITileConnection)
         {
@@ -184,7 +184,7 @@ public class UniversalEnergyHandler extends EnergyHandler
     }
 
     @Override
-    public double getEnergy(Object obj, ForgeDirection direction)
+    public double getEnergy(Object obj, Direction direction)
     {
         if (obj instanceof ItemStack && ((ItemStack) obj).getItem() instanceof IEnergyBufferItem)
         {
@@ -202,7 +202,7 @@ public class UniversalEnergyHandler extends EnergyHandler
     }
 
     @Override
-    public double getMaxEnergy(Object obj, ForgeDirection direction)
+    public double getMaxEnergy(Object obj, Direction direction)
     {
         if (obj instanceof ItemStack && ((ItemStack) obj).getItem() instanceof IEnergyBufferItem)
         {
@@ -242,7 +242,7 @@ public class UniversalEnergyHandler extends EnergyHandler
         }
         else if (obj instanceof IEnergyBufferProvider)
         {
-            IEnergyBuffer buffer = ((IEnergyBufferProvider) obj).getEnergyBuffer(ForgeDirection.UNKNOWN);
+            IEnergyBuffer buffer = ((IEnergyBufferProvider) obj).getEnergyBuffer(Direction.UNKNOWN);
             if (buffer != null)
             {
                 double e = buffer.getEnergyStored();
@@ -258,7 +258,7 @@ public class UniversalEnergyHandler extends EnergyHandler
     {
         if (handler instanceof IEnergyBufferProvider)
         {
-            IEnergyBuffer buffer = ((IEnergyBufferProvider) handler).getEnergyBuffer(ForgeDirection.UNKNOWN);
+            IEnergyBuffer buffer = ((IEnergyBufferProvider) handler).getEnergyBuffer(Direction.UNKNOWN);
             if (buffer != null)
             {
                 int energy = buffer.getEnergyStored();
@@ -273,6 +273,6 @@ public class UniversalEnergyHandler extends EnergyHandler
             ((IEnergyBufferItem) ((ItemStack) handler).getItem()).setEnergy((ItemStack) handler, cap);
             return cap - energy;
         }
-        return receiveEnergy(handler, ForgeDirection.UNKNOWN, Double.MAX_VALUE, true);
+        return receiveEnergy(handler, Direction.UNKNOWN, Double.MAX_VALUE, true);
     }
 }

@@ -3,7 +3,7 @@ package com.builtbroken.mc.core.commands.sub;
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.TextComponentString;
 
 import java.util.List;
 
@@ -37,9 +37,9 @@ public class CommandVEClear extends SubCommand
                     }
                     p.inventoryContainer.detectAndSendChanges();
                     if (p != entityPlayer)
-                        p.addChatComponentMessage(new ChatComponentText("Your armor has been removed by an admin"));
+                        p.addChatComponentMessage(new TextComponentString("Your armor has been removed by an admin"));
                     else
-                        p.addChatComponentMessage(new ChatComponentText("Your armor has been removed"));
+                        p.addChatComponentMessage(new TextComponentString("Your armor has been removed"));
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("inv"))
@@ -50,9 +50,9 @@ public class CommandVEClear extends SubCommand
                     }
                     p.inventoryContainer.detectAndSendChanges();
                     if (p != entityPlayer)
-                        p.addChatComponentMessage(new ChatComponentText("Your inventory has been cleared by an admin"));
+                        p.addChatComponentMessage(new TextComponentString("Your inventory has been cleared by an admin"));
                     else
-                        p.addChatComponentMessage(new ChatComponentText("Your inventory has been cleared"));
+                        p.addChatComponentMessage(new TextComponentString("Your inventory has been cleared"));
                     return true;
                 }
             }

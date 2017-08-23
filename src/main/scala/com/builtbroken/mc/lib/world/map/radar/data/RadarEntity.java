@@ -19,13 +19,13 @@ public class RadarEntity extends RadarObject<Entity>
     @Override
     public boolean isValid()
     {
-        return entity != null && entity.isEntityAlive() && entity.worldObj != null;
+        return entity != null && entity.isEntityAlive() && entity.world != null;
     }
 
     @Override
     public World oldWorld()
     {
-        return entity != null ? entity.worldObj : null;
+        return entity != null ? entity.world : null;
     }
 
     @Override

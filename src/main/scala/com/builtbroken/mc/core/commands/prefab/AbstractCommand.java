@@ -1,10 +1,13 @@
 package com.builtbroken.mc.core.commands.prefab;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,25 +37,25 @@ public class AbstractCommand extends CommandBase
     }
 
     @Override
-    public String getCommandName()
+    public String getName()
     {
         return name;
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_)
+    public String getUsage(ICommandSender p_71518_1_)
     {
-        return "/" + getCommandName() + " help";
+        return "/" + getName() + " help";
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args)
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
     {
         if (!handleHelp(sender, args))
         {
             if (!(sender instanceof EntityPlayer && handleEntityPlayerCommand((EntityPlayer) sender, args)) && !handleConsoleCommand(sender, args))
             {
-                sender.addChatMessage(new ChatComponentText("Error: Unknown chat command"));
+                sender.sendMessage(new TextComponentString("Error: Unknown chat command"));
             }
         }
     }
@@ -131,12 +134,12 @@ public class AbstractCommand extends CommandBase
         List<String> items = new ArrayList();
         getHelpOutput(sender, items);
 
-        sender.addChatMessage(new ChatComponentText("====== help -" + getPrefix().replace("/", "") + "- page " + p + " ======"));
+        sender.sendMessage(new TextComponentString("====== help -" + getPrefix().replace("/", "") + "- page " + p + " ======"));
         for (int i = 0 + (p * 10); i < 10 + (p * 10) && i < items.size(); i++)
         {
-            sender.addChatMessage(new ChatComponentText(getPrefix() + " " + items.get(i)));
+            sender.sendMessage(new TextComponentString(getPrefix() + " " + items.get(i)));
         }
-        sender.addChatMessage(new ChatComponentText(""));
+        sender.sendMessage(new TextComponentString(""));
     }
 
     /**
@@ -146,7 +149,7 @@ public class AbstractCommand extends CommandBase
      */
     public String getPrefix()
     {
-        return "/" + getCommandName();
+        return "/" + getName();
     }
 
     /**
@@ -169,7 +172,7 @@ public class AbstractCommand extends CommandBase
      */
     protected final String[] playersOnlineByUsername()
     {
-        return MinecraftServer.getServer().getAllUsernames();
+        return FMLServerHandler.instance().getServer().getPlayerList().getOnlinePlayerNames();
     }
 
     /**
@@ -177,9 +180,9 @@ public class AbstractCommand extends CommandBase
      *
      * @return list of players
      */
-    protected final List<EntityPlayer> getPlayersOnline()
+    protected final List<EntityPlayerMP> getPlayersOnline()
     {
-        return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+        return FMLServerHandler.instance().getServer().getPlayerList().getPlayers();
     }
 
     /**
@@ -188,12 +191,12 @@ public class AbstractCommand extends CommandBase
      * @param players - list of players, shouldn't be null, can be empty, not checked
      * @param msg     - msg to display the the user, shouldn't be null or empty, not checked
      */
-    protected void addChatToPlayers(List<EntityPlayer> players, String msg)
+    protected void addChatToPlayers(List<EntityPlayerMP> players, String msg)
     {
-        ChatComponentText chatComponentText = new ChatComponentText(msg);
+        TextComponentString chatComponentText = new TextComponentString(msg);
         for (EntityPlayer player : players)
         {
-            player.addChatComponentMessage(chatComponentText);
+            player.sendMessage(chatComponentText);
         }
     }
 

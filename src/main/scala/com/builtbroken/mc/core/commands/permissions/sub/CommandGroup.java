@@ -7,7 +7,7 @@ import com.builtbroken.mc.core.commands.prefab.ModularCommand;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +48,11 @@ public class CommandGroup extends ModularCommand
                     }
                 }
             }
-            sender.addChatMessage(new ChatComponentText("Unknown group sub command"));
+            sender.sendMessage(new TextComponentString("Unknown group sub command"));
         }
         else
         {
-            sender.addChatMessage(new ChatComponentText("Unknown group"));
+            sender.sendMessage(new TextComponentString("Unknown group"));
         }
         return true;
     }

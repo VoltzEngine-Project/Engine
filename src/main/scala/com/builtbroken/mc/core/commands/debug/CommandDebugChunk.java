@@ -2,10 +2,12 @@ package com.builtbroken.mc.core.commands.debug;
 
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -25,7 +27,7 @@ public class CommandDebugChunk extends SubCommand
     @Override
     public boolean handleConsoleCommand(ICommandSender sender, String[] args)
     {
-        sender.addChatMessage(new ChatComponentText("This command is not supported from console."));
+        sender.sendMessage(new TextComponentString("This command is not supported from console."));
         return true;
     }
 
@@ -39,32 +41,34 @@ public class CommandDebugChunk extends SubCommand
             {
                 World world = player.getEntityWorld();
 
-                Chunk chunk = world.getChunkFromBlockCoords((int) Math.round(player.posX), (int) Math.round(player.posZ));
-                int chunkX = chunk.xPosition << 4;
-                int chunkZ = chunk.zPosition << 4;
+                Chunk chunk = world.getChunkFromChunkCoords((int) Math.round(player.posX) >> 4, (int) Math.round(player.posZ) >> 4);
+                int chunkX = chunk.x << 4;
+                int chunkZ = chunk.z << 4;
                 for (int y = 1; y < 256; y++)
                 {
                     for (int x = 0; x < 16; x++)
                     {
                         for (int z = 0; z < 16; z++)
                         {
-                            Block block = world.getBlock(x + chunkX, y, z + chunkZ);
-                            if (block == Blocks.stone || block == Blocks.sand || block == Blocks.sandstone || block == Blocks.dirt || block == Blocks.grass || block == Blocks.gravel)
+                            BlockPos pos = new BlockPos(x + chunkX, y, z + chunkZ);
+                            IBlockState state = world.getBlockState(pos);
+                            Block block = state.getBlock();
+                            if (block == Blocks.STONE || block == Blocks.SAND || block == Blocks.SANDSTONE || block == Blocks.DIRT || block == Blocks.GRASS || block == Blocks.GRAVEL)
                             {
-                                world.setBlockToAir(x + chunkX, y, z + chunkZ);
+                                world.setBlockToAir(pos);
                             }
-                            else if (block == Blocks.water || block == Blocks.flowing_water)
+                            else if (block == Blocks.WATER || block == Blocks.FLOWING_WATER)
                             {
-                                world.setBlock(x + chunkX, y, z + chunkZ, Blocks.stained_glass, 4, 2);
+                                world.setBlockState(pos, Blocks.STAINED_GLASS.getStateFromMeta(4), 2);
                             }
-                            else if (block == Blocks.lava || block == Blocks.flowing_lava)
+                            else if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA)
                             {
-                                world.setBlock(x + chunkX, y, z + chunkZ, Blocks.stained_glass, 1, 2);
+                                world.setBlockState(pos, Blocks.STAINED_GLASS.getStateFromMeta(1), 2);
                             }
                         }
                     }
                 }
-                player.addChatMessage(new ChatComponentText("Generating world hole! Watch your step :P"));
+                player.sendMessage(new TextComponentString("Generating world hole! Watch your step :P"));
                 return true;
             }
         }

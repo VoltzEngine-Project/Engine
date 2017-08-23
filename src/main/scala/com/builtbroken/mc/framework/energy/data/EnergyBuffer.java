@@ -1,9 +1,9 @@
 package com.builtbroken.mc.framework.energy.data;
 
 import com.builtbroken.mc.api.energy.IEnergyBuffer;
+import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Basic implementation of energy buffer
@@ -131,7 +131,7 @@ public class EnergyBuffer implements IEnergyBuffer
      */
     public void addEmeryFromItem(ItemStack stackInSlot)
     {
-        if (UniversalEnergySystem.isHandler(stackInSlot, ForgeDirection.UNKNOWN))
+        if (UniversalEnergySystem.isHandler(stackInSlot, Direction.UNKNOWN))
         {
             int energy = (int) Math.floor(UniversalEnergySystem.drain(stackInSlot, Integer.MAX_VALUE, false));
             if (energy > 0)

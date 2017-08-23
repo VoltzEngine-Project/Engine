@@ -1,7 +1,7 @@
 package com.builtbroken.mc.framework.energy;
 
+import com.builtbroken.mc.data.Direction;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class EnergyHandler
 {
@@ -43,9 +43,9 @@ public abstract class EnergyHandler
         return toForeignEnergy(energy);
     }
 
-    public abstract double receiveEnergy(Object handler, ForgeDirection direction, double energy, boolean doReceive);
+    public abstract double receiveEnergy(Object handler, Direction direction, double energy, boolean doReceive);
 
-    public abstract double extractEnergy(Object handler, ForgeDirection direction, double energy, boolean doExtract);
+    public abstract double extractEnergy(Object handler, Direction direction, double energy, boolean doExtract);
 
     /**
      * Charges an item with the given energy
@@ -67,19 +67,19 @@ public abstract class EnergyHandler
      */
     public abstract double dischargeItem(ItemStack itemStack, double joules, boolean doDischarge);
 
-    public abstract boolean doIsHandler(Object obj, ForgeDirection dir);
+    public abstract boolean doIsHandler(Object obj, Direction dir);
 
     public abstract boolean doIsHandler(Object obj);
 
     public abstract boolean doIsEnergyContainer(Object obj);
 
-    public abstract boolean canConnect(Object obj, ForgeDirection direction, Object source);
+    public abstract boolean canConnect(Object obj, Direction direction, Object source);
 
     public abstract ItemStack getItemWithCharge(ItemStack itemStack, double energy);
 
-    public abstract double getEnergy(Object obj, ForgeDirection direction);
+    public abstract double getEnergy(Object obj, Direction direction);
 
-    public abstract double getMaxEnergy(Object handler, ForgeDirection direction);
+    public abstract double getMaxEnergy(Object handler, Direction direction);
 
     public abstract double getEnergyItem(ItemStack is);
 

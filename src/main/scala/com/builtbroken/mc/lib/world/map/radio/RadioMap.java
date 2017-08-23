@@ -6,7 +6,7 @@ import com.builtbroken.mc.imp.transform.region.Cube;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +24,9 @@ public class RadioMap
     protected final int dimID;
 
     /** Map of chunk positions to receive, mainly used by short range radio gear */
-    protected HashMap<ChunkCoordIntPair, List<IRadioWaveReceiver>> chunk_to_entities = new HashMap();
+    protected HashMap<ChunkPos, List<IRadioWaveReceiver>> chunk_to_entities = new HashMap();
     /** Map of receive to chunks covered */
-    protected HashMap<IRadioWaveReceiver, List<ChunkCoordIntPair>> receive_to_chunks = new HashMap();
+    protected HashMap<IRadioWaveReceiver, List<ChunkPos>> receive_to_chunks = new HashMap();
     /** Cache of receivers to their range, used by {@link #update(IRadioWaveReceiver)} method */
     protected HashMap<IRadioWaveReceiver, Cube> receive_to_range = new HashMap();
     /** Cache of active senders to receivers, reduced CPU time at cost of a little memory */
@@ -71,10 +71,10 @@ public class RadioMap
 
     protected void updateChunkCache(IRadioWaveReceiver receiver, Cube range)
     {
-        List<ChunkCoordIntPair> list = range.getChunkCoords();
+        List<ChunkPos> list = range.getChunkCoords();
 
         //Update chunk position map
-        for (ChunkCoordIntPair pair : list)
+        for (ChunkPos pair : list)
         {
             List<IRadioWaveReceiver> receivers = chunk_to_entities.get(pair);
             if (receivers == null)
@@ -145,7 +145,7 @@ public class RadioMap
         if (receive_to_chunks.containsKey(receiver))
         {
             //Clear cached chunk positions
-            for (ChunkCoordIntPair pair : receive_to_chunks.get(receiver))
+            for (ChunkPos pair : receive_to_chunks.get(receiver))
             {
                 if (chunk_to_entities.containsKey(pair))
                 {
@@ -222,9 +222,9 @@ public class RadioMap
             //Complex method only used if number of receive is very high, e.g. is faster~ish than the above method
             else
             {
-                List<ChunkCoordIntPair> coords = range.getChunkCoords();
+                List<ChunkPos> coords = range.getChunkCoords();
                 List<IRadioWaveReceiver> receivers = new ArrayList();
-                for (ChunkCoordIntPair pair : coords)
+                for (ChunkPos pair : coords)
                 {
                     List<IRadioWaveReceiver> l = chunk_to_entities.get(pair);
                     if (l != null && l.size() > 0)
@@ -322,9 +322,9 @@ public class RadioMap
         return receivers;
     }
 
-    protected final ChunkCoordIntPair getChunkValue(int x, int z)
+    protected final ChunkPos getChunkValue(int x, int z)
     {
-        return new ChunkCoordIntPair(x >> 4, z >> 4);
+        return new ChunkPos(x >> 4, z >> 4);
     }
 
     public void unloadAll()

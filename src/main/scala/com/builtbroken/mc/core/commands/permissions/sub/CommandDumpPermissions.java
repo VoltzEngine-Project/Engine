@@ -4,7 +4,7 @@ import com.builtbroken.mc.core.commands.permissions.PermissionsRegistry;
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * Created by robert on 2/17/2015.
@@ -25,7 +25,7 @@ public class CommandDumpPermissions extends SubCommand
     @Override
     public boolean handleConsoleCommand(ICommandSender sender, String[] args)
     {
-        sender.addChatMessage(new ChatComponentText("Dumping permission nodes to file in the server's base directory"));
+        sender.sendMessage(new TextComponentString("Dumping permission nodes to file in the server's base directory"));
         PermissionsRegistry.dumpNodesToFile();
         return true;
     }

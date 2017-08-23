@@ -6,9 +6,6 @@ import com.builtbroken.mc.client.json.models.ModelData;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.core.Engine;
-import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -31,8 +28,6 @@ public class ClientDataHandler
     public HashMap<String, AudioData> audioData = new HashMap();
     /** Effect key to effect data */
     public HashMap<String, IEffectData> effectData = new HashMap();
-    /** Block renders to be attached to blocks */
-    public HashMap<String, ISimpleBlockRenderingHandler> blockRenders = new HashMap();
 
     /** Global client data handler for Voltz Engine */
     public static final ClientDataHandler INSTANCE = new ClientDataHandler();
@@ -83,15 +78,6 @@ public class ClientDataHandler
         effectData.put(key.toLowerCase(), data);
     }
 
-    public void addBlockRenderer(String key, ISimpleBlockRenderingHandler renderer)
-    {
-        if (blockRenders.containsKey(key.toLowerCase()))
-        {
-            Engine.logger().error("Overriding " + blockRenders.get(key) + " with " + renderer);
-        }
-        blockRenders.put(key.toLowerCase(), renderer);
-    }
-
     public RenderData getRenderData(String key)
     {
         if (key == null || key.isEmpty())
@@ -135,33 +121,6 @@ public class ClientDataHandler
             return null;
         }
         return effectData.get(key.toLowerCase());
-    }
-
-    public ISimpleBlockRenderingHandler getBlockRender(String key)
-    {
-        if (key == null || key.isEmpty())
-        {
-            return null;
-        }
-        return blockRenders.get(key.toLowerCase());
-    }
-
-    @SubscribeEvent
-    public void textureEvent(TextureStitchEvent.Pre event)
-    {
-        /** 0 = terrain.png, 1 = items.png */
-        final int textureType = event.map.getTextureType();
-        for (TextureData data : textures.values())
-        {
-            if (textureType == 0 && data.type == TextureData.Type.BLOCK)
-            {
-                data.register(event.map);
-            }
-            else if (textureType == 1 && data.type == TextureData.Type.ITEM)
-            {
-                data.register(event.map);
-            }
-        }
     }
 
     public boolean canSupportColor(String colorKey)

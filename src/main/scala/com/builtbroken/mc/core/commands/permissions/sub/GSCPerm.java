@@ -3,7 +3,7 @@ package com.builtbroken.mc.core.commands.permissions.sub;
 import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * Handles adding perms to a group
@@ -29,7 +29,7 @@ public class GSCPerm extends GroupSubCommand
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Group already contains the node or super version of the node"));
+                sender.sendMessage(new TextComponentString("Group already contains the node or super version of the node"));
             }
         }
         else
@@ -37,19 +37,19 @@ public class GSCPerm extends GroupSubCommand
             if(!remove)
             {
                 group.addNode(node);
-                sender.addChatMessage(new ChatComponentText("Node added to the group"));
+                sender.sendMessage(new TextComponentString("Node added to the group"));
             }
             else if(group.hasNode(node))
             {
-                sender.addChatMessage(new ChatComponentText("Group contains a super version of that node, but not an exact match"));
+                sender.sendMessage(new TextComponentString("Group contains a super version of that node, but not an exact match"));
             }
             else if(group.getExtendGroup() != null && group.getExtendGroup().hasNode(node))
             {
-                sender.addChatMessage(new ChatComponentText("Super group contains the node, but the node is not contained in this group"));
+                sender.sendMessage(new TextComponentString("Super group contains the node, but the node is not contained in this group"));
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Group does not contain the node"));
+                sender.sendMessage(new TextComponentString("Group does not contain the node"));
             }
         }
         return true;

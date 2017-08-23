@@ -36,14 +36,14 @@ public final class RadioRegistry
      */
     public static boolean add(IRadioWaveReceiver tile)
     {
-        return getRadarMapForDim(tile.oldWorld().provider.dimensionId).add(tile);
+        return getRadarMapForDim(tile.oldWorld().provider.getDimension()).add(tile);
     }
 
     public static boolean addOrUpdate(IRadioWaveReceiver receiver)
     {
         if (!add(receiver))
         {
-            RadioMap map = getRadarMapForDim(receiver.oldWorld().provider.dimensionId);
+            RadioMap map = getRadarMapForDim(receiver.oldWorld().provider.getDimension());
             if (map.receive_to_chunks.containsKey(receiver))
             {
                 map.update(receiver);
@@ -62,9 +62,9 @@ public final class RadioRegistry
      */
     public static boolean remove(IRadioWaveReceiver tile)
     {
-        if (RADIO_MAPS.containsKey(tile.oldWorld().provider.dimensionId))
+        if (RADIO_MAPS.containsKey(tile.oldWorld().provider.getDimension()))
         {
-            RadioMap map = getRadarMapForDim(tile.oldWorld().provider.dimensionId);
+            RadioMap map = getRadarMapForDim(tile.oldWorld().provider.getDimension());
             return map.remove(tile);
         }
         return false;
@@ -80,9 +80,9 @@ public final class RadioRegistry
      */
     public static void popMessage(World world, IRadioWaveSender sender, float hz, String header, Object... data)
     {
-        if (RADIO_MAPS.containsKey(world.provider.dimensionId))
+        if (RADIO_MAPS.containsKey(world.provider.getDimension()))
         {
-            RadioMap map = getRadarMapForDim(world.provider.dimensionId);
+            RadioMap map = getRadarMapForDim(world.provider.getDimension());
             map.popMessage(sender, hz, header, data);
         }
     }
@@ -105,7 +105,7 @@ public final class RadioRegistry
                 }
                 return null;
             }
-            return getRadarMapForDim(world.provider.dimensionId);
+            return getRadarMapForDim(world.provider.getDimension());
         }
         //Only throw an error in dev mode, ignore in normal runtime
         else if (Engine.runningAsDev)
@@ -135,9 +135,9 @@ public final class RadioRegistry
     @SubscribeEvent
     public void worldUnload(WorldEvent.Unload event)
     {
-        if (event.world.provider != null)
+        if (event.getWorld().provider != null)
         {
-            int dim = event.world.provider.dimensionId;
+            int dim = event.getWorld().provider.getDimension();
             if (RADIO_MAPS.containsKey(dim))
             {
                 getRadarMapForDim(dim).unloadAll();

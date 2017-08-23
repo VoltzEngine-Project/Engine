@@ -2,8 +2,6 @@ package com.builtbroken.mc.core.commands.debug;
 
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
-import com.builtbroken.mc.prefab.tile.BlockTile;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.Loader;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,14 +42,14 @@ public class CommandDebugRecipes extends SubCommand
             String modID = args[0];
             if (Loader.isModLoaded(modID))
             {
-                sender.addChatMessage(new ChatComponentText("Checking data...."));
+                sender.sendMessage(new TextComponentString("Checking data...."));
 
                 List<Item> items = InventoryUtility.getItemsForMod(modID);
                 if (items != null && !items.isEmpty())
                 {
                     HashMap<Item, List<IRecipe>> itemToRecipes = new HashMap();
 
-                    sender.addChatMessage(new ChatComponentText("Found " + items.size() + " items for the mod " + modID + " moving on to processing recipes"));
+                    sender.sendMessage(new TextComponentString("Found " + items.size() + " items for the mod " + modID + " moving on to processing recipes"));
 
                     for (Item item : items)
                     {
@@ -60,10 +59,10 @@ public class CommandDebugRecipes extends SubCommand
                             itemToRecipes.put(item, recipes);
                         }
                     }
-                    sender.addChatMessage(new ChatComponentText("Mapped " + itemToRecipes.size() + " entries with recipes"));
+                    sender.sendMessage(new TextComponentString("Mapped " + itemToRecipes.size() + " entries with recipes"));
                     if (args.length == 1 || args[1].equalsIgnoreCase("conflict"))
                     {
-                        sender.addChatMessage(new ChatComponentText("Not implemented yet"));
+                        sender.sendMessage(new TextComponentString("Not implemented yet"));
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("missing"))
@@ -75,19 +74,12 @@ public class CommandDebugRecipes extends SubCommand
                             {
                                 if (item instanceof ItemBlock)
                                 {
-                                    Block block = ((ItemBlock) item).field_150939_a;
-                                    if (block instanceof BlockTile)
-                                    {
-                                        sender.addChatMessage(new ChatComponentText("Tile[" + ((BlockTile) block).staticTile.name + "] has no recipes for any subtype"));
-                                    }
-                                    else
-                                    {
-                                        sender.addChatMessage(new ChatComponentText("Block[" + block.getLocalizedName() + "] has no recipes for any subtype"));
-                                    }
+                                    Block block = ((ItemBlock) item).getBlock();
+                                    sender.sendMessage(new TextComponentString("Block[" + block.getLocalizedName() + "] has no recipes for any subtype"));
                                 }
                                 else
                                 {
-                                    sender.addChatMessage(new ChatComponentText("Item[" + item.getItemStackDisplayName(new ItemStack(item)) + "] has no recipes for any subtype"));
+                                    sender.sendMessage(new TextComponentString("Item[" + item.getItemStackDisplayName(new ItemStack(item)) + "] has no recipes for any subtype"));
                                 }
                             }
                         }
@@ -95,14 +87,14 @@ public class CommandDebugRecipes extends SubCommand
                 }
                 else
                 {
-                    sender.addChatMessage(new ChatComponentText("No items are mapped for the mod[" + modID + "]"));
+                    sender.sendMessage(new TextComponentString("No items are mapped for the mod[" + modID + "]"));
                 }
                 return true;
             }
             else
             {
                 //TODO maybe show closest spelling
-                sender.addChatMessage(new ChatComponentText("Failed to find mod[" + modID + "]"));
+                sender.sendMessage(new TextComponentString("Failed to find mod[" + modID + "]"));
                 return true;
             }
         }

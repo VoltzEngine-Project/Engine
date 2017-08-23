@@ -6,7 +6,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.TextComponentString;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class CommandDebugItem extends SubCommand
         {
             if (args[0].equals("dump") || args[0].equals("dumpsubs"))
             {
-                sender.addChatMessage(new ChatComponentText("See console for data"));
+                sender.sendMessage(new TextComponentString("See console for data"));
                 FMLControlledNamespacedRegistry<Item> registry = (FMLControlledNamespacedRegistry<Item>) Item.itemRegistry;
                 Set set = registry.getKeys();
                 for (Object obj : set)

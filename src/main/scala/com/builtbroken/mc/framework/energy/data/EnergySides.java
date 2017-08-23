@@ -1,6 +1,6 @@
 package com.builtbroken.mc.framework.energy.data;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import com.builtbroken.mc.data.Direction;
 
 /**
  * Quick way to store exact power values for a machine per side. Mainly used as
@@ -13,12 +13,12 @@ public class EnergySides
 {
     private final double[] power = new double[7];
 
-    public void set(ForgeDirection side, double power)
+    public void set(Direction side, double power)
     {
         this.power[side.ordinal()] = power;
     }
 
-    public double get(ForgeDirection side)
+    public double get(Direction side)
     {
         return power[side.ordinal()];
     }

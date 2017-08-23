@@ -4,7 +4,7 @@ import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.framework.access.AccessUser;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.List;
 
@@ -41,12 +41,12 @@ public abstract class UserSubCommand extends SubCommandWithName
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("User not found in permissions profile"));
+                sender.sendMessage(new TextComponentString("User not found in permissions profile"));
             }
         }
         else
         {
-            sender.addChatMessage(new ChatComponentText("Missing user name"));
+            sender.sendMessage(new TextComponentString("Missing user name"));
         }
         return true;
     }

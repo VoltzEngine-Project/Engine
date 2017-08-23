@@ -1,19 +1,16 @@
 package com.builtbroken.mc.lib.render.fx;
 
 import com.builtbroken.mc.core.References;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
 /**
  * @author Zmaster
  */
-public class FxRocketFire extends EntityFX
+public class FxRocketFire extends Particle
 {
     public static final ResourceLocation icon = new ResourceLocation(References.DOMAIN, "textures/particle/soft.png");
 
@@ -32,9 +29,9 @@ public class FxRocketFire extends EntityFX
     {
         super(world, x, y, z, motx, moty, motz);
 
-        this.prevPosX = this.posX = this.lastTickPosX = x;
-        this.prevPosY = this.posY = this.lastTickPosY = y;
-        this.prevPosZ = this.posZ = this.lastTickPosZ = z;
+        this.prevPosX = this.posX = x;
+        this.prevPosY = this.posY = y;
+        this.prevPosZ = this.posZ = z;
 
         this.particleRed = 0.9F + this.rand.nextFloat() / 10f;
         this.particleGreen = 0.6F + this.rand.nextFloat() / 5f;
@@ -47,9 +44,11 @@ public class FxRocketFire extends EntityFX
         this.particleMaxAge = (int) (8.0D / (Math.random() * 0.8D + 0.6D));
     }
 
+    /*
     @Override
-    public void renderParticle(Tessellator tess, float x1, float y1, float z1, float x2, float y2, float z2)
+    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {
+        super.renderParticle();
         Minecraft.getMinecraft().getTextureManager().bindTexture(icon);
 
         GL11.glPushMatrix();
@@ -73,6 +72,7 @@ public class FxRocketFire extends EntityFX
 
         GL11.glPopMatrix();
     }
+    */
 
     @Override
     public int getFXLayer()
@@ -83,6 +83,7 @@ public class FxRocketFire extends EntityFX
     @Override
     public void onUpdate()
     {
+        super.onUpdate();
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
@@ -93,7 +94,7 @@ public class FxRocketFire extends EntityFX
 
         if (this.particleAge++ >= this.particleMaxAge)
         {
-            this.setDead();
+            this.setExpired();
         }
 
         this.setPosition(posX + this.motionX, posY + this.motionY, posZ + this.motionX);

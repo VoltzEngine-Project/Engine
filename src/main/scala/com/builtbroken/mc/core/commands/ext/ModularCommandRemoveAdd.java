@@ -4,7 +4,7 @@ import com.builtbroken.mc.core.commands.prefab.AbstractCommand;
 import com.builtbroken.mc.core.commands.prefab.ModularCommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,12 +60,12 @@ public class ModularCommandRemoveAdd extends ModularCommand
                         }
                         else if(remove)
                         {
-                            sender.addChatMessage(new ChatComponentText("Need to know what to remove the " + type + " from"));
+                            sender.sendMessage(new TextComponentString("Need to know what to remove the " + type + " from"));
                             return true;
                         }
                         else
                         {
-                            sender.addChatMessage(new ChatComponentText("Need to know what to add the " + type + " to"));
+                            sender.sendMessage(new TextComponentString("Need to know what to add the " + type + " to"));
                             return true;
                         }
                     }
@@ -76,22 +76,22 @@ public class ModularCommandRemoveAdd extends ModularCommand
                             return true;
                         }
                     }
-                    sender.addChatMessage(new ChatComponentText("Unknown sub command"));
+                    sender.sendMessage(new TextComponentString("Unknown sub command"));
                 }
                 else if(remove)
                 {
-                    sender.addChatMessage(new ChatComponentText("Need to know what to remove the " + type + " from"));
+                    sender.sendMessage(new TextComponentString("Need to know what to remove the " + type + " from"));
                     return true;
                 }
                 else
                 {
-                    sender.addChatMessage(new ChatComponentText("Need to know what to add the " + type + " to"));
+                    sender.sendMessage(new TextComponentString("Need to know what to add the " + type + " to"));
                     return true;
                 }
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Empty names are not permitted"));
+                sender.sendMessage(new TextComponentString("Empty names are not permitted"));
             }
         }
         return true;

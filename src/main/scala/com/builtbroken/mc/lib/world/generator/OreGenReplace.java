@@ -1,14 +1,14 @@
 package com.builtbroken.mc.lib.world.generator;
 
+import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.block.Block;
-import net.minecraft.util.MathHelper;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.ChunkProviderEnd;
-import net.minecraft.world.gen.ChunkProviderGenerate;
-import net.minecraft.world.gen.ChunkProviderHell;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.world.gen.*;
 
 import java.util.*;
 
@@ -33,16 +33,22 @@ public class OreGenReplace extends OreGenerator
 
     /**
      * @param name         - The name of the ore dictionary
-     * @param block        -block to place
-     * @param meta         - meta of block to place
      * @param settings     - controls spawn conditions
      * @param harvestLevel
      * @param harvestTool
      */
-    public OreGenReplace(String name, Block block, int meta, OreGeneratorSettings settings, String harvestTool, int harvestLevel)
+    public OreGenReplace(String name, IBlockState state, OreGeneratorSettings settings, String harvestTool, int harvestLevel)
     {
-        super(name, block, meta, harvestTool, harvestLevel);
+        super(name, state, harvestTool, harvestLevel);
         this.settings = settings;
+    }
+
+
+
+    @Override
+    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider)
+    {
+
     }
 
     @Override
@@ -97,13 +103,13 @@ public class OreGenReplace extends OreGenerator
                 double var28 = (MathHelper.sin(b * (float) Math.PI / settings.amountPerBranch) + 1.0F) * var26 + 1.0D;
                 double var30 = (MathHelper.sin(b * (float) Math.PI / settings.amountPerBranch) + 1.0F) * var26 + 1.0D;
 
-                int startX = MathHelper.floor_double(var20 - var28 / 2.0D);
-                int startY = MathHelper.floor_double(var22 - var30 / 2.0D);
-                int startZ = MathHelper.floor_double(var24 - var28 / 2.0D);
+                int startX = MathHelper.floor(var20 - var28 / 2.0D);
+                int startY = MathHelper.floor(var22 - var30 / 2.0D);
+                int startZ = MathHelper.floor(var24 - var28 / 2.0D);
 
-                int endX = MathHelper.floor_double(var20 + var28 / 2.0D);
-                int endY = MathHelper.floor_double(var22 + var30 / 2.0D);
-                int endZ = MathHelper.floor_double(var24 + var28 / 2.0D);
+                int endX = MathHelper.floor(var20 + var28 / 2.0D);
+                int endY = MathHelper.floor(var22 + var30 / 2.0D);
+                int endZ = MathHelper.floor(var24 + var28 / 2.0D);
 
                 for (int px = startX; px <= endX; ++px)
                 {
@@ -121,10 +127,11 @@ public class OreGenReplace extends OreGenerator
                                 {
                                     double dz = (pz + 0.5D - var24) / (var28 / 2.0D);
 
-                                    Block block = world.getBlock(px, py, pz);
-                                    if (deltaX * deltaX + dy * dy + dz * dz < 1.0D && (settings.replaceBlock == null || block == settings.replaceBlock))
+                                    BlockPos pos = new BlockPos(px, py, pz);
+                                    IBlockState state = world.getBlockState(pos);
+                                    if (deltaX * deltaX + dy * dy + dz * dz < 1.0D && (settings.replaceBlock == null || state.getBlock() == settings.replaceBlock))
                                     {
-                                        if (world.setBlock(px, py, pz, this.oreBlock, this.oreMeta, 2))
+                                        if (world.setBlockState(pos, this.oreBlock, 2))
                                         {
                                             blocksPlaced++;
                                         }
@@ -147,8 +154,8 @@ public class OreGenReplace extends OreGenerator
             //First location to path
             toPath.add(new Pos(varX, varY, varZ));
 
-            List<ForgeDirection> directions = new ArrayList();
-            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+            List<Direction> directions = new ArrayList();
+            for (Direction dir : Direction.DIRECTIONS)
             {
                 directions.add(dir);
             }
@@ -163,7 +170,7 @@ public class OreGenReplace extends OreGenerator
                 Block block = next.getBlock(world);
                 if (settings.replaceBlock == null || block == settings.replaceBlock)
                 {
-                    if (next.setBlock(world, oreBlock, oreMeta, 2))
+                    if (next.setBlock(world, oreBlock, 2))
                     {
                         blocksPlaced += 1;
                     }
@@ -171,7 +178,7 @@ public class OreGenReplace extends OreGenerator
 
                 //Find new locations to place blocks
                 Collections.shuffle(directions);
-                for (ForgeDirection direction : directions)
+                for (Direction direction : directions)
                 {
                     //TODO randomize next path
                     Pos pos = next.add(direction);
@@ -210,16 +217,17 @@ public class OreGenReplace extends OreGenerator
     }
 
     @Override
-    public boolean isOreGeneratedInWorld(World world, IChunkProvider chunkGenerator)
+    public boolean isOreGeneratedInWorld(World world, IChunkGenerator generator, IChunkProvider provider)
     {
-        if (this.ignoreSurface && chunkGenerator instanceof ChunkProviderGenerate)
+
+        if (this.ignoreSurface && generator instanceof ChunkGeneratorOverworld)
         {
             return false;
         }
-        if (this.ignoreNether && chunkGenerator instanceof ChunkProviderHell)
+        if (this.ignoreNether && generator instanceof ChunkGeneratorHell)
         {
             return false;
         }
-        return !(this.ignoreEnd && chunkGenerator instanceof ChunkProviderEnd);
+        return !(this.ignoreEnd && generator instanceof ChunkGeneratorEnd);
     }
 }

@@ -7,7 +7,7 @@ import com.builtbroken.mc.prefab.entity.selector.EntitySelectors;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.TextComponentString;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
@@ -72,18 +72,18 @@ public class CommandVERemove extends SubCommand
                     radius = Integer.parseInt(args[1]);
                     if (radius > 1000)
                     {
-                        entityPlayer.addChatMessage(new ChatComponentText("To prevent lag/crashes radius is limited to 1000"));
+                        entityPlayer.sendMessage(new TextComponentString("To prevent lag/crashes radius is limited to 1000"));
                         return true;
                     }
                     else if (radius < 1)
                     {
-                        entityPlayer.addChatMessage(new ChatComponentText("Radius needs to be positive"));
+                        entityPlayer.sendMessage(new TextComponentString("Radius needs to be positive"));
                         return true;
                     }
                 }
                 catch (NumberFormatException e)
                 {
-                    entityPlayer.addChatMessage(new ChatComponentText("Radius needs to be an integer"));
+                    entityPlayer.sendMessage(new TextComponentString("Radius needs to be an integer"));
                     return true;
                 }
             }
@@ -95,11 +95,11 @@ public class CommandVERemove extends SubCommand
                 {
                     entity.setDead();
                 }
-                entityPlayer.addChatMessage(new ChatComponentText("Removed " + list.size() + " " + args[0] + " entities within " + radius + " block radius"));
+                entityPlayer.sendMessage(new TextComponentString("Removed " + list.size() + " " + args[0] + " entities within " + radius + " block radius"));
             }
             else
             {
-                entityPlayer.addChatMessage(new ChatComponentText("Error unknown selector"));
+                entityPlayer.sendMessage(new TextComponentString("Error unknown selector"));
             }
             return true;
         }
@@ -129,13 +129,13 @@ public class CommandVERemove extends SubCommand
                 }
                 catch (NumberFormatException e)
                 {
-                    sender.addChatMessage(new ChatComponentText("Dim id needs to be an int"));
+                    sender.sendMessage(new TextComponentString("Dim id needs to be an int"));
                     return true;
                 }
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Right now only /ve butcher dim[#] is supported, ex /ve butcher dim0"));
+                sender.sendMessage(new TextComponentString("Right now only /ve butcher dim[#] is supported, ex /ve butcher dim0"));
                 return true;
             }
         }
@@ -168,11 +168,11 @@ public class CommandVERemove extends SubCommand
                 }
             }
             time = System.nanoTime() - time;
-            sender.addChatMessage(new ChatComponentText("Removed " + entitiesKilled + " entities over " + chunksSearched + " chunks in " + StringHelpers.formatNanoTime(time)));
+            sender.sendMessage(new TextComponentString("Removed " + entitiesKilled + " entities over " + chunksSearched + " chunks in " + StringHelpers.formatNanoTime(time)));
         }
         else
         {
-            sender.addChatMessage(new ChatComponentText("World doesn't exist, this means it unloaded or the wrong id was provided."));
+            sender.sendMessage(new TextComponentString("World doesn't exist, this means it unloaded or the wrong id was provided."));
         }
         return true;
     }

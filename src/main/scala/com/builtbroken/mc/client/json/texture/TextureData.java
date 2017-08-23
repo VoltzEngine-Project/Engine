@@ -3,8 +3,6 @@ package com.builtbroken.mc.client.json.texture;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -19,9 +17,6 @@ public class TextureData extends JsonGenData
     public final Type type;
 
     private ResourceLocation cachedLocation;
-
-    @Deprecated //Move to cache outside of this class
-    private IIcon icon;
 
     public TextureData(IJsonProcessor processor, String key, String domain, String name, Type type)
     {
@@ -39,16 +34,6 @@ public class TextureData extends JsonGenData
             cachedLocation = new ResourceLocation(domain, "textures/" + type.path + "/" + name + ".png");
         }
         return cachedLocation;
-    }
-
-    public IIcon getIcon()
-    {
-        return icon;
-    }
-
-    public void register(IIconRegister register)
-    {
-        icon = register.registerIcon(domain + ":" + name);
     }
 
     @Override

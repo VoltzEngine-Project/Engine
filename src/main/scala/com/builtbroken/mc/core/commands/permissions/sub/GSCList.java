@@ -3,8 +3,10 @@ package com.builtbroken.mc.core.commands.permissions.sub;
 import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import com.builtbroken.mc.framework.access.AccessUser;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.List;
 
@@ -28,16 +30,16 @@ public class GSCList extends GroupSubCommand
             {
                 if(group.getNodes() != null && group.getNodes().size() > 0)
                 {
-                    sender.addChatMessage(new ChatComponentText("==== Permission Nodes ====="));
+                    sender.sendMessage(new TextComponentString("==== Permission Nodes ====="));
                     for (String node : group.getNodes())
                     {
-                        sender.addChatMessage(new ChatComponentText(node));
+                        sender.sendMessage(new TextComponentString(node));
                     }
-                    sender.addChatMessage(new ChatComponentText(""));
+                    sender.sendMessage(new TextComponentString(""));
                 }
                 else
                 {
-                    sender.addChatMessage(new ChatComponentText("No perms to list"));
+                    sender.sendMessage(new TextComponentString("No perms to list"));
                 }
                 return true;
             }
@@ -45,21 +47,21 @@ public class GSCList extends GroupSubCommand
             {
                 if(group.getMembers() != null && group.getMembers().size() > 0)
                 {
-                    sender.addChatMessage(new ChatComponentText("===== Members ====="));
+                    sender.sendMessage(new TextComponentString("===== Members ====="));
                     for (AccessUser u : group.getMembers())
                     {
-                        sender.addChatMessage(new ChatComponentText(u.getName()));
+                        sender.sendMessage(new TextComponentString(u.getName()));
                     }
-                    sender.addChatMessage(new ChatComponentText(""));
+                    sender.sendMessage(new TextComponentString(""));
                 }
                 else
                 {
-                    sender.addChatMessage(new ChatComponentText("Group contains no members"));
+                    sender.sendMessage(new TextComponentString("Group contains no members"));
                 }
                 return true;
             }
         }
-        sender.addChatMessage(new ChatComponentText("Not sure what you want listed"));
+        sender.sendMessage(new TextComponentString("Not sure what you want listed"));
         return true;
     }
 

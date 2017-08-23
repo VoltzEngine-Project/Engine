@@ -30,15 +30,13 @@ public class VEProviderShockWave extends VisualEffectProvider
     {
         FXShockWave fx = new FXShockWave(world, x, y, z, otherData.getFloat("red"), otherData.getFloat("green"), otherData.getFloat("blue"), otherData.getFloat("scale"), otherData.getFloat("distance"));
         fx.texture = SharedAssets.GREY_TEXTURE_40pAlpha;
-        fx.motionX = mx;
-        fx.motionY = my;
-        fx.motionZ = mz;
+        fx.setMotion(mx, my, mz);
         FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
     }
 
     public static void spawnEffect(World world, double x, double y, double z, double motionX, double motionY, double motionZ, float red, float green, float blue, float scale, float distance)
     {
-        PacketSpawnParticle packet = new PacketSpawnParticle("VEP_shockwave", world.provider.dimensionId, x, y, z, motionX, motionY, motionZ);
+        PacketSpawnParticle packet = new PacketSpawnParticle("VEP_shockwave", world.provider.getDimension(), x, y, z, motionX, motionY, motionZ);
         packet.otherData = new NBTTagCompound();
         packet.otherData.setFloat("red", red);
         packet.otherData.setFloat("green", green);

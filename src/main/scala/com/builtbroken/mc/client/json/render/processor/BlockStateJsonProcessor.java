@@ -2,8 +2,8 @@ package com.builtbroken.mc.client.json.render.processor;
 
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.block.BlockState;
+import com.builtbroken.mc.data.Direction;
 import com.google.gson.JsonObject;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -57,7 +57,7 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor
         }
 
         //Load individual sides
-        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+        for (Direction direction : Direction.DIRECTIONS)
         {
             final String key1 = "side:" + direction.ordinal();
             final String key2 = direction.name().toLowerCase();

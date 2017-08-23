@@ -2,7 +2,7 @@ package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.mc.core.Engine;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.TextComponentString;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 import scala.actors.threadpool.Arrays;
@@ -134,10 +134,10 @@ public class LanguageUtility
             {
                 Engine.logger().error("LanguageUtility.getLocalChat(" + key + ")", new RuntimeException());
             }
-            return new ChatComponentText("error.translation.empty");
+            return new TextComponentString("error.translation.empty");
         }
 
-        return new ChatComponentText(translation);
+        return new TextComponentString(translation);
     }
 
     /**

@@ -1,12 +1,9 @@
 package com.builtbroken.mc.lib.helper;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.ForgeDirection;
-import com.builtbroken.mc.imp.transform.vector.Location;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;
@@ -32,7 +29,7 @@ public class DummyPlayer extends FakePlayer
 
     public DummyPlayer(World world)
     {
-        this(world, "(" + world.provider.dimensionId + ")");
+        this(world, "(" + world.provider.getDimension() + ")");
     }
 
     /**
@@ -47,20 +44,4 @@ public class DummyPlayer extends FakePlayer
 
         return FAKE_PLAYERS.get(world);
     }
-
-    public static boolean useItemAt(ItemStack itemStack, Location location, ForgeDirection direction)
-    {
-        return useItemAt(itemStack, location.world, location.xi(), location.yi(), location.zi(), direction.ordinal(), 0, 0, 0);
-    }
-
-    public static boolean useItemAt(ItemStack itemStack, World world, int x, int y, int z, int side)
-    {
-        return useItemAt(itemStack, world, x, y, z, side, 0, 0, 0);
-    }
-
-    public static boolean useItemAt(ItemStack itemStack, World world, int x, int y, int z, int side, int hitX, int hitY, int hitZ)
-    {
-        return itemStack.getItem().onItemUse(itemStack, get(world), world, x, y, z, side, hitX, hitY, hitZ);
-    }
-
 }

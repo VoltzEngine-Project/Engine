@@ -3,7 +3,7 @@ package com.builtbroken.mc.core.commands.sub;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class CommandVEVersion extends SubCommand
     @Override
     public boolean handleConsoleCommand(ICommandSender sender, String[] args)
     {
-        sender.addChatMessage(new ChatComponentText("Version: " + References.VERSION + "  Build: " + References.BUILD_VERSION));
+        sender.sendMessage(new TextComponentString("Version: " + References.VERSION + "  Build: " + References.BUILD_VERSION));
         return true;
     }
 

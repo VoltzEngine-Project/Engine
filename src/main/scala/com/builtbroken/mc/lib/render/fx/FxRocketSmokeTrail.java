@@ -1,22 +1,20 @@
 package com.builtbroken.mc.lib.render.fx;
 
 import com.builtbroken.mc.core.References;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
 /**
  * @author Zmaster
- *         edited by DarkGuardsman
+ * edited by DarkGuardsman
  */
-public class FxRocketSmokeTrail extends EntityFX
+public class FxRocketSmokeTrail extends Particle
 {
     public static final ResourceLocation icon = new ResourceLocation(References.DOMAIN, "textures/particle/soft.png");
 
@@ -34,9 +32,9 @@ public class FxRocketSmokeTrail extends EntityFX
     {
         super(world, x, y, z, motx, moty, motz);
 
-        this.prevPosX = this.posX = this.lastTickPosX = x;
-        this.prevPosY = this.posY = this.lastTickPosY = y;
-        this.prevPosZ = this.posZ = this.lastTickPosZ = z;
+        this.prevPosX = this.posX = x;
+        this.prevPosY = this.posY = y;
+        this.prevPosZ = this.posZ = z;
 
         float chroma = this.rand.nextFloat() * 0.2f;
         this.particleRed = r + chroma;
@@ -50,6 +48,7 @@ public class FxRocketSmokeTrail extends EntityFX
         this.particleMaxAge = age;
     }
 
+    /*
     @Override
     public void renderParticle(Tessellator tess, float x1, float y1, float z1, float x2, float y2, float z2)
     {
@@ -72,6 +71,7 @@ public class FxRocketSmokeTrail extends EntityFX
 
         GL11.glPopMatrix();
     }
+    */
 
     @Override
     public int getFXLayer()
@@ -93,16 +93,17 @@ public class FxRocketSmokeTrail extends EntityFX
 
         if (this.particleAge++ >= this.particleMaxAge)
         {
-            this.setDead();
+            this.setExpired();
             return;
         }
 
         if (particleAge % 20 == 0)
         {
-            Block block = worldObj.getBlock((int) posX, (int) posY, (int) posZ);
-            if (block != Blocks.air && !block.isAir(worldObj, (int) posX, (int) posY, (int) posZ))
+            BlockPos pos = new BlockPos((int) Math.floor(posX), (int) Math.floor(posY), (int) Math.floor(posZ));
+            IBlockState block = world.getBlockState(pos);
+            if (block.getBlock() != Blocks.AIR && !block.getBlock().isAir(block, world, pos))
             {
-                setDead();
+                setExpired();
                 return;
             }
         }

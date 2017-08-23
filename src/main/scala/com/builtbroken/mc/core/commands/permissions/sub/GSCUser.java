@@ -3,7 +3,7 @@ package com.builtbroken.mc.core.commands.permissions.sub;
 import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * Created by robert on 2/18/2015.
@@ -24,15 +24,15 @@ public class GSCUser extends GroupSubCommand
         {
             if (group.addMember(user))
             {
-                sender.addChatMessage(new ChatComponentText("User added to group"));
+                sender.sendMessage(new TextComponentString("User added to group"));
             }
             else if (group.getMember(user) != null)
             {
-                sender.addChatMessage(new ChatComponentText("Error: User already added"));
+                sender.sendMessage(new TextComponentString("Error: User already added"));
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Error adding user to group"));
+                sender.sendMessage(new TextComponentString("Error adding user to group"));
             }
         }
         else
@@ -40,11 +40,11 @@ public class GSCUser extends GroupSubCommand
             if (group.getMember(user) != null)
             {
                 group.removeMember(user);
-                sender.addChatMessage(new ChatComponentText("User removed from group"));
+                sender.sendMessage(new TextComponentString("User removed from group"));
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Group does not contain that user"));
+                sender.sendMessage(new TextComponentString("Group does not contain that user"));
             }
         }
         return true;

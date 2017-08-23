@@ -3,7 +3,7 @@ package com.builtbroken.mc.core.commands.permissions.sub;
 import com.builtbroken.mc.core.commands.ext.UserSubCommand;
 import com.builtbroken.mc.framework.access.AccessUser;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.List;
 
@@ -27,21 +27,21 @@ public class USCList extends UserSubCommand
             {
                 if(user.nodes != null && user.nodes.size() > 0)
                 {
-                    sender.addChatMessage(new ChatComponentText("==== Permission Nodes ====="));
+                    sender.sendMessage(new TextComponentString("==== Permission Nodes ====="));
                     for (String node : user.nodes)
                     {
-                        sender.addChatMessage(new ChatComponentText(node));
+                        sender.sendMessage(new TextComponentString(node));
                     }
-                    sender.addChatMessage(new ChatComponentText(""));
+                    sender.sendMessage(new TextComponentString(""));
                 }
                 else
                 {
-                    sender.addChatMessage(new ChatComponentText("No perms to list"));
+                    sender.sendMessage(new TextComponentString("No perms to list"));
                 }
                 return true;
             }
         }
-        sender.addChatMessage(new ChatComponentText("Not sure what you want listed"));
+        sender.sendMessage(new TextComponentString("Not sure what you want listed"));
         return true;
     }
 

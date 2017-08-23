@@ -4,7 +4,8 @@ import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.state.RenderState;
 import com.builtbroken.mc.client.json.texture.TextureData;
-import net.minecraft.util.IIcon;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -20,12 +21,12 @@ public class BlockState extends RenderState implements IRenderState
     }
 
     @Override
-    public IIcon getIcon(int side)
+    public ResourceLocation getIcon(int side)
     {
         TextureData textureData = getTextureData(side);
-        if (textureData != null && textureData.getIcon() != null)
+        if (textureData != null)
         {
-            return textureData.getIcon();
+            return textureData.getLocation();
         }
         return null;
     }
@@ -43,5 +44,21 @@ public class BlockState extends RenderState implements IRenderState
             return parentState.getTextureData(side);
         }
         return getTextureData(0);
+    }
+
+    @Override
+    public final ImmutableList<ResourceLocation> getTextures()
+    {
+        ImmutableList.Builder<ResourceLocation> builder = ImmutableList.builder();
+        //If recursive method is too deep, switch to iterative
+        for (int i = 0; i < 6; i++)
+        {
+            TextureData data = getTextureData(i);
+            if (data != null && data.getLocation() != null)
+            {
+                builder.add(data.getLocation());
+            }
+        }
+        return builder.build();
     }
 }

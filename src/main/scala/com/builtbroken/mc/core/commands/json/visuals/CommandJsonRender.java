@@ -9,7 +9,7 @@ import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -39,16 +39,16 @@ public class CommandJsonRender extends SubCommand
                     loadedData = ClientDataHandler.INSTANCE.getRenderData(id);
                     if (loadedData != null)
                     {
-                        player.addChatMessage(new ChatComponentText("Loaded render data for id '" + id + "', data contains " + loadedData.renderStatesByName.size() + " render states."));
+                        player.sendMessage(new TextComponentString("Loaded render data for id '" + id + "', data contains " + loadedData.renderStatesByName.size() + " render states."));
                     }
                     else
                     {
-                        player.addChatMessage(new ChatComponentText("Did not find render data with id '" + id + "'"));
+                        player.sendMessage(new TextComponentString("Did not find render data with id '" + id + "'"));
                     }
                 }
                 else
                 {
-                    player.addChatMessage(new ChatComponentText("Need to provide render data ID"));
+                    player.sendMessage(new TextComponentString("Need to provide render data ID"));
                 }
             }
             else if (loadedData != null)
@@ -62,20 +62,20 @@ public class CommandJsonRender extends SubCommand
                         if (state instanceof ModelState)
                         {
                             loadedState = (ModelState) state;
-                            player.addChatMessage(new ChatComponentText("Loaded render state for id '" + id + "'"));
+                            player.sendMessage(new TextComponentString("Loaded render state for id '" + id + "'"));
                         }
                         else if (state != null)
                         {
-                            player.addChatMessage(new ChatComponentText("Only model state data is supported for command modification."));
+                            player.sendMessage(new TextComponentString("Only model state data is supported for command modification."));
                         }
                         else
                         {
-                            player.addChatMessage(new ChatComponentText("Did not find render state for id '" + id + "'"));
+                            player.sendMessage(new TextComponentString("Did not find render state for id '" + id + "'"));
                         }
                     }
                     else
                     {
-                        player.addChatMessage(new ChatComponentText("Need to provide render state ID"));
+                        player.sendMessage(new TextComponentString("Need to provide render state ID"));
                     }
                 }
                 else if (loadedState != null)
@@ -86,13 +86,13 @@ public class CommandJsonRender extends SubCommand
                         {
                             try
                             {
-                                player.addChatMessage(new ChatComponentText("Previous Rotation: " + loadedState.getRotation()));
+                                player.sendMessage(new TextComponentString("Previous Rotation: " + loadedState.getRotation()));
                                 loadedState.rotation = new EulerAngle(Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
-                                player.addChatMessage(new ChatComponentText("Rotation: " + loadedState.getRotation()));
+                                player.sendMessage(new TextComponentString("Rotation: " + loadedState.getRotation()));
                             }
                             catch (NumberFormatException e)
                             {
-                                player.addChatMessage(new ChatComponentText("Error: could not parse numbers"));
+                                player.sendMessage(new TextComponentString("Error: could not parse numbers"));
                             }
                         }
                     }
@@ -102,13 +102,13 @@ public class CommandJsonRender extends SubCommand
                         {
                             try
                             {
-                                player.addChatMessage(new ChatComponentText("Previous Offset: " + loadedState.getOffset()));
+                                player.sendMessage(new TextComponentString("Previous Offset: " + loadedState.getOffset()));
                                 loadedState.offset = new Pos(Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
-                                player.addChatMessage(new ChatComponentText("Offset: " + loadedState.getOffset()));
+                                player.sendMessage(new TextComponentString("Offset: " + loadedState.getOffset()));
                             }
                             catch (NumberFormatException e)
                             {
-                                player.addChatMessage(new ChatComponentText("Error: could not parse numbers"));
+                                player.sendMessage(new TextComponentString("Error: could not parse numbers"));
                             }
                         }
                     }
@@ -118,44 +118,44 @@ public class CommandJsonRender extends SubCommand
                         {
                             try
                             {
-                                player.addChatMessage(new ChatComponentText("Previous Offset: " + loadedState.getOffset()));
+                                player.sendMessage(new TextComponentString("Previous Offset: " + loadedState.getOffset()));
                                 loadedState.offset = new Pos(Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]));
-                                player.addChatMessage(new ChatComponentText("Offset: " + loadedState.getOffset()));
+                                player.sendMessage(new TextComponentString("Offset: " + loadedState.getOffset()));
                             }
                             catch (NumberFormatException e)
                             {
-                                player.addChatMessage(new ChatComponentText("Error: could not parse numbers"));
+                                player.sendMessage(new TextComponentString("Error: could not parse numbers"));
                             }
                         }
                         else if (args.length > 1)
                         {
                             try
                             {
-                                player.addChatMessage(new ChatComponentText("Previous Scale: " + loadedState.getScale()));
+                                player.sendMessage(new TextComponentString("Previous Scale: " + loadedState.getScale()));
                                 loadedState.scale = new Pos(Double.parseDouble(args[1]));
-                                player.addChatMessage(new ChatComponentText("Scale: " + loadedState.getScale()));
+                                player.sendMessage(new TextComponentString("Scale: " + loadedState.getScale()));
                             }
                             catch (NumberFormatException e)
                             {
-                                player.addChatMessage(new ChatComponentText("Error: could not parse numbers"));
+                                player.sendMessage(new TextComponentString("Error: could not parse numbers"));
                             }
                         }
                     }
                     else if (args[0].equalsIgnoreCase("output"))
                     {
-                        player.addChatMessage(new ChatComponentText("Offset: " + loadedState.getOffset()));
-                        player.addChatMessage(new ChatComponentText("Rotation: " + loadedState.getRotation()));
-                        player.addChatMessage(new ChatComponentText("Scale: " + loadedState.getScale()));
+                        player.sendMessage(new TextComponentString("Offset: " + loadedState.getOffset()));
+                        player.sendMessage(new TextComponentString("Rotation: " + loadedState.getRotation()));
+                        player.sendMessage(new TextComponentString("Scale: " + loadedState.getScale()));
                     }
                 }
                 else
                 {
-                    player.addChatMessage(new ChatComponentText("Render data must be loaded to use any other command. Use '/ve debug render loadState <render state id>' to load render data"));
+                    player.sendMessage(new TextComponentString("Render data must be loaded to use any other command. Use '/ve debug render loadState <render state id>' to load render data"));
                 }
             }
             else
             {
-                player.addChatMessage(new ChatComponentText("Render data must be loaded to use any other command. Use '/ve debug render loadData <render data id>' to load render data"));
+                player.sendMessage(new TextComponentString("Render data must be loaded to use any other command. Use '/ve debug render loadData <render data id>' to load render data"));
             }
         }
         return true;

@@ -4,7 +4,7 @@ import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.List;
 
@@ -41,12 +41,12 @@ public abstract class GroupSubCommand extends SubCommandWithName
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("Unknown group"));
+                sender.sendMessage(new TextComponentString("Unknown group"));
             }
         }
         else
         {
-            sender.addChatMessage(new ChatComponentText("Missing group name"));
+            sender.sendMessage(new TextComponentString("Missing group name"));
         }
         return true;
     }

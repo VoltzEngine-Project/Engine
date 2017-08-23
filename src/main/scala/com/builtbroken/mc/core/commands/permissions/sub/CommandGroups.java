@@ -5,7 +5,7 @@ import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.TextComponentString;
 
 /**
  * Created by robert on 2/18/2015.
@@ -28,12 +28,12 @@ public class CommandGroups extends SubCommand
     {
         if (args[0].equalsIgnoreCase("list"))
         {
-            sender.addChatMessage(new ChatComponentText("==== Groups ===="));
+            sender.sendMessage(new TextComponentString("==== Groups ===="));
             for (AccessGroup group : GroupProfileHandler.GLOBAL.getAccessProfile().getGroups())
             {
-                sender.addChatMessage(new ChatComponentText("  Group[" + group.getName() + (group.getExtendGroupName() != null ? " extends " + group.getExtendGroupName() : "") + "]  Members: " + group.getMembers().size()));
+                sender.sendMessage(new TextComponentString("  Group[" + group.getName() + (group.getExtendGroupName() != null ? " extends " + group.getExtendGroupName() : "") + "]  Members: " + group.getMembers().size()));
             }
-            sender.addChatMessage(new ChatComponentText("================"));
+            sender.sendMessage(new TextComponentString("================"));
         }
         return true;
     }

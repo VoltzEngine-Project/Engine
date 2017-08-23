@@ -5,8 +5,9 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundEventAccessorComposite;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 
 /**
  * Holds audio data and is used to play audio
@@ -18,6 +19,7 @@ public class AudioData extends JsonGenData
 {
     public final String key;
     public final ResourceLocation soundLocation;
+    public SoundCategory category = SoundCategory.NEUTRAL;
 
     public AudioData(IJsonProcessor processor, String key, String soundLocation)
     {
@@ -34,12 +36,12 @@ public class AudioData extends JsonGenData
             {
                 if (Minecraft.getMinecraft() != null)
                 {
-                    if (Minecraft.getMinecraft().theWorld != null)
+                    if (Minecraft.getMinecraft().world != null)
                     {
-                        SoundEventAccessorComposite sound = Minecraft.getMinecraft().getSoundHandler().getSound(soundLocation);
+                        SoundEvent sound = SoundEvent.REGISTRY.getObject(soundLocation);
                         if (sound != null)
                         {
-                            Minecraft.getMinecraft().theWorld.playSound(x, y, z, soundLocation.toString(), pitch, volume, false);
+                            Minecraft.getMinecraft().world.playSound(x, y, z, sound, category, pitch, volume, false);
                         }
                         else
                         {

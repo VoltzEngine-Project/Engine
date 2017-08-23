@@ -1,19 +1,12 @@
 package com.builtbroken.mc.lib.render.fx;
 
-import com.builtbroken.mc.client.SharedAssets;
-import com.builtbroken.mc.lib.render.RenderUtility;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Sphere;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class FXShockWave extends EntityFX
+public class FXShockWave extends FxBase
 {
 	public ResourceLocation texture;
 
@@ -31,10 +24,11 @@ public class FXShockWave extends EntityFX
 		this.particleScale = size;
 		this.particleMaxAge = (int) (10D / (Math.random() * 0.8D + 0.2D));
 		this.particleMaxAge = (int) (this.particleMaxAge * size);
-		this.renderDistanceWeight = distance;
-		this.noClip = false;
+		//this.renderDistanceWeight = distance;
+		this.canCollide = false;
 	}
 
+	/*
 	@Override
 	public void renderParticle(Tessellator tessellator, float partialTickRate, float par3, float par4, float par5, float par6, float par7)
 	{
@@ -59,6 +53,7 @@ public class FXShockWave extends EntityFX
 		RenderUtility.disableBlending();
 		GL11.glPopMatrix();
 	}
+	*/
 
 	/**
 	 * Called to update the entity's position/logic.
@@ -73,7 +68,7 @@ public class FXShockWave extends EntityFX
 
 		if (this.particleAge++ >= this.particleMaxAge)
 		{
-			this.setDead();
+			this.setExpired();
 		}
 	}
 }

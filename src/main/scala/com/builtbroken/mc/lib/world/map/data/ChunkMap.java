@@ -3,14 +3,14 @@ package com.builtbroken.mc.lib.world.map.data;
 import com.builtbroken.mc.api.IVirtualObject;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.handler.SaveManager;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
     protected long ticks = 0L;
 
     /** Loaded chunks */
-    public final HashMap<ChunkCoordIntPair, C> chunks = new HashMap();
+    public final HashMap<ChunkPos, C> chunks = new HashMap();
 
     public final ChunkMapManager mapManager;
 
@@ -67,7 +67,7 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
      */
     public C getChunk(int x, int z)
     {
-        ChunkCoordIntPair coords = new ChunkCoordIntPair(x, z);
+        ChunkPos coords = new ChunkPos(x, z);
         if (chunks.containsKey(coords))
         {
             return chunks.get(coords);
@@ -85,7 +85,7 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
     public void onChunkLoaded(ChunkEvent.Load event)
     {
         Chunk chunk = event.getChunk();
-        ChunkCoordIntPair coords = chunk.getChunkCoordIntPair();
+        ChunkPos coords = chunk.getPos();
         if (chunks.containsKey(coords))
         {
             //TODO load data into existing object
@@ -100,7 +100,7 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
     public void onChunkUnloaded(ChunkEvent.Unload event)
     {
         Chunk chunk = event.getChunk();
-        ChunkCoordIntPair coords = chunk.getChunkCoordIntPair();
+        ChunkPos coords = chunk.getPos();
         if (chunks.containsKey(coords))
         {
             //TODO save data
@@ -111,7 +111,7 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
     @SubscribeEvent
     public void onWorldSave(WorldEvent.Save event)
     {
-        if (event.world.provider.dimensionId == dimID)
+        if (event.getWorld().provider.getDimension() == dimID)
         {
             saveAll();
         }
@@ -189,7 +189,7 @@ public abstract class ChunkMap<C extends ChunkData> implements IVirtualObject
     @Override
     public boolean shouldSaveForWorld(World world)
     {
-        return dimID == world.provider.dimensionId;
+        return dimID == world.provider.getDimension();
     }
 
     @Override

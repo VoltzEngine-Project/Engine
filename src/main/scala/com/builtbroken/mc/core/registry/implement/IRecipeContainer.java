@@ -1,11 +1,6 @@
 package com.builtbroken.mc.core.registry.implement;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.List;
 
@@ -38,76 +33,4 @@ public interface IRecipeContainer
      * @param recipes - list of recipes
      */
     void genRecipes(final List<IRecipe> recipes);
-
-    /**
-     * Wrapper
-     *
-     * @param stack
-     * @param obj
-     * @return
-     */
-    default IRecipe newShapedRecipe(ItemStack stack, Object... obj)
-    {
-        return new ShapedOreRecipe(stack, obj);
-    }
-
-    /**
-     * Wrapper
-     *
-     * @param block
-     * @param obj
-     * @return
-     */
-    default IRecipe newShapedRecipe(Block block, Object... obj)
-    {
-        return new ShapedOreRecipe(block, obj);
-    }
-
-    /**
-     * Wrapper
-     *
-     * @param item
-     * @param obj
-     * @return
-     */
-    default IRecipe newShapedRecipe(Item item, Object... obj)
-    {
-        return new ShapedOreRecipe(item, obj);
-    }
-
-    /**
-     * Wrapper
-     *
-     * @param stack
-     * @param obj
-     * @return
-     */
-    default IRecipe newShapelessRecipe(ItemStack stack, Object... obj)
-    {
-        return new ShapelessOreRecipe(stack, obj);
-    }
-
-    /**
-     * Wrapper
-     *
-     * @param block
-     * @param obj
-     * @return
-     */
-    default IRecipe newShapelessRecipe(Block block, Object... obj)
-    {
-        return new ShapelessOreRecipe(block, obj);
-    }
-
-    /**
-     * Wrapper
-     *
-     * @param item
-     * @param obj
-     * @return
-     */
-    default IRecipe newShapelessRecipe(Item item, Object... obj)
-    {
-        return new ShapelessOreRecipe(item, obj);
-    }
 }

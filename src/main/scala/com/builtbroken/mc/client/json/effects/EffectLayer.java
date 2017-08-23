@@ -5,11 +5,11 @@ import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IEffectData;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
-import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
+import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -63,20 +63,16 @@ public class EffectLayer extends JsonGenData implements IEffectData
             NBTTagCompound usedNBT;
             if (nbt != null && !nbt.hasNoTags())
             {
-                usedNBT = (NBTTagCompound) nbt.copy();
+                usedNBT = nbt.copy();
                 //Merges base NBT with server nbt
                 if (this.getNbt() != null)
                 {
-                    for (Object o : getNbt().func_150296_c())
+                    for (String key : getNbt().getKeySet())
                     {
-                        if (o instanceof String)
+                        NBTBase tag = getNbt().getTag(key);
+                        if (tag != null)
                         {
-                            String key = (String) o;
-                            NBTBase tag = getNbt().getTag(key);
-                            if (tag != null)
-                            {
-                                usedNBT.setTag(key, tag);
-                            }
+                            usedNBT.setTag(key, tag);
                         }
                     }
                 }

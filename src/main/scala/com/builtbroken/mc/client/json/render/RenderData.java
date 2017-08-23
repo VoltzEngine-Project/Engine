@@ -7,8 +7,8 @@ import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
 import java.util.HashMap;
 
@@ -91,12 +91,12 @@ public class RenderData extends JsonGenData
         return contentID;
     }
 
-    public boolean render(IItemRenderer.ItemRenderType type, String stateKey, Object item)
+    public boolean render(ItemCameraTransforms.TransformType type, String stateKey, Object item)
     {
         return render(getRenderKeyForState(type, stateKey, item));
     }
 
-    public String getRenderKeyForState(IItemRenderer.ItemRenderType type, String stateKey, Object item)
+    public String getRenderKeyForState(ItemCameraTransforms.TransformType type, String stateKey, Object item)
     {
         String key = null;
         if (item instanceof IJsonRenderStateProvider)
@@ -110,23 +110,25 @@ public class RenderData extends JsonGenData
 
         switch (type)
         {
-            case ENTITY:
+            case GROUND:
                 key = ENTITY_RENDER_KEY + (stateKey != null ? "." + stateKey : "");
                 break;
-            case INVENTORY:
+            case GUI:
                 key = INVENTORY_RENDER_KEY + (stateKey != null ? "." + stateKey : "");
                 break;
-            case EQUIPPED:
+            case THIRD_PERSON_LEFT_HAND:
+            case THIRD_PERSON_RIGHT_HAND:
                 key = EQUIPPED_RENDER_KEY + (stateKey != null ? "." + stateKey : "");
                 break;
-            case EQUIPPED_FIRST_PERSON:
+            case FIRST_PERSON_LEFT_HAND:
+            case FIRST_PERSON_RIGHT_HAND:
                 key = FIRST_PERSON_RENDER_KEY + (stateKey != null ? "." + stateKey : "");
                 break;
         }
         return key;
     }
 
-    public boolean shouldRenderType(IItemRenderer.ItemRenderType type, String key, Object item)
+    public boolean shouldRenderType(ItemCameraTransforms.TransformType type, String key, Object item)
     {
         return canRenderState(getRenderKeyForState(type, key, item));
     }

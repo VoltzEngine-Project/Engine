@@ -4,18 +4,26 @@ import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 
-/** Based off Thaumcraft's Beam Renderer.
+/**
+ * Based off Thaumcraft's Beam Renderer.
  *
- * @author Calclavia, Azanor */
+ * @author Calclavia, Azanor
+ */
 @SideOnly(Side.CLIENT)
 public class FxBeam extends Particle
 {
@@ -104,8 +112,7 @@ public class FxBeam extends Particle
 
         if (this.particleAge++ >= this.particleMaxAge)
         {
-            //setDead(); //TODO see if there is a way to kill particle
-            //super.de
+            this.setExpired();
         }
     }
 
@@ -116,13 +123,133 @@ public class FxBeam extends Particle
         this.particleBlue = b;
     }
 
-    /**
+    @Override
+    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
+    {
+        float var9 = 1.0F;
+        float slide = this.world.getTotalWorldTime();
+        float rot = this.world.provider.getWorldTime() % (360 / this.rotationSpeed) * this.rotationSpeed + this.rotationSpeed * partialTicks;
+
+        float size = 1.0F;
+        if (this.pulse)
+        {
+            size = Math.min(this.particleAge / 4.0F, 1.0F);
+            size = this.prevSize + (size - this.prevSize) * partialTicks;
+        }
+
+        float op = 0.5F;
+        if ((this.pulse) && (this.particleMaxAge - this.particleAge <= 4))
+        {
+            op = 0.5F - (4 - (this.particleMaxAge - this.particleAge)) * 0.1F;
+        }
+
+        FMLClientHandler.instance().getClient().renderEngine.bindTexture(texture);
+
+        GlStateManager.glTexParameterf(3553, 10242, 10497.0F);
+        GlStateManager.glTexParameterf(3553, 10243, 10497.0F);
+
+
+        float var11 = slide + partialTicks;
+        if (this.reverse)
+        {
+            var11 *= -1.0F;
+        }
+        float var12 = -var11 * 0.2F - MathHelper.floor(-var11 * 0.1F);
+
+        GlStateManager.disableCull();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(770, 1);
+        GlStateManager.disableDepth();
+
+        //Set position
+        float xx = (float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX);
+        float yy = (float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY);
+        float zz = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ);
+        GlStateManager.translate(xx, yy, zz);
+
+        //Set rotation
+        float ry = this.prevYaw + (this.rotYaw - this.prevYaw) * partialTicks;
+        float rp = this.prevPitch + (this.rotPitch - this.prevPitch) * partialTicks;
+        GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(180.0F + ry, 0.0F, 0.0F, -1.0F);
+        GlStateManager.rotate(rp, 1.0F, 0.0F, 0.0F);
+
+        //Figure out size
+        double var44 = -0.15D * size;
+        double var17 = 0.15D * size;
+        double var44b = -0.15D * size * this.endModifier;
+        double var17b = 0.15D * size * this.endModifier;
+
+        //Brightness
+        int i = this.getBrightnessForRender(partialTicks);
+        int j = i >> 16 & 65535;
+        int k = i & 65535;
+
+        GlStateManager.rotate(rot, 0.0F, 1.0F, 0.0F);
+        for (int t = 0; t < 3; t++)
+        {
+            double var29 = this.length * size * var9;
+            double var31 = 0.0D;
+            double var33 = 1.0D;
+            double var35 = -1.0F + var12 + t / 3.0F;
+            double var37 = this.length * size * var9 + var35;
+
+            GlStateManager.rotate(60.0F, 0.0F, 1.0F, 0.0F);
+
+            buffer.pos(var44b, var29, 0.0D)
+                    .tex(var33, var37)
+                    .color(this.particleRed, this.particleGreen, this.particleBlue, op)
+                    .lightmap(j, k).endVertex();
+
+            buffer.pos(var44, 0.0D, 0.0D)
+                    .tex(var33, var35)
+                    .color(this.particleRed, this.particleGreen, this.particleBlue, op)
+                    .lightmap(j, k).endVertex();
+
+            buffer.pos(var17, 0.0D, 0.0D)
+                    .tex(var31, var35)
+                    .color(this.particleRed, this.particleGreen, this.particleBlue, op)
+                    .lightmap(j, k).endVertex();
+
+            buffer.pos(var17b, var29, 0.0D)
+                    .tex(var31, var37)
+                    .color(this.particleRed, this.particleGreen, this.particleBlue, op)
+                    .lightmap(j, k).endVertex();
+
+        }
+
+        GlStateManager.resetColor();
+        GlStateManager.enableDepth();
+        GlStateManager.disableBlend();
+        GlStateManager.enableCull();
+
+        GlStateManager.glEnd();
+        this.prevSize = size;
+    }
+
+    @Override
+    public int getBrightnessForRender(float partialTicks)
+    {
+        //Math ends up with 240 being the value used
+        BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
+        if(this.world.isBlockLoaded(blockpos))
+        {
+            //Inverted light value (laser is brighter in dark, and dim in light)
+            int i = 17 - world.getLightFromNeighborsFor(EnumSkyBlock.SKY, blockpos);
+            int j = 17 - world.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, blockpos);
+
+            return i << 20 | j << 4;
+        }
+        return 0;
+    }
+
+    /*
     @Override
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float f, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {
         super.renderParticle();
 
-        GL11.glPushMatrix();
+        GlStateManager.glPushMatrix();
         float var9 = 1.0F;
         float slide = this.world.getTotalWorldTime();
         float rot = this.world.provider.getWorldTime() % (360 / this.rotationSpeed) * this.rotationSpeed + this.rotationSpeed * f;
@@ -142,37 +269,37 @@ public class FxBeam extends Particle
 
         FMLClientHandler.instance().getClient().renderEngine.bindTexture(texture);
 
-        GL11.glTexParameterf(3553, 10242, 10497.0F);
-        GL11.glTexParameterf(3553, 10243, 10497.0F);
+        GlStateManager.glTexParameterf(3553, 10242, 10497.0F);
+        GlStateManager.glTexParameterf(3553, 10243, 10497.0F);
 
-        GL11.glDisable(2884);
+        GlStateManager.glDisable(2884);
 
         float var11 = slide + f;
         if (this.reverse)
             var11 *= -1.0F;
         float var12 = -var11 * 0.2F - MathHelper.floor(-var11 * 0.1F);
 
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 1);
-        GL11.glDepthMask(false);
+        GlStateManager.glEnable(3042);
+        GlStateManager.glBlendFunc(770, 1);
+        GlStateManager.glDepthMask(false);
 
         float xx = (float) (this.prevPosX + (this.posX - this.prevPosX) * f - interpPosX);
         float yy = (float) (this.prevPosY + (this.posY - this.prevPosY) * f - interpPosY);
         float zz = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * f - interpPosZ);
-        GL11.glTranslated(xx, yy, zz);
+        GlStateManager.glTranslated(xx, yy, zz);
 
         float ry = this.prevYaw + (this.rotYaw - this.prevYaw) * f;
         float rp = this.prevPitch + (this.rotPitch - this.prevPitch) * f;
-        GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-        GL11.glRotatef(180.0F + ry, 0.0F, 0.0F, -1.0F);
-        GL11.glRotatef(rp, 1.0F, 0.0F, 0.0F);
+        GlStateManager.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.glRotatef(180.0F + ry, 0.0F, 0.0F, -1.0F);
+        GlStateManager.glRotatef(rp, 1.0F, 0.0F, 0.0F);
 
         double var44 = -0.15D * size;
         double var17 = 0.15D * size;
         double var44b = -0.15D * size * this.endModifier;
         double var17b = 0.15D * size * this.endModifier;
 
-        GL11.glRotatef(rot, 0.0F, 1.0F, 0.0F);
+        GlStateManager.glRotatef(rot, 0.0F, 1.0F, 0.0F);
         for (int t = 0; t < 3; t++)
         {
             double var29 = this.length * size * var9;
@@ -181,7 +308,7 @@ public class FxBeam extends Particle
             double var35 = -1.0F + var12 + t / 3.0F;
             double var37 = this.length * size * var9 + var35;
 
-            GL11.glRotatef(60.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.glRotatef(60.0F, 0.0F, 1.0F, 0.0F);
             tessellator.startDrawingQuads();
             tessellator.setBrightness(200);
             tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, op);
@@ -192,12 +319,12 @@ public class FxBeam extends Particle
             tessellator.draw();
         }
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDepthMask(true);
-        GL11.glDisable(3042);
-        GL11.glEnable(2884);
+        GlStateManager.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.glDepthMask(true);
+        GlStateManager.glDisable(3042);
+        GlStateManager.glEnable(2884);
 
-        GL11.glPopMatrix();
+        GlStateManager.glPopMatrix();
         this.prevSize = size;
 
         FMLClientHandler.instance().getClient().renderEngine.bindTexture(RenderUtility.PARTICLE_RESOURCE);

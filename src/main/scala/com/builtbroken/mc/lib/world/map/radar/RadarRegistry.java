@@ -4,15 +4,15 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarEntity;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarObject;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraft.command.IEntitySelector;
+import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,10 +41,10 @@ public final class RadarRegistry
      */
     public static boolean add(Entity entity)
     {
-        if (entity != null && !entity.isDead && entity.worldObj != null && !entity.worldObj.isRemote)
+        if (entity != null && !entity.isDead && entity.world != null && !entity.world.isRemote)
         {
-            RadarMap map = getRadarMapForWorld(entity.worldObj);
-            return map != null ? getRadarMapForWorld(entity.worldObj).add(entity) : false;
+            RadarMap map = getRadarMapForWorld(entity.world);
+            return map != null ? getRadarMapForWorld(entity.world).add(entity) : false;
         }
         return false;
     }
@@ -57,10 +57,10 @@ public final class RadarRegistry
      */
     public static boolean add(TileEntity tile)
     {
-        if (tile != null && tile.getWorldObj() != null && !tile.getWorldObj().isRemote)
+        if (tile != null && tile.getWorld() != null && !tile.getWorld().isRemote)
         {
-            RadarMap map = getRadarMapForWorld(tile.getWorldObj());
-            return map != null ? getRadarMapForWorld(tile.getWorldObj()).add(tile) : false;
+            RadarMap map = getRadarMapForWorld(tile.getWorld());
+            return map != null ? getRadarMapForWorld(tile.getWorld()).add(tile) : false;
         }
         return false;
     }
@@ -73,10 +73,10 @@ public final class RadarRegistry
      */
     public static boolean remove(Entity entity)
     {
-        if (entity != null && !entity.isDead && entity.worldObj != null)
+        if (entity != null && !entity.isDead && entity.world != null)
         {
-            RadarMap map = getRadarMapForWorld(entity.worldObj);
-            return map != null ? getRadarMapForWorld(entity.worldObj).remove(entity) : false;
+            RadarMap map = getRadarMapForWorld(entity.world);
+            return map != null ? getRadarMapForWorld(entity.world).remove(entity) : false;
         }
         return false;
     }
@@ -89,10 +89,10 @@ public final class RadarRegistry
      */
     public static boolean remove(TileEntity tile)
     {
-        if (tile != null && tile.getWorldObj() != null)
+        if (tile != null && tile.getWorld() != null)
         {
-            RadarMap map = getRadarMapForWorld(tile.getWorldObj());
-            return map != null ? getRadarMapForWorld(tile.getWorldObj()).remove(tile) : false;
+            RadarMap map = getRadarMapForWorld(tile.getWorld());
+            return map != null ? getRadarMapForWorld(tile.getWorld()).remove(tile) : false;
         }
         return false;
     }
@@ -115,7 +115,7 @@ public final class RadarRegistry
                 }
                 return null;
             }
-            return getRadarMapForDim(world.provider.dimensionId);
+            return getRadarMapForDim(world.provider.getDimension());
         }
         //Only throw an error in dev mode, ignore in normal runtime
         else if (Engine.runningAsDev)
@@ -153,7 +153,7 @@ public final class RadarRegistry
      * @param selector - optional, used to refine list of entities
      * @return list, never null
      */
-    public static List<Entity> getAllLivingObjectsWithin(World world, double x, double y, double z, double distance, IEntitySelector selector)
+    public static List<Entity> getAllLivingObjectsWithin(World world, double x, double y, double z, double distance, Predicate<Entity> selector)
     {
         return getAllLivingObjectsWithin(world, new Cube(x - distance, Math.max(0, y - distance), z - distance, x + distance, Math.min(255, y + distance), z + distance), selector);
     }
@@ -165,10 +165,10 @@ public final class RadarRegistry
      * @param cube  - area to search for contacts
      * @return list, never null
      */
-    public static List<Entity> getAllLivingObjectsWithin(World world, Cube cube, IEntitySelector selector)
+    public static List<Entity> getAllLivingObjectsWithin(World world, Cube cube, Predicate<Entity> selector)
     {
         List<Entity> list = new ArrayList();
-        if (RADAR_MAPS.containsKey(world.provider.dimensionId))
+        if (RADAR_MAPS.containsKey(world.provider.getDimension()))
         {
             RadarMap map = getRadarMapForWorld(world);
             if (map != null)
@@ -179,7 +179,7 @@ public final class RadarRegistry
                     if (object instanceof RadarEntity && object.isValid())
                     {
                         Entity entity = ((RadarEntity) object).entity;
-                        if (entity != null && !entity.isDead && (selector == null || selector.isEntityApplicable(entity)))
+                        if (entity != null && !entity.isDead && (selector == null || selector.test(entity)))
                         {
                             list.add(entity);
                         }
@@ -197,9 +197,9 @@ public final class RadarRegistry
     @SubscribeEvent
     public void chunkUnload(ChunkEvent.Unload event)
     {
-        if (event.getChunk().worldObj != null && event.getChunk().worldObj.provider != null)
+        if (event.getChunk().getWorld() != null && event.getChunk().getWorld().provider != null)
         {
-            int dim = event.getChunk().worldObj.provider.dimensionId;
+            int dim = event.getChunk().getWorld().provider.getDimension();
             if (RADAR_MAPS.containsKey(dim))
             {
                 getRadarMapForDim(dim).remove(event.getChunk());
@@ -212,7 +212,7 @@ public final class RadarRegistry
     {
         if (event.world.provider != null && event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
-            int dim = event.world.provider.dimensionId;
+            int dim = event.world.provider.getDimension();
             if (RADAR_MAPS.containsKey(dim))
             {
                 RadarMap map = getRadarMapForDim(dim);
@@ -231,9 +231,9 @@ public final class RadarRegistry
     @SubscribeEvent
     public void worldUnload(WorldEvent.Unload event)
     {
-        if (event.world.provider != null)
+        if (event.getWorld().provider != null)
         {
-            int dim = event.world.provider.dimensionId;
+            int dim = event.getWorld().provider.getDimension();
             if (RADAR_MAPS.containsKey(dim))
             {
                 getRadarMapForDim(dim).unloadAll();

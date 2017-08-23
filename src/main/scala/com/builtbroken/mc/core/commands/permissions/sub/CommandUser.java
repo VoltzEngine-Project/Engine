@@ -7,7 +7,7 @@ import com.builtbroken.mc.core.commands.prefab.ModularCommand;
 import com.builtbroken.mc.framework.access.AccessUser;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +54,11 @@ public class CommandUser extends ModularCommand
                         }
                     }
                 }
-                sender.addChatMessage(new ChatComponentText("Unknown user sub command"));
+                sender.sendMessage(new TextComponentString("Unknown user sub command"));
             }
             else
             {
-                sender.addChatMessage(new ChatComponentText("User not found in permissions profile"));
+                sender.sendMessage(new TextComponentString("User not found in permissions profile"));
             }
         }
         return true;

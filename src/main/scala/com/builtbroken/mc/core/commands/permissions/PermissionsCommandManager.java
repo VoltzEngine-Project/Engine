@@ -107,7 +107,7 @@ public class PermissionsCommandManager extends ServerCommandManager
                         {
                             ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation(commandexception1.getMessage(), commandexception1.getErrorOjbects());
                             chatcomponenttranslation1.getChatStyle().setColor(EnumChatFormatting.RED);
-                            sender.addChatMessage(chatcomponenttranslation1);
+                            sender.sendMessage(chatcomponenttranslation1);
                         }
                     }
 
@@ -123,7 +123,7 @@ public class PermissionsCommandManager extends ServerCommandManager
                     {
                         chatcomponenttranslation = new ChatComponentTranslation(commandexception.getMessage(), commandexception.getErrorOjbects());
                         chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-                        sender.addChatMessage(chatcomponenttranslation);
+                        sender.sendMessage(chatcomponenttranslation);
                     }
                 }
             }
@@ -131,23 +131,23 @@ public class PermissionsCommandManager extends ServerCommandManager
             {
                 ChatComponentTranslation chatcomponenttranslation2 = new ChatComponentTranslation("commands.generic.permission");
                 chatcomponenttranslation2.getChatStyle().setColor(EnumChatFormatting.RED);
-                sender.addChatMessage(chatcomponenttranslation2);
+                sender.sendMessage(chatcomponenttranslation2);
             }
         } catch (WrongUsageException wrongusageexception)
         {
             chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.getErrorOjbects()));
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-            sender.addChatMessage(chatcomponenttranslation);
+            sender.sendMessage(chatcomponenttranslation);
         } catch (CommandException commandexception2)
         {
             chatcomponenttranslation = new ChatComponentTranslation(commandexception2.getMessage(), commandexception2.getErrorOjbects());
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-            sender.addChatMessage(chatcomponenttranslation);
+            sender.sendMessage(chatcomponenttranslation);
         } catch (Throwable throwable)
         {
             chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception");
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-            sender.addChatMessage(chatcomponenttranslation);
+            sender.sendMessage(chatcomponenttranslation);
             Engine.logger().error("Failed to process command: \'" + cmd + "\'", throwable);
         }
 
