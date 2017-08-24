@@ -229,10 +229,6 @@ public final class TileMapRegistry
                     if (((RadarTile) object).tile.isInvalid() || object.xi() == x && object.yi() == y && object.zi() == z)
                     {
                         map.remove(object);
-                        if (Engine.runningAsDev)
-                        {
-                            Engine.logger().info("Removed tile from TileMap. Tile = " + object, new RuntimeException());
-                        }
                     }
                 }
             }
