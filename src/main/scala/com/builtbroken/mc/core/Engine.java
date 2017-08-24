@@ -8,8 +8,10 @@ import com.builtbroken.mc.core.content.resources.gems.GemTypes;
 import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;
 import com.builtbroken.mc.core.content.tool.ItemSimpleCraftingTool;
 import com.builtbroken.mc.core.network.netty.PacketManager;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.LoaderState;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import org.apache.logging.log4j.LogManager;
@@ -322,5 +324,21 @@ public class Engine
     public static boolean isShiftHeld()
     {
         return minecraft.isShiftHeld();
+    }
+
+    @Deprecated
+    public static Side getEffectiveSide()
+    {
+        return FMLCommonHandler.instance().getEffectiveSide();
+    }
+
+    public static boolean shouldDoServerLogic()
+    {
+        return isJUnitTest() || getEffectiveSide() == Side.SERVER; //TODO recode to avoid issues with getEffectiveSide()
+    }
+
+    public static boolean shouldDoClientLogic()
+    {
+        return isJUnitTest() || getEffectiveSide() == Side.CLIENT; //TODO recode to avoid issues with getEffectiveSide()
     }
 }
