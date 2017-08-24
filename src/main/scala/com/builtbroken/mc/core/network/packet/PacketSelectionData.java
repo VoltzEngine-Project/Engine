@@ -5,7 +5,6 @@ import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.ArrayList;
@@ -88,19 +87,8 @@ public class PacketSelectionData implements IPacket
     }
 
     @Override
-    public void handleClientSide()
-    {
-        handle(Minecraft.getMinecraft().thePlayer);
-    }
-
-    @Override
-    public void handleServerSide(EntityPlayer player)
-    {
-        handle(player);
-    }
-
     public void handle(EntityPlayer player)
     {
-
+        //Do nothing as decode does all of the work
     }
 }

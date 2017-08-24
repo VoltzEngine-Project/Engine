@@ -27,7 +27,7 @@ public class ResonantPacketHandler extends SimpleChannelInboundHandler<IPacket>
             switch (FMLCommonHandler.instance().getEffectiveSide())
             {
                 case CLIENT:
-                    packet.handleClientSide();
+                    packet.handleClientSide(Engine.minecraft.getLocalPlayer());
                     break;
                 case SERVER:
                     packet.handleServerSide(((NetHandlerPlayServer) netHandler).playerEntity);
