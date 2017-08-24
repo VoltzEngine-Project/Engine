@@ -4,6 +4,7 @@ import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.edit.BlockEditResult;
 import com.builtbroken.mc.api.explosive.IBlastEdit;
+import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.imp.transform.vector.AbstractLocation;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import io.netty.buffer.ByteBuf;
@@ -14,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -47,7 +47,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     /** Force energy used to place it */
     public float energy = 0;
     /** direction placed from */
-    public EnumFacing face = null;
+    public Direction face = null;
 
     /** Drop block that was at the location */
     public boolean doItemDrop = false;
@@ -63,6 +63,11 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     public BlockEdit(World world, double x, double y, double z)
     {
         super(world, x, y, z);
+    }
+
+    public BlockEdit(World world, double x, double y, double z, Direction direction)
+    {
+        super(world, x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ);
     }
 
     public BlockEdit(NBTTagCompound nbt)
@@ -102,6 +107,11 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
         set(block, meta, false, true);
     }
 
+    public BlockEdit(World oldWorld, IPos3D vec, Direction dir)
+    {
+        this(oldWorld, vec.x(), vec.y(), vec.z(), dir);
+    }
+
     public BlockEdit(World world, IPos3D vector)
     {
         super(world, vector);
@@ -116,6 +126,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     {
         super(world, target);
     }
+
 
     /**
      * Sets placement data and additional checks
@@ -179,13 +190,13 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     }
 
     @Override
-    public void setBlastDirection(EnumFacing dir)
+    public void setBlastDirection(Direction dir)
     {
         this.face = dir;
     }
 
     @Override
-    public EnumFacing getBlastDirection()
+    public Direction getBlastDirection()
     {
         return face;
     }
@@ -341,7 +352,8 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
     @Override
     public int hashCode()
     {
-        int result = 31 + (oldWorld() != null && oldWorld().provider != null ? oldWorld().provider.dimensionId : 0);
+        int result = 17;
+        result = 31 * result + (oldWorld() != null && oldWorld().provider != null ? oldWorld().provider.dimensionId : 0);
         result = 31 * result + xi();
         result = 31 * result + yi();
         result = 31 * result + zi();
@@ -355,12 +367,12 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
         {
             return true;
         }
-        if (obj instanceof BlockEdit)
+        if (obj instanceof IBlastEdit)
         {
-            return ((BlockEdit) obj).world == world
-                    && ((BlockEdit) obj).xi() == xi()
-                    && ((BlockEdit) obj).yi() == yi()
-                    && ((BlockEdit) obj).zi() == zi();
+            return ((IBlastEdit) obj).oldWorld() == world
+                    && ((IBlastEdit) obj).xi() == xi()
+                    && ((IBlastEdit) obj).yi() == yi()
+                    && ((IBlastEdit) obj).zi() == zi();
         }
         return false;
     }
