@@ -6,8 +6,6 @@ import com.builtbroken.mc.core.Engine;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -58,16 +56,11 @@ public class GuiJsonDebug extends JFrame
         JPanel menuPanel = new JPanel();
         menuPanel.setMaximumSize(new Dimension(-1, 100));
         Button button = new Button("Reload");
-        button.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
+        button.addActionListener(e -> {
+            model.removeAllElements();
+            for (DebugData data : debugData)
             {
-                model.removeAllElements();
-                for (DebugData data : debugData)
-                {
-                    model.addElement(data);
-                }
+                model.addElement(data);
             }
         });
         menuPanel.add(button);
@@ -111,7 +104,7 @@ public class GuiJsonDebug extends JFrame
             builder.append(prefix);
             builder.append(msg);
 
-            window.addData(builder.toString(), null);
+            window.addData(builder.toString());
         }
 
         @Override
