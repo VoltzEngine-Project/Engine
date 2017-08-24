@@ -32,4 +32,29 @@ public @interface JsonProcessorData
      * @return true to enforce a not null state
      */
     boolean required() default false;
+
+    /**
+     * Should the field or method be invoked
+     * server side.
+     * <p>
+     * Make sure to use this for client only data. Though
+     * it is best to avoid having client data on a server
+     * object.
+     *
+     * @return true if should invoke
+     */
+    boolean loadForServer() default true;
+
+    /**
+     * Should the field or method be invoked
+     * client side.
+     * <p>
+     * Make sure to use this for server only data. Though
+     * it is best to avoid having server data on a client only
+     * object.
+     *
+     * @return true if should invoke
+     */
+    boolean loadForClient() default true;
+
 }

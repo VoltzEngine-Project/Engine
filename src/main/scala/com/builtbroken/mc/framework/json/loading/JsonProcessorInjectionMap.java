@@ -32,6 +32,8 @@ public class JsonProcessorInjectionMap<O extends Object>
 
     protected void load(Class clazz)
     {
+        boolean loadServer = Engine.shouldDoServerLogic();
+        boolean loadClient = Engine.shouldDoClientLogic();
         //Locate all fields, both in the target and parent of target
         List<Field> fields = ReflectionUtility.getAllFields(clazz);
         for (Field field : fields)
@@ -47,7 +49,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                     {
                         //Get keys and add each
                         final String[] values = ((JsonProcessorData) annotation).value();
-                        if (values != null)
+                        if (values != null && (loadServer && ((JsonProcessorData) annotation).loadForServer() || loadClient && ((JsonProcessorData) annotation).loadForClient()))
                         {
                             for (final String keyValue : values)
                             {
