@@ -116,7 +116,7 @@ public final class JsonContentLoader extends AbstractLoadable
     {
         if(debugWindow != null)
         {
-            debugWindow.addData(msg);
+            debugWindow.addDebug(msg);
         }
     }
 
@@ -880,10 +880,17 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void clear()
     {
-        debug.log("Clearing cached data to same RAM");
-        externalFiles.clear();
-        externalJarFiles.clear();
-        classPathResources.clear();
-        jsonEntries.clear();
+        if(!Engine.runningAsDev)
+        {
+            debug.log("Clearing cached data to same RAM");
+            externalFiles.clear();
+            externalJarFiles.clear();
+            classPathResources.clear();
+            jsonEntries.clear();
+        }
+        else
+        {
+            debug.log("Not clearing cache in order to allow debugging of data");
+        }
     }
 }
