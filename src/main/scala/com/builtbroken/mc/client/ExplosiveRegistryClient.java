@@ -95,29 +95,31 @@ public class ExplosiveRegistryClient
         if (item != null)
         {
             IExplosiveHandler handler = ExplosiveRegistry.get(item);
-
-            //Old outdated system TODO remove once converted to JSON fully
-            if (handler instanceof ITexturedExplosiveHandler)
+            if(handler != null)
             {
-                IIcon icon = ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIcon(item, pass);
-                if (icon != null)
+                //Old outdated system TODO remove once converted to JSON fully
+                if (handler instanceof ITexturedExplosiveHandler)
                 {
-                    return icon;
-                }
-            }
-
-            //Try to get icon from JSON
-            String contentID = handler.getID();
-            RenderData data = ClientDataHandler.INSTANCE.getRenderData(handler.getMod() + ":" + contentID); //TODO consider using state ID to get render
-            if (data != null && data.renderType.equalsIgnoreCase("ex"))
-            {
-                List<String> keys = getStatesForCornerIcon(stack, handler, pass);
-                for (String key : keys)
-                {
-                    IRenderState state = data.getState(key);
-                    if (state != null && state instanceof TextureState)
+                    IIcon icon = ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIcon(item, pass);
+                    if (icon != null)
                     {
-                        return state.getIcon(0);
+                        return icon;
+                    }
+                }
+
+                //Try to get icon from JSON
+                String contentID = handler.getID();
+                RenderData data = ClientDataHandler.INSTANCE.getRenderData(handler.getMod() + ":" + contentID); //TODO consider using state ID to get render
+                if (data != null && data.renderType.equalsIgnoreCase("ex"))
+                {
+                    List<String> keys = getStatesForCornerIcon(stack, handler, pass);
+                    for (String key : keys)
+                    {
+                        IRenderState state = data.getState(key);
+                        if (state != null && state instanceof TextureState)
+                        {
+                            return state.getIcon(0);
+                        }
                     }
                 }
             }
