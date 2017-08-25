@@ -23,11 +23,12 @@ public class RecipeShapedOreLarge implements IRecipe
 {
     public static int SIZE = 4;
 
-    private ItemStack output = null;
-    private Object[] input = null;
-    private int width = 0;
-    private int height = 0;
-    private boolean mirrored = true;
+    public ItemStack output = null;
+    public Object[] input = null;
+    public int width = 0;
+    public int height = 0;
+
+    public final String recipeString;
 
     public RecipeShapedOreLarge(Block result, Object... recipe)
     {
@@ -45,19 +46,6 @@ public class RecipeShapedOreLarge implements IRecipe
 
         String shape = "";
         int idx = 0;
-
-        if (recipe[idx] instanceof Boolean)
-        {
-            mirrored = (Boolean) recipe[idx];
-            if (recipe[idx + 1] instanceof Object[])
-            {
-                recipe = (Object[]) recipe[idx + 1];
-            }
-            else
-            {
-                idx = 1;
-            }
-        }
 
         if (recipe[idx] instanceof String[])
         {
@@ -82,14 +70,18 @@ public class RecipeShapedOreLarge implements IRecipe
             }
         }
 
+        String recipeString = "";
+        for (Object tmp : recipe)
+        {
+            recipeString += tmp + ", ";
+        }
+        recipeString += output;
+
+        this.recipeString = recipeString;
+
         if (width * height != shape.length())
         {
-            String ret = "Invalid shaped ore recipe: ";
-            for (Object tmp : recipe)
-            {
-                ret += tmp + ", ";
-            }
-            ret += output;
+            String ret = "Invalid shaped ore large recipe:  " + recipeString;
             throw new RuntimeException(ret);
         }
 
@@ -174,11 +166,6 @@ public class RecipeShapedOreLarge implements IRecipe
                 {
                     return true;
                 }
-
-                if (mirrored && checkMatch(inv, x, y, true))
-                {
-                    return true;
-                }
             }
         }
 
@@ -242,12 +229,6 @@ public class RecipeShapedOreLarge implements IRecipe
         return true;
     }
 
-    public RecipeShapedOreLarge setMirrored(boolean mirror)
-    {
-        mirrored = mirror;
-        return this;
-    }
-
     /**
      * Returns the input for this recipe, any mod accessing this value should never
      * manipulate the values in this array as it will effect the recipe itself.
@@ -257,5 +238,11 @@ public class RecipeShapedOreLarge implements IRecipe
     public Object[] getInput()
     {
         return this.input;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "RecipeShapedOreLarge[ " + recipeString + "]@" + hashCode();
     }
 }

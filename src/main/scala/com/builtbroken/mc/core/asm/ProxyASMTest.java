@@ -18,16 +18,23 @@ public class ProxyASMTest extends AbstractProxy
     @Override
     public void preInit()
     {
-        MinecraftForge.EVENT_BUS.register(this);
-        CheckFakeWorld world = CheckFakeWorld.newWorld("Test");
-        Chunk chunk = new Chunk(world, 0, 0);
-        chunk.func_150807_a(1, 1, 1, Blocks.stone, 0);
-
-        if(!chunkASM)
+        try
         {
-            EngineCoreMod.logger.error("\n\n\nFailed to get chunk update event when fired. This may mean the ASM for injecting this event didn't function. Code depending on this event may fail to function correctly.\n\n\n");
+            MinecraftForge.EVENT_BUS.register(this);
+            CheckFakeWorld world = CheckFakeWorld.newWorld("Test");
+            Chunk chunk = new Chunk(world, 0, 0);
+            chunk.func_150807_a(1, 1, 1, Blocks.stone, 0);
+
+            if (!chunkASM)
+            {
+                EngineCoreMod.logger.error("ProxyASMTest: Failed to get chunk update event when fired. This may mean the ASM for injecting this event didn't function. Code depending on this event may fail to function correctly.\n\n\n");
+            }
+            MinecraftForge.EVENT_BUS.unregister(this);
         }
-        MinecraftForge.EVENT_BUS.unregister(this);
+        catch (Exception e)
+        {
+            EngineCoreMod.logger.error("ProxyASMTest: Unexpected error while testing ASM injection of world events.", e);
+        }
     }
 
     @SubscribeEvent
