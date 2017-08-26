@@ -10,7 +10,6 @@ import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
 import com.builtbroken.mc.core.commands.ext.SubCommandWithName;
 import com.builtbroken.mc.core.commands.ext.UserSubCommand;
-import com.builtbroken.mc.core.commands.json.CommandJsonRecipe;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandGroup;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandUser;
 import com.builtbroken.mc.core.commands.prefab.AbstractCommand;
@@ -74,7 +73,7 @@ public class CommandVE extends ModularCommand
             addToDebugCommand(new CommandDebugChunk());
         }
 
-        addToJsonCommand(new CommandJsonRecipe());
+        //addToJsonCommand(new CommandJsonRecipe());
         addToThreadCommand(new CommandThreadClear());
         addToPowerCommand(new CommandChargeItem());
     }

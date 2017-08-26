@@ -45,4 +45,14 @@ public class ModelData extends JsonGenData
     {
         return "ModelData[" + key + " >> " + domain + ":" + name + " >> " + model + "]@" + hashCode();
     }
+
+    public boolean isValid()
+    {
+        return model != null;
+    }
+
+    public void render(boolean renderOnlyParts, String[] partsToRender)
+    {
+
+    }
 }

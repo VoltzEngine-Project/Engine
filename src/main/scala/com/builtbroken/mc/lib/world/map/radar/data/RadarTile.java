@@ -21,31 +21,31 @@ public class RadarTile extends RadarObject<TileEntity>
     @Override
     public boolean isValid()
     {
-        return tile != null && tile.hasWorldObj() && !tile.isInvalid();
+        return tile != null && tile.hasWorld() && !tile.isInvalid();
     }
 
     @Override
     public World oldWorld()
     {
-        return tile != null ? tile.getWorldObj() : null;
+        return tile != null ? tile.getWorld() : null;
     }
 
     @Override
     public double x()
     {
-        return tile != null ? tile.xCoord + 0.5 : 0;
+        return tile != null ? tile.getPos().getX() + 0.5 : 0;
     }
 
     @Override
     public double y()
     {
-        return tile != null ? tile.yCoord + 0.5 : 0;
+        return tile != null ? tile.getPos().getY() + 0.5 : 0;
     }
 
     @Override
     public double z()
     {
-        return tile != null ? tile.zCoord + 0.5 : 0;
+        return tile != null ? tile.getPos().getZ() + 0.5 : 0;
     }
 
     @Override

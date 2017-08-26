@@ -8,7 +8,6 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.IPacketReceiver;
 import com.builtbroken.mc.core.network.packet.PacketPlayerItem;
 import com.builtbroken.mc.core.network.packet.PacketType;
-import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import io.netty.buffer.ByteBuf;
@@ -26,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,7 +39,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/9/2017.
  */
-public class ItemBase extends Item implements IJsonGenObject, IItemWithListeners, IPacketReceiver
+public class ItemBase extends Item implements IJsonGenObject<Item>, IItemWithListeners, IPacketReceiver
 {
     /** Handles item properties and main logic */
     public final ItemNode node;
@@ -270,12 +270,13 @@ public class ItemBase extends Item implements IJsonGenObject, IItemWithListeners
     //=============================================
 
     @Override
-    public void register(IJsonGenMod mod, ModManager manager)
+    public void register(IJsonGenMod mod, RegistryEvent.Register<Item> reg)
     {
         if (!registered)
         {
             registered = true;
-            manager.newItem(node.id, this);
+            this.setRegistryName(mod.getDomain() + ":" + node.id);
+            reg.getRegistry().register(this);
             Engine.logger().info(this + " has been claimed by " + mod);
         }
     }

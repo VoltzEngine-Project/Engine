@@ -39,7 +39,7 @@ public class CommandGroup extends ModularCommand
             {
                 for (AbstractCommand command : subCommands)
                 {
-                    if (command instanceof GroupSubCommand && command.getCommandName().equalsIgnoreCase(args[1]))
+                    if (command instanceof GroupSubCommand && command.getName().equalsIgnoreCase(args[1]))
                     {
                         if (((GroupSubCommand) command).handle(sender, group, "", removeFront(args, 2)))
                         {
@@ -67,7 +67,7 @@ public class CommandGroup extends ModularCommand
             command.getHelpOutput(sender, commands);
             for (String s : commands)
             {
-                items.add("[name] " + command.getCommandName() + " " + s);
+                items.add("[name] " + command.getName() + " " + s);
             }
         }
     }

@@ -6,11 +6,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * Prefab creative tab to either create a fast creative tab or reduce code
@@ -46,48 +45,32 @@ public class ModCreativeTab extends CreativeTabs
     }
 
     @Override
-    public void displayAllReleventItems(List list)
+    public void displayAllRelevantItems(NonNullList<ItemStack> list)
     {
-        //TODO maybe cache?
-
-        for (Object anItemRegistry : Item.itemRegistry)
+        for (Item item : Item.REGISTRY)
         {
-            Item item = (Item) anItemRegistry;
-
             if (item != null)
             {
                 for (CreativeTabs tab : item.getCreativeTabs())
                 {
                     if (tab == this)
                     {
-                        List temp_list = new ArrayList();
-                        item.getSubItems(item, this, temp_list);
-                        for (Object o : temp_list)
+                        NonNullList<ItemStack> temp_list = NonNullList.create();
+                        item.getSubItems(this, temp_list);
+                        for (ItemStack stack : temp_list)
                         {
-                            if (o instanceof ItemStack)
+                            if (stack.getItem() != null)
                             {
-                                if (((ItemStack) o).getItem() != null)
-                                {
-                                    list.add(o);
-                                }
-                                else
-                                {
-                                    Engine.logger().error("Item: " + item + "  attempted to add a stack with a null item to creative tab " + this);
-                                }
+                                list.add(stack);
                             }
                             else
                             {
-                                Engine.logger().error("Item: " + item + "  attempted to add a non ItemStack to creative tab " + this);
+                                Engine.logger().error("Item: " + item + "  attempted to add a stack with a null item to creative tab " + this);
                             }
                         }
                     }
                 }
             }
-        }
-
-        if (this.func_111225_m() != null)
-        {
-            this.addEnchantmentBooksToList(list, this.func_111225_m());
         }
 
         if (itemSorter != null && !list.isEmpty())
@@ -112,27 +95,24 @@ public class ModCreativeTab extends CreativeTabs
             }
 
             //Attempt to use a random item in the tab
-            List list = new ArrayList();
-            displayAllReleventItems(list);
-            for (Object object : list)
+            NonNullList<ItemStack> list = NonNullList.create();
+            displayAllRelevantItems(list);
+            for (ItemStack stack : list)
             {
-                if (object instanceof ItemStack)
-                {
-                    itemStack = (ItemStack) object;
-                    return itemStack;
-                }
+                itemStack = stack;
+                return itemStack;
             }
 
             //If that fails set to redstone block as backup
-            itemStack = new ItemStack(Blocks.redstone_block);
+            itemStack = new ItemStack(Blocks.REDSTONE_LAMP);
         }
         return itemStack;
     }
 
     @Override
-    public Item getTabIconItem()
+    public ItemStack getTabIconItem()
     {
-        return getIconItemStack().getItem();
+        return getIconItemStack();
     }
 
     /**
@@ -141,11 +121,11 @@ public class ModCreativeTab extends CreativeTabs
      * @param list
      * @param item
      */
-    protected void add(List list, Item item)
+    protected void add(NonNullList<ItemStack> list, Item item)
     {
         if (item != null)
         {
-            item.getSubItems(item, this, list);
+            item.getSubItems(this, list);
         }
     }
 
@@ -155,19 +135,11 @@ public class ModCreativeTab extends CreativeTabs
      * @param list
      * @param block
      */
-    protected void add(List list, Block block)
+    protected void add(NonNullList<ItemStack> list, Block block)
     {
         if (block != null)
         {
-            Item item = Item.getItemFromBlock(block);
-            if (item != null)
-            {
-                block.getSubBlocks(item, this, list);
-            }
-            else if (Engine.runningAsDev)
-            {
-                Engine.logger().error("Block: " + block + " does not have an item so can not be displayed in creative tab");
-            }
+            block.getSubBlocks(this, list);
         }
     }
 

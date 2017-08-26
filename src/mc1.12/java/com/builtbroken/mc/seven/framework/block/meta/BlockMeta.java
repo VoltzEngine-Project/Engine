@@ -6,7 +6,6 @@ import com.builtbroken.mc.seven.framework.block.tile.ITileProvider;
 import com.builtbroken.mc.seven.framework.block.tile.TileProviderMeta;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
@@ -26,12 +25,6 @@ public class BlockMeta extends BlockBase
         ITileProvider provider = data.tileEntityProvider;
         data.tileEntityProvider = new TileProviderMeta();
         ((TileProviderMeta) data.tileEntityProvider).backupProvider = provider;
-    }
-
-    @Override
-    protected Class<? extends ItemBlock> getItemBlockClass()
-    {
-        return ItemBlockMeta.class;
     }
 
     @Override

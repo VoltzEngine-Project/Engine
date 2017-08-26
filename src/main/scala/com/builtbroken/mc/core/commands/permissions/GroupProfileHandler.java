@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 import java.io.File;
 
@@ -66,7 +67,7 @@ public class GroupProfileHandler extends AbstractLoadable implements IVirtualObj
     @Override
     public boolean shouldSaveForWorld(World world)
     {
-        return world != null && world.provider.dimensionId == 0;
+        return world != null && world.provider.getDimension() == 0;
     }
 
     @Override
@@ -166,7 +167,7 @@ public class GroupProfileHandler extends AbstractLoadable implements IVirtualObj
             String node = PermissionsRegistry.getNodeFor(command, args);
             return user.hasNode(node);
         }
-        return command.canCommandSenderUseCommand(sender);
+        return command.checkPermission(FMLServerHandler.instance().getServer(), sender);
     }
 
     @Override

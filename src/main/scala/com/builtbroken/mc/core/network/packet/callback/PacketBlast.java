@@ -99,7 +99,7 @@ public class PacketBlast implements IPacket
         }
 
         NBTTagCompound save = ByteBufUtils.readTag(buffer);
-        blast = (Blast) handler.createBlastForTrigger(Minecraft.getMinecraft().theWorld, x, y, z, TriggerCauseRegistry.rebuild(save.getCompoundTag("trigger"), Minecraft.getMinecraft().theWorld), size, save.getCompoundTag("explosiveData"));
+        blast = (Blast) handler.createBlastForTrigger(Minecraft.getMinecraft().world, x, y, z, TriggerCauseRegistry.rebuild(save.getCompoundTag("trigger"), Minecraft.getMinecraft().world), size, save.getCompoundTag("explosiveData"));
 
         if (type == BlastPacketType.EDIT_DISPLAY)
         {

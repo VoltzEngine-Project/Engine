@@ -1,13 +1,13 @@
 package com.builtbroken.mc.seven.framework.block.tile;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.registry.ModManager;
-import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
+import com.builtbroken.mc.seven.framework.block.BlockBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -49,9 +49,9 @@ public class TileProviderByClass extends JsonGenData implements ITileProvider
     }
 
     @Override
-    public void register(BlockBase block, IJsonGenMod mod, ModManager manager)
+    public void register(BlockBase block, IJsonGenMod mod)
     {
-        manager.registerTileEntity(id, block, create(clazz));
+        GameRegistry.registerTileEntity(clazz, id);
     }
 
     @Override

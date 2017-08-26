@@ -106,7 +106,7 @@ public class AbstractCommand extends CommandBase
      * @param args   - args for the command
      * @return true if the command was consumed or was processed in some way
      */
-    public boolean handleEntityPlayerCommand(EntityPlayer player, String[] args)
+    public boolean handleEntityPlayerCommand(EntityPlayer player, String[] args)  throws CommandException
     {
         return false;
     }
@@ -118,7 +118,7 @@ public class AbstractCommand extends CommandBase
      * @param args   - args for the command
      * @return true if the command was consumed or was processed in some way
      */
-    public boolean handleConsoleCommand(ICommandSender sender, String[] args)
+    public boolean handleConsoleCommand(ICommandSender sender, String[] args)  throws CommandException
     {
         return false;
     }

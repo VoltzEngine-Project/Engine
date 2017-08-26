@@ -52,14 +52,12 @@ public class BlockEditMove extends BlockEdit
             BlockEditResult result = super.doPlace();
             if (result == BlockEditResult.PLACED)
             {
-                newMovementLocation.setBlock(prev_block, prev_meta);
+                newMovementLocation.setBlock(prev_block);
                 TileEntity tile = newMovementLocation.getTileEntity();
                 if (tile != null)
                 {
                     tile.readFromNBT(tag);
-                    tile.xCoord = newMovementLocation.xi();
-                    tile.yCoord = newMovementLocation.yi();
-                    tile.zCoord = newMovementLocation.zi();
+                    tile.setPos(newMovementLocation.toBlockPos());
                 }
             }
             return result;

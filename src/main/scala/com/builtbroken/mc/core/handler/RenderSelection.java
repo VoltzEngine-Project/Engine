@@ -1,17 +1,13 @@
 package com.builtbroken.mc.core.handler;
 
 import com.builtbroken.jlib.data.Colors;
-import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -48,6 +44,7 @@ public class RenderSelection
 
     public static void render(Cube selection, Color box_color)
     {
+        /*
         GL11.glPushMatrix();
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -114,6 +111,7 @@ public class RenderSelection
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         // tess.renderingWorldRenderer = true;
         GL11.glPopMatrix();
+        */
     }
 
     /**
@@ -121,6 +119,7 @@ public class RenderSelection
      */
     private static void renderBlockBox(Tessellator tess)
     {
+        /*
         tess.startDrawing(GL11.GL_LINES);
 
         // FRONT
@@ -160,10 +159,12 @@ public class RenderSelection
         tess.addVertex(1, 1, -1);
 
         tess.draw();
+        */
     }
 
     private static void renderBlockBoxTo(Tessellator tess, Pos vec)
     {
+        /*
         tess.startDrawing(GL11.GL_LINES);
 
         // FRONT
@@ -203,5 +204,6 @@ public class RenderSelection
         tess.addVertex(vec.xi(), vec.yi(), vec.zi());
 
         tess.draw();
+        */
     }
 }

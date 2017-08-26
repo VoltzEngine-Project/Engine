@@ -1,7 +1,8 @@
 package com.builtbroken.mc.framework.json.imp;
 
-import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 /**
  * Applied to all objects created from Json data
@@ -9,7 +10,7 @@ import com.builtbroken.mc.framework.json.IJsonGenMod;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/26/2016.
  */
-public interface IJsonGenObject
+public interface IJsonGenObject<T extends IForgeRegistryEntry<T>>
 {
     /**
      * Called at some point after {@link #register()}
@@ -21,9 +22,8 @@ public interface IJsonGenObject
      * using a boolean check in the object.
      *
      * @param mod     - mod registering the content
-     * @param manager - manager used to register the content
      */
-    default void register(IJsonGenMod mod, ModManager manager)
+    default void register(IJsonGenMod mod, RegistryEvent.Register<T> register)
     {
 
     }

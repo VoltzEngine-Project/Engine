@@ -58,7 +58,7 @@ public class PacketSendData extends PacketRequestData
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        if (data != null && dim == player.worldObj.provider.dimensionId)
+        if (data != null && dim == player.world.provider.getDimension())
         {
             if (type == 0)
             {

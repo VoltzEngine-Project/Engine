@@ -21,6 +21,6 @@ public class SubCommand extends AbstractCommand
     @Override
     public String getPrefix()
     {
-        return "/" + (super_command != null ? super_command.getPrefix().replace("/", "") : "") + " " + getCommandName();
+        return "/" + (super_command != null ? super_command.getPrefix().replace("/", "") : "") + " " + getName();
     }
 }

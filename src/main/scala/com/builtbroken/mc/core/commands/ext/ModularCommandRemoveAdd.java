@@ -71,7 +71,7 @@ public class ModularCommandRemoveAdd extends ModularCommand
                     }
                     for (AbstractCommand c : subCommands)
                     {
-                        if (c instanceof SubCommandWithName && c.getCommandName().equalsIgnoreCase(command) && ((SubCommandWithName) c).handleConsoleCommand(sender, username, a))
+                        if (c instanceof SubCommandWithName && c.getName().equalsIgnoreCase(command) && ((SubCommandWithName) c).handleConsoleCommand(sender, username, a))
                         {
                             return true;
                         }
@@ -107,7 +107,7 @@ public class ModularCommandRemoveAdd extends ModularCommand
             command.getHelpOutput(sender, commands);
             for(String s : commands)
             {
-                items.add("[" + type + "] " + (remove ? "from" : "to") + " " + command.getCommandName() + " " + s);
+                items.add("[" + type + "] " + (remove ? "from" : "to") + " " + command.getName() + " " + s);
             }
         }
     }

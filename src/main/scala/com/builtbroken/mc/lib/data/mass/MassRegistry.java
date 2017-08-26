@@ -6,10 +6,12 @@ import com.builtbroken.mc.api.items.IItemHasMass;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.ChunkProviderServer;
@@ -128,15 +130,15 @@ public class MassRegistry implements IMassRegistry
             //Checks if the chunk is loaded
             if (world instanceof WorldServer)
             {
-                ChunkProviderServer providerServer = ((WorldServer) world).theChunkProviderServer;
+                ChunkProviderServer providerServer = ((WorldServer) world).getChunkProvider();
                 if (!providerServer.chunkExists(x >> 4, z >> 4))
                 {
                     return -1;
                 }
             }
-            Block block = world.getBlock(x, y, z);
-            int meta = world.getBlockMetadata(x, y, z);
-            TileEntity tile = world.getTileEntity(x, y, z);
+            BlockPos pos = new BlockPos(x, y, z);
+            IBlockState block = world.getBlockState(pos);
+            TileEntity tile = world.getTileEntity(pos);
 
             if (tile instanceof IHasMass)
             {
@@ -147,8 +149,8 @@ public class MassRegistry implements IMassRegistry
                 }
             }
 
-            mass = getMass(block, meta);
-            return mass >= 0 ? mass : getMass(block);
+            mass = getMass(block);
+            return mass >= 0 ? mass : getMass(block.getBlock());
         }
         return -1;
     }
@@ -215,11 +217,11 @@ public class MassRegistry implements IMassRegistry
     }
 
     @Override
-    public double getMass(Block block, int meta)
+    public double getMass(IBlockState state)
     {
-        if(block != null)
+        if(state != null)
         {
-            return getMass(new ItemStack(block, 1, meta));
+            return getMass(new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state)));
         }
         return -1;
     }

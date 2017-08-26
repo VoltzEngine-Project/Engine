@@ -45,7 +45,7 @@ public class CommandUser extends ModularCommand
                 {
                     for (AbstractCommand command : subCommands)
                     {
-                        if (command instanceof UserSubCommand && command.getCommandName().equalsIgnoreCase(args[1]))
+                        if (command instanceof UserSubCommand && command.getName().equalsIgnoreCase(args[1]))
                         {
                             if (((UserSubCommand) command).handle(sender, user, removeFront(args, 2)))
                             {
@@ -74,7 +74,7 @@ public class CommandUser extends ModularCommand
             command.getHelpOutput(sender, commands);
             for(String s : commands)
             {
-                items.add("[name] " + command.getCommandName() + " " +  s);
+                items.add("[name] " + command.getName() + " " +  s);
             }
         }
     }

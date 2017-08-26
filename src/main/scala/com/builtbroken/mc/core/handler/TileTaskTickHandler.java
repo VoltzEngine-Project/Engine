@@ -34,9 +34,9 @@ public class TileTaskTickHandler
             while (it.hasNext())
             {
                 TileEntity tile = it.next();
-                if (tile.getWorldObj() == event.world)
+                if (tile.getWorld() == event.world)
                 {
-                    if(tile.getWorldObj().loadedTileEntityList.remove(this))
+                    if(tile.getWorld().loadedTileEntityList.remove(this))
                     {
                         debug("\tremoved " + tile + " from tick system");
                     }
@@ -53,7 +53,7 @@ public class TileTaskTickHandler
      */
     public void addTileToBeRemoved(TileEntity tile)
     {
-        if (!removeList.contains(tile) && tile.getWorldObj().loadedTileEntityList.contains(tile))
+        if (!removeList.contains(tile) && tile.getWorld().loadedTileEntityList.contains(tile))
         {
             debug("Added " + tile);
             removeList.add(tile);

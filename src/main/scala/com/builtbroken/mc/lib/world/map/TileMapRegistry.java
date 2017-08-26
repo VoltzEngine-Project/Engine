@@ -41,10 +41,10 @@ public final class TileMapRegistry
      */
     public static boolean add(TileEntity tile)
     {
-        if (tile != null && tile.getWorldObj() != null && !tile.getWorldObj().isRemote)
+        if (tile != null && tile.getWorld() != null && !tile.getWorld().isRemote)
         {
-            RadarMap map = getRadarMapForWorld(tile.getWorldObj());
-            return map != null ? getRadarMapForWorld(tile.getWorldObj()).add(tile) : false;
+            RadarMap map = getRadarMapForWorld(tile.getWorld());
+            return map != null ? getRadarMapForWorld(tile.getWorld()).add(tile) : false;
         }
         return false;
     }
@@ -57,10 +57,10 @@ public final class TileMapRegistry
      */
     public static boolean remove(TileEntity tile)
     {
-        if (tile != null && tile.getWorldObj() != null)
+        if (tile != null && tile.getWorld() != null)
         {
-            RadarMap map = getRadarMapForWorld(tile.getWorldObj());
-            return map != null ? getRadarMapForWorld(tile.getWorldObj()).remove(tile) : false;
+            RadarMap map = getRadarMapForWorld(tile.getWorld());
+            return map != null ? getRadarMapForWorld(tile.getWorld()).remove(tile) : false;
         }
         return false;
     }
@@ -83,7 +83,7 @@ public final class TileMapRegistry
                 }
                 return null;
             }
-            return getRadarMapForDim(world.provider.dimensionId);
+            return getRadarMapForDim(world.provider.getDimension());
         }
         //Only throw an error in dev mode, ignore in normal runtime
         else if (Engine.runningAsDev)
@@ -113,9 +113,9 @@ public final class TileMapRegistry
     @SubscribeEvent
     public void chunkUnload(ChunkEvent.Unload event)
     {
-        if (event.getChunk().worldObj != null && event.getChunk().worldObj.provider != null)
+        if (event.getChunk().getWorld() != null && event.getChunk().getWorld().provider != null)
         {
-            int dim = event.getChunk().worldObj.provider.dimensionId;
+            int dim = event.getChunk().getWorld().provider.getDimension();
             if (WORLD_TO_MAP.containsKey(dim))
             {
                 getRadarMapForDim(dim).remove(event.getChunk());
@@ -128,7 +128,7 @@ public final class TileMapRegistry
     {
         if (event.world.provider != null && event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
-            int dim = event.world.provider.dimensionId;
+            int dim = event.world.provider.getDimension();
             if (WORLD_TO_MAP.containsKey(dim))
             {
                 RadarMap map = getRadarMapForDim(dim);
@@ -147,9 +147,9 @@ public final class TileMapRegistry
     @SubscribeEvent
     public void worldUnload(WorldEvent.Unload event)
     {
-        if (event.world.provider != null && !event.world.isRemote)
+        if (event.getWorld().provider != null && !event.getWorld().isRemote)
         {
-            int dim = event.world.provider.dimensionId;
+            int dim = event.getWorld().provider.getDimension();
             if (WORLD_TO_MAP.containsKey(dim))
             {
                 getRadarMapForDim(dim).unloadAll();

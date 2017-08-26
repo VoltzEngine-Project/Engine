@@ -22,7 +22,7 @@ public class DamageUtility
      */
     public static boolean canHarm(Entity entity, DamageSource source, float damage)
     {
-        if (canDamage(entity))
+        if (canDamage(entity, source))
         {
             if (isMachine(entity))
             {
@@ -46,9 +46,9 @@ public class DamageUtility
      * @param entity - entity being attacked
      * @return true if the entity can be damaged
      */
-    public static boolean canDamage(Entity entity)
+    public static boolean canDamage(Entity entity, DamageSource source)
     {
-        if (!entity.isEntityInvulnerable() && entity.isEntityAlive())
+        if (!entity.isEntityInvulnerable(source) && entity.isEntityAlive())
         {
             if (entity instanceof EntityLivingBase)
             {

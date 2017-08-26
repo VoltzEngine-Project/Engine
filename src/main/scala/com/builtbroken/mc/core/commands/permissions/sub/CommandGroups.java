@@ -5,7 +5,7 @@ import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.framework.access.AccessGroup;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.TextComponentString;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * Created by robert on 2/18/2015.

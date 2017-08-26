@@ -10,6 +10,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Packet type designed to be used with Tiles
@@ -52,7 +53,7 @@ public class PacketTile extends PacketType
      */
     public PacketTile(TileEntity tile, Object... args)
     {
-        this(tile.xCoord, tile.yCoord, tile.zCoord, args);
+        this(tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), args);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class PacketTile extends PacketType
             }
             return;
         }
-        handle(player, player.getEntityWorld().getTileEntity(this.x, this.y, this.z));
+        handle(player, player.getEntityWorld().getTileEntity(new BlockPos(this.x, this.y, this.z)));
     }
 
     /**
@@ -126,7 +127,7 @@ public class PacketTile extends PacketType
     public void handle(EntityPlayer player, TileEntity tile)
     {
         //TODO add checksum or hash to verify the packet is sent to the correct tile
-        final Location location = new Location(player.worldObj, x, y, z);
+        final Location location = new Location(player.world, x, y, z);
         sender_$eq(player);
         if (tile == null)
         {

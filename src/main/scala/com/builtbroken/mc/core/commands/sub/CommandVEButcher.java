@@ -7,13 +7,13 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.TextComponentString;
+import net.minecraft.util.ClassInheritanceMultiMap;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.DimensionManager;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,7 +34,7 @@ public class CommandVEButcher extends SubCommand
         {
             entity.setDead();
         }
-        entityPlayer.addChatComponentMessage(new TextComponentString("Removed " + list.size() + " mobs entities within " + 100 + " block radius."));
+        entityPlayer.sendMessage(new TextComponentString("Removed " + list.size() + " mobs entities within " + 100 + " block radius."));
         return true;
     }
 
@@ -71,26 +71,20 @@ public class CommandVEButcher extends SubCommand
 
             int entitiesKilled = 0;
             int chunksSearched = 0;
-            ChunkProviderServer provider = world.theChunkProviderServer;
-            for (Object object : provider.loadedChunks)
+            ChunkProviderServer provider = world.getChunkProvider();
+            for (Chunk chunk : provider.getLoadedChunks())
             {
-                if (object instanceof Chunk)
+                chunksSearched++;
+                for (ClassInheritanceMultiMap<Entity> l : chunk.getEntityLists())
                 {
-                    chunksSearched++;
-                    for (Object l : ((Chunk) object).entityLists)
+                    for (Entity e : l)
                     {
-                        if (l instanceof Collection)
+                        if (e instanceof IMob)
                         {
-                            for (Object e : (Collection) l)
+                            if (e.isEntityAlive())
                             {
-                                if (e instanceof Entity && e instanceof IMob)
-                                {
-                                    if (((Entity) e).isEntityAlive())
-                                    {
-                                        ((Entity) e).setDead();
-                                        entitiesKilled++;
-                                    }
-                                }
+                                e.setDead();
+                                entitiesKilled++;
                             }
                         }
                     }

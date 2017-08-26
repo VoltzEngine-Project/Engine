@@ -7,7 +7,6 @@ import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
 import com.builtbroken.mc.framework.block.imp.*;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
@@ -16,6 +15,7 @@ import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.WrenchUtility;
 import com.builtbroken.mc.seven.abstraction.MinecraftWrapper;
 import com.builtbroken.mc.seven.framework.block.listeners.ListenerIterator;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyInteger;
@@ -24,7 +24,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -37,6 +36,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -53,7 +53,7 @@ import java.util.Random;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/24/2016.
  */
-public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGenObject, ITileEntityProvider
+public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGenObject<Block>, ITileEntityProvider
 {
     public static final PropertyInteger META = PropertyInteger.create("meta", 0, 15);
     /** Data about the block */
@@ -102,29 +102,19 @@ public class BlockBase extends BlockContainer implements IRegistryInit, IJsonGen
     }
 
     @Override
-    public void register(IJsonGenMod mod, ModManager manager)
+    public void register(IJsonGenMod mod, RegistryEvent.Register<Block> manager)
     {
         if (!registered)
         {
             this.mod = mod;
+            this.setRegistryName(mod.getDomain(), data.registryKey);
             registered = true;
-            manager.newBlock(data.registryKey, this, getItemBlockClass());
+            manager.getRegistry().register(this);
             if (data.tileEntityProvider != null)
             {
-                data.tileEntityProvider.register(this, mod, manager);
+                data.tileEntityProvider.register(this, mod);
             }
         }
-    }
-
-    /**
-     * Gets the item block class to use with this block,
-     * only used during registration.
-     *
-     * @return
-     */
-    protected Class<? extends ItemBlock> getItemBlockClass()
-    {
-        return ItemBlockBase.class;
     }
 
     @Override

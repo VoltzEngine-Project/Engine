@@ -7,6 +7,7 @@ import com.builtbroken.mc.core.Engine;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumParticleTypes;
 
 import java.util.Random;
 
@@ -83,11 +84,11 @@ public class PacketSpawnStream extends PacketType
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        if (player.worldObj.provider.dimensionId == dim)
+        if (player.world.provider.getDimension() == dim)
         {
             short short1 = 128;
 
-            final Random rand = player.worldObj.rand;
+            final Random rand = player.world.rand;
             for (int l = 0; l < short1; ++l)
             {
                 double d6 = (double) l / ((double) short1 - 1.0D);
@@ -100,7 +101,7 @@ public class PacketSpawnStream extends PacketType
                 IWorld world = Engine.minecraft.getWorld(dim);
                 if (world != null)
                 {
-                    world.spawnParticle("portal", d7, d8, d9, (double) f, (double) f1, (double) f2);
+                    world.spawnParticle(EnumParticleTypes.PORTAL, d7, d8, d9, (double) f, (double) f1, (double) f2);
                 }
             }
         }

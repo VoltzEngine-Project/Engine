@@ -6,8 +6,8 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.registry.implement.ILoadComplete;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
-import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.framework.json.data.JsonRecipeData;
 import com.builtbroken.mc.framework.json.debug.GuiJsonDebug;
 import com.builtbroken.mc.framework.json.event.JsonProcessorRegistryEvent;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
@@ -18,12 +18,14 @@ import com.builtbroken.mc.framework.json.loading.ProcessorKeySorter;
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.framework.mod.loadable.ILoadable;
 import com.google.gson.JsonElement;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.Display;
 
@@ -275,7 +277,7 @@ public final class JsonContentLoader extends AbstractLoadable
      *
      * @param mod - mod
      */
-    public void claimContent(IJsonGenMod mod)
+    public void claimItems(IJsonGenMod mod, RegistryEvent.Register<Item> reg)
     {
         for (List<IJsonGenObject> list : generatedObjects.values())
         {
@@ -283,9 +285,43 @@ public final class JsonContentLoader extends AbstractLoadable
             {
                 for (IJsonGenObject object : list)
                 {
-                    if (object.getMod() != null && object.getMod().equals(mod.getDomain()))
+                    if (object instanceof Item && object.getMod() != null && object.getMod().equals(mod.getDomain()))
                     {
-                        object.register(mod, mod.getJsonContentManager());
+                        object.register(mod, reg);
+                    }
+                }
+            }
+        }
+    }
+
+    public void claimBlocks(IJsonGenMod mod, RegistryEvent.Register<Block> reg)
+    {
+        for (List<IJsonGenObject> list : generatedObjects.values())
+        {
+            if (list != null && !list.isEmpty())
+            {
+                for (IJsonGenObject object : list)
+                {
+                    if (object instanceof Block && object.getMod() != null && object.getMod().equals(mod.getDomain()))
+                    {
+                        object.register(mod, reg);
+                    }
+                }
+            }
+        }
+    }
+
+    public void claimRecipes(IJsonGenMod mod, RegistryEvent.Register<IRecipe> reg)
+    {
+        for (List<IJsonGenObject> list : generatedObjects.values())
+        {
+            if (list != null && !list.isEmpty())
+            {
+                for (IJsonGenObject object : list)
+                {
+                    if (object instanceof JsonRecipeData && object.getMod() != null && object.getMod().equals(mod.getDomain()))
+                    {
+                        object.register(mod, reg);
                     }
                 }
             }
@@ -840,34 +876,6 @@ public final class JsonContentLoader extends AbstractLoadable
                 if (obj instanceof IPostInit)
                 {
                     ((IPostInit) obj).onPostInit();
-                }
-                if (obj instanceof IRecipeContainer)
-                {
-                    List<IRecipe> recipes = new ArrayList();
-                    ((IRecipeContainer) obj).genRecipes(recipes);
-                    if (recipes.size() > 0)
-                    {
-                        debug.start("Adding recipes from gen object:");
-                        for (IRecipe recipe : recipes)
-                        {
-                            if (recipe != null)
-                            {
-                                if (recipe.getRecipeOutput() != null)
-                                {
-                                    GameRegistry.addRecipe(recipe);
-                                }
-                                else
-                                {
-                                    debug.log("Null recipe output detected");
-                                }
-                            }
-                            else
-                            {
-                                debug.log("Null recipe detected");
-                            }
-                        }
-                        debug.end();
-                    }
                 }
                 debug.end();
             }

@@ -1,10 +1,13 @@
 package com.builtbroken.mc.seven.framework.json.recipe.crafting;
 
-import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
+import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.data.JsonRecipeData;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +16,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/9/2017.
  */
-public abstract class JsonCraftingRecipeData extends JsonRecipeData implements IRecipeContainer
+public abstract class JsonCraftingRecipeData extends JsonRecipeData<IRecipe>
 {
     public final Object[] data;
 
@@ -24,6 +27,24 @@ public abstract class JsonCraftingRecipeData extends JsonRecipeData implements I
     }
 
     @Override
+    public void register(IJsonGenMod mod, RegistryEvent.Register<IRecipe> register)
+    {
+        List<IRecipe> recipes = new ArrayList();
+        genRecipes(recipes);
+
+        for (IRecipe recipe : recipes)
+        {
+            if (recipe != null && recipe.getRecipeOutput() != null)
+            {
+                if (recipe.getRegistryName() == null)
+                {
+                    recipe.setRegistryName(new ResourceLocation(mod.getDomain(), recipe.getRecipeOutput().getUnlocalizedName()));
+                }
+                register.getRegistry().register(recipe);
+            }
+        }
+    }
+
     public void genRecipes(List<IRecipe> recipes)
     {
         //If output is a string convert

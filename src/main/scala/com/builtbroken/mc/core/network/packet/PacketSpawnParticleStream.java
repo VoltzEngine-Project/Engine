@@ -6,6 +6,7 @@ import com.builtbroken.mc.imp.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumParticleTypes;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -48,7 +49,7 @@ public class PacketSpawnParticleStream extends PacketType
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        if (player.worldObj.provider.dimensionId == dim)
+        if (player.world.provider.getDimension() == dim)
         {
             double distance = start.distance(end);
             Pos direction = start.sub(end).divide(distance);
@@ -57,7 +58,7 @@ public class PacketSpawnParticleStream extends PacketType
             for (int l = 0; l < particles; ++l)
             {
                 Pos next = start.sub(direction.multiply(l));
-                player.worldObj.spawnParticle("portal", next.x(), next.y(), next.z(), 0, 0, 0);
+                player.world.spawnParticle(EnumParticleTypes.PORTAL, next.x(), next.y(), next.z(), 0, 0, 0);
             }
         }
     }

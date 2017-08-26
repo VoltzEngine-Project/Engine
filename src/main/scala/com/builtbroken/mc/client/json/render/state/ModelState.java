@@ -48,7 +48,7 @@ public class ModelState extends TextureState implements IModelState
     {
         TextureData textureData = getTexture();
         ModelData modelData = getModel();
-        if (modelData != null && modelData.getModel() != null)
+        if (modelData != null && modelData.isValid())
         {
             //Starts rendering by storing previous matrix
             GL11.glPushMatrix();

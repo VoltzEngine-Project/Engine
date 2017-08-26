@@ -120,42 +120,42 @@ public class HeatedBlockRegistry
 
     public static void addNewHeatingConversion(Block block, Block result, int kelvin)
     {
-        addNewHeatingConversion(block, new PlacementData(result, -1), kelvin);
+        addNewHeatingConversion(block, new PlacementData(result.getDefaultState()), kelvin);
     }
 
     public static void addNewHeatingConversion(Block block, PlacementData result, int kelvin)
     {
-        addNewHeatingConversion(new PlacementData(block, -1), result, kelvin);
+        addNewHeatingConversion(new PlacementData(block.getDefaultState()), result, kelvin);
     }
 
     public static void addNewHeatingConversion(PlacementData block, PlacementData result, int kelvin)
     {
-        if (warm_up_conversion.containsKey(block.block()))
+        if (warm_up_conversion.containsKey(block.blockState))
         {
-            Engine.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.block()) + " is being replaced by " + result);
+            Engine.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.blockState.getBlock()) + " is being replaced by " + result);
 
         }
-        warm_up_conversion.put(block.block(), new BlockConversionData(block, result, kelvin));
+        warm_up_conversion.put(block.blockState.getBlock(), new BlockConversionData(block, result, kelvin));
     }
 
     public static void addNewCoolingConversion(Block block, Block result, int kelvin)
     {
-        addNewCoolingConversion(block, new PlacementData(result, -1), kelvin);
+        addNewCoolingConversion(block, new PlacementData(result.getDefaultState()), kelvin);
     }
 
     public static void addNewCoolingConversion(Block block, PlacementData result, int kelvin)
     {
-        addNewCoolingConversion(new PlacementData(block, -1), result, kelvin);
+        addNewCoolingConversion(new PlacementData(block.getDefaultState()), result, kelvin);
     }
 
     public static void addNewCoolingConversion(PlacementData block, PlacementData result, int kelvin)
     {
-        if (cool_down_conversion.containsKey(block.block()))
+        if (cool_down_conversion.containsKey(block.blockState.getBlock()))
         {
-            Engine.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.block()) + " is being replaced by " + result);
+            Engine.logger().error("HeatedBlockRegistry: Block[" + block + "] conversion to " + warm_up_conversion.get(block.blockState.getBlock()) + " is being replaced by " + result);
 
         }
-        cool_down_conversion.put(block.block(), new BlockConversionData(block, result, kelvin));
+        cool_down_conversion.put(block.blockState.getBlock(), new BlockConversionData(block, result, kelvin));
     }
 
     public static float getSpecificHeat(IBlockState block)

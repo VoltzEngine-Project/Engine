@@ -1,11 +1,10 @@
 package com.builtbroken.mc.seven.framework.block.tile;
 
-import com.builtbroken.mc.core.registry.ModManager;
+import com.builtbroken.mc.framework.json.IJsonGenMod;
+import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.seven.framework.block.meta.BlockMeta;
 import com.builtbroken.mc.seven.framework.block.meta.MetaData;
-import com.builtbroken.mc.framework.json.IJsonGenMod;
-import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -33,7 +32,7 @@ public class TileProviderMeta extends JsonGenData implements ITileProvider
     }
 
     @Override
-    public void register(BlockBase block, IJsonGenMod mod, ModManager manager)
+    public void register(BlockBase block, IJsonGenMod mod)
     {
         if (block instanceof BlockMeta)
         {
@@ -41,13 +40,13 @@ public class TileProviderMeta extends JsonGenData implements ITileProvider
             {
                 if (data != null && data.tileEntityProvider != null)
                 {
-                    data.tileEntityProvider.register(block, mod, manager);
+                    data.tileEntityProvider.register(block, mod);
                 }
             }
         }
         if (backupProvider != null)
         {
-            backupProvider.register(block, mod, manager);
+            backupProvider.register(block, mod);
         }
     }
 

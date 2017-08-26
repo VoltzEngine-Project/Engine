@@ -1,15 +1,13 @@
 package com.builtbroken.mc.framework.mod;
 
-import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
-import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.mod.loadable.LoadableHandler;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,8 +31,6 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
 {
     /** Loader handler for proxies and loadable objects */
     protected LoadableHandler loader;
-    /** Manager for creating and handling content */
-    protected ModManager manager;
     /** Info or error logger */
     protected Logger logger;
     /** Custom path to config file */
@@ -55,7 +51,6 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
     {
         this.domain = domain;
         loader = new LoadableHandler();
-        manager = new ModManager().setPrefix(domain);
         logger = LogManager.getLogger(domain);
     }
 
@@ -105,9 +100,6 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
 
         //Call nub friendly loader methods
         loadHandlers(loader);
-        loadBlocks(manager);
-        loadItems(manager);
-        JsonContentLoader.INSTANCE.claimContent(this);
 
         //Fire post load methods
         if (fireProxyPreInit)
@@ -118,21 +110,15 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
 
     public void init(FMLInitializationEvent event)
     {
-        //Load entities a little late
-        loadEntities(manager);
 
         //Fire post load methods
         loader.init();
-        getManager().fireInit();
     }
 
     public void postInit(FMLPostInitializationEvent event)
     {
         //Fire post load methods
         loader.postInit();
-        getManager().firePostInit();
-
-        loadRecipes(manager);
 
         //Close save file
         getConfig().save();
@@ -151,51 +137,9 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
 
     }
 
-    /**
-     * Load all blocks threw content registry
-     */
-    protected void loadBlocks(ModManager manager)
-    {
-
-    }
-
-    /**
-     * Load all items threw content registry
-     */
-    public void loadItems(ModManager manager)
-    {
-
-    }
-
-    /**
-     * Load entities
-     */
-    public void loadEntities(ModManager manager)
-    {
-
-    }
-
-    /**
-     * Old way to load recipes. Use {@link com.builtbroken.mc.core.registry.implement.IPostInit}
-     * on the item or block class, as well {@link com.builtbroken.mc.framework.mod.loadable.ILoadable}
-     * to handle recipes instead. As this provides a much more organized and cleaner solution
-     * to managing content.
-     *
-     * @param manager
-     */
-    public void loadRecipes(ModManager manager)
-    {
-
-    }
-
     public Configuration getConfig()
     {
         return config;
-    }
-
-    public ModManager getManager()
-    {
-        return this.manager;
     }
 
     public Logger logger()

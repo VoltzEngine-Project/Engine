@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.helper;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import com.builtbroken.mc.data.Direction;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Random;
 
@@ -76,33 +77,33 @@ public class MathUtility
 	/**
 	 * gets the facing direction using the yaw angle
 	 */
-	public static ForgeDirection getFacingDirectionFromAngle(float yaw)
+	public static Direction getFacingDirectionFromAngle(float yaw)
 	{
-		float angle = net.minecraft.util.MathHelper.wrapAngleTo180_float(yaw);
+		float angle = MathHelper.wrapDegrees(yaw);
 		if (angle >= -45 && angle <= 45)
 		{
-			return ForgeDirection.SOUTH;
+			return Direction.SOUTH;
 		}
 		else if (angle >= 45 && angle <= 135)
 		{
 
-			return ForgeDirection.WEST;
+			return Direction.WEST;
 		}
 		else if (angle >= 135 && angle <= -135)
 		{
 
-			return ForgeDirection.NORTH;
+			return Direction.NORTH;
 		}
 		else
 		{
-			return ForgeDirection.EAST;
+			return Direction.EAST;
 		}
 	}
 
 	/**
 	 * gets the facing direction using the yaw angle
 	 */
-	public static ForgeDirection getFacingDirectionFromAngle(double yaw)
+	public static Direction getFacingDirectionFromAngle(double yaw)
 	{
 		return getFacingDirectionFromAngle((float) yaw);
 	}

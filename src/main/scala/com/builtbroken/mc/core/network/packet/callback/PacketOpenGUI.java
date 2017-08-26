@@ -39,7 +39,7 @@ public class PacketOpenGUI extends PacketTile
     @Override
     public void handle(EntityPlayer player, TileEntity tile)
     {
-        if (!player.worldObj.isRemote)
+        if (!player.world.isRemote)
         {
             IGuiTile guiTile = null;
             if (tile instanceof IGuiTile)
@@ -56,12 +56,12 @@ public class PacketOpenGUI extends PacketTile
                 int guiID = buf.readInt();
                 if (!guiTile.openGui(player, guiID))
                 {
-                    Engine.logger().error("Failed to open gui with ID(" + guiID + ") at location " + new Location(player.worldObj, x, y, z) + ", tile = " + tile);
+                    Engine.logger().error("Failed to open gui with ID(" + guiID + ") at location " + new Location(player.world, x, y, z) + ", tile = " + tile);
                 }
             }
             else if (Engine.runningAsDev)
             {
-                Engine.logger().error("Tile at location " + new Location(player.worldObj, x, y, z) + " is not an instance of ITileGUI, tile = " + tile);
+                Engine.logger().error("Tile at location " + new Location(player.world, x, y, z) + " is not an instance of ITileGUI, tile = " + tile);
             }
         }
         else if (Engine.runningAsDev)

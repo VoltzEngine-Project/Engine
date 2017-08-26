@@ -6,6 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Uses to store an item parsed from JSON data
@@ -59,13 +60,13 @@ public class JsonItemEntry
                 else if (item.startsWith("item@"))
                 {
                     String id = item.substring(5, item.length());
-                    object = Item.itemRegistry.getObject(id);
+                    object = Item.REGISTRY.getObject(new ResourceLocation(id));
                 }
                 else if (item.startsWith("block@"))
                 {
                     String id = item.substring(6, item.length());
-                    object = Block.blockRegistry.getObject(id);
-                    if (object == Blocks.air)
+                    object = Block.REGISTRY.getObject(new ResourceLocation(id));
+                    if (object == Blocks.AIR)
                     {
                         return null;
                     }
@@ -73,10 +74,10 @@ public class JsonItemEntry
             }
             else
             {
-                object = Item.itemRegistry.getObject(item);
+                object = Item.REGISTRY.getObject(new ResourceLocation(item));
                 if (object == null)
                 {
-                    object = Block.blockRegistry.getObject(item);
+                    object = Block.REGISTRY.getObject(new ResourceLocation(item));
                 }
             }
 

@@ -6,6 +6,7 @@ import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -39,7 +40,7 @@ public class PacketSpawnParticleCircle extends PacketType
 
     public PacketSpawnParticleCircle(String name, IWorldPosition pos, double distance)
     {
-        this(name, pos.oldWorld().provider.dimensionId, pos.x(), pos.y(), pos.z(), distance, 0, 0, 0);
+        this(name, pos.oldWorld().provider.getDimension(), pos.x(), pos.y(), pos.z(), distance, 0, 0, 0);
     }
 
     public PacketSpawnParticleCircle(String name, int dim, IPos3D pos, double distance)
@@ -109,7 +110,7 @@ public class PacketSpawnParticleCircle extends PacketType
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-        if (player.worldObj.provider.dimensionId == dim && name != null && !name.isEmpty()) //TODO add error logging as neither condition should happen
+        if (player.world.provider.getDimension() == dim && name != null && !name.isEmpty()) //TODO add error logging as neither condition should happen
         {
             if (Engine.runningAsDev && distance <= 1)
             {
@@ -130,7 +131,7 @@ public class PacketSpawnParticleCircle extends PacketType
             {
                 EulerAngle angle = new EulerAngle(angleSeg * i, 0);
                 Pos pos = angle.toPos().multiply(distance).add(x, y, z);
-                player.worldObj.spawnParticle(name, pos.x(), pos.y(), pos.z(), vx, vy, vz);
+                player.world.spawnParticle(EnumParticleTypes.getByName(name), pos.x(), pos.y(), pos.z(), vx, vy, vz);
             }
         }
     }

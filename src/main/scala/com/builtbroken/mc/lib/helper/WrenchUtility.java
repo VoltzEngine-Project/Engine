@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.content.tool.ItemScrewdriver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +25,9 @@ public class WrenchUtility
     /**
      * Is the item the player is hold a wrench
      */
-    public static boolean isHoldingWrench(EntityPlayer player)
+    public static boolean isHoldingWrench(EntityPlayer player, EnumHand hand)
     {
-        return isWrench(player.getHeldItem());
+        return isWrench(player.getHeldItem(hand));
     }
 
     /**
@@ -69,9 +70,9 @@ public class WrenchUtility
      * @param z      - zCoord of the target block
      * @return true if the item the player is using is a wrench
      */
-    public static boolean isUsableWrench(EntityPlayer player, int x, int y, int z)
+    public static boolean isUsableWrench(EntityPlayer player, EnumHand hand, int x, int y, int z)
     {
-        return isUsableWrench(player, player.getHeldItem(), x, y, z);
+        return isUsableWrench(player, player.getHeldItem(hand), x, y, z);
     }
 
     /**
@@ -122,9 +123,9 @@ public class WrenchUtility
      * @param z      - zCoord of the target block
      * @return true if the wrench was damaged, or action went threw without issues
      */
-    public static boolean damageWrench(EntityPlayer player, int x, int y, int z)
+    public static boolean damageWrench(EntityPlayer player, EnumHand hand, int x, int y, int z)
     {
-        return damageWrench(player, player.getHeldItem(), x, y, z);
+        return damageWrench(player, player.getHeldItem(hand), x, y, z);
     }
 
     /**

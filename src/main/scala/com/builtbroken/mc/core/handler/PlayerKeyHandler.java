@@ -44,16 +44,16 @@ public class PlayerKeyHandler
     @SubscribeEvent
     public void mouseHandler(MouseEvent e)
     {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        ItemStack stack = player.getCurrentEquippedItem();
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        ItemStack stack = player.getHeldItemMainhand();
         if (stack != null)
         {
             final Item item = stack.getItem();
             if (item instanceof IModeItem.IModeScrollItem)
             {
-                if (player.isSneaking() && e.dwheel != 0)
+                if (player.isSneaking() && e.getDwheel() != 0)
                 {
-                    int newMode = ((IModeItem.IModeScrollItem) stack.getItem()).cycleMode(stack, player, e.dwheel / 120);
+                    int newMode = ((IModeItem.IModeScrollItem) stack.getItem()).cycleMode(stack, player, e.getDwheel() / 120);
                     if (newMode != ((IModeItem.IModeScrollItem) stack.getItem()).getMode(stack))
                     {
                         Engine.packetHandler.sendToServer(new PacketPlayerItemMode(player.inventory.currentItem, newMode));
@@ -61,11 +61,11 @@ public class PlayerKeyHandler
                     e.setCanceled(true);
                 }
             }
-            else if (item instanceof IMouseButtonHandler && e.button != -1)
+            else if (item instanceof IMouseButtonHandler && e.getButton() != -1)
             {
-                Engine.packetHandler.sendToServer(new PacketMouseClick(player.inventory.currentItem, e.button, e.buttonstate));
-                ((IMouseButtonHandler) item).mouseClick(stack, player, e.button, e.buttonstate);
-                if (((IMouseButtonHandler) item).shouldCancelMouseEvent(stack, player, e.button, e.buttonstate))
+                Engine.packetHandler.sendToServer(new PacketMouseClick(player.inventory.currentItem, e.getButton(), e.isButtonstate()));
+                ((IMouseButtonHandler) item).mouseClick(stack, player, e.getButton(), e.isButtonstate());
+                if (((IMouseButtonHandler) item).shouldCancelMouseEvent(stack, player, e.getButton(), e.isButtonstate()))
                 {
                     e.setCanceled(true);
                 }

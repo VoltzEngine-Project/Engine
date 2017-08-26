@@ -40,7 +40,7 @@ public abstract class ChunkMapManager<M extends ChunkMap>
 
     public M getMap(World world, boolean create)
     {
-        return getMapForDim(world.provider.dimensionId, create);
+        return getMapForDim(world.provider.getDimension(), create);
     }
 
     public M getMapForDim(int dim, boolean create)
@@ -83,7 +83,7 @@ public abstract class ChunkMapManager<M extends ChunkMap>
     {
         if (event.world.provider != null && event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
-            int dim = event.world.provider.dimensionId;
+            int dim = event.world.provider.getDimension();
             if (worldMaps.containsKey(dim))
             {
                 M map = getMapForDim(dim, false);
@@ -102,9 +102,9 @@ public abstract class ChunkMapManager<M extends ChunkMap>
     @SubscribeEvent
     public void worldUnload(WorldEvent.Unload event)
     {
-        if (event.world.provider != null)
+        if (event.getWorld().provider != null)
         {
-            int dim = event.world.provider.dimensionId;
+            int dim = event.getWorld().provider.getDimension();
             if (worldMaps.containsKey(dim))
             {
                 M map = getMapForDim(dim, false);

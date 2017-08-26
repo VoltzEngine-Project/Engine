@@ -426,11 +426,11 @@ public final class ExplosiveRegistry
 
                     HashMap<Integer, Double> map = itemToExplosiveSizeScaled.get(wrapper);
                     //Init cached scale size if null
-                    if (!map.containsKey(wrapper.itemStack.stackSize))
+                    if (!map.containsKey(wrapper.itemStack.getCount()))
                     {
-                        map.put(wrapper.itemStack.stackSize, getExplosiveSize(pair.left(), wrapper.itemStack.stackSize));
+                        map.put(wrapper.itemStack.getCount(), getExplosiveSize(pair.left(), wrapper.itemStack.getCount()));
                     }
-                    return map.get(wrapper.itemStack.stackSize);
+                    return map.get(wrapper.itemStack.getCount());
                 }
             }
             return 0;

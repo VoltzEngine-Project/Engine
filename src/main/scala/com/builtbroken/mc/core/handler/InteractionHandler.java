@@ -44,11 +44,11 @@ public class InteractionHandler
                 }
                 else if (tile instanceof ISneakWrenchable)
                 {
-                    do_drop = player.isSneaking() && WrenchUtility.isHoldingWrench(player);
+                    do_drop = player.isSneaking() && WrenchUtility.isHoldingWrench(player, event.getHand());
                 }
                 else if (tile instanceof IWrenchable)
                 {
-                    do_drop = WrenchUtility.isHoldingWrench(player);
+                    do_drop = WrenchUtility.isHoldingWrench(player, event.getHand());
                 }
                 else if (tile instanceof ISneakPickup)
                 {

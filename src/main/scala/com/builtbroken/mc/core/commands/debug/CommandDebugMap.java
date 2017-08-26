@@ -6,7 +6,7 @@ import com.builtbroken.mc.lib.world.map.radar.RadarMap;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarObject;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.TextComponentString;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.List;
 
@@ -38,62 +38,62 @@ public class CommandDebugMap extends SubCommand
                 {
                     if (args.length > 2)
                     {
-                        RadarMap map = TileMapRegistry.getRadarMapForWorld(player.worldObj);
+                        RadarMap map = TileMapRegistry.getRadarMapForWorld(player.world);
                         if (args[2].equalsIgnoreCase("true") || args[2].equalsIgnoreCase("t"))
                         {
                             map.setDebugEnabled(true);
-                            player.addChatComponentMessage(new TextComponentString("Debug enabled for tile map in your world."));
+                            player.sendMessage(new TextComponentString("Debug enabled for tile map in your world."));
                         }
                         else if (args[2].equalsIgnoreCase("false") || args[2].equalsIgnoreCase("f"))
                         {
                             map.setDebugEnabled(false);
-                            player.addChatComponentMessage(new TextComponentString("Debug disabled for tile map in your world."));
+                            player.sendMessage(new TextComponentString("Debug disabled for tile map in your world."));
                         }
                         else
                         {
-                            player.addChatComponentMessage(new TextComponentString("Could not parse [" + args[2] + "], enable status can only be true or false"));
+                            player.sendMessage(new TextComponentString("Could not parse [" + args[2] + "], enable status can only be true or false"));
                         }
                         return true;
                     }
                     else
                     {
-                        RadarMap map = TileMapRegistry.getRadarMapForWorld(player.worldObj);
+                        RadarMap map = TileMapRegistry.getRadarMapForWorld(player.world);
                         if (!map.debugRadarMap)
                         {
                             map.setDebugEnabled(true);
-                            player.addChatComponentMessage(new TextComponentString("Debug enabled for tile map in your world."));
+                            player.sendMessage(new TextComponentString("Debug enabled for tile map in your world."));
                         }
                         else
                         {
                             map.setDebugEnabled(false);
-                            player.addChatComponentMessage(new TextComponentString("Debug disabled for tile map in your world."));
+                            player.sendMessage(new TextComponentString("Debug disabled for tile map in your world."));
                         }
                         return true;
                     }
                 }
                 else if (args[1].equalsIgnoreCase("objects"))
                 {
-                    RadarMap map = TileMapRegistry.getRadarMapForWorld(player.worldObj);
+                    RadarMap map = TileMapRegistry.getRadarMapForWorld(player.world);
                     if (map.allEntities.size() > 0)
                     {
-                        player.addChatComponentMessage(new TextComponentString("There are " + map.allEntities.size() + " tiles in the map."));
+                        player.sendMessage(new TextComponentString("There are " + map.allEntities.size() + " tiles in the map."));
                     }
                     else
                     {
-                        player.addChatComponentMessage(new TextComponentString("No tiles detected in global tile list."));
+                        player.sendMessage(new TextComponentString("No tiles detected in global tile list."));
                     }
                     return true;
                 }
                 else if (args[1].equalsIgnoreCase("chunks"))
                 {
-                    RadarMap map = TileMapRegistry.getRadarMapForWorld(player.worldObj);
+                    RadarMap map = TileMapRegistry.getRadarMapForWorld(player.world);
                     if (map.chunk_to_entities.size() > 0)
                     {
-                        player.addChatComponentMessage(new TextComponentString("There are " + map.chunk_to_entities.size() + " chunk locations in the map."));
+                        player.sendMessage(new TextComponentString("There are " + map.chunk_to_entities.size() + " chunk locations in the map."));
                     }
                     else
                     {
-                        player.addChatComponentMessage(new TextComponentString("No chunks detected in map."));
+                        player.sendMessage(new TextComponentString("No chunks detected in map."));
                     }
                     return true;
                 }
@@ -108,19 +108,19 @@ public class CommandDebugMap extends SubCommand
                         }
                         catch (NumberFormatException e)
                         {
-                            player.addChatComponentMessage(new TextComponentString("Invalid range number"));
+                            player.sendMessage(new TextComponentString("Invalid range number"));
                             return true;
                         }
                     }
-                    RadarMap map = TileMapRegistry.getRadarMapForWorld(player.worldObj);
+                    RadarMap map = TileMapRegistry.getRadarMapForWorld(player.world);
                     List<RadarObject> list = map.getRadarObjects(player.posX, player.posZ, range);
                     if (list.size() > 0)
                     {
-                        player.addChatComponentMessage(new TextComponentString("There are " + list.size() + " tiles within " + range + " meters"));
+                        player.sendMessage(new TextComponentString("There are " + list.size() + " tiles within " + range + " meters"));
                     }
                     else
                     {
-                        player.addChatComponentMessage(new TextComponentString("No tiles detected in within " + range + " meters"));
+                        player.sendMessage(new TextComponentString("No tiles detected in within " + range + " meters"));
                     }
                     return true;
                 }

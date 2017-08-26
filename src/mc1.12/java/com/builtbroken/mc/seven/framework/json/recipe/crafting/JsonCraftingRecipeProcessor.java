@@ -5,7 +5,6 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.seven.framework.block.json.IJsonBlockSubProcessor;
 import com.builtbroken.mc.seven.framework.json.recipe.JsonRecipeProcessor;
 import com.builtbroken.mc.seven.framework.json.recipe.crafting.shaped.JsonShapedRecipeData;
-import com.builtbroken.mc.seven.framework.json.recipe.crafting.shaped.JsonSheetMetalRecipeData;
 import com.builtbroken.mc.seven.framework.json.recipe.crafting.shaped.JsonToolRecipeData;
 import com.builtbroken.mc.seven.framework.json.recipe.crafting.shapeless.JsonShapelessRecipeData;
 import com.google.gson.JsonArray;
@@ -191,7 +190,7 @@ public class JsonCraftingRecipeProcessor extends JsonRecipeProcessor<JsonCraftin
                 }
                 else if (subType.equalsIgnoreCase("sheetmetal"))
                 {
-                    return new JsonSheetMetalRecipeData(this, output, data, largeGrid);
+                    //return new JsonSheetMetalRecipeData(this, output, data, largeGrid);
                 }
                 else
                 {

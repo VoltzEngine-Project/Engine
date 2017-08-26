@@ -1,6 +1,5 @@
 package com.builtbroken.mc.framework.mod;
 
-import com.builtbroken.mc.core.registry.ModManager;
 import net.minecraftforge.common.config.Configuration;
 
 /**
@@ -15,17 +14,6 @@ public interface IMod
     /** Resource folder name, used to pull localization and textures */
     String getDomain();
 
-    /**
-     * Gets the manager that is used to
-     * register content for the mod.
-     *
-     * @return
-     */
-    @Deprecated
-    default ModManager getManager()
-    {
-        return null;
-    }
 
     /**
      * Gets the config file

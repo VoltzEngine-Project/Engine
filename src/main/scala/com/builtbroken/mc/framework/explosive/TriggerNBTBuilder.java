@@ -2,12 +2,12 @@ package com.builtbroken.mc.framework.explosive;
 
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.event.TriggerCauseRegistry;
+import com.builtbroken.mc.data.Direction;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -28,16 +28,16 @@ public class TriggerNBTBuilder implements TriggerCauseRegistry.TriggerNBTBuilder
         switch (id)
         {
             case "fire":
-                return new TriggerCause.TriggerCauseFire(ForgeDirection.getOrientation(tag.getByte("side")));
+                return new TriggerCause.TriggerCauseFire(Direction.getOrientation(tag.getByte("side")));
             case "redstone":
-                return new TriggerCause.TriggerCauseRedstone(ForgeDirection.getOrientation(tag.getByte("side")), tag.getInteger("str"));
+                return new TriggerCause.TriggerCauseRedstone(Direction.getOrientation(tag.getByte("side")), tag.getInteger("str"));
             case "explosion":
                 Entity source = toEntity(tag.getCompoundTag("source"), world);
                 double xx = tag.getDouble("xx");
                 double yy = tag.getDouble("yy");
                 double zz = tag.getDouble("zz");
                 float size = tag.getFloat("float");
-                return new TriggerCause.TriggerCauseExplosion(new Explosion(world, source, xx, yy, zz, size));
+                return new TriggerCause.TriggerCauseExplosion(new Explosion(world, source, xx, yy, zz, size, false, true));
             case "entityImpactEntity":
                 Entity source2 = toEntity(tag.getCompoundTag("source"), world);
                 Entity entityHit = toEntity(tag.getCompoundTag("hit"), world);
@@ -73,11 +73,11 @@ public class TriggerNBTBuilder implements TriggerCauseRegistry.TriggerNBTBuilder
         }
         else if (cause instanceof TriggerCause.TriggerCauseExplosion)
         {
-            tag.setTag("source", toNBT(((TriggerCause.TriggerCauseExplosion) cause).source.exploder));
-            tag.setDouble("xx", ((TriggerCause.TriggerCauseExplosion) cause).source.explosionX);
-            tag.setDouble("yy", ((TriggerCause.TriggerCauseExplosion) cause).source.explosionX);
-            tag.setDouble("zz", ((TriggerCause.TriggerCauseExplosion) cause).source.explosionX);
-            tag.setFloat("size", ((TriggerCause.TriggerCauseExplosion) cause).source.explosionSize);
+            tag.setTag("source", toNBT(((TriggerCause.TriggerCauseExplosion) cause).source.getExplosivePlacedBy()));
+            tag.setDouble("xx", ((TriggerCause.TriggerCauseExplosion) cause).source.getPosition().x);
+            tag.setDouble("yy", ((TriggerCause.TriggerCauseExplosion) cause).source.getPosition().y);
+            tag.setDouble("zz", ((TriggerCause.TriggerCauseExplosion) cause).source.getPosition().z);
+            tag.setFloat("size", -1); //TODO get size
         }
         else if (cause instanceof TriggerCause.TriggerEntityImpact)
         {

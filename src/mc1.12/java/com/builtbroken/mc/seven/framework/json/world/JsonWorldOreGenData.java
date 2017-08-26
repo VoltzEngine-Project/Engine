@@ -46,7 +46,7 @@ public class JsonWorldOreGenData extends JsonGenData implements IPostInit
         {
             if (Engine.loaderInstance.getConfig().getBoolean("" + LanguageUtility.capitalizeFirst(oreName) + "_Ore", "WorldGen", true, "Enables generation of the ore in the world"))
             {
-                GameRegistry.registerWorldGenerator(new OreGenReplace(oreName, ((ItemBlock) stack.getItem()).field_150939_a, stack.getItemDamage(), new OreGeneratorSettings(min_y, max_y, chunkLimit, branchSize), "pickaxe", 1), 1);
+                GameRegistry.registerWorldGenerator(new OreGenReplace(oreName, ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getItemDamage()), new OreGeneratorSettings(min_y, max_y, chunkLimit, branchSize), "pickaxe", 1), 1);
             }
         }
     }

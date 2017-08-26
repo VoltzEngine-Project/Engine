@@ -43,9 +43,9 @@ public class PermissionsRegistry
     {
         if (command != null && node != null && !node.isEmpty())
         {
-            if (command.getCommandName() != null && command.getCommandName().length() > longestCommandLength)
+            if (command.getName() != null && command.getName().length() > longestCommandLength)
             {
-                longestCommandLength = command.getCommandName().length();
+                longestCommandLength = command.getName().length();
             }
 
             if (!commandToNodeMap.containsKey(command))
@@ -109,7 +109,7 @@ public class PermissionsRegistry
             int i = 0;
             for (Map.Entry<ICommand, String> entry : commandToNodeMap.entrySet())
             {
-                bw.write("  " + StringHelpers.padRight(entry.getKey().getCommandName(), longestCommandLength) + "   " + entry.getValue());
+                bw.write("  " + StringHelpers.padRight(entry.getKey().getName(), longestCommandLength) + "   " + entry.getValue());
                 bw.newLine();
                 i++;
                 if (i >= 5)

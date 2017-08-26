@@ -83,7 +83,7 @@ public class ItemStackWrapper
             if (meta_compare)
                 meta = itemStack.getItemDamage() == i.getItemDamage();
             if (stack_size)
-                size = itemStack.stackSize == i.stackSize;
+                size = itemStack.getCount() == i.getCount();
             if (nbt_compare)
             {
                 nbt = InventoryUtility.doesStackNBTMatch(itemStack, i);
@@ -116,7 +116,7 @@ public class ItemStackWrapper
             if (meta_compare)
                 hashCode = 31 * hashCode + itemStack.getItemDamage();
             if (stack_size)
-                hashCode = 31 * hashCode + itemStack.stackSize;
+                hashCode = 31 * hashCode + itemStack.getCount();
             if (nbt_compare)
                 hashCode = 31 * hashCode + (itemStack.getTagCompound() != null ? itemStack.getTagCompound().hashCode() : 0);
             return hashCode;

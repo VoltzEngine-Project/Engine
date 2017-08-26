@@ -11,11 +11,11 @@ import net.minecraft.util.ResourceLocation;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/4/2017.
  */
-public class BlockState extends RenderState implements IRenderState
+public class BlockRenderState extends RenderState implements IRenderState
 {
     public final String[] textureID = new String[6];
 
-    public BlockState(String id)
+    public BlockRenderState(String id)
     {
         super(id);
     }

@@ -90,7 +90,7 @@ public class PacketSelectionData implements IPacket
     @Override
     public void handleClientSide()
     {
-        handle(Minecraft.getMinecraft().thePlayer);
+        handle(Minecraft.getMinecraft().player);
     }
 
     @Override

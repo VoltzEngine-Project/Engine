@@ -1,9 +1,10 @@
 package com.builtbroken.mc.client.helpers;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -48,7 +49,7 @@ public class Render2DHelper
 
         //Render middle
         int sizeRender = 0;
-        int sectionSize =(int)Math.floor((height - capBotHeight - capTopHeight) / 2f);
+        int sectionSize = (int) Math.floor((height - capBotHeight - capTopHeight) / 2f);
         int sections = (int) Math.ceil(midHeight / (float) sectionSize);
         for (int s = 0; s < sections; s++)
         {
@@ -94,80 +95,78 @@ public class Render2DHelper
     /**
      * Draws a solid color rectangle with the specified coordinates and color. Args: x1, y1, x2, y2, color
      */
-    public static void drawRect(int p_73734_0_, int p_73734_1_, int p_73734_2_, int p_73734_3_, int p_73734_4_)
+    public static void drawRect(int left, int top, int right, int bottom, int color)
     {
-        int j1;
-
-        if (p_73734_0_ < p_73734_2_)
+        if (left < right)
         {
-            j1 = p_73734_0_;
-            p_73734_0_ = p_73734_2_;
-            p_73734_2_ = j1;
+            int i = left;
+            left = right;
+            right = i;
         }
 
-        if (p_73734_1_ < p_73734_3_)
+        if (top < bottom)
         {
-            j1 = p_73734_1_;
-            p_73734_1_ = p_73734_3_;
-            p_73734_3_ = j1;
+            int j = top;
+            top = bottom;
+            bottom = j;
         }
 
-        float f3 = (float) (p_73734_4_ >> 24 & 255) / 255.0F;
-        float f = (float) (p_73734_4_ >> 16 & 255) / 255.0F;
-        float f1 = (float) (p_73734_4_ >> 8 & 255) / 255.0F;
-        float f2 = (float) (p_73734_4_ & 255) / 255.0F;
-        Tessellator tessellator = Tessellator.instance;
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glColor4f(f, f1, f2, f3);
-        tessellator.startDrawingQuads();
-        tessellator.addVertex((double) p_73734_0_, (double) p_73734_3_, 0.0D);
-        tessellator.addVertex((double) p_73734_2_, (double) p_73734_3_, 0.0D);
-        tessellator.addVertex((double) p_73734_2_, (double) p_73734_1_, 0.0D);
-        tessellator.addVertex((double) p_73734_0_, (double) p_73734_1_, 0.0D);
+        float f3 = (float) (color >> 24 & 255) / 255.0F;
+        float f = (float) (color >> 16 & 255) / 255.0F;
+        float f1 = (float) (color >> 8 & 255) / 255.0F;
+        float f2 = (float) (color & 255) / 255.0F;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(f, f1, f2, f3);
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos((double) left, (double) bottom, 0.0D).endVertex();
+        bufferbuilder.pos((double) right, (double) bottom, 0.0D).endVertex();
+        bufferbuilder.pos((double) right, (double) top, 0.0D).endVertex();
+        bufferbuilder.pos((double) left, (double) top, 0.0D).endVertex();
         tessellator.draw();
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 
     /**
      * Draws a rectangle with a vertical gradient between the specified colors.
      */
-    public static void drawGradientRect(int p_73733_1_, int p_73733_2_, int p_73733_3_, int p_73733_4_, int p_73733_5_, int p_73733_6_)
+    protected static void drawGradientRect(int left, int top, int right, int bottom, int startColor, int endColor)
     {
-        float f = (float) (p_73733_5_ >> 24 & 255) / 255.0F;
-        float f1 = (float) (p_73733_5_ >> 16 & 255) / 255.0F;
-        float f2 = (float) (p_73733_5_ >> 8 & 255) / 255.0F;
-        float f3 = (float) (p_73733_5_ & 255) / 255.0F;
-        float f4 = (float) (p_73733_6_ >> 24 & 255) / 255.0F;
-        float f5 = (float) (p_73733_6_ >> 16 & 255) / 255.0F;
-        float f6 = (float) (p_73733_6_ >> 8 & 255) / 255.0F;
-        float f7 = (float) (p_73733_6_ & 255) / 255.0F;
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glShadeModel(GL11.GL_SMOOTH);
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.setColorRGBA_F(f1, f2, f3, f);
-        tessellator.addVertex((double) p_73733_3_, (double) p_73733_2_, (double) zLevel);
-        tessellator.addVertex((double) p_73733_1_, (double) p_73733_2_, (double) zLevel);
-        tessellator.setColorRGBA_F(f5, f6, f7, f4);
-        tessellator.addVertex((double) p_73733_1_, (double) p_73733_4_, (double) zLevel);
-        tessellator.addVertex((double) p_73733_3_, (double) p_73733_4_, (double) zLevel);
+        float f = (float) (startColor >> 24 & 255) / 255.0F;
+        float f1 = (float) (startColor >> 16 & 255) / 255.0F;
+        float f2 = (float) (startColor >> 8 & 255) / 255.0F;
+        float f3 = (float) (startColor & 255) / 255.0F;
+        float f4 = (float) (endColor >> 24 & 255) / 255.0F;
+        float f5 = (float) (endColor >> 16 & 255) / 255.0F;
+        float f6 = (float) (endColor >> 8 & 255) / 255.0F;
+        float f7 = (float) (endColor & 255) / 255.0F;
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(7425);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos((double) right, (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos((double) left, (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos((double) left, (double) bottom, (double) zLevel).color(f5, f6, f7, f4).endVertex();
+        bufferbuilder.pos((double) right, (double) bottom, (double) zLevel).color(f5, f6, f7, f4).endVertex();
         tessellator.draw();
-        GL11.glShadeModel(GL11.GL_FLAT);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GlStateManager.shadeModel(7424);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
     }
 
     /**
      * Renders the specified text to the screen, center-aligned.
      */
-    public void drawCenteredString(FontRenderer p_73732_1_, String p_73732_2_, int p_73732_3_, int p_73732_4_, int p_73732_5_)
+    public static void drawCenteredString(FontRenderer p_73732_1_, String p_73732_2_, int p_73732_3_, int p_73732_4_, int p_73732_5_)
     {
         p_73732_1_.drawStringWithShadow(p_73732_2_, p_73732_3_ - p_73732_1_.getStringWidth(p_73732_2_) / 2, p_73732_4_, p_73732_5_);
     }
@@ -175,7 +174,7 @@ public class Render2DHelper
     /**
      * Renders the specified text to the screen.
      */
-    public void drawString(FontRenderer p_73731_1_, String p_73731_2_, int p_73731_3_, int p_73731_4_, int p_73731_5_)
+    public static void drawString(FontRenderer p_73731_1_, String p_73731_2_, int p_73731_3_, int p_73731_4_, int p_73731_5_)
     {
         p_73731_1_.drawStringWithShadow(p_73731_2_, p_73731_3_, p_73731_4_, p_73731_5_);
     }
@@ -183,16 +182,17 @@ public class Render2DHelper
     /**
      * Draws a textured rectangle at the stored z-value. Args: x, y, u, v, width, height
      */
-    public static void drawTexturedModalRect(int p_73729_1_, int p_73729_2_, int p_73729_3_, int p_73729_4_, int p_73729_5_, int p_73729_6_)
+    public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height)
     {
         float f = 0.00390625F;
         float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double) (p_73729_1_ + 0), (double) (p_73729_2_ + p_73729_6_), (double) zLevel, (double) ((float) (p_73729_3_ + 0) * f), (double) ((float) (p_73729_4_ + p_73729_6_) * f1));
-        tessellator.addVertexWithUV((double) (p_73729_1_ + p_73729_5_), (double) (p_73729_2_ + p_73729_6_), (double) zLevel, (double) ((float) (p_73729_3_ + p_73729_5_) * f), (double) ((float) (p_73729_4_ + p_73729_6_) * f1));
-        tessellator.addVertexWithUV((double) (p_73729_1_ + p_73729_5_), (double) (p_73729_2_ + 0), (double) zLevel, (double) ((float) (p_73729_3_ + p_73729_5_) * f), (double) ((float) (p_73729_4_ + 0) * f1));
-        tessellator.addVertexWithUV((double) (p_73729_1_ + 0), (double) (p_73729_2_ + 0), (double) zLevel, (double) ((float) (p_73729_3_ + 0) * f), (double) ((float) (p_73729_4_ + 0) * f1));
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos((double) (x + 0), (double) (y + height), (double) zLevel).tex((double) ((float) (textureX + 0) * 0.00390625F), (double) ((float) (textureY + height) * 0.00390625F)).endVertex();
+        bufferbuilder.pos((double) (x + width), (double) (y + height), (double) zLevel).tex((double) ((float) (textureX + width) * 0.00390625F), (double) ((float) (textureY + height) * 0.00390625F)).endVertex();
+        bufferbuilder.pos((double) (x + width), (double) (y + 0), (double) zLevel).tex((double) ((float) (textureX + width) * 0.00390625F), (double) ((float) (textureY + 0) * 0.00390625F)).endVertex();
+        bufferbuilder.pos((double) (x + 0), (double) (y + 0), (double) zLevel).tex((double) ((float) (textureX + 0) * 0.00390625F), (double) ((float) (textureY + 0) * 0.00390625F)).endVertex();
         tessellator.draw();
     }
 }

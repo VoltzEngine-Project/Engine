@@ -7,7 +7,7 @@ import com.builtbroken.mc.prefab.entity.selector.EntitySelectors;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.TextComponentString;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
@@ -145,13 +145,13 @@ public class CommandVERemove extends SubCommand
         {
             int entitiesKilled = 0;
             int chunksSearched = 0;
-            ChunkProviderServer provider = world.theChunkProviderServer;
-            for (Object object : provider.loadedChunks)
+            ChunkProviderServer provider = world.getChunkProvider();
+            for (Object object : provider.getLoadedChunks())
             {
                 if (object instanceof Chunk)
                 {
                     chunksSearched++;
-                    for (Object l : ((Chunk) object).entityLists)
+                    for (Object l : ((Chunk) object).getEntityLists())
                     {
                         if (l instanceof Collection)
                         {

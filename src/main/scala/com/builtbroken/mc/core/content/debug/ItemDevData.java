@@ -33,6 +33,7 @@ public class ItemDevData extends ItemAbstract
 {
     public ItemDevData()
     {
+        this.setRegistryName(References.DOMAIN, "ve.devTool");
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
         this.setUnlocalizedName(References.PREFIX + "devDataTool");

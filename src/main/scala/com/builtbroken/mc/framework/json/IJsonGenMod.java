@@ -1,6 +1,5 @@
 package com.builtbroken.mc.framework.json;
 
-import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.framework.mod.IMod;
 import net.minecraftforge.common.config.Configuration;
@@ -30,17 +29,6 @@ public interface IJsonGenMod extends IMod
     default void loadJsonContentHandlers()
     {
 
-    }
-
-    /**
-     * Gets the manager that is used to
-     * register content for the mod.
-     *
-     * @return
-     */
-    default ModManager getJsonContentManager()
-    {
-        return getManager();
     }
 
     /**

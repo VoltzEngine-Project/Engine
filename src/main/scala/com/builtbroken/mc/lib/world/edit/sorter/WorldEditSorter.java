@@ -15,11 +15,11 @@ public class WorldEditSorter implements Comparator<IWorldEdit>
     @Override
     public int compare(IWorldEdit o1, IWorldEdit o2)
     {
-        if (o1.oldWorld().provider.dimensionId < o2.oldWorld().provider.dimensionId)
+        if (o1.oldWorld().provider.getDimension() < o2.oldWorld().provider.getDimension())
         {
             return -1;
         }
-        else if (o1.oldWorld().provider.dimensionId > o2.oldWorld().provider.dimensionId)
+        else if (o1.oldWorld().provider.getDimension() > o2.oldWorld().provider.getDimension())
         {
             return 1;
         }

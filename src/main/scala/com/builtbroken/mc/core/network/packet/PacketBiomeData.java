@@ -3,7 +3,7 @@ package com.builtbroken.mc.core.network.packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 
 /**
@@ -24,8 +24,8 @@ public class PacketBiomeData extends PacketType
 
     public PacketBiomeData(Chunk chunk)
     {
-        chunkX = chunk.xPosition;
-        chunkZ = chunk.zPosition;
+        chunkX = chunk.x;
+        chunkZ = chunk.z;
         biomes = chunk.getBiomeArray();
     }
 
@@ -49,7 +49,7 @@ public class PacketBiomeData extends PacketType
         for (int i = 0; i < 256; i++)
         {
             byte b = buffer.readByte();
-            if (b >= 0 && b < 256 && BiomeGenBase.getBiome(b) != null)
+            if (b >= 0 && b < 256 && Biome.getBiome(b) != null)
             {
                 biomes[i] = b;
             }

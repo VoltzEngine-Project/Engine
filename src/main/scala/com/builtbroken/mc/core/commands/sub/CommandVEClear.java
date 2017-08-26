@@ -1,9 +1,14 @@
 package com.builtbroken.mc.core.commands.sub;
 
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.TextComponentString;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 import java.util.List;
 
@@ -18,41 +23,53 @@ public class CommandVEClear extends SubCommand
     }
 
     @Override
-    public boolean handleEntityPlayerCommand(EntityPlayer entityPlayer, String[] args)
+    public boolean handleEntityPlayerCommand(EntityPlayer entityPlayer, String[] args) throws CommandException
     {
-        if(!handleHelp(entityPlayer, args))
+        if (!handleHelp(entityPlayer, args))
         {
-            EntityPlayer p;
+            EntityPlayer player;
             if (args.length > 1)
-                p = getPlayer(entityPlayer, args[1]);
+            {
+                player = getPlayer(FMLServerHandler.instance().getServer(), entityPlayer, args[1]);
+            }
             else
-                p = entityPlayer;
-            if (p != null)
+            {
+                player = entityPlayer;
+            }
+            if (player != null)
             {
                 if (args[0].equalsIgnoreCase("armor"))
                 {
-                    for (int slot = 0; slot < p.inventory.armorInventory.length; slot++)
+                    for (int slot = 0; slot < player.inventory.armorInventory.size(); slot++)
                     {
-                        p.inventory.armorInventory[slot] = null;
+                        player.inventory.armorInventory.set(slot, ItemStack.EMPTY);
                     }
-                    p.inventoryContainer.detectAndSendChanges();
-                    if (p != entityPlayer)
-                        p.addChatComponentMessage(new TextComponentString("Your armor has been removed by an admin"));
+                    player.inventoryContainer.detectAndSendChanges();
+                    if (player != entityPlayer)
+                    {
+                        player.sendMessage(new TextComponentString("Your armor has been removed by an admin"));
+                    }
                     else
-                        p.addChatComponentMessage(new TextComponentString("Your armor has been removed"));
+                    {
+                        player.sendMessage(new TextComponentString("Your armor has been removed"));
+                    }
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("inv"))
                 {
-                    for (int slot = 0; slot < p.inventory.mainInventory.length; slot++)
+                    for (int slot = 0; slot < player.inventory.mainInventory.size(); slot++)
                     {
-                        p.inventory.mainInventory[slot] = null;
+                        player.inventory.mainInventory.set(slot, ItemStack.EMPTY);
                     }
-                    p.inventoryContainer.detectAndSendChanges();
-                    if (p != entityPlayer)
-                        p.addChatComponentMessage(new TextComponentString("Your inventory has been cleared by an admin"));
+                    player.inventoryContainer.detectAndSendChanges();
+                    if (player != entityPlayer)
+                    {
+                        player.sendMessage(new TextComponentString("Your inventory has been cleared by an admin"));
+                    }
                     else
-                        p.addChatComponentMessage(new TextComponentString("Your inventory has been cleared"));
+                    {
+                        player.sendMessage(new TextComponentString("Your inventory has been cleared"));
+                    }
                     return true;
                 }
             }
@@ -75,7 +92,7 @@ public class CommandVEClear extends SubCommand
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args)
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
     {
         if (args != null && args.length > 0 && args[0] != null)
         {

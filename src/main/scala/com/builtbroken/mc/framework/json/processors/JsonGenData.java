@@ -8,15 +8,15 @@ import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.ArrayList;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/10/2017.
  */
-public abstract class JsonGenData implements IJsonGenObject
+public abstract class JsonGenData<T extends IForgeRegistryEntry<T>> implements IJsonGenObject<T>
 {
     /** Person or group that created the object */
     public String author;
@@ -196,7 +196,7 @@ public abstract class JsonGenData implements IJsonGenObject
         else if (object instanceof String)
         {
             String orename = (String) object;
-            ArrayList<ItemStack> stacks = OreDictionary.getOres(orename);
+            NonNullList<ItemStack> stacks = OreDictionary.getOres(orename);
             for (ItemStack stack : stacks)
             {
                 if (stack != null && stack.getItem() != null)

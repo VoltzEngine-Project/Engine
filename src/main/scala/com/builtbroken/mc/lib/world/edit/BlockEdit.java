@@ -278,7 +278,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
         //Breaks block in order to drop items contained
         if (doItemDrop)
         {
-            InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), false);
+            InventoryUtility.dropBlockAsItem(world, toBlockPos(), false);
         }
         //Place the block and check if the world says its placed
         if (super.setBlock(world, newBlock, placementNotification))
@@ -287,13 +287,13 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
             if (!newBlock.getBlock().canPlaceBlockAt(world, toBlockPos()))
             {
                 //Drops the block
-                InventoryUtility.dropBlockAsItem(world, xi(), yi(), zi(), true);
+                InventoryUtility.dropBlockAsItem(world, toBlockPos(), true);
             }
             //Check to make blocks above this block are removed if invalid
             IBlockState block = world.getBlockState(toBlockPos().up());
             if (!block.getBlock().canPlaceBlockAt(world, toBlockPos().up()))
             {
-                InventoryUtility.dropBlockAsItem(world, xi(), yi() + 1, zi(), true);
+                InventoryUtility.dropBlockAsItem(world, toBlockPos().up(), true);
             }
             return BlockEditResult.PLACED;
         }

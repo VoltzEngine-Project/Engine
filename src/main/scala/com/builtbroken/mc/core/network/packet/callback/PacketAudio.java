@@ -27,7 +27,7 @@ public class PacketAudio implements IPacket
 
     public PacketAudio(World world, String key, double x, double y, double z, float pitch, float volume)
     {
-        dim = world != null && world.provider != null ? world.provider.dimensionId : 0;
+        dim = world != null && world.provider != null ? world.provider.getDimension() : 0;
         audioKey = key;
         this.x = x;
         this.y = y;

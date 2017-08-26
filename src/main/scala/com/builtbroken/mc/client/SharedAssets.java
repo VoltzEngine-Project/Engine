@@ -1,10 +1,7 @@
 package com.builtbroken.mc.client;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.lib.render.model.loader.EngineModelLoader;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModelCustom;
-import net.minecraftforge.client.model.ModelFormatException;
 
 /**
  * Stores all assets shared between several mods produced by Built Broken Modding
@@ -34,31 +31,6 @@ public final class SharedAssets
     public static final ResourceLocation GUI_COMPONENTS_BARS = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "gui_components.bars.png");
     public static final ResourceLocation GUI_BUTTON_9PX = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "9px_buttons.png");
     public static final ResourceLocation GUI_SLOTS = new ResourceLocation(References.DOMAIN, References.GUI_DIRECTORY + "gui_slots.png");
-
-
-    private static boolean loaded = false;
-
-    /**
-     * Called to load the models and textures
-     * <p>
-     * Can only be called once
-     */
-    public static void loadResources()
-    {
-
-    }
-
-    /**
-     * Loads a model from system
-     *
-     * @param name - name of the model file, can include path as well
-     * @return model as an IModeCustom instance
-     * @throws ModelFormatException - if model is missing or formatted in corrrectly
-     */
-    public static IModelCustom model(String name)
-    {
-        return EngineModelLoader.loadModel(new ResourceLocation(References.DOMAIN, References.MODEL_PATH + name));
-    }
 
     /**
      * Creates a resource location for a texture

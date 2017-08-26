@@ -17,16 +17,16 @@ public class MaterialDict
 
     static
     {
-        add("air", Material.air);
-        add("grass", Material.grass);
-        add("ground", Material.ground);
-        add("wood", Material.wood);
-        add("rock", Material.rock);
-        add("stone", Material.rock);
-        add("iron", Material.iron);
-        add("metal", Material.iron);
-        add("anvil", Material.anvil);
-        add("water", Material.water);
+        add("air", Material.AIR);
+        add("grass", Material.GRASS);
+        add("ground", Material.GROUND);
+        add("wood", Material.WOOD);
+        add("rock", Material.ROCK);
+        add("stone", Material.ROCK);
+        add("iron", Material.IRON);
+        add("metal", Material.IRON);
+        add("anvil", Material.ANVIL);
+        add("water", Material.WATER);
         //TODO add rest
     }
 
@@ -37,6 +37,6 @@ public class MaterialDict
 
     public static Material get(String name)
     {
-        return map.containsKey(name.toLowerCase()) ? map.get(name.toLowerCase()) : Material.rock;
+        return map.containsKey(name.toLowerCase()) ? map.get(name.toLowerCase()) : Material.ROCK;
     }
 }

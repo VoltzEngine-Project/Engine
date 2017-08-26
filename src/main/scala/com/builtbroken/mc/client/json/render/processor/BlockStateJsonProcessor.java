@@ -1,7 +1,7 @@
 package com.builtbroken.mc.client.json.render.processor;
 
 import com.builtbroken.mc.client.json.imp.IRenderState;
-import com.builtbroken.mc.client.json.render.block.BlockState;
+import com.builtbroken.mc.client.json.render.block.BlockRenderState;
 import com.builtbroken.mc.data.Direction;
 import com.google.gson.JsonObject;
 
@@ -14,7 +14,7 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor
     @Override
     public IRenderState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
     {
-        BlockState renderState = new BlockState(stateID);
+        BlockRenderState renderState = new BlockRenderState(stateID);
 
         //Load global texture for state
         if (renderStateObject.has("textureID"))

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.network.ex;
 
 import com.builtbroken.mc.imp.transform.vector.Location;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -14,8 +14,7 @@ public class PacketTileReadException extends RuntimeException
 {
     protected Location location;
     private TileEntity tile;
-    private Block block;
-    private int meta;
+    private IBlockState block;
 
     public PacketTileReadException(Location location, String message)
     {
@@ -23,7 +22,6 @@ public class PacketTileReadException extends RuntimeException
         this.location = location;
         this.tile = location.getTileEntity();
         this.block = location.getBlockState();
-        this.meta = location.getBlockMetadata();
     }
 
     public PacketTileReadException(Location location, String message, Throwable cause)
@@ -32,7 +30,6 @@ public class PacketTileReadException extends RuntimeException
         this.location = location;
         this.tile = location.getTileEntity();
         this.block = location.getBlockState();
-        this.meta = location.getBlockMetadata();
     }
 
     @Override
@@ -47,7 +44,6 @@ public class PacketTileReadException extends RuntimeException
         s += "\nPos: " + location;
         s += "\nTile: " + tile;
         s += "\nBlock: " + block;
-        s += "\nMeta: " + meta;
 
         return s;
     }

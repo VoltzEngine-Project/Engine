@@ -67,7 +67,7 @@ public class TileRenderHandler extends TileEntitySpecialRenderer<TileEntity>
         //If BlockBase, iterate listeners
         if (tile.getBlockType() instanceof BlockBase)
         {
-            ListenerIterator it = new ListenerIterator(tile.getWorld(), tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), (BlockBase) tile.getBlockType(), "tilerender");
+            ListenerIterator it = new ListenerIterator(tile.getWorld(), tile.getPos(), (BlockBase) tile.getBlockType(), "tilerender");
             while (it.hasNext())
             {
                 ITileEventListener next = it.next();

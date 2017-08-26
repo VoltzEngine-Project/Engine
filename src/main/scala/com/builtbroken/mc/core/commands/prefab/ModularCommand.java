@@ -1,8 +1,12 @@
 package com.builtbroken.mc.core.commands.prefab;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +33,7 @@ public class ModularCommand extends SubCommand
     }
 
     @Override
-    public boolean handleEntityPlayerCommand(EntityPlayer player, String[] args)
+    public boolean handleEntityPlayerCommand(EntityPlayer player, String[] args) throws CommandException
     {
         if (isHelpCommand(args))
         {
@@ -40,7 +44,7 @@ public class ModularCommand extends SubCommand
         {
             for (AbstractCommand command : subCommands)
             {
-                if (command.getCommandName().equalsIgnoreCase(args[0]))
+                if (command.getName().equalsIgnoreCase(args[0]))
                 {
                     String[] a = removeFront(args);
                     if (command.isHelpCommand(a))
@@ -59,7 +63,7 @@ public class ModularCommand extends SubCommand
     }
 
     @Override
-    public boolean handleConsoleCommand(ICommandSender sender, String[] args)
+    public boolean handleConsoleCommand(ICommandSender sender, String[] args) throws CommandException
     {
         if (isHelpCommand(args))
         {
@@ -70,7 +74,7 @@ public class ModularCommand extends SubCommand
         {
             for (AbstractCommand command : subCommands)
             {
-                if (command.getCommandName().equalsIgnoreCase(args[0]))
+                if (command.getName().equalsIgnoreCase(args[0]))
                 {
                     String[] a = removeFront(args);
                     if (command.isHelpCommand(a))
@@ -98,19 +102,19 @@ public class ModularCommand extends SubCommand
             command.getHelpOutput(sender, commands);
             for (String s : commands)
             {
-                items.add(command.getCommandName() + " " + s);
+                items.add(command.getName() + " " + s);
             }
         }
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args)
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
     {
         if (args != null && args.length > 0 && args[0] != null)
         {
             for (AbstractCommand command : subCommands)
             {
-                List l = command.addTabCompletionOptions(sender, removeFront(args));
+                List<String> l = command.getTabCompletions(server, sender, removeFront(args), targetPos);
                 if (l != null && !l.isEmpty())
                 {
                     return l;

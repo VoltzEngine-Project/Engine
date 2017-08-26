@@ -7,13 +7,11 @@ import com.builtbroken.mc.client.effects.providers.VEProviderRocketTrail;
 import com.builtbroken.mc.client.effects.providers.VEProviderShockWave;
 import com.builtbroken.mc.client.effects.providers.VEProviderSmokeStream;
 import com.builtbroken.mc.client.json.ClientDataHandler;
-import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.audio.AudioJsonProcessor;
 import com.builtbroken.mc.client.json.effects.EffectJsonProcessor;
 import com.builtbroken.mc.client.json.effects.EffectListJsonProcessor;
 import com.builtbroken.mc.client.json.models.ModelJsonProcessor;
 import com.builtbroken.mc.client.json.render.RenderData;
-import com.builtbroken.mc.client.json.render.item.ItemJsonRenderer;
 import com.builtbroken.mc.client.json.render.processor.RenderJsonProcessor;
 import com.builtbroken.mc.client.json.render.tile.TileRenderData;
 import com.builtbroken.mc.client.json.texture.TextureJsonProcessor;
@@ -23,20 +21,14 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.commands.CommandVE;
 import com.builtbroken.mc.core.commands.json.visuals.CommandJsonRender;
 import com.builtbroken.mc.core.content.blast.emp.ExEmp;
-import com.builtbroken.mc.core.content.entity.EntityExCreeper;
-import com.builtbroken.mc.core.content.entity.RenderExCreeper;
 import com.builtbroken.mc.core.handler.PlayerKeyHandler;
 import com.builtbroken.mc.core.handler.RenderSelection;
 import com.builtbroken.mc.core.network.packet.callback.chunk.PacketRequestData;
-import com.builtbroken.mc.core.registry.ClientRegistryProxy;
-import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.access.global.gui.GuiAccessSystem;
 import com.builtbroken.mc.framework.block.imp.ITileEventListener;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
-import com.builtbroken.mc.framework.multiblock.MultiBlockRenderHelper;
-import com.builtbroken.mc.lib.render.block.BlockRenderHandler;
 import com.builtbroken.mc.lib.world.map.block.ExtendedBlockDataManager;
 import com.builtbroken.mc.lib.world.map.data.ChunkData;
 import com.builtbroken.mc.seven.CommonProxy;
@@ -48,27 +40,19 @@ import com.builtbroken.mc.seven.client.listeners.blocks.RotatableIconListener;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.seven.framework.block.json.JsonBlockListenerProcessor;
 import com.builtbroken.mc.seven.framework.block.listeners.RotatableListener;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -81,7 +65,6 @@ public class ClientProxy extends CommonProxy
 {
     public void onLoad()
     {
-        ModManager.proxy = new ClientRegistryProxy();
         Engine.minecraft = MinecraftWrapper.INSTANCE = new MinecraftWrapperClient();
     }
 
@@ -91,7 +74,6 @@ public class ClientProxy extends CommonProxy
         FMLCommonHandler.instance().bus().register(new ExplosiveRegistryClient());
         MinecraftForge.EVENT_BUS.register(new ExplosiveRegistryClient());
 
-        RenderingRegistry.registerBlockHandler(new BlockRenderHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerKeyHandler());
         MinecraftForge.EVENT_BUS.register(new RenderSelection());
 
@@ -106,11 +88,6 @@ public class ClientProxy extends CommonProxy
         //Textures have to be loaded in pre-init or will fail
         JsonContentLoader.INSTANCE.process("texture");
         MinecraftForge.EVENT_BUS.register(ClientDataHandler.INSTANCE);
-
-        //Register icons for explosives
-        ExplosiveRegistryClient.registerIcon(new ItemStack(Items.gunpowder), References.PREFIX + "ex.icon.gunpowder");
-        ExplosiveRegistryClient.registerIcon(new ItemStack(Items.skull, 1, 4), References.PREFIX + "ex.icon.creeper_head");
-        ExplosiveRegistryClient.registerIcon(new ItemStack(Blocks.tnt), References.PREFIX + "ex.icon.tnt");
 
         VisualEffectRegistry.addEffectProvider(new VEProviderShockWave());
         VisualEffectRegistry.addEffectProvider(new VEProviderLaserBeam());
@@ -142,13 +119,7 @@ public class ClientProxy extends CommonProxy
         ExplosiveRegistry.registerOrGetExplosive(References.DOMAIN, "Emp", new ExEmp());
 
         //Register graphics
-        RenderingRegistry.registerEntityRenderingHandler(EntityExCreeper.class, new RenderExCreeper());
-
-        //Register graphics handlers
-        if (Engine.multiBlock != null)
-        {
-            RenderingRegistry.registerBlockHandler(MultiBlockRenderHelper.INSTANCE);
-        }
+        //RenderingRegistry.registerEntityRenderingHandler(EntityExCreeper.class, new RenderExCreeper());
 
         //Register tile renders
         TileRenderHandler tileRenderHandler = new TileRenderHandler();
@@ -166,7 +137,7 @@ public class ClientProxy extends CommonProxy
     {
         super.postInit();
         //Item that uses a model for all states
-        registerItemJsonRenders(new ItemJsonRenderer(), "VE-Item", "item", "tile", "block");
+        //registerItemJsonRenders(new ItemJsonRenderer(), "VE-Item", "item", "tile", "block");
 
         List<IJsonGenObject> objects = JsonContentLoader.INSTANCE.generatedObjects.get(References.JSON_ITEM_KEY);
         if (objects != null && !objects.isEmpty())
@@ -192,76 +163,14 @@ public class ClientProxy extends CommonProxy
         }
     }
 
-    /**
-     * Called to loop through all registered json content to register
-     * items to item renders.
-     *
-     * @param keys     - keys for the render type supported
-     * @param renderer - render handler
-     */
-    public static int registerItemJsonRenders(IItemRenderer renderer, String... keys)
-    {
-        int count = 0;
-        for (List<IJsonGenObject> list : JsonContentLoader.INSTANCE.generatedObjects.values())
-        {
-            if (list != null && !list.isEmpty())
-            {
-                for (IJsonGenObject obj : list)
-                {
-                    Item item = null;
-                    if (obj instanceof Item)
-                    {
-                        item = (Item) obj;
-                    }
-                    else if (obj instanceof Block)
-                    {
-                        item = Item.getItemFromBlock((Block) obj);
-                    }
-                    if (item != null)
-                    {
-                        if (registerItemJsonRender(renderer, item, keys))
-                        {
-                            count++;
-                        }
-                    }
-                }
-            }
-        }
-        return count;
-    }
-
-    public static boolean registerItemJsonRender(IItemRenderer renderer, Item item, String... keys)
-    {
-        if (item instanceof IJsonRenderStateProvider)
-        {
-            List<String> ids = ((IJsonRenderStateProvider) item).getRenderContentIDs();
-            for (String id : ids)
-            {
-                RenderData data = ClientDataHandler.INSTANCE.getRenderData(id);
-                if (data != null)
-                {
-                    for (String key : keys)
-                    {
-                        if (data.renderType.equalsIgnoreCase(key))
-                        {
-                            MinecraftForgeClient.registerItemRenderer(item, renderer);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     @SubscribeEvent
     public void keyHandler(InputEvent.KeyInputEvent e)
     {
         final int key = Keyboard.getEventKey();
-        if (Minecraft.getMinecraft() != null && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().thePlayer != null) //Prevent key bind from working on loading screen and main menu
+        if (Minecraft.getMinecraft() != null && Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().player != null) //Prevent key bind from working on loading screen and main menu
         {
             //TODO add config for key binding
-            if (key == Keyboard.KEY_GRAVE && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+            if (Keyboard.isCreated() && key == Keyboard.KEY_GRAVE && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
             {
                 if (!(Minecraft.getMinecraft().currentScreen instanceof GuiAccessSystem)) //TODO check previous GUI to prevent bugs (e.g. prevent opening on death screen)
                 {
@@ -288,14 +197,14 @@ public class ClientProxy extends CommonProxy
                     Minecraft mc = Minecraft.getMinecraft();
                     if (mc != null)
                     {
-                        EntityPlayer player = mc.thePlayer;
-                        World world = mc.theWorld;
+                        EntityPlayer player = mc.player;
+                        World world = mc.world;
                         if (player != null && world != null)
                         {
-                            if (ExtendedBlockDataManager.CLIENT.dimID != world.provider.dimensionId)
+                            if (ExtendedBlockDataManager.CLIENT.dimID != world.provider.getDimension())
                             {
                                 ExtendedBlockDataManager.CLIENT.clear();
-                                ExtendedBlockDataManager.CLIENT.dimID = world.provider.dimensionId;
+                                ExtendedBlockDataManager.CLIENT.dimID = world.provider.getDimension();
                             }
                             int renderDistance = mc.gameSettings.renderDistanceChunks + 2;
                             int centerX = ((int) Math.floor(player.posX)) >> 4;
@@ -305,7 +214,7 @@ public class ClientProxy extends CommonProxy
                             List<ChunkData> chunksToRemove = new ArrayList();
                             for (ChunkData data : ExtendedBlockDataManager.CLIENT.chunks.values())
                             {
-                                if (Math.abs(data.position.chunkXPos - centerX) > renderDistance || Math.abs(data.position.chunkZPos - centerZ) > renderDistance)
+                                if (Math.abs(data.position.x - centerX) > renderDistance || Math.abs(data.position.z - centerZ) > renderDistance)
                                 {
                                     chunksToRemove.add(data);
                                 }
@@ -324,7 +233,7 @@ public class ClientProxy extends CommonProxy
                                     ChunkData chunkData = ExtendedBlockDataManager.CLIENT.getChunk(x, z);
                                     if (chunkData == null)
                                     {
-                                        Engine.packetHandler.sendToServer(new PacketRequestData(world.provider.dimensionId, x, z, 0));
+                                        Engine.packetHandler.sendToServer(new PacketRequestData(world.provider.getDimension(), x, z, 0));
                                     }
                                 }
                             }
@@ -364,8 +273,8 @@ public class ClientProxy extends CommonProxy
     }
 
     @Override
-    public EntityClientPlayerMP getClientPlayer()
+    public EntityPlayerSP getClientPlayer()
     {
-        return Minecraft.getMinecraft().thePlayer;
+        return Minecraft.getMinecraft().player;
     }
 }

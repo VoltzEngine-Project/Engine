@@ -24,6 +24,7 @@ public class ItemScrewdriver extends Item
 {
     public ItemScrewdriver()
     {
+        this.setRegistryName(References.DOMAIN, "ve.screwdriver");
         this.setUnlocalizedName(References.PREFIX + "screwdriver");
         this.setNoRepair();
         this.setMaxStackSize(1);

@@ -1,10 +1,10 @@
 package com.builtbroken.mc.lib.world.edit;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
-import com.builtbroken.jlib.type.Pair;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.edit.BlockEditResult;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -16,21 +16,12 @@ import net.minecraft.world.chunk.Chunk;
  * <p>
  * Created by robert on 2/25/2015.
  */
-public class PlacementData extends Pair<Block, Integer>
+public class PlacementData
 {
-    public PlacementData(Block block, int meta)
+    public IBlockState blockState;
+    public PlacementData(IBlockState blockState)
     {
-        super(block, meta);
-    }
-
-    public Block block()
-    {
-        return left();
-    }
-
-    public int meta()
-    {
-        return right();
+       this.blockState = blockState;
     }
 
     /**
@@ -78,14 +69,13 @@ public class PlacementData extends Pair<Block, Integer>
     {
         if (world != null)
         {
-            if (world.checkChunksExist(x, y, z, x, y, z))
+            if (world.isChunkGeneratedAt(x, z))
             {
-                final Chunk chunk = world.getChunkFromBlockCoords(x, z);
-                if (chunk != null && chunk.isChunkLoaded)
+                final Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
+                if (chunk != null && chunk.isLoaded())
                 {
-                    final Block prev_block = world.getBlock(x, y, z);
-                    int prev_meta = world.getBlockMetadata(x, y, z);
-                    if (prev_block != block() && prev_meta != meta())
+                    final IBlockState prev_block = world.getBlockState(new BlockPos(x, y, z));
+                    if (prev_block != blockState)
                     {
                         if (!simulate)
                         {
@@ -121,6 +111,6 @@ public class PlacementData extends Pair<Block, Integer>
      */
     protected boolean doPlace(final World world, int x, int y, int z)
     {
-        return world.setBlock(x, y, z, block(), meta(), 2);
+        return world.setBlockState(new BlockPos(x, y, z), blockState, 2);
     }
 }

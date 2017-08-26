@@ -2,9 +2,9 @@ package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.mc.core.Engine;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.TextComponentString;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class LanguageUtility
         }
 
         //Get translation
-        String translation = StatCollector.translateToLocal(key);
+        String translation = I18n.translateToLocal(key);
         if (translation == null || translation.isEmpty())
         {
             if (Engine.runningAsDev)
@@ -75,7 +75,7 @@ public class LanguageUtility
         }
 
         //Get translation
-        String translation = StatCollector.translateToLocal(key);
+        String translation = I18n.translateToLocal(key);
         if (translation == null || translation.isEmpty())
         {
             if (Engine.runningAsDev)
@@ -125,7 +125,7 @@ public class LanguageUtility
      * @param key
      * @return
      */
-    public static IChatComponent getLocalChat(String key)
+    public static ITextComponent getLocalChat(String key)
     {
         String translation = getLocalName(key);
         if (translation == null || translation.isEmpty())
@@ -151,7 +151,7 @@ public class LanguageUtility
     {
         if (player != null)
         {
-            player.addChatComponentMessage(getLocalChat(key));
+            player.sendMessage(getLocalChat(key));
         }
         else if (Engine.runningAsDev)
         {

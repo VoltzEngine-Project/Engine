@@ -59,7 +59,7 @@ public class ItemBlockMeta extends ItemBlockBase
 
     public BlockMeta getBlockJson()
     {
-        return (BlockMeta) this.field_150939_a;
+        return (BlockMeta) this.block;
     }
 
     @Override

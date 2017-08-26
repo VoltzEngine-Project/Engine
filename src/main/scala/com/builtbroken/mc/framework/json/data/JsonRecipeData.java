@@ -1,9 +1,9 @@
 package com.builtbroken.mc.framework.json.data;
 
-import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 /**
  * Prefab for any recipe that has a single output
@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/10/2017.
  */
-public abstract class JsonRecipeData extends JsonGenData implements IJsonGenObject
+public abstract class JsonRecipeData<T extends IForgeRegistryEntry<T>> extends JsonGenData<T>
 {
     /** Output of the recipe */
     public Object output;
