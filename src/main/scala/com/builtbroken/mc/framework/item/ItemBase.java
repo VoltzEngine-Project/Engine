@@ -95,16 +95,18 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List items)
     {
+        boolean added = false;
         if (getHasSubtypes())
         {
             for (ItemNodeSubType type : node.subTypeHashMap.values())
             {
                 items.add(new ItemStack(item, 1, type.index));
+                added = true;
             }
         }
 
         //Backup for if getHashSubTypes is false or didn't add items
-        if (items.isEmpty())
+        if (!added)
         {
             items.add(new ItemStack(item, 1, 0));
         }
