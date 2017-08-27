@@ -80,13 +80,13 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        if (getHasSubtypes())
+        if (getHasSubtypes() && !node.subTypeHashMap.isEmpty())
         {
             if (node.subTypeHashMap.containsKey(stack.getItemDamage()))
             {
                 return "item." + this.unlocalizedName + "." + node.subTypeHashMap.get(stack.getItemDamage()).unlocalizedName;
             }
-            return "item." + this.unlocalizedName + "." + stack.getItemDamage();
+            return "item." + this.unlocalizedName + "." + stack.getItemDamage(); //TODO maybe check if has translation
         }
         return "item." + this.unlocalizedName;
     }
@@ -102,7 +102,9 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
                 items.add(new ItemStack(item, 1, type.index));
             }
         }
-        else
+
+        //Backup for if getHashSubTypes is false or didn't add items
+        if (items.isEmpty())
         {
             items.add(new ItemStack(item, 1, 0));
         }
