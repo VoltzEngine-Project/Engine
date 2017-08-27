@@ -95,7 +95,7 @@ public class ExplosiveRegistryClient
         if (item != null)
         {
             IExplosiveHandler handler = ExplosiveRegistry.get(item);
-            if(handler != null)
+            if (handler != null)
             {
                 //Old outdated system TODO remove once converted to JSON fully
                 if (handler instanceof ITexturedExplosiveHandler)
@@ -144,54 +144,55 @@ public class ExplosiveRegistryClient
         if (item != null)
         {
             IExplosiveHandler handler = ExplosiveRegistry.get(item);
-
-            //Old system TODO remove once fully JSON
-            if (handler instanceof ITexturedExplosiveHandler)
+            if (handler != null)
             {
-                return ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIconColor(item, pass);
-            }
-
-
-            String contentID = handler.getID();
-            RenderData data = ClientDataHandler.INSTANCE.getRenderData(handler.getMod() + ":" + contentID); //TODO consider using state ID to get render
-            if (data != null && data.renderType.equalsIgnoreCase("ex"))
-            {
-                List<String> keys = getStatesForCornerIcon(stack, handler, pass);
-                for (String key : keys)
+                //Old system TODO remove once fully JSON
+                if (handler instanceof ITexturedExplosiveHandler)
                 {
-                    IRenderState state = data.getState(key);
-                    if (state != null && state instanceof TextureState)
+                    return ((ITexturedExplosiveHandler) handler).getBottomLeftCornerIconColor(item, pass);
+                }
+
+                String contentID = handler.getID();
+                RenderData data = ClientDataHandler.INSTANCE.getRenderData(handler.getMod() + ":" + contentID); //TODO consider using state ID to get render
+                if (data != null && data.renderType.equalsIgnoreCase("ex"))
+                {
+                    List<String> keys = getStatesForCornerIcon(stack, handler, pass);
+                    for (String key : keys)
                     {
-                        String colorKey = ((TextureState) state).color;
-                        if (colorKey != null && !colorKey.isEmpty())
+                        IRenderState state = data.getState(key);
+                        if (state != null && state instanceof TextureState)
                         {
-                            if (colorKey.startsWith("data@"))
+                            String colorKey = ((TextureState) state).color;
+                            if (colorKey != null && !colorKey.isEmpty())
                             {
-                                if (handler instanceof IJsonKeyDataProvider)
+                                if (colorKey.startsWith("data@"))
                                 {
-                                    Object object = ((IJsonKeyDataProvider) handler).getJsonKeyData(colorKey.substring(5, colorKey.length()), stack);
-                                    if (object instanceof Integer)
+                                    if (handler instanceof IJsonKeyDataProvider)
                                     {
-                                        return (int) object;
+                                        Object object = ((IJsonKeyDataProvider) handler).getJsonKeyData(colorKey.substring(5, colorKey.length()), stack);
+                                        if (object instanceof Integer)
+                                        {
+                                            return (int) object;
+                                        }
+                                        else if (object instanceof Color)
+                                        {
+                                            return ((Color) object).getRGB();
+                                        }
+                                        //TODO more options?
                                     }
-                                    else if (object instanceof Color)
+                                    else
                                     {
-                                        return ((Color) object).getRGB();
+                                        //TODO add warning about missing implementation
                                     }
-                                    //TODO more options?
+                                }
+                                else if (ClientDataHandler.INSTANCE.canSupportColor(colorKey))
+                                {
+                                    return ClientDataHandler.INSTANCE.getColorAsInt(colorKey);
                                 }
                                 else
                                 {
-                                    //TODO add warning about missing implementation
+                                    //TODO add warning about missing color data
                                 }
-                            }
-                            else if (ClientDataHandler.INSTANCE.canSupportColor(colorKey))
-                            {
-                                return ClientDataHandler.INSTANCE.getColorAsInt(colorKey);
-                            }
-                            else
-                            {
-                                //TODO add warning about missing color data
                             }
                         }
                     }
