@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.mod;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -141,12 +142,51 @@ public class ModCreativeTab extends CreativeTabs
      * @param list
      * @param item
      */
-    protected void add(List list, Item item)
+    protected boolean add(List list, Item item)
     {
         if (item != null)
         {
             item.getSubItems(item, this, list);
+            return true;
         }
+        return false;
+    }
+
+    protected boolean add(List list, String name)
+    {
+        if (!addItem(list, name))
+        {
+            return addBlock(list, name);
+        }
+        return true;
+    }
+
+    protected boolean addItem(List list, String name)
+    {
+        Item item = InventoryUtility.getItem(name);
+        if (item != null)
+        {
+            return add(list, item);
+        }
+        else if (Engine.runningAsDev)
+        {
+            Engine.logger().error("Failed to locate '" + name + "' to add to creative tab");
+        }
+        return false;
+    }
+
+    protected boolean addBlock(List list, String name)
+    {
+        Block block = InventoryUtility.getBlock(name);
+        if (block != null)
+        {
+            return add(list, block);
+        }
+        else if (Engine.runningAsDev)
+        {
+            Engine.logger().error("Failed to locate '" + name + "' to add to creative tab");
+        }
+        return false;
     }
 
     /**
@@ -155,7 +195,7 @@ public class ModCreativeTab extends CreativeTabs
      * @param list
      * @param block
      */
-    protected void add(List list, Block block)
+    protected boolean add(List list, Block block)
     {
         if (block != null)
         {
@@ -163,12 +203,14 @@ public class ModCreativeTab extends CreativeTabs
             if (item != null)
             {
                 block.getSubBlocks(item, this, list);
+                return true;
             }
             else if (Engine.runningAsDev)
             {
                 Engine.logger().error("Block: " + block + " does not have an item so can not be displayed in creative tab");
             }
         }
+        return false;
     }
 
     public static abstract class ItemSorter implements Comparator
