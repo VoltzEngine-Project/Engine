@@ -19,12 +19,17 @@ public class EngineCoreMod implements IFMLLoadingPlugin
     public static final Logger logger = LogManager.getLogger("VoltzEngine");
     public static boolean devMode = false;
 
+    /** Check to do downloads if enabled */
+    public static boolean doDownloads;
+    /** Check to only run ASM if enabled */
+    public static boolean enableASM;
+
     public EngineCoreMod()
     {
         //TODO see if there is a better place to load this as a construct is not designed for downloading
         final boolean notDevMode = System.getProperty("development") == null || !System.getProperty("development").equalsIgnoreCase("true");
-        final boolean doDownloads = System.getProperty("disableDepDownloader") == null || !System.getProperty("disableDepDownloader").equalsIgnoreCase("true");
-        final boolean enableASM = System.getProperty("enableAsmTemplates") == null || System.getProperty("enableAsmTemplates").equalsIgnoreCase("true");
+        doDownloads = System.getProperty("disableDepDownloader") == null || !System.getProperty("disableDepDownloader").equalsIgnoreCase("true");
+        enableASM = System.getProperty("enableAsm") == null || System.getProperty("enableAsm").equalsIgnoreCase("true");
 
         devMode = !notDevMode;
 
@@ -41,7 +46,11 @@ public class EngineCoreMod implements IFMLLoadingPlugin
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[]{"com.builtbroken.mc.core.asm.ChunkTransformer", "com.builtbroken.mc.core.asm.template.ClassTransformer"};
+        if (enableASM)
+        {
+            return new String[]{"com.builtbroken.mc.core.asm.ChunkTransformer", "com.builtbroken.mc.core.asm.template.ClassTransformer"};
+        }
+        return new String[]{};
     }
 
     @Override
