@@ -73,7 +73,7 @@ public class PacketManager extends AbstractLoadable
     @Override
     public void init()
     {
-        this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(channel, new ResonantChannelHandler(), new ResonantPacketHandler());
+        this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(channel, new PacketHandler(), new PacketChannelHandler());
     }
 
     @Override
