@@ -168,6 +168,13 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
 
     @Override
     @SideOnly(Side.CLIENT)
+    public boolean requiresMultipleRenderPasses()
+    {
+        return true; //Fix for getting ItemStack calls
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister reg)
     {
         super.registerIcons(reg);
@@ -178,13 +185,6 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     public IIcon getIconFromDamage(int meta)
     {
         return getIconFromState(ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(meta)), meta, 0);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses()
-    {
-        return true; //Fix for getting ItemStack calls
     }
 
     @Override
