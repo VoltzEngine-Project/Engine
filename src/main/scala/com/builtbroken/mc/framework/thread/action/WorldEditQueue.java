@@ -75,6 +75,10 @@ public class WorldEditQueue extends LinkedList<IWorldEdit> implements IWorldActi
                 {
                     editsPerTick = size();
                 }
+                else if(editsPerTick <= 0)
+                {
+                    editsPerTick = 100; //TODO make config option or hook
+                }
 
                 int edits = 0;
                 while (it.hasNext() && c++ <= editsPerTick)
