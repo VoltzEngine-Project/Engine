@@ -139,7 +139,7 @@ public class RadarMap
             while (it.hasNext())
             {
                 RadarObject object = it.next();
-                if (!object.isValid())
+                if (object == null || !object.isValid())
                 {
                     debug.log("Removed: " + object);
                     it.remove();
