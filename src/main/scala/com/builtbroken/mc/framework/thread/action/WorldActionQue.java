@@ -40,11 +40,15 @@ public final class WorldActionQue
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
+        //Run at end of world tick TODO get time left until next tick
         if (event.phase == TickEvent.Phase.END)
         {
+            final long startTime = System.nanoTime();
+
             int edits = 0;
-            long time = System.nanoTime();
-            while (System.nanoTime() - time < 10000 && edits < MAX_EDITS_PER_TICK)
+
+            //Time is less than 10ms and edits are less then max
+            while (System.nanoTime() - startTime < 10000 && edits < MAX_EDITS_PER_TICK)
             {
                 if (currentQue == null || currentQue.isQueDone())
                 {
