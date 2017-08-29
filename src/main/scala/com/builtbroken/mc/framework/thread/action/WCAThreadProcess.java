@@ -24,8 +24,6 @@ import java.util.List;
  */
 public class WCAThreadProcess implements IThreadProcess
 {
-    public static int MAX_EDITS_PER_TICK = 200;
-
     /** Location of the Blast */
     public final Location position;
     /** Blast instance */
@@ -37,6 +35,8 @@ public class WCAThreadProcess implements IThreadProcess
 
     /** Blocks to remove from the world */
     private Collection<IWorldEdit> effectedBlocks;
+
+    public List<LayerDebugData> layerDebugData;
 
     /**
      * Constructor, nothing should be null and blast should be created with the center equaling
@@ -52,10 +52,6 @@ public class WCAThreadProcess implements IThreadProcess
         this.blast = blast;
         this.triggerCause = triggerCause;
         blocksPerTick = blast.shouldThreadAction();
-        if (blocksPerTick < 0)
-        {
-            //blocksPerTick = MAX_EDITS_PER_TICK;
-        }
     }
 
     @Override
@@ -69,13 +65,32 @@ public class WCAThreadProcess implements IThreadProcess
                 {
                     if (((IWorldChangeLayeredAction) blast).shouldContinueAction(i))
                     {
+                        //Get start time
                         long time = System.nanoTime();
+
+
+                        ///Create list to populate edits
                         effectedBlocks = new ArrayList();
+
+                        //Get edits for layer
                         ((IWorldChangeLayeredAction) blast).getEffectedBlocks((List<IWorldEdit>) effectedBlocks, i);
+
+                        //If running as dev, log data about layer
                         if (Engine.runningAsDev)
                         {
                             time = System.nanoTime() - time;
-                            System.out.println("Layer(" + i + ") generated " + effectedBlocks.size() + " blocks and took " + StringHelpers.formatNanoTime(time));
+
+                            if (layerDebugData == null)
+                            {
+                                layerDebugData = new ArrayList();
+                            }
+
+                            LayerDebugData data = new LayerDebugData();
+                            data.layer = i;
+                            data.blocksEdited = effectedBlocks.size();
+                            data.timeProcessedNano = time;
+
+                            layerDebugData.add(data);
                         }
 
                         //Triggers an event allowing other mods to edit the block list
@@ -86,6 +101,20 @@ public class WCAThreadProcess implements IThreadProcess
                     {
                         break;
                     }
+                }
+
+                if (Engine.runningAsDev && layerDebugData.size() > 0)
+                {
+                    long time = 0;
+                    long blocks = 0;
+
+                    for (LayerDebugData data : layerDebugData)
+                    {
+                        time += data.timeProcessedNano;
+                        blocks += data.blocksEdited;
+                    }
+
+                    Engine.logger().info(this + " ran " + layerDebugData.size() + " layers in " + StringHelpers.formatNanoTime(time) + " edit " + blocks + " blocks with an average of " + StringHelpers.formatNanoTime(time / layerDebugData.size()) + " per layer");
                 }
             }
             else
@@ -134,5 +163,24 @@ public class WCAThreadProcess implements IThreadProcess
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "WCAThreadProcess[" + position + " || " + blast + "]@" + hashCode();
+    }
+
+    public static class LayerDebugData
+    {
+        public int layer;
+        public int blocksEdited;
+        public long timeProcessedNano;
+
+        @Override
+        public String toString()
+        {
+            return "Layer[" + layer + "] edited " + blocksEdited + " tiles, took " + StringHelpers.formatNanoTime(timeProcessedNano);
+        }
     }
 }
