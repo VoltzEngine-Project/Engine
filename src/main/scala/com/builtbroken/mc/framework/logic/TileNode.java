@@ -383,18 +383,18 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
      */
     public void sendDescPacket()
     {
-        if (isServer())
+        if (world() != null && isServer())
         {
-            MinecraftServer server = MinecraftServer.getServer();
             List<EntityPlayer> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 
             for (EntityPlayer player : players)
             {
-                if (player.worldObj == world().unwrap())
+                if (player instanceof EntityPlayerMP && player.worldObj == world().unwrap())
                 {
                     IPacket packet = getPacketForData();
                     packet.data().writeInt(DESCRIPTION_PACKET_ID);
                     writeDescPacket(player, packet.data());
+                    Engine.packetHandler.sendToPlayer(packet, (EntityPlayerMP) player);
                 }
             }
         }
@@ -402,7 +402,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
 
     public void sendPacketToGuiUsers(IPacket packet)
     {
-        if (isServer() && this instanceof IPlayerUsing && packet != null)
+        if (world() != null && isServer() && this instanceof IPlayerUsing && packet != null)
         {
             Iterator<EntityPlayer> players = ((IPlayerUsing) this).getPlayersUsing().iterator();
             while (players.hasNext())
@@ -425,7 +425,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
      */
     public void doUpdateGuiUsers()
     {
-        if (isServer() && this instanceof IGuiTile && this instanceof IPlayerUsing)
+        if (world() != null && isServer() && this instanceof IGuiTile && this instanceof IPlayerUsing)
         {
             Iterator<EntityPlayer> players = ((IPlayerUsing) this).getPlayersUsing().iterator();
             while (players.hasNext())
