@@ -11,12 +11,18 @@ public interface IRegistryInit
     /**
      * Called right after the block has been registered
      */
-    void onRegistered();
+    default void onRegistered()
+    {
+
+    }
 
     /**
      * Called client side after the block has been registered,
      * use this to register any renders
      */
     @SideOnly(Side.CLIENT)
-    void onClientRegistered();
+    default void onClientRegistered()
+    {
+
+    }
 }
