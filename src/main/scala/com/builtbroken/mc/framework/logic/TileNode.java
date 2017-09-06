@@ -237,17 +237,6 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
 
     }
 
-    /**
-     * Called client side only to read
-     * the data from a description packet
-     *
-     * @param player - player the packet is being read for
-     * @param buf    - what to read data from
-     */
-    public void readDescPacket(EntityPlayer player, ByteBuf buf)
-    {
-        readDescPacket(buf);
-    }
 
     /**
      * Called server side to write the
@@ -262,6 +251,19 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     {
 
     }
+
+    /**
+     * Called client side only to read
+     * the data from a description packet
+     *
+     * @param player - player the packet is being read for
+     * @param buf    - what to read data from
+     */
+    public void readDescPacket(EntityPlayer player, ByteBuf buf)
+    {
+        readDescPacket(buf);
+    }
+
 
     /**
      * Called server side to write the
