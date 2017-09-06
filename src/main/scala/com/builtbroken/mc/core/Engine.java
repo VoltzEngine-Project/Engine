@@ -45,8 +45,6 @@ public class Engine
     public static Block heatedStone;
     @Deprecated
     public static Block multiBlock;
-    @Deprecated
-    public static Block blockInfInventory;
 
     @Deprecated
     public static Item itemWrench;

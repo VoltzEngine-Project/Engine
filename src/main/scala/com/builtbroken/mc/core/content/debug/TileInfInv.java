@@ -1,15 +1,18 @@
 package com.builtbroken.mc.core.content.debug;
 
+import com.builtbroken.mc.api.tile.provider.IInventoryProvider;
+import com.builtbroken.mc.codegen.annotations.TileWrapped;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.imp.transform.vector.Pos;
-import com.builtbroken.mc.prefab.tile.Tile;
-import net.minecraft.block.material.Material;
+import com.builtbroken.mc.framework.block.imp.IActivationListener;
+import com.builtbroken.mc.framework.logic.TileNode;
+import com.builtbroken.mc.prefab.inventory.BasicInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Inventory tile that provides a single infinite stack for automation testing
@@ -17,20 +20,20 @@ import net.minecraft.util.ChatComponentText;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 11/15/2016.
  */
-public class TileInfInv extends Tile implements IInventory
+@TileWrapped(className = "TileEntityWrappedInfInv", wrappers = "ExternalInventory")
+public class TileInfInv extends TileNode implements IInventoryProvider, IActivationListener //TODO port as an SBM mod for greater reuse
 {
     public ItemStack slotStack = null;
 
+    public IInventory inv;
+
     public TileInfInv()
     {
-        super("tileInfInventory", Material.iron);
-        this.hardness = -1;
-        this.resistance = -1;
-        this.setTextureName(References.PREFIX + "infiniteInventory");
+        super("tileInfInventory", References.DOMAIN);
     }
 
     @Override
-    protected boolean onPlayerRightClick(EntityPlayer player, int side, Pos hit)
+    public boolean onPlayerActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
         if (isServer())
         {
@@ -45,7 +48,7 @@ public class TileInfInv extends Tile implements IInventory
                     }
                     else
                     {
-                        setInventorySlotContents(0, player.getHeldItem());
+                        slotStack = player.getHeldItem().copy();
                     }
                 }
             }
@@ -58,101 +61,21 @@ public class TileInfInv extends Tile implements IInventory
     }
 
     @Override
-    public Tile newTile()
+    public boolean canStore(ItemStack stack, ForgeDirection side)
     {
-        return new TileInfInv();
+        return false; //can not insert items
     }
 
     @Override
-    public int getSizeInventory()
+    public boolean canRemove(ItemStack stack, ForgeDirection side) //TODO maybe implement side configs for testing
     {
-        return 1;
+        return true; //can always remove
     }
 
     @Override
-    public ItemStack getStackInSlot(int slot)
+    public void load(NBTTagCompound nbt)
     {
-        return slot == 0 ? slotStack : null;
-    }
-
-    @Override
-    public ItemStack decrStackSize(int slot, int a)
-    {
-        if (slot == 0 && slotStack != null)
-        {
-            ItemStack stack = slotStack.copy();
-            stack.stackSize -= a;
-            if (stack.stackSize <= 0)
-            {
-                return null;
-            }
-            return stack;
-        }
-        return null;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot)
-    {
-        return slot == 0 ? slotStack : null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack stack)
-    {
-        if (slot == 0 && stack != null)
-        {
-            slotStack = stack.copy();
-            slotStack.stackSize = slotStack.getMaxStackSize();
-        }
-    }
-
-    @Override
-    public String getInventoryName()
-    {
-        return "Inf Inventory";
-    }
-
-    @Override
-    public boolean hasCustomInventoryName()
-    {
-        return true;
-    }
-
-    @Override
-    public int getInventoryStackLimit()
-    {
-        return 64;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
-    {
-        return true;
-    }
-
-    @Override
-    public void openInventory()
-    {
-
-    }
-
-    @Override
-    public void closeInventory()
-    {
-
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack)
-    {
-        return slot == 0 && stack != null;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbt)
-    {
-        super.readFromNBT(nbt);
+        super.load(nbt);
         if (nbt.hasKey("slotStack"))
         {
             slotStack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("slotStack"));
@@ -160,12 +83,29 @@ public class TileInfInv extends Tile implements IInventory
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt)
+    public NBTTagCompound save(NBTTagCompound nbt)
     {
-        super.writeToNBT(nbt);
+        super.save(nbt);
         if (slotStack != null)
         {
             nbt.setTag("slotStack", slotStack.writeToNBT(new NBTTagCompound()));
         }
+        return nbt;
+    }
+
+    @Override
+    public IInventory getInventory()
+    {
+        if (inv == null)
+        {
+            inv = new BasicInventory(1)
+            {
+                public ItemStack getStackInSlot(int slot)
+                {
+                    return slotStack;
+                }
+            };
+        }
+        return inv;
     }
 }

@@ -1,0 +1,30 @@
+{
+  "author": {
+    "name": "voltzengine"
+  },
+  "loadCondition": "devMode",
+  "block": {
+    "name": "tile.inventory.infinite",
+    "id": "infInv",
+    "mod": "voltzengine",
+    "material": "iron",
+    "tileEntity": {
+      "id": "infInv",
+      "class": "com.builtbroken.mc.core.content.debug.TileEntityWrappedInfInv"
+    }
+  },
+  "render": {
+    "contentID": "voltzengine:infInv",
+    "type": "block",
+    "states": [
+      {
+        "id": "tile",
+        "renderType": "block",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "infiniteInventory"
+        }
+      }
+    ]
+  }
+}

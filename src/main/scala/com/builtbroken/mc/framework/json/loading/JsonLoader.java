@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
 
 import java.io.*;
 import java.net.URL;
@@ -127,22 +129,58 @@ public class JsonLoader
     {
         if (element.isJsonObject())
         {
-            JsonObject object = element.getAsJsonObject();
+            final JsonObject object = element.getAsJsonObject();
+
+            //Handle load conditions
+            if (object.has("loadCondition"))
+            {
+                final String condition = object.getAsJsonPrimitive("loadCondition").getAsString(); //TODO implement array version
+
+                //Dev mod load condition
+                if (condition.equalsIgnoreCase("devMode") && !Engine.runningAsDev)
+                {
+                    return new ArrayList();
+                }
+                //Mod load condition
+                else if (condition.startsWith("mod:"))
+                {
+                    final String modName = condition.substring(4, condition.length());
+                    final List<ModContainer> mods = Loader.instance().getActiveModList();
+                    boolean found = false;
+                    for (ModContainer mod : mods)
+                    {
+                        if (mod.getModId().equalsIgnoreCase(modName))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        Engine.logger().info("JsonLoader: File '" + file + "' contains load condition for mod '" + modName + "' but mod is not loaded. This file will be ignored for JSON loading.");
+                        return new ArrayList();
+                    }
+                }
+            }
+
+            //Handle author data
             String author = null;
             String helpSite = null;
             if (object.has("author"))
             {
-                JsonObject authorData = object.get("author").getAsJsonObject();
+                final JsonObject authorData = object.get("author").getAsJsonObject();
                 author = authorData.get("name").getAsString();
                 if (authorData.has("site"))
                 {
                     helpSite = authorData.get("site").getAsString();
                 }
             }
+
+            //Load entries
             List<JsonEntry> processedEntries = new ArrayList();
             for (Map.Entry<String, JsonElement> entry : object.entrySet())
             {
-                if (!entry.getKey().equalsIgnoreCase("author") && !entry.getKey().startsWith("_")) //Ignore author and _comments
+                if (!ignoreLoadingEntry(entry.getKey()))
                 {
                     String key = entry.getKey();
                     if (key.contains(":"))
@@ -165,5 +203,14 @@ public class JsonLoader
             return processedEntries;
         }
         return null;
+    }
+
+    //Json keys to ignore when processing
+    private static boolean ignoreLoadingEntry(String key)
+    {
+        return key.equalsIgnoreCase("author") // Ignore author as its already handled
+                || key.startsWith("_") // Ignore comments
+                || key.equalsIgnoreCase("loadCondition")  // Ignore load condition as its already handled
+                || key.equalsIgnoreCase("editorData");  // Ignore data stored by editor
     }
 }
