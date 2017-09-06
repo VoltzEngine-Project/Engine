@@ -15,8 +15,11 @@ public abstract class JsonSettingData extends JsonGenData
     @JsonProcessorData("config")
     public boolean doConfig = false;
 
-    @JsonProcessorData("config")
+    @JsonProcessorData("configKey")
     public String configKey;
+
+    @JsonProcessorData("description")
+    public String description;
 
     public JsonSettingData(IJsonProcessor processor, String key)
     {

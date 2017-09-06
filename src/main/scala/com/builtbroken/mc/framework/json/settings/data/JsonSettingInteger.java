@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.json.settings.data;
 
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.framework.json.settings.JsonSettingData;
 
 /**
@@ -10,7 +11,12 @@ import com.builtbroken.mc.framework.json.settings.JsonSettingData;
 public class JsonSettingInteger extends JsonSettingData
 {
     public int value;
-    public int min, max;
+
+    @JsonProcessorData(value = "min", type = "int")
+    public int min;
+
+    @JsonProcessorData(value = "max", type = "int")
+    public int max;
 
     public JsonSettingInteger(IJsonProcessor processor, String key, int value)
     {
