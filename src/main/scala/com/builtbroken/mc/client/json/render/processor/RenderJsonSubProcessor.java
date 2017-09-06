@@ -15,7 +15,7 @@ import java.util.Map;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 5/2/2017.
  */
-public abstract class RenderJsonSubProcessor
+public abstract class RenderJsonSubProcessor<S extends IRenderState>
 {
     public final TextureData.Type textureType;
 
@@ -24,7 +24,7 @@ public abstract class RenderJsonSubProcessor
         this.textureType = textureType;
     }
 
-    public abstract IRenderState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType);
+    public abstract S process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType);
 
     /**
      * Called to process common data shared by a layered processor design
@@ -32,7 +32,7 @@ public abstract class RenderJsonSubProcessor
      * @param state
      * @param renderStateObject
      */
-    protected void process(IRenderState state, JsonObject renderStateObject)
+    protected void process(S state, JsonObject renderStateObject)
     {
         if (state instanceof RenderState)
         {
@@ -46,59 +46,79 @@ public abstract class RenderJsonSubProcessor
             {
                 ((RenderState) state).color = renderStateObject.get("color").getAsString();
             }
-
-            if (state instanceof TextureState)
+            //Legacy way to register textures
+            if (renderStateObject.has("textureID"))
             {
-                //Legacy way to register textures
-                if (renderStateObject.has("textureID"))
-                {
-                    ((TextureState) state).textureID = renderStateObject.get("textureID").getAsString();
-                }
+                setMainTexture(state, renderStateObject.get("textureID").getAsString());
+            }
+            //Load global texture for state
+            if (renderStateObject.has("texture") && renderStateObject.get("texture").isJsonPrimitive())
+            {
+                String textureID = renderStateObject.get("texture").getAsString();
+                setMainTexture(state, textureID);
+            }
 
-                //TODO add error state if textures are being loaded without being used
-                //Load all textures (mainly for blocks)
-                for (Map.Entry<String, JsonElement> elementEntry : renderStateObject.entrySet())
+            //TODO add error state if textures are being loaded without being used
+            //Load all textures (mainly for blocks)
+            for (Map.Entry<String, JsonElement> elementEntry : renderStateObject.entrySet())
+            {
+                //Lazy way to register textures
+                if (elementEntry.getKey().equalsIgnoreCase("texture")
+                        || elementEntry.getKey().contains(":") && elementEntry.getKey().split(":")[0].equalsIgnoreCase("texture"))
                 {
-                    //Lazy way to register textures
-                    if (elementEntry.getKey().equalsIgnoreCase("texture")
-                            || elementEntry.getKey().contains(":") && elementEntry.getKey().split(":")[0].equalsIgnoreCase("texture"))
+                    //Get data
+                    JsonObject textureData = elementEntry.getValue().getAsJsonObject();
+
+                    //Enforce minimal values
+                    JsonProcessor.ensureValuesExist(textureData, "domain", "name");
+
+                    //Read minimal values
+                    String domain = textureData.getAsJsonPrimitive("domain").getAsString();
+                    String name = textureData.getAsJsonPrimitive("name").getAsString();
+
+                    //Get key
+                    String key;
+
+                    //Get key in case it doesn't match texture name
+                    if (textureData.has("key"))
                     {
-                        //Get data
-                        JsonObject textureData = elementEntry.getValue().getAsJsonObject();
-
-                        //Enforce minimal values
-                        JsonProcessor.ensureValuesExist(textureData, "domain", "name");
-
-                        //Read minimal values
-                        String domain = textureData.getAsJsonPrimitive("domain").getAsString();
-                        String name = textureData.getAsJsonPrimitive("name").getAsString();
-
-                        //Get key
-                        String key;
-
-                        //Get key in case it doesn't match texture name
-                        if (textureData.has("key"))
-                        {
-                            key = textureData.getAsJsonPrimitive("key").getAsString();
-                        }
-                        else
-                        {
-                            key = domain + ":" + name;
-                        }
-
-                        //Init texture ID
-                        if (((TextureState) state).textureID == null)
-                        {
-                            ((TextureState) state).textureID = key;
-                        }
-
-                        //Create and register texture
-                        new TextureData(null, key, domain, name, textureType).register();
+                        key = textureData.getAsJsonPrimitive("key").getAsString();
                     }
+                    else
+                    {
+                        key = domain + ":" + name;
+                    }
+
+                    //Init texture ID
+                    if (!hasTexture(state))
+                    {
+                        setMainTexture(state, key);
+                    }
+
+                    //Create and register texture
+                    new TextureData(null, key, domain, name, textureType).register();
                 }
             }
         }
     }
+
+    protected void setMainTexture(S state, String key)
+    {
+        if (state instanceof TextureState)
+        {
+            ((TextureState) state).setTextureID(key);
+        }
+    }
+
+    protected boolean hasTexture(S state)
+    {
+        if (state instanceof TextureState)
+        {
+            return ((TextureState) state).getTextureID() != null;
+        }
+        return false;
+    }
+
 
     /**
      * Called after all states are loaded to do

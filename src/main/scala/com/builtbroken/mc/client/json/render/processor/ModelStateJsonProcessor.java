@@ -1,12 +1,11 @@
 package com.builtbroken.mc.client.json.render.processor;
 
-import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.state.ModelState;
 import com.builtbroken.mc.client.json.render.tile.TileState;
 import com.builtbroken.mc.client.json.texture.TextureData;
+import com.builtbroken.mc.framework.json.conversion.JsonConverterPos;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import com.builtbroken.mc.framework.json.conversion.JsonConverterPos;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -19,7 +18,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 5/2/2017.
  */
-public class ModelStateJsonProcessor extends RenderJsonSubProcessor
+public class ModelStateJsonProcessor extends RenderJsonSubProcessor<ModelState>
 {
     public ModelStateJsonProcessor()
     {
@@ -27,7 +26,7 @@ public class ModelStateJsonProcessor extends RenderJsonSubProcessor
     }
 
     @Override
-    public IRenderState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
+    public ModelState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
     {
         ModelState renderState;
         //Data

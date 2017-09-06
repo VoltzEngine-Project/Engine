@@ -11,7 +11,7 @@ import net.minecraft.util.IIcon;
  */
 public class TextureState extends RenderState implements IRenderState
 {
-    public String textureID;
+    private String textureID;
 
     public TextureState(String id)
     {
@@ -32,10 +32,20 @@ public class TextureState extends RenderState implements IRenderState
     @Override
     public TextureData getTextureData(int side)
     {
-        if (textureID != null)
+        if (getTextureID() != null)
         {
-            return ClientDataHandler.INSTANCE.getTexture(textureID);
+            return ClientDataHandler.INSTANCE.getTexture(getTextureID());
         }
         return parentState != null ? parentState.getTextureData(side) : null;
+    }
+
+    public String getTextureID()
+    {
+        return textureID;
+    }
+
+    public void setTextureID(String textureID)
+    {
+        this.textureID = textureID;
     }
 }

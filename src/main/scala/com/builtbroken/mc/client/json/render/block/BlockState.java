@@ -1,7 +1,6 @@
 package com.builtbroken.mc.client.json.render.block;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
-import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.state.RenderState;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import net.minecraft.util.IIcon;
@@ -10,7 +9,7 @@ import net.minecraft.util.IIcon;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/4/2017.
  */
-public class BlockState extends RenderState implements IRenderState
+public class BlockState extends RenderState
 {
     public final String[] textureID = new String[6];
 

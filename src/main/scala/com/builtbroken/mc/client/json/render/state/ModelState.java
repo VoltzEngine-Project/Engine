@@ -265,7 +265,7 @@ public class ModelState extends TextureState implements IModelState
     @Override
     public TextureData getTexture()
     {
-        TextureData textureData = ClientDataHandler.INSTANCE.getTexture(textureID);
+        TextureData textureData = ClientDataHandler.INSTANCE.getTexture(getTextureID());
         if (textureData == null && parentState instanceof IModelState)
         {
             return ((IModelState) parentState).getTexture();

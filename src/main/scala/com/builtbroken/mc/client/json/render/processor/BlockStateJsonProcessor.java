@@ -1,16 +1,15 @@
 package com.builtbroken.mc.client.json.render.processor;
 
-import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.block.BlockState;
 import com.builtbroken.mc.client.json.texture.TextureData;
+import com.builtbroken.mc.data.Direction;
 import com.google.gson.JsonObject;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 5/2/2017.
  */
-public class BlockStateJsonProcessor extends RenderJsonSubProcessor
+public class BlockStateJsonProcessor extends RenderJsonSubProcessor<BlockState>
 {
     public BlockStateJsonProcessor()
     {
@@ -18,19 +17,10 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor
     }
 
     @Override
-    public IRenderState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
+    public BlockState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
     {
         BlockState renderState = new BlockState(stateID);
 
-        //Load global texture for state
-        if (renderStateObject.has("textureID"))
-        {
-            String textureID = renderStateObject.get("textureID").getAsString();
-            for (int i = 0; i < 6; i++)
-            {
-                renderState.textureID[i] = textureID;
-            }
-        }
         //Load sides (2-5)
         if (renderStateObject.has("sides"))
         {
@@ -63,7 +53,7 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor
         }
 
         //Load individual sides
-        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+        for (Direction direction : Direction.DIRECTIONS)
         {
             final String key1 = "side:" + direction.ordinal();
             final String key2 = direction.name().toLowerCase();
@@ -77,6 +67,31 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor
             }
         }
         return renderState;
+    }
+
+    @Override
+    protected void setMainTexture(BlockState state, String key)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (state.textureID[i] == null)
+            {
+                state.textureID[i] = key;
+            }
+        }
+    }
+
+    @Override
+    protected boolean hasTexture(BlockState state)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (state.textureID[i] == null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
