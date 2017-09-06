@@ -4,7 +4,7 @@
   },
   "loadCondition": "devMode",
   "block": {
-    "name": "tile.inventory.infinite",
+    "name": "inventory.infinite",
     "id": "infInv",
     "mod": "voltzengine",
     "material": "iron",
@@ -18,7 +18,7 @@
     "type": "block",
     "states": [
       {
-        "id": "tile",
+        "id": "block",
         "renderType": "block",
         "texture": {
           "domain": "voltzengine",

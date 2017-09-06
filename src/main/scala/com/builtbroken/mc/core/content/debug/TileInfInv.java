@@ -5,7 +5,7 @@ import com.builtbroken.mc.codegen.annotations.TileWrapped;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.block.imp.IActivationListener;
 import com.builtbroken.mc.framework.logic.TileNode;
-import com.builtbroken.mc.prefab.inventory.BasicInventory;
+import com.builtbroken.mc.prefab.inventory.ExternalInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -49,6 +49,7 @@ public class TileInfInv extends TileNode implements IInventoryProvider, IActivat
                     else
                     {
                         slotStack = player.getHeldItem().copy();
+                        slotStack.stackSize = 64;
                     }
                 }
             }
@@ -98,11 +99,11 @@ public class TileInfInv extends TileNode implements IInventoryProvider, IActivat
     {
         if (inv == null)
         {
-            inv = new BasicInventory(1)
+            inv = new ExternalInventory(this, 1)
             {
                 public ItemStack getStackInSlot(int slot)
                 {
-                    return slotStack;
+                    return TileInfInv.this.slotStack != null ? TileInfInv.this.slotStack.copy() : null;
                 }
             };
         }

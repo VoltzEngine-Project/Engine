@@ -381,6 +381,7 @@ item.voltzengine:craftingPart.copperCoilStepper.name=Motor Coils Assembly
 
 ## Creative Testing Blocks
 tile.voltzengine:creativeBuilder.name=Creative Builder
+tile.voltzengine:inventory.infinite.name=Infinite Inventory
 tile.voltzengine:infiniteEnergy.name=Infinite Energy
 tile.voltzengine:infiniteFluid.name=Infinite Fluid
 
