@@ -1,5 +1,6 @@
 package com.builtbroken.mc.client.json;
 
+import com.google.common.collect.Lists;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraftforge.client.IItemRenderer;
@@ -22,10 +23,27 @@ public interface IJsonRenderStateProvider
      * @param renderType          - type of renderer, if the object is a tile
      *                            entity is the same.
      * @param objectBeingRendered - normally an entity, tile, or item
-     * @return name of the object for simplist implementation
+     * @return unique render ID of the object
      */
     @SideOnly(Side.CLIENT)
-    String getRenderContentID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered);
+    default String getRenderContentID(IItemRenderer.ItemRenderType renderType, Object objectBeingRendered)
+    {
+        return getRenderContentID();
+    }
+
+    /**
+     * Gets the ID that is used
+     * to access the render state
+     * <p>
+     * This is an internal interface call and not externally called
+     *
+     * @return unique render ID of the object
+     */
+    @SideOnly(Side.CLIENT)
+    default String getRenderContentID()
+    {
+        return null;
+    }
 
     /**
      * Overrides the default render state
@@ -34,11 +52,22 @@ public interface IJsonRenderStateProvider
      *                            entity is the same.
      * @param key                 - extra key type that was passed in, ex: gun.empty
      * @param objectBeingRendered - normally an entity, tile, or item
-     * @return null to use defaults
-     * value for the render state to use. If key can not be found it defaults to render ID
+     * @return state key for use in rendering
      */
     @SideOnly(Side.CLIENT)
     default String getRenderStateKey(IItemRenderer.ItemRenderType renderType, String key, Object objectBeingRendered)
+    {
+        return getRenderStateKey(key);
+    }
+
+    /**
+     * Overrides the default render state
+     *
+     * @param key - extra key type that was passed in, ex: gun.empty
+     * @return state key for use in rendering
+     */
+    @SideOnly(Side.CLIENT)
+    default String getRenderStateKey(String key)
     {
         return null;
     }
@@ -51,5 +80,13 @@ public interface IJsonRenderStateProvider
      * @return
      */
     @SideOnly(Side.CLIENT)
-    List<String> getRenderContentIDs();
+    default List<String> getRenderContentIDs()
+    {
+        String id = getRenderContentID();
+        if (id != null)
+        {
+            return Lists.newArrayList(id);
+        }
+        return null;
+    }
 }
