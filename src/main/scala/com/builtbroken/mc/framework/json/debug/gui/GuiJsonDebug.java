@@ -1,10 +1,11 @@
-package com.builtbroken.mc.framework.json.debug;
+package com.builtbroken.mc.framework.json.debug.gui;
 
 import com.builtbroken.jlib.debug.DebugPrinter;
 import com.builtbroken.jlib.debug.IDebugPrintListener;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.framework.json.JsonContentLoader;
-import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
+import com.builtbroken.mc.framework.json.debug.component.DebugDataCellRenderer;
+import com.builtbroken.mc.framework.json.debug.data.DebugData;
+import com.builtbroken.mc.framework.json.debug.gui.json.JsonDataPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -29,7 +29,6 @@ public class GuiJsonDebug extends JFrame
 
     DefaultListModel<DebugData> debugDataListModel = new DefaultListModel();
 
-    JTabbedPane jsonDataPanel;
 
     public void init()
     {
@@ -49,12 +48,14 @@ public class GuiJsonDebug extends JFrame
                 "Shows debug output console");
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
-        JComponent panel2 = buildDataPanel();
+        JComponent panel2 = new JsonDataPanel();
         tabbedPane.addTab("Data", icon, panel2,
                 "Shows list of loaded JSON data");
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 
         add(tabbedPane, BorderLayout.CENTER);
+
+        pack();
     }
 
     /** Returns an ImageIcon, or null if the path was invalid. */
@@ -87,7 +88,7 @@ public class GuiJsonDebug extends JFrame
         //Create list
         dataLogList = new JList(debugDataListModel);
         dataLogList.setLayoutOrientation(JList.VERTICAL);
-        dataLogList.setCellRenderer(new CellRenderer());
+        dataLogList.setCellRenderer(new DebugDataCellRenderer());
 
 
         //Create scroll panel
@@ -102,96 +103,35 @@ public class GuiJsonDebug extends JFrame
         JPanel menuPanel = new JPanel();
         menuPanel.setMaximumSize(new Dimension(-1, 100));
         Button button = new Button("Reload");
-        button.addActionListener(e -> {
-            reloadDebugData();
-        });
+        button.addActionListener(e -> reloadDebugData(null));
         menuPanel.add(button);
-        menuPanel.add(new Button("TWO"));
-        menuPanel.add(new Button("THREE"));
+
+        JTextField searchBox = new JTextField();
+        searchBox.setMinimumSize(new Dimension(200, -1));
+        searchBox.setPreferredSize(new Dimension(200, 30));
+        searchBox.setToolTipText("Search filter");
+        menuPanel.add(searchBox);
+
+        button = new Button("Search");
+        button.addActionListener(e -> reloadDebugData(searchBox.getText().trim()));
+        menuPanel.add(button);
+
+
         panel.add(menuPanel, BorderLayout.NORTH);
 
         return panel;
     }
 
-    public JPanel buildDataPanel()
-    {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        //Create list
-        dataLogList = new JList(debugDataListModel);
-        dataLogList.setLayoutOrientation(JList.VERTICAL);
-        dataLogList.setCellRenderer(new CellRenderer());
-
-
-        jsonDataPanel = new JTabbedPane();
-
-        JPanel panel1 = new JPanel();
-        Button initButton = new Button("Load");
-        initButton.addActionListener(e -> reloadJsonData());
-        panel1.add(initButton);
-        jsonDataPanel.addTab("Init", null, panel1, "The only panel until you hit load");
-
-        panel.add(jsonDataPanel, BorderLayout.CENTER);
-
-        //Menu
-        JPanel menuPanel = new JPanel();
-        menuPanel.setMaximumSize(new Dimension(-1, 100));
-        Button button = new Button("Reload Data");
-        button.addActionListener(e -> reloadJsonData());
-        menuPanel.add(button);
-        menuPanel.add(new Button("..."));
-        menuPanel.add(new Button("..."));
-        panel.add(menuPanel, BorderLayout.NORTH);
-
-        return  panel;
-    }
-
-    public void reloadDebugData()
+    public void reloadDebugData(String filter)
     {
         debugDataListModel.removeAllElements();
         for (DebugData data : debugData)
         {
-            debugDataListModel.addElement(data);
+            if (filter == null || filter.isEmpty() || data.msg.contains(filter)) //TODO add regex support
+            {
+                debugDataListModel.addElement(data);
+            }
         }
-    }
-
-    public void reloadJsonData()
-    {
-        jsonDataPanel.removeAll();
-        for(Map.Entry<String, List<IJsonGenObject>> entry : JsonContentLoader.INSTANCE.generatedObjects.entrySet())
-        {
-            createJsonDataTab(entry.getKey(), entry.getValue());
-        }
-    }
-
-    protected void createJsonDataTab(String key, List<IJsonGenObject> objects)
-    {
-        JPanel panel = new JPanel();
-
-        //Generate data
-        DefaultListModel<DebugData> model = new DefaultListModel();
-
-        for(IJsonGenObject object : objects)
-        {
-            model.addElement(new DebugData("MOD: " + object.getMod() + "  ID: " + object.getContentID()));
-        }
-
-        //Create list
-        JList<DebugData> dataLogList = new JList(model);
-        dataLogList.setLayoutOrientation(JList.VERTICAL);
-        dataLogList.setCellRenderer(new CellRenderer());
-
-        //Create scroll panel
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setViewportView(dataLogList);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setPreferredSize(new Dimension(getWidth() - 100, getHeight() - 100));
-        scrollPane.setMinimumSize(new Dimension(getWidth() - 100, getHeight() - 100));
-        panel.add(scrollPane, BorderLayout.CENTER);
-
-        //Create tab
-        jsonDataPanel.addTab(key, null, panel); //TODO add icon
     }
 
     public void addDebug(String msg, String... lines)
@@ -248,27 +188,6 @@ public class GuiJsonDebug extends JFrame
             return writer.toString();
         }
 
-    }
-
-    protected class CellRenderer extends DefaultListCellRenderer
-    {
-        @Override
-        public Component getListCellRendererComponent(JList list, Object o, int index, boolean isSelected, boolean cellHasFocus)
-        {
-            DebugData data = (DebugData) o;
-            if (data.lines != null && data.lines.length > 0)
-            {
-                String text = "<html>";
-                text += "<h3>" + data.msg + "</h3>";
-                for (String s : data.lines)
-                {
-                    text += "<p>" + s.replace("\t", "    ") + "</p>";
-                }
-                text += "</html>";
-                return super.getListCellRendererComponent(list, text, index, isSelected, cellHasFocus);
-            }
-            return super.getListCellRendererComponent(list, data.msg.replace("\t", "    "), index, isSelected, cellHasFocus);
-        }
     }
 
     //Used to test GUI

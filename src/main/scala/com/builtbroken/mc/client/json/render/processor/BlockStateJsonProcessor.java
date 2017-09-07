@@ -1,6 +1,6 @@
 package com.builtbroken.mc.client.json.render.processor;
 
-import com.builtbroken.mc.client.json.render.block.BlockState;
+import com.builtbroken.mc.client.json.render.block.RenderStateBlock;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.data.Direction;
 import com.google.gson.JsonObject;
@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 5/2/2017.
  */
-public class BlockStateJsonProcessor extends RenderJsonSubProcessor<BlockState>
+public class BlockStateJsonProcessor extends RenderJsonSubProcessor<RenderStateBlock>
 {
     public BlockStateJsonProcessor()
     {
@@ -17,9 +17,9 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor<BlockState>
     }
 
     @Override
-    public BlockState process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
+    public RenderStateBlock process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
     {
-        BlockState renderState = new BlockState(stateID);
+        RenderStateBlock renderState = new RenderStateBlock(stateID);
 
         //Load sides (2-5)
         if (renderStateObject.has("sides"))
@@ -70,7 +70,7 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor<BlockState>
     }
 
     @Override
-    protected void setMainTexture(BlockState state, String key)
+    protected void setMainTexture(RenderStateBlock state, String key)
     {
         for (int i = 0; i < 6; i++)
         {
@@ -82,7 +82,7 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor<BlockState>
     }
 
     @Override
-    protected boolean hasTexture(BlockState state)
+    protected boolean hasTexture(RenderStateBlock state)
     {
         for (int i = 0; i < 6; i++)
         {

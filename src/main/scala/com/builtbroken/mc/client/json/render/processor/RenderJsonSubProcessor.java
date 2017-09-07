@@ -3,7 +3,7 @@ package com.builtbroken.mc.client.json.render.processor;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.state.RenderState;
-import com.builtbroken.mc.client.json.render.state.TextureState;
+import com.builtbroken.mc.client.json.render.state.RenderStateTexture;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
@@ -104,17 +104,17 @@ public abstract class RenderJsonSubProcessor<S extends IRenderState>
 
     protected void setMainTexture(S state, String key)
     {
-        if (state instanceof TextureState)
+        if (state instanceof RenderStateTexture)
         {
-            ((TextureState) state).setTextureID(key);
+            ((RenderStateTexture) state).setTextureID(key);
         }
     }
 
     protected boolean hasTexture(S state)
     {
-        if (state instanceof TextureState)
+        if (state instanceof RenderStateTexture)
         {
-            return ((TextureState) state).getTextureID() != null;
+            return ((RenderStateTexture) state).getTextureID() != null;
         }
         return false;
     }

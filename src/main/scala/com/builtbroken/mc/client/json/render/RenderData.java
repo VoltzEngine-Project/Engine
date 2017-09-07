@@ -5,18 +5,21 @@ import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.framework.json.debug.gui.render.GuiJsonDebugRender;
+import com.builtbroken.mc.framework.json.debug.IJsonDebugDisplay;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 11/16/2016.
  */
-public class RenderData extends JsonGenData
+public class RenderData extends JsonGenData implements IJsonDebugDisplay
 {
     public static final String INVENTORY_RENDER_KEY = "item.inventory";
     public static final String EQUIPPED_RENDER_KEY = "item.equipped";
@@ -32,6 +35,8 @@ public class RenderData extends JsonGenData
 
     /** Map for quickly looking up name of the state with it's render ID */
     public HashMap<String, IRenderState> renderStatesByName = new HashMap();
+
+    GuiJsonDebugRender debugWindow;
 
     public RenderData(IJsonProcessor processor, String contentID, String type)
     {
@@ -134,5 +139,38 @@ public class RenderData extends JsonGenData
     public void add(String name, IRenderState state)
     {
         renderStatesByName.put(name, state);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "RenderData[" + contentID + "]";
+    }
+
+    @Override
+    public String getDisplayName()
+    {
+        return "RenderData[" + contentID + "]";
+    }
+
+    @Override
+    public void addDebugLines(List<String> lines)
+    {
+        lines.add("Type: " + renderType);
+        lines.add("States: " + renderStatesByName.size());
+    }
+
+    @Override
+    public void onDoubleClickLine()
+    {
+        if (Engine.runningAsDev)
+        {
+            if (debugWindow == null)
+            {
+                debugWindow = new GuiJsonDebugRender(this);
+            }
+
+            debugWindow.show();
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.client.json.render.processor;
 
 import com.builtbroken.mc.client.json.render.state.ModelState;
-import com.builtbroken.mc.client.json.render.tile.TileState;
+import com.builtbroken.mc.client.json.render.tile.RenderStateTile;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.framework.json.conversion.JsonConverterPos;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
@@ -90,7 +90,7 @@ public class ModelStateJsonProcessor extends RenderJsonSubProcessor<ModelState>
         //Creates state object
         if (globalRenderType.equalsIgnoreCase("tile"))
         {
-            renderState = new TileState(stateID, modelID, offset, scale, rotation);
+            renderState = new RenderStateTile(stateID, modelID, offset, scale, rotation);
         }
         else
         {

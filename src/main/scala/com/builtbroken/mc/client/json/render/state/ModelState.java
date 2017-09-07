@@ -11,13 +11,15 @@ import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.client.FMLClientHandler;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
+
 /**
  * Render/Texture/Animation states used for rendering models in the game
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 11/22/2016.
  */
-public class ModelState extends TextureState implements IModelState
+public class ModelState extends RenderStateTexture implements IModelState
 {
     public String modelID;
     public String[] parts;
@@ -271,5 +273,18 @@ public class ModelState extends TextureState implements IModelState
             return ((IModelState) parentState).getTexture();
         }
         return textureData;
+    }
+
+    @Override
+    public void addDebugLines(List<String> lines)
+    {
+        super.addDebugLines(lines);
+        lines.add("Model = " + modelID);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "RenderStateModel[" + id + "]@" + hashCode();
     }
 }

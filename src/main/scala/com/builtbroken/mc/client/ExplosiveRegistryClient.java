@@ -6,7 +6,7 @@ import com.builtbroken.mc.api.items.explosives.IExplosiveContainerItem;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
-import com.builtbroken.mc.client.json.render.state.TextureState;
+import com.builtbroken.mc.client.json.render.state.RenderStateTexture;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
@@ -116,7 +116,7 @@ public class ExplosiveRegistryClient
                     for (String key : keys)
                     {
                         IRenderState state = data.getState(key);
-                        if (state != null && state instanceof TextureState)
+                        if (state != null && state instanceof RenderStateTexture)
                         {
                             return state.getIcon(0);
                         }
@@ -160,9 +160,9 @@ public class ExplosiveRegistryClient
                     for (String key : keys)
                     {
                         IRenderState state = data.getState(key);
-                        if (state != null && state instanceof TextureState)
+                        if (state != null && state instanceof RenderStateTexture)
                         {
-                            String colorKey = ((TextureState) state).color;
+                            String colorKey = ((RenderStateTexture) state).color;
                             if (colorKey != null && !colorKey.isEmpty())
                             {
                                 if (colorKey.startsWith("data@"))

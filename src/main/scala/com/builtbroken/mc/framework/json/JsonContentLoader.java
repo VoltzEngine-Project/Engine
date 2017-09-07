@@ -8,7 +8,7 @@ import com.builtbroken.mc.core.registry.implement.ILoadComplete;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
-import com.builtbroken.mc.framework.json.debug.GuiJsonDebug;
+import com.builtbroken.mc.framework.json.debug.gui.GuiJsonDebug;
 import com.builtbroken.mc.framework.json.event.JsonProcessorRegistryEvent;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;

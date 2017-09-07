@@ -5,15 +5,17 @@ import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import net.minecraft.util.IIcon;
 
+import java.util.List;
+
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/4/2017.
  */
-public class TextureState extends RenderState implements IRenderState
+public class RenderStateTexture extends RenderState implements IRenderState
 {
     private String textureID;
 
-    public TextureState(String id)
+    public RenderStateTexture(String id)
     {
         super(id);
     }
@@ -47,5 +49,18 @@ public class TextureState extends RenderState implements IRenderState
     public void setTextureID(String textureID)
     {
         this.textureID = textureID;
+    }
+
+    @Override
+    public void addDebugLines(List<String> lines)
+    {
+        super.addDebugLines(lines);
+        lines.add("Texture = " + getTextureID());
+    }
+
+    @Override
+    public String toString()
+    {
+        return "RenderTextureState[" + id + ", " + getTextureID() + "]@" + hashCode();
     }
 }
