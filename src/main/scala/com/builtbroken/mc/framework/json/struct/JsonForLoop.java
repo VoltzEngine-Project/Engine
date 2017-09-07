@@ -82,11 +82,16 @@ public class JsonForLoop
         {
             throw new IllegalArgumentException("Start can not be greater than or equal to end for a for loop.");
         }
+
+        //Loop entries
         for (int i = start; i <= end; i++)
         {
             injectionKeys.put(id, "" + i);
             handle(currentJsonObject, states, injectionKeys, depth);
         }
+
+        //Remove ID to prevent issues
+        injectionKeys.remove(id);
     }
 
     public static void generateDataForEachLoop(JsonObject currentJsonObject, List<JsonObject> states, HashMap<String, String> injectionKeys, int depth)
@@ -178,7 +183,7 @@ public class JsonForLoop
         //Copy template and rename values as needed
         for (Map.Entry<String, JsonElement> jsonEntry : template.entrySet())
         {
-            state.add(jsonEntry.getKey(), buildElementFromTemplate(jsonEntry.getValue(), injectionKeys, true));
+            state.add(jsonEntry.getKey(), buildElementFromTemplate(jsonEntry.getValue(), injectionKeys, doNested));
         }
         return state;
     }

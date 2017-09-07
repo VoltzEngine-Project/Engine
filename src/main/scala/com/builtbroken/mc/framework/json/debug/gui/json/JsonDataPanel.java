@@ -139,7 +139,7 @@ public class JsonDataPanel extends JPanel
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setPreferredSize(new Dimension(getWidth() - 100, getHeight() - 100));
         scrollPane.setMinimumSize(new Dimension(getWidth() - 100, getHeight() - 100));
-        
+
         panel.add(scrollPane, BorderLayout.CENTER);
 
         //Create tab
