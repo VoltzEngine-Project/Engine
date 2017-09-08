@@ -34,5 +34,9 @@ public abstract class RenderState implements IRenderState, IJsonDebugDisplay
     public void addDebugLines(List<String> lines)
     {
         lines.add("Parent: " + parent);
+    @Override
+    public IRenderState getParent()
+    {
+        return parentState;
     }
 }

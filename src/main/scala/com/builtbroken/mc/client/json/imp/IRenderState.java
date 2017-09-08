@@ -32,4 +32,6 @@ public interface IRenderState
      * @return texture data, or null if none
      */
     TextureData getTextureData(int side);
+
+    IRenderState getParent();
 }
