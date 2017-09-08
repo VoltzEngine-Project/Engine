@@ -70,7 +70,7 @@ public class PacketTile extends PacketType
         x = buffer.readInt();
         y = buffer.readInt();
         z = buffer.readInt();
-        data_$eq(buffer.slice());
+        data_$eq(buffer);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class PacketTile extends PacketType
                 try
                 {
                     IPacketIDReceiver receiver = (IPacketIDReceiver) tile;
-                    ByteBuf buf = data().slice();
+                    ByteBuf buf = data();
 
                     int id;
                     try
