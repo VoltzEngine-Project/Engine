@@ -1,17 +1,20 @@
 package com.builtbroken.mc.client.json.texture;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.framework.json.debug.IJsonDebugDisplay;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.List;
+
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 11/23/2016.
  */
-public class TextureData extends JsonGenData
+public class TextureData extends JsonGenData implements IJsonDebugDisplay
 {
     public final String domain;
     public final String key;
@@ -60,7 +63,26 @@ public class TextureData extends JsonGenData
     @Override
     public String getContentID()
     {
-        return null;
+        return key;
+    }
+
+    @Override
+    public String getDisplayName()
+    {
+        return getContentID();
+    }
+
+    @Override
+    public void addDebugLines(List<String> lines)
+    {
+        lines.add("Location = " + getLocation());
+        if (type == Type.BLOCK || type == Type.ITEM)
+        {
+            lines.add("Icon = " + getIcon());
+        }
+        lines.add("Type = " + type.name().toLowerCase());
+        lines.add("Domain = " + domain);
+        lines.add("Path = " + name);
     }
 
     public enum Type

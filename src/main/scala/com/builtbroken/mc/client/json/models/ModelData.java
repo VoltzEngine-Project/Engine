@@ -2,6 +2,7 @@ package com.builtbroken.mc.client.json.models;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.framework.json.debug.IJsonDebugDisplay;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import com.builtbroken.mc.lib.render.RenderUtility;
@@ -10,12 +11,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
 
 import java.awt.*;
+import java.util.List;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 11/23/2016.
  */
-public class ModelData extends JsonGenData
+public class ModelData extends JsonGenData implements IJsonDebugDisplay
 {
     String key;
     String domain;
@@ -110,6 +112,20 @@ public class ModelData extends JsonGenData
     public String getContentID()
     {
         return key;
+    }
+
+    @Override
+    public String getDisplayName()
+    {
+        return getContentID();
+    }
+
+    @Override
+    public void addDebugLines(List<String> lines)
+    {
+        lines.add("Model = " + getModel());
+        lines.add("Domain = " + domain);
+        lines.add("Path = " + name);
     }
 
     @Override

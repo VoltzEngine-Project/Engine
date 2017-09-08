@@ -55,7 +55,8 @@ public class RenderStateTexture extends RenderState implements IRenderState
     public void addDebugLines(List<String> lines)
     {
         super.addDebugLines(lines);
-        lines.add("Texture = " + getTextureID());
+        lines.add("Texture ID = " + getTextureID());
+        lines.add("Texture = " + getTextureData(0));
     }
 
     @Override

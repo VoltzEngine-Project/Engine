@@ -304,7 +304,6 @@ public class TestForLoop extends TestCase
     @Test
     public void testForLoopNested4()
     {
-
         JsonObject forLoop = new JsonObject();
 
         //values

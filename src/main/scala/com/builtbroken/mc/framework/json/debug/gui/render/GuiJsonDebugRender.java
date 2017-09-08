@@ -51,18 +51,27 @@ public class GuiJsonDebugRender extends JFrame
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-    public void reloadData()
+    public void reloadData(String filter)
     {
         debugDataListModel.clear();
         for (Map.Entry<String, IRenderState> entry : renderData.renderStatesByName.entrySet())
         {
             if (entry.getValue() instanceof IJsonDebugDisplay)
             {
-                debugDataListModel.addElement(new DebugJsonData((IJsonDebugDisplay) entry.getValue()));
+                IJsonDebugDisplay display = (IJsonDebugDisplay) entry.getValue();
+                String displayName = display.getDisplayName() != null ? display.getDisplayName() : display.toString();
+                if (filter == null || filter.isEmpty() || displayName.contains(filter))
+                {
+                    debugDataListModel.addElement(new DebugJsonData(display));
+                }
             }
             else
             {
-                debugDataListModel.addElement(new DebugData("Key: " + entry.getKey() + " value:" + entry.getValue()));
+                String msg = "Key: " + entry.getKey() + " value:" + entry.getValue();
+                if (filter == null || filter.isEmpty() || msg.contains(filter))
+                {
+                    debugDataListModel.addElement(new DebugData(msg));
+                }
             }
         }
     }
@@ -89,11 +98,24 @@ public class GuiJsonDebugRender extends JFrame
         //Menu
         JPanel menuPanel = new JPanel();
         menuPanel.setMaximumSize(new Dimension(-1, 100));
+
+        //Reload button
         Button button = new Button("Reload");
-        button.addActionListener(e -> reloadData());
+        button.addActionListener(e -> reloadData(null));
         menuPanel.add(button);
-        menuPanel.add(new Button(".."));
-        menuPanel.add(new Button("..."));
+
+        //Search box
+        JTextField searchBox = new JTextField();
+        searchBox.setMinimumSize(new Dimension(200, -1));
+        searchBox.setPreferredSize(new Dimension(200, 30));
+        searchBox.setToolTipText("Search filter");
+        menuPanel.add(searchBox);
+
+        //Search button
+        button = new Button("Search");
+        button.addActionListener(e -> reloadData(searchBox.getText().trim()));
+        menuPanel.add(button);
+
         panel.add(menuPanel, BorderLayout.NORTH);
 
         return panel;

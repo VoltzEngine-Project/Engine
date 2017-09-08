@@ -279,7 +279,8 @@ public class ModelState extends RenderStateTexture implements IModelState
     public void addDebugLines(List<String> lines)
     {
         super.addDebugLines(lines);
-        lines.add("Model = " + modelID);
+        lines.add("Model ID = " + modelID);
+        lines.add("Model = " + getModel());
     }
 
     @Override
