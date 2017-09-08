@@ -3,12 +3,13 @@ package com.builtbroken.mc.client.json.texture;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
+import com.builtbroken.mc.framework.json.struct.JsonForLoop;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -38,40 +39,22 @@ public class TextureJsonProcessor extends JsonProcessor<TextureData>
     public boolean process(JsonElement element, List<IJsonGenObject> entries)
     {
         JsonObject object = element.getAsJsonObject();
+        List<JsonObject> elements = new ArrayList();
+
         if (object.has("for"))
         {
-            object = object.getAsJsonObject("for");
-            ensureValuesExist(object, "start", "end", "state");
-            int start = object.getAsJsonPrimitive("start").getAsInt();
-            int end = object.getAsJsonPrimitive("end").getAsInt();
+            JsonForLoop.generateDataForLoop(object.getAsJsonObject("for"), elements, new HashMap(), 0);
+        }
+        else if (object.has("forEach"))
+        {
+            JsonForLoop.generateDataForEachLoop(object.getAsJsonObject("forEach"), elements, new HashMap(), 0);
+        }
 
-            if (start >= end)
+        if (!elements.isEmpty())
+        {
+            for (JsonObject o : elements)
             {
-                throw new IllegalArgumentException("Start can not be greater than or equal to end for a for loop.");
-            }
-
-            JsonObject template = object.getAsJsonObject("state");
-            for (int i = start; i <= end; i++)
-            {
-                JsonObject state = new JsonObject();
-
-                //Copy template and rename values as needed
-                for (Map.Entry<String, JsonElement> entry : template.entrySet())
-                {
-                    if (entry.getValue() instanceof JsonPrimitive && ((JsonPrimitive) entry.getValue()).isString())
-                    {
-                        String s = entry.getValue().getAsString();
-                        s = s.replace("%number%", "" + i);
-                        state.add(entry.getKey(), new JsonPrimitive(s));
-                    }
-                    else
-                    {
-                        state.add(entry.getKey(), entry.getValue());
-                    }
-                }
-
-                //Load state
-                entries.add(handle(state));
+                entries.add(handle(o));
             }
         }
         else
@@ -83,6 +66,7 @@ public class TextureJsonProcessor extends JsonProcessor<TextureData>
 
     /**
      * Handles loading a texture instance from JSON
+     *
      * @param object
      * @return
      */
