@@ -257,6 +257,96 @@ public class TestForLoop extends TestCase
         assertEquals("value.3.6.blue.large", elements.get(8).get("someVar").getAsString());
     }
 
+    @Test
+    public void testForLoopNested3()
+    {
+        JsonObject forLoop2 = buildLoop("i", 0, 2);
+        JsonObject forLoop = new JsonObject();
+
+        //values
+        JsonArray values = new JsonArray();
+        values.add(buildLoopValue("burger", "green", "fries", "small"));
+        values.add(buildLoopValue("burger", "red", "fries", "medium"));
+        values.add(buildLoopValue("burger", "blue", "fries", "large"));
+        forLoop.add("values", values);
+
+        //Data
+        JsonObject dataJSON = new JsonObject();
+        dataJSON.add("someVar", new JsonPrimitive("value.%i%.%burger%.%fries%"));
+        forLoop.add("data", dataJSON);
+
+        forLoop2.add("forEach", forLoop);
+
+        List<JsonObject> elements = new ArrayList();
+        JsonForLoop.generateDataForLoop(forLoop2, elements, new HashMap(), 0);
+
+        //We should have 3 entries
+        assertEquals(9, elements.size());
+
+        //All entries should have a value, not containing injection points
+        for (JsonObject o : elements)
+        {
+            assertTrue(o.has("someVar"));
+            assertTrue(!o.get("someVar").getAsString().contains("%"));
+        }
+
+        assertEquals("value.0.green.small", elements.get(0).get("someVar").getAsString());
+        assertEquals("value.0.red.medium", elements.get(1).get("someVar").getAsString());
+        assertEquals("value.0.blue.large", elements.get(2).get("someVar").getAsString());
+        assertEquals("value.1.green.small", elements.get(3).get("someVar").getAsString());
+        assertEquals("value.1.red.medium", elements.get(4).get("someVar").getAsString());
+        assertEquals("value.1.blue.large", elements.get(5).get("someVar").getAsString());
+        assertEquals("value.2.green.small", elements.get(6).get("someVar").getAsString());
+        assertEquals("value.2.red.medium", elements.get(7).get("someVar").getAsString());
+        assertEquals("value.2.blue.large", elements.get(8).get("someVar").getAsString());
+    }
+
+    @Test
+    public void testForLoopNested4()
+    {
+
+        JsonObject forLoop = new JsonObject();
+
+        //values
+        JsonArray values = new JsonArray();
+        values.add(buildLoopValue("burger", "green", "fries", "small"));
+        values.add(buildLoopValue("burger", "red", "fries", "medium"));
+        values.add(buildLoopValue("burger", "blue", "fries", "large"));
+        forLoop.add("values", values);
+
+        JsonObject forLoop2 = buildLoop("i", 0, 2);
+
+        //Data
+        JsonObject dataJSON = new JsonObject();
+        dataJSON.add("someVar", new JsonPrimitive("value.%burger%.%fries%.%i%"));
+        forLoop2.add("data", dataJSON);
+
+        forLoop.add("for", forLoop2);
+
+        List<JsonObject> elements = new ArrayList();
+        JsonForLoop.generateDataForEachLoop(forLoop, elements, new HashMap(), 0);
+
+        //We should have 3 entries
+        assertEquals(9, elements.size());
+
+        //All entries should have a value, not containing injection points
+        for (JsonObject o : elements)
+        {
+            assertTrue(o.has("someVar"));
+            assertTrue(!o.get("someVar").getAsString().contains("%"));
+        }
+
+        assertEquals("value.green.small.0", elements.get(0).get("someVar").getAsString());
+        assertEquals("value.green.small.1", elements.get(1).get("someVar").getAsString());
+        assertEquals("value.green.small.2", elements.get(2).get("someVar").getAsString());
+        assertEquals("value.red.medium.0", elements.get(3).get("someVar").getAsString());
+        assertEquals("value.red.medium.1", elements.get(4).get("someVar").getAsString());
+        assertEquals("value.red.medium.2", elements.get(5).get("someVar").getAsString());
+        assertEquals("value.blue.large.0", elements.get(6).get("someVar").getAsString());
+        assertEquals("value.blue.large.1", elements.get(7).get("someVar").getAsString());
+        assertEquals("value.blue.large.2", elements.get(8).get("someVar").getAsString());
+    }
+
     private JsonObject buildLoopValue(String... strings)
     {
         assertTrue(strings.length % 2 == 0);
