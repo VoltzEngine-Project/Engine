@@ -4,6 +4,7 @@ import com.builtbroken.jlib.helpers.MathHelper;
 import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IModelState;
+import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.models.ModelData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
@@ -26,10 +27,13 @@ public class ModelState extends RenderStateTexture implements IModelState
     public Pos offset;
     public Pos scale;
     public EulerAngle rotation;
-    public String[] rotationOrder = new String[] { "roll", "pitch", "yaw"};
+    public String[] rotationOrder = new String[]{"roll", "pitch", "yaw"};
 
     public boolean renderParent = false;
+    public boolean combineRotations = false;
     public boolean renderOnlyParts = true;
+
+    protected EulerAngle _cachedRotation;
 
     public ModelState(String ID)
     {
@@ -68,8 +72,30 @@ public class ModelState extends RenderStateTexture implements IModelState
                     GL11.glScaled(((IModelState) parentState).getScale().x(), ((IModelState) parentState).getScale().y(), ((IModelState) parentState).getScale().z());
                 }
 
+                if (combineRotations && _cachedRotation == null && parentState != null)
+                {
+                    double r = rotation != null ? rotation.roll() : 0;
+                    double p = rotation != null ? rotation.pitch() : 0;
+                    double y = rotation != null ? rotation.yaw() : 0;
+
+                    IRenderState state = getParent();
+                    while (state instanceof IModelState)
+                    {
+                        EulerAngle rot = ((IModelState) state).getRotation();
+                        if (rot != null)
+                        {
+                            r += rot.roll();
+                            p += rot.pitch();
+                            y += rot.yaw();
+                        }
+                        state = state.getParent();
+                    }
+
+                    _cachedRotation = new EulerAngle(y, p, r);
+                }
+
                 //Apply rotation, using render defined order
-                if(rotationOrder != null)
+                if (rotationOrder != null)
                 {
                     for (String r : rotationOrder)
                     {
@@ -145,7 +171,7 @@ public class ModelState extends RenderStateTexture implements IModelState
             }
 
             //Render model
-            modelData.render(renderOnlyParts, getPartsToRender());
+            modelData.render(renderOnlyParts(), getPartsToRender());
 
             //Ends render by restoring previous matrix(rotation, position, etc)
             GL11.glPopMatrix();
@@ -157,7 +183,11 @@ public class ModelState extends RenderStateTexture implements IModelState
     private void doRoll(float extra)
     {
         float roll = extra;
-        if (rotation != null)
+        if (_cachedRotation != null)
+        {
+            roll += _cachedRotation.roll();
+        }
+        else if (rotation != null)
         {
             roll += rotation.roll();
         }
@@ -172,7 +202,11 @@ public class ModelState extends RenderStateTexture implements IModelState
     private void doPitch(float extra)
     {
         float pitch = extra;
-        if (rotation != null)
+        if (_cachedRotation != null)
+        {
+            pitch += _cachedRotation.pitch();
+        }
+        else if (rotation != null)
         {
             pitch += rotation.pitch();
         }
@@ -187,9 +221,13 @@ public class ModelState extends RenderStateTexture implements IModelState
     private void doYaw(float extra)
     {
         float yaw = extra;
-        if (rotation != null)
+        if (_cachedRotation != null)
         {
-           yaw += rotation.yaw();
+            yaw += _cachedRotation.yaw();
+        }
+        else if (rotation != null)
+        {
+            yaw += rotation.yaw();
         }
         else if (parentState instanceof IModelState && ((IModelState) parentState).getRotation() != null)
         {
@@ -247,11 +285,16 @@ public class ModelState extends RenderStateTexture implements IModelState
     @Override
     public ModelData getModel()
     {
+        ModelData data = ClientDataHandler.INSTANCE.getModel(modelID);
+        if (data != null && data.getModel() != null)
+        {
+            return data;
+        }
         if (parentState instanceof IModelState)
         {
             return ((IModelState) parentState).getModel();
         }
-        return ClientDataHandler.INSTANCE.getModel(modelID);
+        return null;
     }
 
     @Override
@@ -262,6 +305,15 @@ public class ModelState extends RenderStateTexture implements IModelState
             return ((IModelState) parentState).getPartsToRender();
         }
         return parts;
+    }
+
+    public boolean renderOnlyParts()
+    {
+        if (parts == null && parentState instanceof ModelState)
+        {
+            return ((ModelState) parentState).renderOnlyParts();
+        }
+        return renderOnlyParts;
     }
 
     @Override

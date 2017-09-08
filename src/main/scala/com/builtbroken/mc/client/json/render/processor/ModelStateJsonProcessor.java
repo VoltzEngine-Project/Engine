@@ -138,6 +138,11 @@ public class ModelStateJsonProcessor extends RenderJsonSubProcessor<ModelState>
             renderState.renderOnlyParts = renderStateObject.get("renderOnlyParts").getAsBoolean();
         }
 
+        if (renderStateObject.has("combineRotations"))
+        {
+            renderState.combineRotations = renderStateObject.get("combineRotations").getAsBoolean();
+        }
+
         if (renderStateObject.has("renderParent"))
         {
             renderState.renderParent = renderStateObject.get("renderParent").getAsBoolean();
