@@ -114,7 +114,7 @@ public final class JsonContentLoader extends AbstractLoadable
 
     protected void displayDebug(String msg)
     {
-        if(debugWindow != null)
+        if (debugWindow != null)
         {
             debugWindow.addDebug(msg);
         }
@@ -768,12 +768,12 @@ public final class JsonContentLoader extends AbstractLoadable
             {
                 debug.error("Jar detected, using secondary method to load resources.");
 
-                URI jar = new URI("jar", uri.getSchemeSpecificPart().replace("%20", " "), null);
+                URI jar = new URI(uri.getScheme(), uri.getSchemeSpecificPart().replace("%20", " "), null);
 
                 Map<String, Object> env = new HashMap<>();
                 env.put("create", "true");
 
-                try (FileSystem fs = FileSystems.newFileSystem(jar, env))
+                try (FileSystem fs = FileSystems.newFileSystem(jar, env, getClass().getClassLoader()))
                 {
                     walkPaths(fs.getPath(folder));
                 }
@@ -880,7 +880,7 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void clear()
     {
-        if(!Engine.runningAsDev)
+        if (!Engine.runningAsDev)
         {
             debug.log("Clearing cached data to same RAM");
             externalFiles.clear();

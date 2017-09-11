@@ -32,6 +32,22 @@ public class TestLoader extends TestCase
     }
 
     @Test
+    public void testJarLoadWithDot() throws Exception
+    {
+        File file = new File(System.getProperty("user.dir"), "src/test/resources/.local/test.jar");
+
+        assertTrue(file.exists());
+
+        Path path = Paths.get(file.getPath());
+        URI uri = new URI("jar", path.toUri().toString(),  null);
+
+        JsonContentLoader loader = new JsonContentLoader();
+
+        loader.loadResourcesFromPackage(uri, "content");
+        assertEquals(1, loader.jsonEntries.size());
+    }
+
+    @Test
     public void testJarLoadWithFilePathSpace() throws Exception
     {
         File file = new File(System.getProperty("user.dir"), "src/test/resources/test test/test.jar");
