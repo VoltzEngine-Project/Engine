@@ -62,7 +62,7 @@ public enum GemOres
                     ore.block = block;
                     ore.oreDictName = "ore" + LanguageUtility.capitalizeFirst(ore.name().toLowerCase());
                     ItemStack stack = ore.stack();
-                    GameRegistry.registerWorldGenerator(new OreGenReplace(ore.oreDictName, block, ore.ordinal(), ore.oreGenSettings, "pickaxe", 1), 1);
+                    GameRegistry.registerWorldGenerator(new OreGenReplace(block, ore.ordinal(), ore.oreGenSettings, "pickaxe", 1), 1);
                     OreDictionary.registerOre(ore.oreDictName, stack);
                 }
             }

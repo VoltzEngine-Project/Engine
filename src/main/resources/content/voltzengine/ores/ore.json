@@ -1,0 +1,175 @@
+{
+  "author": {
+    "name": "voltzengine"
+  },
+  "loadCondition": "setting@content.load.ores",
+  "setting": {
+    "key": "content.load.ores",
+    "type": "boolean",
+    "value": true,
+    "configKey": "LoadOres",
+    "config": true,
+    "description": "Allows disabling ores blocks from load. if set to true ores will load and false will disable. World generation can be disable separate if you want to keep the block for legacy purposes."
+  },
+  "block": {
+    "id": "veStoneOre",
+    "name": "",
+    "mod": "voltzengine",
+    "material": "rock",
+    "hardness": 1.5,
+    "resistance": 10,
+    "canSilkHarvest": true,
+    "subtypes": [
+      {
+        "id": "tin",
+        "meta": 0,
+        "name": "oreTin",
+        "ore": "oreTin"
+      },
+      {
+        "id": "copper",
+        "meta": 1,
+        "name": "oreCopper",
+        "ore": "oreCopper"
+      },
+      {
+        "id": "silver",
+        "meta": 2,
+        "name": "oreSilver",
+        "ore": "oreSilver"
+      },
+      {
+        "id": "lead",
+        "meta": 3,
+        "name": "oreLead",
+        "ore": "oreLead"
+      },
+      {
+        "id": "zinc",
+        "meta": 4,
+        "name": "oreZinc",
+        "ore": "oreZinc"
+      },
+      {
+        "id": "nickel",
+        "meta": 5,
+        "name": "oreNickel",
+        "ore": "oreNickel"
+      },
+      {
+        "id": "bauxite",
+        "meta": 6,
+        "name": "oreBauxite",
+        "ore": "oreAluminum"
+      },
+      {
+        "id": "magnesite",
+        "meta": 7,
+        "name": "oreMagnesite",
+        "ore": "oreMagnesium"
+      },
+      {
+        "id": "uranium",
+        "meta": 8,
+        "name": "oreUranium",
+        "ore": "oreUranium"
+      },
+      {
+        "id": "platinum",
+        "meta": 9,
+        "name": "orePlatinum",
+        "ore": "orePlatinum"
+      }
+    ]
+  },
+  "worldGenerator:0": {
+    "block": "block@voltzengine:veStoneOre@0",
+    "oreName": "tin",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 120,
+    "branchSize": 7,
+    "chunkLimit": 40
+  },
+  "worldGenerator:1": {
+    "block": "block@voltzengine:veStoneOre@1",
+    "oreName": "copper",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 120,
+    "branchSize": 7,
+    "chunkLimit": 60
+  },
+  "worldGenerator:2": {
+    "block": "block@voltzengine:veStoneOre@2",
+    "oreName": "silver",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 5,
+    "chunkLimit": 4
+  },
+  "worldGenerator:3": {
+    "block": "block@voltzengine:veStoneOre@3",
+    "oreName": "lead",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 80,
+    "branchSize": 5,
+    "chunkLimit": 4
+  },
+  "worldGenerator:4": {
+    "block": "block@voltzengine:veStoneOre@4",
+    "oreName": "zinc",
+    "type": "StoneOre",
+    "minY": 20,
+    "maxY": 40,
+    "branchSize": 5,
+    "chunkLimit": 20
+  },
+  "worldGenerator:5": {
+    "block": "block@voltzengine:veStoneOre@5",
+    "oreName": "nickel",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 5,
+    "chunkLimit": 8
+  },
+  "worldGenerator:6": {
+    "block": "block@voltzengine:veStoneOre@6",
+    "oreName": "bauxite",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 5,
+    "chunkLimit": 10
+  },
+  "worldGenerator:7": {
+    "block": "block@voltzengine:veStoneOre@7",
+    "oreName": "magnesite",
+    "type": "StoneOre",
+    "minY": 5,
+    "maxY": 10,
+    "branchSize": 3,
+    "chunkLimit": 6
+  },
+  "worldGenerator:8": {
+    "block": "block@voltzengine:veStoneOre@8",
+    "oreName": "uranium",
+    "type": "StoneOre",
+    "minY": 5,
+    "maxY": 30,
+    "branchSize": 2,
+    "chunkLimit": 4
+  },
+  "worldGenerator:9": {
+    "block": "block@voltzengine:veStoneOre@9",
+    "oreName": "platinum",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 3,
+    "chunkLimit": 10
+  }
+}
