@@ -201,7 +201,9 @@ public abstract class JsonGenData implements IJsonGenObject
             {
                 if (stack != null && stack.getItem() != null)
                 {
-                    return stack;
+                    ItemStack copy = stack.copy();
+                    copy.stackSize = 1;
+                    return copy;
                 }
             }
         }
