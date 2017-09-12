@@ -13,7 +13,7 @@
   },
   "block": {
     "id": "veStoneOre",
-    "name": "",
+    "name": "${metaLocalization}",
     "mod": "voltzengine",
     "material": "rock",
     "hardness": 1.5,

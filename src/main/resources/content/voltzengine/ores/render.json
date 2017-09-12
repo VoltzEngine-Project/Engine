@@ -1,0 +1,52 @@
+{
+  "render": {
+    "contentID": "voltzengine:veStoneOre",
+    "type": "block",
+    "states": [
+      {
+        "forEach": {
+          "values": [
+            {
+              "id": "tin"
+            },
+            {
+              "id": "copper"
+            },
+            {
+              "id": "silver"
+            },
+            {
+              "id": "lead"
+            },
+            {
+              "id": "zinc"
+            },
+            {
+              "id": "nickel"
+            },
+            {
+              "id": "bauxite"
+            },
+            {
+              "id": "magnesite"
+            },
+            {
+              "id": "uranium"
+            },
+            {
+              "id": "platinum"
+            }
+          ],
+          "data": {
+            "id": "%id%",
+            "renderType": "block",
+            "texture": {
+              "domain": "voltzengine",
+              "name": "stone_%id%_ore"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

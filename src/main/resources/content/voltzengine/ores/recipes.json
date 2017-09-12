@@ -1,0 +1,45 @@
+{
+  "furnaceRecipe": {
+    "forEach": {
+      "values": [
+        {
+          "id": "Tin"
+        },
+        {
+          "id": "Copper"
+        },
+        {
+          "id": "Silver"
+        },
+        {
+          "id": "Lead"
+        },
+        {
+          "id": "Zinc"
+        },
+        {
+          "id": "Nickel"
+        },
+        {
+          "id": "Bauxite"
+        },
+        {
+          "id": "Magnesite"
+        },
+        {
+          "id": "Uranium"
+        },
+        {
+          "id": "Platinum"
+        }
+      ],
+      "data": {
+        "input": {
+          "item": "block@voltzengine:veStoneOre",
+          "meta": "%id%"
+        },
+        "output": "ore@ingot%id%"
+      }
+    }
+  }
+}
