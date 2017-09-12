@@ -184,8 +184,20 @@ public abstract class JsonGenData implements IJsonGenObject
             return toStack(convertItemEntry((String) object));
         }
 
+
         //Convert to itemstack
-        if (object instanceof Item)
+        if (object instanceof JsonItemEntry)
+        {
+            try
+            {
+                return ((JsonItemEntry) object).get();
+            }
+            catch (IllegalArgumentException e)
+            {
+                Engine.logger().error("Error in recipe data " + this, e);
+            }
+        }
+        else if (object instanceof Item)
         {
             return new ItemStack((Item) object);
         }
