@@ -1,4 +1,5 @@
 {
+  "loadCondition": "setting@content.load.ores",
   "item": {
     "id": "gems",
     "mod": "voltzengine",
@@ -7,17 +8,111 @@
     "subTypes": [
       {
         "forEach": {
+          "_comment": "index is built from two parts, prefix noting 1000 place and index noting 1-999 value",
+          "_comment": "32 types can exist with each type having 999 possible gem types or sub types",
+          "_comment": "value 0 is not used by index due to it previously being used as a null placeholder",
           "values": [
             {
-              "id": "",
-              "ore": ""
+              "gem": "amazonite",
+              "oreName": "Amazonite",
+              "i": "001"
+            },
+            {
+              "gem": "quartz",
+              "oreName": "Quartz",
+              "i": "002"
+            },
+            {
+              "gem": "quartz.smoky",
+              "oreName": "QuartzSmoky",
+              "i": "003"
+            },
+            {
+              "gem": "onyx.black",
+              "oreName": "OnyxBlack",
+              "i": "004"
+            },
+            {
+              "gem": "onyx.red",
+              "oreName": "OnyxRed",
+              "i": "005"
+            },
+            {
+              "gem": "garnet.green",
+              "oreName": "GarnetGreen",
+              "i": "006"
+            },
+            {
+              "gem": "garnet.orange",
+              "oreName": "GarnetOrange",
+              "i": "007"
+            },
+            {
+              "gem": "garnet.red",
+              "oreName": "GarnetRed",
+              "i": "008"
+            },
+            {
+              "gem": "garnet.yellow",
+              "oreName": "GarnetYellow",
+              "i": "009"
+            },
+            {
+              "gem": "emerald",
+              "oreName": "Emerald",
+              "i": "010"
             }
           ],
-          "data": {
-            "id": "%id%",
-            "name": "%id%",
-            "ore": "%ore%",
-            "index": 0
+          "forEach": {
+            "values": [
+              {
+                "type": "ore",
+                "ore": "gemOre",
+                "index": "%i%"
+              },
+              {
+                "type": "raw",
+                "ore": "gemRaw",
+                "index": "1%i%"
+              },
+              {
+                "type": "uncut",
+                "ore": "gemUncut",
+                "index": "2%i%",
+                "runCondition": {
+                  "IfAllTrue": [
+                    {
+                      "type": "isNot",
+                      "field": "gem",
+                      "check": "emerald",
+                      "result": true
+                    },
+                    {
+                      "type": "isNot",
+                      "field": "gem",
+                      "check": "quartz",
+                      "result": true
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "cut",
+                "ore": "gem",
+                "index": "3%i%"
+              },
+              {
+                "type": "polished",
+                "ore": "gemPolished",
+                "index": "4%i%"
+              }
+            ],
+            "data": {
+              "id": "%gem%.%type%",
+              "name": "%gem%.%type%",
+              "ore": "%ore%%oreName%",
+              "index": "%index%"
+            }
           }
         }
       }

@@ -46,13 +46,13 @@ tile.voltzengine:orePlatinum.name=Platinum Ore
 
 ## Ores, Gems
 tile.voltzengine:oreAmazonite.name=Amazonite Ore
-tile.voltzengine:oreSmokeyquartz.name=Smokey Quartz Ore
-tile.voltzengine:oreOnyxblack.name=Black Banded Onyx Ore
-tile.voltzengine:oreOnyxred.name=Red Banded Onyx Ore
-tile.voltzengine:oreGarnetgreen.name=Green Garnet Ore
-tile.voltzengine:oreGarnetred.name=Red Garnet Ore
-tile.voltzengine:oreGarnetorange.name=Orange Garnet Ore
-tile.voltzengine:oreGarnetyellow.name=Yellow Garnet Ore
+tile.voltzengine:oreSmokeyQuartz.name=Smokey Quartz Ore
+tile.voltzengine:oreOnyxBlack.name=Black Banded Onyx Ore
+tile.voltzengine:oreOnyxRed.name=Red Banded Onyx Ore
+tile.voltzengine:oreGarnetGreen.name=Green Garnet Ore
+tile.voltzengine:oreGarnetRed.name=Red Garnet Ore
+tile.voltzengine:oreGarnetOrange.name=Orange Garnet Ore
+tile.voltzengine:oreGarnetYellow.name=Yellow Garnet Ore
 
 ## Gems
 item.voltzengine:gem.amazonite.uncut.name=Amazonite Gem

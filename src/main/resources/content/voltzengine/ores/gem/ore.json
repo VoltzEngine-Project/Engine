@@ -21,64 +21,52 @@
     "canSilkHarvest": true,
     "subtypes": [
       {
-        "id": "tin",
+        "id": "amazonite",
         "meta": 0,
-        "name": "oreTin",
-        "ore": "oreTin"
+        "name": "oreAmazonite",
+        "ore": "oreAmazonite"
       },
       {
-        "id": "copper",
+        "id": "quartz.smoky",
         "meta": 1,
-        "name": "oreCopper",
-        "ore": "oreCopper"
+        "name": "oreQuartzSmoky",
+        "ore": "oreQuartzSmoky"
       },
       {
-        "id": "silver",
+        "id": "onyx.black",
         "meta": 2,
-        "name": "oreSilver",
-        "ore": "oreSilver"
+        "name": "oreOnyxBlack",
+        "ore": "oreOnyxBlack"
       },
       {
-        "id": "lead",
+        "id": "onyx.red",
         "meta": 3,
-        "name": "oreLead",
-        "ore": "oreLead"
+        "name": "oreOnyxRed",
+        "ore": "oreOnyxRed"
       },
       {
-        "id": "zinc",
+        "id": "garnet.green",
         "meta": 4,
-        "name": "oreZinc",
-        "ore": "oreZinc"
+        "name": "oreGarnetGreen",
+        "ore": "oreGarnetGreen"
       },
       {
-        "id": "nickel",
+        "id": "garnet.orange",
         "meta": 5,
-        "name": "oreNickel",
-        "ore": "oreNickel"
+        "name": "oreGarnetOrange",
+        "ore": "oreGarnetOrange"
       },
       {
-        "id": "bauxite",
+        "id": "garnet.red",
         "meta": 6,
-        "name": "oreBauxite",
-        "ore": "oreAluminum"
+        "name": "oreGarnetRed",
+        "ore": "oreGarnetRed"
       },
       {
-        "id": "magnesite",
+        "id": "garnet.yellow",
         "meta": 7,
-        "name": "oreMagnesite",
-        "ore": "oreMagnesium"
-      },
-      {
-        "id": "uranium",
-        "meta": 8,
-        "name": "oreUranium",
-        "ore": "oreUranium"
-      },
-      {
-        "id": "platinum",
-        "meta": 9,
-        "name": "orePlatinum",
-        "ore": "orePlatinum"
+        "name": "oreGarnetYellow",
+        "ore": "oreGarnetYellow"
       }
     ]
   }

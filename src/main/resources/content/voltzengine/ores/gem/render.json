@@ -1,0 +1,54 @@
+{
+  "render": {
+    "contentID": "voltzengine:veGemOre",
+    "type": "block",
+    "states": [
+      {
+        "forEach": {
+          "values": [
+            {
+              "id": "amazonite",
+              "texture":"amazonite"
+            },
+            {
+              "id": "quartz.smoky",
+              "texture":"smokeyquartz"
+            },
+            {
+              "id": "onyx.black",
+              "texture":"onyxblack"
+            },
+            {
+              "id": "onyx.red",
+              "texture":"onyxred"
+            },
+            {
+              "id": "garnet.green",
+              "texture":"garnetgreen"
+            },
+            {
+              "id": "garnet.orange",
+              "texture":"garnetorange"
+            },
+            {
+              "id": "garnet.red",
+              "texture":"garnetred"
+            },
+            {
+              "id": "garnet.yellow",
+              "texture":"garnetyellow"
+            }
+          ],
+          "data": {
+            "id": "%id%",
+            "renderType": "block",
+            "texture": {
+              "domain": "voltzengine",
+              "name": "stone_%texture%_ore"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
