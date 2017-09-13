@@ -3,6 +3,7 @@ package com.builtbroken.mc.framework.item;
 import com.builtbroken.mc.api.items.listeners.IItemEventListener;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
+import com.builtbroken.mc.framework.json.struct.JsonForLoop;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
@@ -94,26 +95,18 @@ public class ItemNode implements IItemEventListener
         {
             for (JsonElement element : data.getAsJsonArray())
             {
-                JsonObject itemData = element.getAsJsonObject();
+
                 if (element.isJsonObject()) //TODO move to JSON processor?
                 {
-                    ItemNodeSubType subType = new ItemNodeSubType(this.item, this, itemData);
-
-                    //Error checks, can't have duplicate entries
-                    if (subTypeHashMap.containsKey(subType.index))
+                    JsonObject itemData = element.getAsJsonObject();
+                    if(JsonForLoop.hasLoops(itemData))
                     {
-                        throw new IllegalArgumentException("ItemNode#setSubTypes(data) >> process subtypes >> duplicate index used for " + subType + " and " + subTypeHashMap.get(subType.index));
+                        JsonForLoop.handleLoops(itemData, e -> createItemSubType(e));
                     }
-                    if (nameToSubType.containsKey(subType.id))
+                    else
                     {
-                        throw new IllegalArgumentException("ItemNode#setSubTypes(data) >> process subtypes >> duplicate id used for " + subType + " and " + nameToSubType.get(subType.id));
+                        createItemSubType(itemData);
                     }
-
-                    //Cache data for use
-                    subTypeHashMap.put(subType.index, subType);
-                    nameToSubType.put(subType.id, subType);
-
-                    //TODO process extra data using JSON injection handler
                 }
                 else
                 {
@@ -125,6 +118,27 @@ public class ItemNode implements IItemEventListener
         {
             throw new IllegalArgumentException("ItemNode#setSubTypes(data) requires that the input from JSON be a json array matching '\"subType\":[{values1}, {value2}]");
         }
+    }
+
+    protected void createItemSubType(JsonObject itemData)
+    {
+        ItemNodeSubType subType = new ItemNodeSubType(this.item, this, itemData);
+
+        //Error checks, can't have duplicate entries
+        if (subTypeHashMap.containsKey(subType.index))
+        {
+            throw new IllegalArgumentException("ItemNode#setSubTypes(data) >> process subtypes >> duplicate index used for " + subType + " and " + subTypeHashMap.get(subType.index));
+        }
+        if (nameToSubType.containsKey(subType.id))
+        {
+            throw new IllegalArgumentException("ItemNode#setSubTypes(data) >> process subtypes >> duplicate id used for " + subType + " and " + nameToSubType.get(subType.id));
+        }
+
+        //Cache data for use
+        subTypeHashMap.put(subType.index, subType);
+        nameToSubType.put(subType.id, subType);
+
+        //TODO process extra data using JSON injection handler
     }
 
     /**
