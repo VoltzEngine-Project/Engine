@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.item;
 
+import com.builtbroken.mc.framework.json.imp.IJsonKeyDataProvider;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
@@ -12,7 +13,7 @@ import java.util.Map;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 8/19/2017.
  */
-public class ItemNodeSubType
+public class ItemNodeSubType implements IJsonKeyDataProvider
 {
     /** Unique ID of the content */
     public final String id;
@@ -31,6 +32,8 @@ public class ItemNodeSubType
 
     public ItemNodeSubType(ItemBase item, ItemNode node, String id, String unlocalizedName, int index)
     {
+        //DO NOT register anything in constructor
+
         this.item = item;
         this.node = node;
         this.id = id;
@@ -40,6 +43,8 @@ public class ItemNodeSubType
 
     public ItemNodeSubType(ItemBase item, ItemNode node, JsonObject itemData)
     {
+        //DO NOT register anything in constructor
+
         this.item = item;
         this.node = node;
 
@@ -69,6 +74,28 @@ public class ItemNodeSubType
     public void setOreName(String value)
     {
         oreName = value;
+    }
+
+    @Override
+    public Object getJsonKeyData(String key)  //TODO automate via annotations
+    {
+        if (key.equalsIgnoreCase("id"))
+        {
+            return id;
+        }
+        else if (key.equalsIgnoreCase("name"))
+        {
+            return unlocalizedName;
+        }
+        else if (key.equalsIgnoreCase("oreName"))
+        {
+            return oreName;
+        }
+        else if (key.equalsIgnoreCase("index"))
+        {
+            return index;
+        }
+        return null;
     }
 
     @Override

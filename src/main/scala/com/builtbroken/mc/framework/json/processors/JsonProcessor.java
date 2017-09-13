@@ -8,9 +8,9 @@ import com.builtbroken.mc.framework.json.data.JsonItemEntry;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
+import com.builtbroken.mc.framework.json.struct.JsonConditional;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import cpw.mods.fml.common.Loader;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
@@ -96,7 +96,7 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
         {
             if (!object.has(value))
             {
-                throw new IllegalArgumentException("File is missing " + value + " value " + object);
+                throw new IllegalArgumentException("File is missing '" + value + "' value from inside '" + object + "'");
             }
         }
     }
@@ -108,19 +108,7 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
         {
             if (((JsonObject) object).has("loadCondition"))
             {
-                final String type = ((JsonObject) object).getAsJsonPrimitive("loadCondition").getAsString();
-                if (type.startsWith("mod@"))
-                {
-                    String modName = type.substring(4, type.length());
-                    if (!Loader.isModLoaded(modName))
-                    {
-                        return false;
-                    }
-                }
-                else if (type.equalsIgnoreCase("devMode"))
-                {
-                    return Engine.runningAsDev;
-                }
+                return JsonConditional.isConditionalTrue(((JsonObject) object).get("loadCondition"), this);
             }
         }
         return true;

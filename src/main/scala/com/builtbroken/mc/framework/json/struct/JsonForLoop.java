@@ -76,12 +76,12 @@ public class JsonForLoop
             }
             if (key.equalsIgnoreCase("for"))
             {
-                generateDataForLoop(currentJsonObject, action);
+                generateDataForLoop(elementEntry.getValue().getAsJsonObject(), action);
                 handled = true;
             }
             else if (key.equalsIgnoreCase("forEach"))
             {
-                generateDataForEachLoop(currentJsonObject, action);
+                generateDataForEachLoop(elementEntry.getValue().getAsJsonObject(), action);
                 handled = true;
             }
         }
@@ -233,7 +233,7 @@ public class JsonForLoop
      */
     public static void generateDataForEachLoop(JsonObject currentJsonObject, List<JsonObject> states)
     {
-        generateDataForEachLoop(currentJsonObject, states);
+        generateDataForEachLoop(currentJsonObject, states, new HashMap(), 0);
     }
 
     /**
@@ -252,28 +252,49 @@ public class JsonForLoop
             throw new RuntimeException("ForEach must define a JSON array of values to loop over");
         }
 
+        //Loop values
         JsonArray values = currentJsonObject.getAsJsonArray("values");
-
         for (JsonElement e : values)
         {
+            //Only use values that are objects TODO allow for primitives
             if (e.isJsonObject())
             {
-                JsonObject o = e.getAsJsonObject();
+                final JsonObject valueObject = e.getAsJsonObject();
+
+                //Build key map
                 HashMap<String, String> newKeys = new HashMap();
-                for (Map.Entry<String, JsonElement> entry : o.entrySet())
+                for (Map.Entry<String, JsonElement> entry : valueObject.entrySet())
                 {
-                    if (entry.getValue().isJsonPrimitive())
+                    if(!entry.getKey().equalsIgnoreCase("runCondition"))
                     {
-                        newKeys.put(entry.getKey(), entry.getValue().getAsString());
-                    }
-                    else
-                    {
-                        throw new RuntimeException("ForEach values keys must be JSON primitives (string, int, double, float, etc)");
+                        if (entry.getValue().isJsonPrimitive())
+                        {
+                            newKeys.put(entry.getKey(), injectValues(entry.getValue().getAsString(), injectionKeys));
+                        }
+                        else
+                        {
+                            throw new RuntimeException("ForEach values keys must be JSON primitives (string, int, double, float, etc)");
+                        }
                     }
                 }
-
+                //Add keys
                 injectionKeys.putAll(newKeys);
-                handle(currentJsonObject, states, injectionKeys, depth);
+
+                boolean run = true;
+                //Check if we should run
+                if (valueObject.has("runCondition"))
+                {
+                    JsonElement runCondition = valueObject.get("runCondition");
+                    run = JsonConditional.isConditionalTrue(runCondition, injectionKeys);
+                }
+
+                if (run)
+                {
+                    //Handle
+                    handle(currentJsonObject, states, injectionKeys, depth);
+                }
+
+                //Remove keys
                 for (String key : newKeys.keySet())
                 {
                     injectionKeys.remove(key);

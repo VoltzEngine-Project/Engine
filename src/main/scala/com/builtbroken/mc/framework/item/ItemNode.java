@@ -2,7 +2,9 @@ package com.builtbroken.mc.framework.item;
 
 import com.builtbroken.mc.api.items.listeners.IItemEventListener;
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.framework.json.imp.IJsonKeyDataProvider;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
+import com.builtbroken.mc.framework.json.struct.JsonConditional;
 import com.builtbroken.mc.framework.json.struct.JsonForLoop;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,7 +22,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 5/8/2017.
  */
-public class ItemNode implements IItemEventListener
+public class ItemNode implements IItemEventListener, IJsonKeyDataProvider
 {
     private static final List<String> empty_list = new ArrayList()
     {
@@ -95,7 +97,6 @@ public class ItemNode implements IItemEventListener
         {
             for (JsonElement element : data.getAsJsonArray())
             {
-
                 if (element.isJsonObject()) //TODO move to JSON processor?
                 {
                     JsonObject itemData = element.getAsJsonObject();
@@ -122,7 +123,17 @@ public class ItemNode implements IItemEventListener
 
     protected void createItemSubType(JsonObject itemData)
     {
+        //Build subtype
         ItemNodeSubType subType = new ItemNodeSubType(this.item, this, itemData);
+
+        //Check if we should load
+        if(itemData.has("loadCondition"))
+        {
+            if(!JsonConditional.isConditionalTrue(itemData.get("loadCondition"), this))
+            {
+                return;
+            }
+        }
 
         //Error checks, can't have duplicate entries
         if (subTypeHashMap.containsKey(subType.index))
@@ -137,8 +148,6 @@ public class ItemNode implements IItemEventListener
         //Cache data for use
         subTypeHashMap.put(subType.index, subType);
         nameToSubType.put(subType.id, subType);
-
-        //TODO process extra data using JSON injection handler
     }
 
     /**
@@ -159,5 +168,15 @@ public class ItemNode implements IItemEventListener
     public String getRenderContentID(int meta)
     {
         return id; //TODO add JSON option to return different render ID per sub type to allow overriding render settings (render pass count)
+    }
+
+    @Override
+    public Object getJsonKeyData(String key)
+    {
+        if(key.equalsIgnoreCase("id"))
+        {
+            return id;
+        }
+        return null;
     }
 }
