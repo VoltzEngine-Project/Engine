@@ -1,0 +1,132 @@
+{
+  "worldGenerator:0": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "tin"
+    },
+    "mod": "voltzengine",
+    "oreName": "tin",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 120,
+    "branchSize": 7,
+    "chunkLimit": 40
+  },
+  "worldGenerator:1": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "copper"
+    },
+    "mod": "voltzengine",
+    "oreName": "copper",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 120,
+    "branchSize": 7,
+    "chunkLimit": 60
+  },
+  "worldGenerator:2": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "silver"
+    },
+    "mod": "voltzengine",
+    "oreName": "silver",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 5,
+    "chunkLimit": 20
+  },
+  "worldGenerator:3": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "lead"
+    },
+    "mod": "voltzengine",
+    "oreName": "lead",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 80,
+    "branchSize": 5,
+    "chunkLimit": 40
+  },
+  "worldGenerator:4": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "zinc"
+    },
+    "mod": "voltzengine",
+    "oreName": "zinc",
+    "type": "StoneOre",
+    "minY": 20,
+    "maxY": 40,
+    "branchSize": 5,
+    "chunkLimit": 20
+  },
+  "worldGenerator:5": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "nickel"
+    },
+    "mod": "voltzengine",
+    "oreName": "nickel",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 5,
+    "chunkLimit": 15
+  },
+  "worldGenerator:6": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "bauxite"
+    },
+    "mod": "voltzengine",
+    "oreName": "bauxite",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 5,
+    "chunkLimit": 30
+  },
+  "worldGenerator:7": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "magnesite"
+    },
+    "mod": "voltzengine",
+    "oreName": "magnesite",
+    "type": "StoneOre",
+    "minY": 5,
+    "maxY": 10,
+    "branchSize": 3,
+    "chunkLimit": 15
+  },
+  "worldGenerator:8": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "uranium"
+    },
+    "mod": "voltzengine",
+    "oreName": "uranium",
+    "type": "StoneOre",
+    "minY": 5,
+    "maxY": 30,
+    "branchSize": 2,
+    "chunkLimit": 7
+  },
+  "worldGenerator:9": {
+    "block": {
+      "item": "block@voltzengine:veStoneOre",
+      "meta": "platinum"
+    },
+    "mod": "voltzengine",
+    "oreName": "platinum",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 3,
+    "chunkLimit": 10
+  }
+}
