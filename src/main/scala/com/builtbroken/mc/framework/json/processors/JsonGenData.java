@@ -23,8 +23,8 @@ public abstract class JsonGenData implements IJsonGenObject
     @JsonProcessorData("author")
     public String author;
 
-    @JsonProcessorData("mod")
-    public String modName;
+    @JsonProcessorData(value = {"mod", "modID"})
+    public String modID;
 
     /** Processor that created this object */
     public final IJsonProcessor processor;
@@ -55,7 +55,7 @@ public abstract class JsonGenData implements IJsonGenObject
     @Override
     public String getMod()
     {
-        return modName;
+        return modID;
     }
 
     /**

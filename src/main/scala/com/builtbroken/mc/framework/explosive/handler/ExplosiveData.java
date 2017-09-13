@@ -25,9 +25,6 @@ public class ExplosiveData extends JsonGenData
     @JsonProcessorData(value = "handler", required = true)
     public String blastHandlerClass;
 
-    @JsonProcessorData(value = {"mod", "modID"}, required = true)
-    public String modID;
-
     @JsonProcessorData(value = "powerMultiplier", type = "int")
     public int multiplier = 1;
 
