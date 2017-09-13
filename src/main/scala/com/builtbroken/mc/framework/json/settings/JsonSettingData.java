@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.json.settings;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
@@ -25,6 +26,12 @@ public abstract class JsonSettingData extends JsonGenData
     {
         super(processor);
         this.key = key;
+    }
+
+    @Override
+    public void register()
+    {
+        Engine.addSetting(this);
     }
 
     @Override
@@ -66,5 +73,10 @@ public abstract class JsonSettingData extends JsonGenData
     public String getString()
     {
         return null;
+    }
+
+    public boolean getBoolean()
+    {
+        return false;
     }
 }

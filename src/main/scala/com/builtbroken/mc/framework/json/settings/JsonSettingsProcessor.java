@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
+import com.builtbroken.mc.framework.json.settings.data.JsonSettingBoolean;
 import com.builtbroken.mc.framework.json.settings.data.JsonSettingInteger;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -65,6 +66,10 @@ public class JsonSettingsProcessor extends JsonProcessor<JsonSettingData>
         else if (type.equalsIgnoreCase("double"))
         {
 
+        }
+        else if (type.equalsIgnoreCase("boolean"))
+        {
+            settingData = new JsonSettingBoolean(this, key, value.getAsBoolean());
         }
         else
         {
