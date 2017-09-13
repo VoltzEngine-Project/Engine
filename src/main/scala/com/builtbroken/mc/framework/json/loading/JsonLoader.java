@@ -36,6 +36,7 @@ public class JsonLoader
         addConverter(new JsonConverterNBT());
         addConverter(new JsonConverterStringArray());
         addConverter(new JsonConverterCube());
+        addConverter(new JsonConverterItem());
         addConverter(new JsonConverterEnergyBufferData());
         addConverter(new JsonConverterEnergyChargeData());
     }
