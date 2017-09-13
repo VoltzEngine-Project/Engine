@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.data.JsonItemEntry;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -19,7 +20,11 @@ import java.util.ArrayList;
 public abstract class JsonGenData implements IJsonGenObject
 {
     /** Person or group that created the object */
+    @JsonProcessorData("author")
     public String author;
+
+    @JsonProcessorData("mod")
+    public String modName;
 
     /** Processor that created this object */
     public final IJsonProcessor processor;
@@ -50,7 +55,7 @@ public abstract class JsonGenData implements IJsonGenObject
     @Override
     public String getMod()
     {
-        return null;
+        return modName;
     }
 
     /**
