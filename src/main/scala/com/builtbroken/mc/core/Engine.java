@@ -4,10 +4,10 @@ import com.builtbroken.mc.abstraction.EngineLoader;
 import com.builtbroken.mc.api.abstraction.imp.IMinecraftInterface;
 import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.core.content.resources.DefinedGenItems;
-import com.builtbroken.mc.core.content.resources.gems.GemTypes;
 import com.builtbroken.mc.core.content.tool.ItemSheetMetalTools;
 import com.builtbroken.mc.core.content.tool.ItemSimpleCraftingTool;
 import com.builtbroken.mc.core.network.netty.PacketManager;
+import com.builtbroken.mc.framework.json.settings.JsonSettingData;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.LoaderState;
@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,6 +37,8 @@ public class Engine
     public static EngineLoader loaderInstance;
 
     public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
+
+    public static final HashMap<String, JsonSettingData> GLOBAL_SETTINGS = new HashMap();
 
     @Deprecated
     public static Block ore = null;
@@ -93,9 +96,6 @@ public class Engine
     @Deprecated
     public static void requestOres()
     {
-        requestMetalOres();
-        requestGemOres();
-        requestedContent.add("ore");
     }
 
     /**
@@ -142,8 +142,6 @@ public class Engine
         DefinedGenItems.NUGGET.requestToLoad();
         DefinedGenItems.WIRE.requestToLoad();
         DefinedGenItems.SCREW.requestToLoad();
-        //TODO remove if statement when gems are nice
-        GemTypes.UNCUT.requestToLoad();
     }
 
     @Deprecated
@@ -240,7 +238,6 @@ public class Engine
         {
             throw new RuntimeException("Modules can only be requested to load in the pre-init phase");
         }
-        requestOres();
         requestResources();
         requestCraftingParts();
         requestCircuits();
@@ -338,5 +335,19 @@ public class Engine
     public static boolean shouldDoClientLogic()
     {
         return isJUnitTest() || getEffectiveSide() == Side.CLIENT; //TODO recode to avoid issues with getEffectiveSide()
+    }
+
+    //=====================================================
+    //========= Global Settings ===========================
+    //=====================================================
+
+    public static void addSetting(JsonSettingData jsonSettingData)
+    {
+        GLOBAL_SETTINGS.put(jsonSettingData.key, jsonSettingData);
+    }
+
+    public static JsonSettingData getSetting(final String key)
+    {
+        return GLOBAL_SETTINGS.get(key);
     }
 }
