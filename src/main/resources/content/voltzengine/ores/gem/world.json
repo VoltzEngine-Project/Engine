@@ -1,0 +1,106 @@
+{
+  "worldGenerator:0": {
+    "block": {
+      "item": "block@voltzengine:veGemOre",
+      "meta": "amazonite"
+    },
+    "mod": "voltzengine",
+    "oreName": "amazonite",
+    "type": "StoneOre",
+    "minY": 5,
+    "maxY": 20,
+    "branchSize": 2,
+    "chunkLimit": 15
+  },
+  "worldGenerator:1": {
+    "block": {
+      "item": "block@voltzengine:veGemOre",
+      "meta": "quartz.smoky"
+    },
+    "mod": "voltzengine",
+    "oreName": "SmokyQuartz",
+    "type": "StoneOre",
+    "minY": 5,
+    "maxY": 20,
+    "branchSize": 2,
+    "chunkLimit": 15
+  },
+  "worldGenerator:2": {
+    "block": {
+      "item": "block@voltzengine:veGemOre",
+      "meta": "onyx.black"
+    },
+    "mod": "voltzengine",
+    "oreName": "BlackOnyx",
+    "type": "StoneOre",
+    "minY": 1,
+    "maxY": 5,
+    "branchSize": 3,
+    "chunkLimit": 10
+  },
+  "worldGenerator:3": {
+    "block": {
+      "item": "block@voltzengine:veGemOre",
+      "meta": "onyx.red"
+    },
+    "mod": "voltzengine",
+    "oreName": "RedOnyx",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 5,
+    "chunkLimit": 20
+  },
+  "worldGenerator:4": {
+    "block": {
+      "item": "block@voltzengine:veGemOre",
+      "meta": "garnet.green"
+    },
+    "mod": "voltzengine",
+    "oreName": "GreenGarnet",
+    "type": "StoneOre",
+    "minY": 15,
+    "maxY": 60,
+    "branchSize": 5,
+    "chunkLimit": 20
+  },
+  "worldGenerator:5": {
+    "block": {
+      "item": "block@voltzengine:veGemOre",
+      "meta": "garnet.orange"
+    },
+    "mod": "voltzengine",
+    "oreName": "OrangeGarnet",
+    "type": "StoneOre",
+    "minY": 10,
+    "maxY": 50,
+    "branchSize": 3,
+    "chunkLimit": 18
+  },
+  "worldGenerator:6": {
+    "block": {
+      "item": "block@voltzengine:veGemOre",
+      "meta": "garnet.red"
+    },
+    "mod": "voltzengine",
+    "oreName": "RedGarnet",
+    "type": "StoneOre",
+    "minY": 10,
+    "maxY": 50,
+    "branchSize": 3,
+    "chunkLimit": 18
+  },
+  "worldGenerator:7": {
+    "block": {
+      "item": "block@voltzengine:veGemOre",
+      "meta": "garnet.yellow"
+    },
+    "mod": "voltzengine",
+    "oreName": "YellowGarnet",
+    "type": "StoneOre",
+    "minY": 10,
+    "maxY": 50,
+    "branchSize": 3,
+    "chunkLimit": 18
+  }
+}
