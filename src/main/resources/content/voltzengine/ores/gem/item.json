@@ -1,0 +1,47 @@
+{
+  "item": {
+    "id": "gems",
+    "mod": "voltzengine",
+    "name": "gem",
+    "hasSubTypes": true,
+    "subTypes": [
+      {
+        "forEach": {
+          "values": [
+            {
+              "id": "",
+              "ore": ""
+            }
+          ],
+          "data": {
+            "id": "%id%",
+            "name": "%id%",
+            "ore": "%ore%",
+            "index": 0
+          }
+        }
+      }
+    ]
+  },
+  "_comment": "Updates old entries to turn into new entry, will not save meta values but at least items are not fully lost",
+  "missingMappingEvent:1": {
+    "oldValue": "voltzengine:GemOreItem",
+    "newValue": "voltzengine:gems"
+  },
+  "missingMappingEvent:2": {
+    "oldValue": "voltzengine:GemRawItem",
+    "newValue": "voltzengine:gems"
+  },
+  "missingMappingEvent:3": {
+    "oldValue": "voltzengine:GemUncutItem",
+    "newValue": "voltzengine:gems"
+  },
+  "missingMappingEvent:4": {
+    "oldValue": "voltzengine:GemCutItem",
+    "newValue": "voltzengine:gems"
+  },
+  "missingMappingEvent:5": {
+    "oldValue": "voltzengine:GemPolishedItem",
+    "newValue": "voltzengine:gems"
+  }
+}

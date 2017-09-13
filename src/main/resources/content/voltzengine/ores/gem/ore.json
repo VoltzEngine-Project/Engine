@@ -1,0 +1,85 @@
+{
+  "author": {
+    "name": "voltzengine"
+  },
+  "loadCondition": "setting@content.load.ores",
+  "setting": {
+    "key": "content.load.ore.gem",
+    "type": "boolean",
+    "value": true,
+    "configKey": "LoadGemOres",
+    "config": true,
+    "description": "Allows disabling ores blocks from load. if set to true ores will load and false will disable. World generation can be disable separate if you want to keep the block for legacy purposes."
+  },
+  "block": {
+    "id": "veGemOre",
+    "name": "${metaLocalization}",
+    "mod": "voltzengine",
+    "material": "rock",
+    "hardness": 1.5,
+    "resistance": 10,
+    "canSilkHarvest": true,
+    "subtypes": [
+      {
+        "id": "tin",
+        "meta": 0,
+        "name": "oreTin",
+        "ore": "oreTin"
+      },
+      {
+        "id": "copper",
+        "meta": 1,
+        "name": "oreCopper",
+        "ore": "oreCopper"
+      },
+      {
+        "id": "silver",
+        "meta": 2,
+        "name": "oreSilver",
+        "ore": "oreSilver"
+      },
+      {
+        "id": "lead",
+        "meta": 3,
+        "name": "oreLead",
+        "ore": "oreLead"
+      },
+      {
+        "id": "zinc",
+        "meta": 4,
+        "name": "oreZinc",
+        "ore": "oreZinc"
+      },
+      {
+        "id": "nickel",
+        "meta": 5,
+        "name": "oreNickel",
+        "ore": "oreNickel"
+      },
+      {
+        "id": "bauxite",
+        "meta": 6,
+        "name": "oreBauxite",
+        "ore": "oreAluminum"
+      },
+      {
+        "id": "magnesite",
+        "meta": 7,
+        "name": "oreMagnesite",
+        "ore": "oreMagnesium"
+      },
+      {
+        "id": "uranium",
+        "meta": 8,
+        "name": "oreUranium",
+        "ore": "oreUranium"
+      },
+      {
+        "id": "platinum",
+        "meta": 9,
+        "name": "orePlatinum",
+        "ore": "orePlatinum"
+      }
+    ]
+  }
+}
