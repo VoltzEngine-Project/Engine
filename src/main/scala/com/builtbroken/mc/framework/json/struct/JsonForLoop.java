@@ -5,9 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -18,10 +17,120 @@ public class JsonForLoop
 
     public static final int MAX_FOR_LOOPS = 100;
 
+    /**
+     * Used to check if an object contains a loop
+     *
+     * @param currentJsonObject
+     * @return true if a loop tag exists
+     */
+    public static boolean hasLoops(JsonObject currentJsonObject)
+    {
+        if (currentJsonObject != null)
+        {
+            for (Map.Entry<String, JsonElement> elementEntry : currentJsonObject.entrySet())
+            {
+                String key = elementEntry.getKey();
+                if (key.contains(":"))
+                {
+                    String[] split = key.split(":");
+                    key = split[0];
+                }
+                if (key.equalsIgnoreCase("for"))
+                {
+                    return true;
+                }
+                else if (key.equalsIgnoreCase("forEach"))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Called to handle any loops found in an object.
+     * <p>
+     * Allows for more than 1 loop and nested loops
+     *
+     * @param currentJsonObject - object being processed containing template and loop data
+     * @param action            - process to run on generated objects
+     * @return true if something was processed
+     */
+    public static boolean handleLoops(JsonObject currentJsonObject, Consumer<JsonObject> action)
+    {
+        boolean handled = false;
+        for (Map.Entry<String, JsonElement> elementEntry : currentJsonObject.entrySet())
+        {
+            String key = elementEntry.getKey();
+            String subKey = "";
+            if (key.contains(":"))
+            {
+                String[] split = key.split(":");
+                if (split.length > 2)
+                {
+                    throw new IllegalArgumentException("JsonForLoop: Loop entry name for '" + key + "' should only contain one ':'");
+                }
+                key = split[0];
+                subKey = split[1];
+            }
+            if (key.equalsIgnoreCase("for"))
+            {
+                generateDataForLoop(currentJsonObject, action);
+                handled = true;
+            }
+            else if (key.equalsIgnoreCase("forEach"))
+            {
+                generateDataForEachLoop(currentJsonObject, action);
+                handled = true;
+            }
+        }
+        return handled;
+    }
+
 
     /**
      * Handles JSON for for loops for generate JsonObject data. Is a recursive call that allows
      * for nest loops.
+     *
+     * @param currentJsonObject - object being read
+     * @param action            - process
+     * @return list of objects generated
+     */
+    public static void generateDataForLoop(JsonObject currentJsonObject, Consumer<JsonObject> action)
+    {
+        //Validate
+        Objects.requireNonNull(action);
+
+        //Generate data
+        List<JsonObject> elements = new ArrayList();
+        JsonForLoop.generateDataForLoop(currentJsonObject, elements);
+
+        //Process
+        for (JsonObject object : elements)
+        {
+            action.accept(object);
+        }
+    }
+
+    /**
+     * Handles JSON for for loops for generate JsonObject data.
+     * <p>
+     * Is a recursive call that allows for nest loops.
+     *
+     * @param currentJsonObject - object being read
+     * @param states            - generate data, populated by method call
+     * @return list of objects generated
+     */
+    public static void generateDataForLoop(JsonObject currentJsonObject, List<JsonObject> states)
+    {
+        generateDataForLoop(currentJsonObject, states, new HashMap(), 0);
+    }
+
+    /**
+     * Handles JSON for for loops for generate JsonObject data.
+     * <p>
+     * Is a recursive call that allows for nest loops.
      *
      * @param currentJsonObject - object being read
      * @param injectionKeys     - inject keys to insert into template
@@ -94,6 +203,48 @@ public class JsonForLoop
         injectionKeys.remove(id);
     }
 
+    /**
+     * Handles generating and processing data for a for each loop
+     *
+     * @param currentJsonObject - loop
+     * @param action            - process
+     */
+    public static void generateDataForEachLoop(JsonObject currentJsonObject, Consumer<JsonObject> action)
+    {
+        //Validate
+        Objects.requireNonNull(action);
+
+        //Generate data
+        List<JsonObject> elements = new ArrayList();
+        JsonForLoop.generateDataForEachLoop(currentJsonObject, elements);
+
+        //Process
+        for (JsonObject object : elements)
+        {
+            action.accept(object);
+        }
+    }
+
+    /**
+     * Handles generating and processing data for a for each loop
+     *
+     * @param currentJsonObject - loop
+     * @param states            - generated data, will be populated by method call
+     */
+    public static void generateDataForEachLoop(JsonObject currentJsonObject, List<JsonObject> states)
+    {
+        generateDataForEachLoop(currentJsonObject, states);
+    }
+
+    /**
+     * Handles generating and processing data for a for each loop.
+     * <p>
+     * This is a recursive method and has a depth limit of a 100 to prevent crashing.
+     *
+     * @param currentJsonObject - loop
+     * @param states            - generated data, will be populated by method call
+     * @param injectionKeys     - keys -> value map, used for replacing %key% in template data, populated by method each iteration
+     */
     public static void generateDataForEachLoop(JsonObject currentJsonObject, List<JsonObject> states, HashMap<String, String> injectionKeys, int depth)
     {
         if (!currentJsonObject.has("values") || !currentJsonObject.get("values").isJsonArray())
@@ -135,6 +286,14 @@ public class JsonForLoop
         }
     }
 
+    /**
+     * Internal handling for each entry in a loop. Allows fo nested loops and injection of sub objects
+     *
+     * @param currentJsonObject
+     * @param states
+     * @param injectionKeys
+     * @param depth
+     */
     public static void handle(JsonObject currentJsonObject, List<JsonObject> states, HashMap<String, String> injectionKeys, int depth)
     {
         JsonObject template;
