@@ -4,6 +4,7 @@ import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.data.JsonItemEntry;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -19,7 +20,11 @@ import java.util.ArrayList;
 public abstract class JsonGenData implements IJsonGenObject
 {
     /** Person or group that created the object */
+    @JsonProcessorData("author")
     public String author;
+
+    @JsonProcessorData("mod")
+    public String modName;
 
     /** Processor that created this object */
     public final IJsonProcessor processor;
@@ -50,7 +55,7 @@ public abstract class JsonGenData implements IJsonGenObject
     @Override
     public String getMod()
     {
-        return null;
+        return modName;
     }
 
     /**
@@ -184,8 +189,20 @@ public abstract class JsonGenData implements IJsonGenObject
             return toStack(convertItemEntry((String) object));
         }
 
+
         //Convert to itemstack
-        if (object instanceof Item)
+        if (object instanceof JsonItemEntry)
+        {
+            try
+            {
+                return ((JsonItemEntry) object).get();
+            }
+            catch (IllegalArgumentException e)
+            {
+                Engine.logger().error("Error in recipe data " + this, e);
+            }
+        }
+        else if (object instanceof Item)
         {
             return new ItemStack((Item) object);
         }
@@ -201,7 +218,9 @@ public abstract class JsonGenData implements IJsonGenObject
             {
                 if (stack != null && stack.getItem() != null)
                 {
-                    return stack;
+                    ItemStack copy = stack.copy();
+                    copy.stackSize = 1;
+                    return copy;
                 }
             }
         }

@@ -177,6 +177,10 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
         if (itemStackObject.has("nbt"))
         {
             entry.nbt = JsonConverterNBT.handle(itemStackObject.get("nbt"));
+            if (entry.nbt.hasNoTags())
+            {
+                entry.nbt = null;
+            }
         }
         return entry;
     }

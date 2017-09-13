@@ -32,16 +32,15 @@ public class OreGenReplace extends OreGenerator
     public int generatorType = 1;
 
     /**
-     * @param name         - The name of the ore dictionary
      * @param block        -block to place
      * @param meta         - meta of block to place
      * @param settings     - controls spawn conditions
      * @param harvestLevel
      * @param harvestTool
      */
-    public OreGenReplace(String name, Block block, int meta, OreGeneratorSettings settings, String harvestTool, int harvestLevel)
+    public OreGenReplace(Block block, int meta, OreGeneratorSettings settings, String harvestTool, int harvestLevel)
     {
-        super(name, block, meta, harvestTool, harvestLevel);
+        super(block, meta, harvestTool, harvestLevel);
         this.settings = settings;
     }
 

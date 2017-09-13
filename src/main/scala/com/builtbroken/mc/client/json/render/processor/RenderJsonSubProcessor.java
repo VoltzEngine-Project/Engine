@@ -5,10 +5,14 @@ import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.state.RenderState;
 import com.builtbroken.mc.client.json.render.state.RenderStateTexture;
 import com.builtbroken.mc.client.json.texture.TextureData;
+import com.builtbroken.mc.framework.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -96,7 +100,15 @@ public abstract class RenderJsonSubProcessor<S extends IRenderState>
                     }
 
                     //Create and register texture
-                    new TextureData(null, key, domain, name, textureType).register();
+                    TextureData data = new TextureData(null, key, domain, name, textureType);
+                    List<IJsonGenObject> list = JsonContentLoader.INSTANCE.generatedObjects.get("texture");
+                    if (list == null)
+                    {
+                        list = new ArrayList();
+                    }
+                    list.add(data);
+                    JsonContentLoader.INSTANCE.generatedObjects.put("texture", list);
+                    data.register();
                 }
             }
         }

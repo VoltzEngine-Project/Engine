@@ -15,11 +15,6 @@ import java.util.Random;
  */
 public abstract class OreGenerator implements IWorldGenerator
 {
-	/**
-	 * The ore dictionary name of the ore.
-	 */
-	public String name;
-
 	public Block oreBlock;
 
 	public int oreMeta;
@@ -35,9 +30,8 @@ public abstract class OreGenerator implements IWorldGenerator
 	 */
 	public String harvestTool;
 
-	public OreGenerator(String name, Block block, int meta, String harvestTool, int harvestLevel)
+	public OreGenerator(Block block, int meta, String harvestTool, int harvestLevel)
 	{
-		this.name = name;
 		this.harvestTool = harvestTool;
 		this.harvestLevel = harvestLevel;
 		this.oreBlock = block;
