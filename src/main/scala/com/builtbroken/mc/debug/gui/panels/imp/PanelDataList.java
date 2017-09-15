@@ -92,10 +92,7 @@ public abstract class PanelDataList<D extends Object> extends JPanel
      */
     protected void reload(String filter)
     {
-        if (data.isEmpty())
-        {
-            buildData();
-        }
+        buildData();
         for (D object : data)
         {
             if (object != null)
