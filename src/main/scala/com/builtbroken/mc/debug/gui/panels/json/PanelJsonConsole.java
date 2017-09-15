@@ -1,4 +1,4 @@
-package com.builtbroken.mc.debug.gui.panels;
+package com.builtbroken.mc.debug.gui.panels.json;
 
 import com.builtbroken.jlib.debug.IDebugPrintListener;
 import com.builtbroken.mc.debug.component.DebugDataCellRenderer;
@@ -23,6 +23,51 @@ public class PanelJsonConsole extends JPanel
     List<DebugData> debugData = new ArrayList();
 
     DefaultListModel<DebugData> debugDataListModel = new DefaultListModel();
+
+
+    public PanelJsonConsole ()
+    {
+        setLayout(new BorderLayout());
+
+        //Init data for testing
+        addDebug("======================================");
+        addDebug("=========JSON debug list==============");
+        addDebug("======================================");
+
+
+        //Create list
+        dataLogList = new JList(debugDataListModel);
+        dataLogList.setLayoutOrientation(JList.VERTICAL);
+        dataLogList.setCellRenderer(new DebugDataCellRenderer());
+
+
+        //Create scroll panel
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(dataLogList);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(getWidth() - 100, getHeight() - 100));
+        scrollPane.setMinimumSize(new Dimension(getWidth() - 100, getHeight() - 100));
+        add(scrollPane, BorderLayout.CENTER);
+
+        //Menu
+        JPanel menuPanel = new JPanel();
+        menuPanel.setMaximumSize(new Dimension(-1, 100));
+        Button button = new Button("Reload");
+        button.addActionListener(e -> reloadDebugData(null));
+        menuPanel.add(button);
+
+        JTextField searchBox = new JTextField();
+        searchBox.setMinimumSize(new Dimension(200, -1));
+        searchBox.setPreferredSize(new Dimension(200, 30));
+        searchBox.setToolTipText("Search filter");
+        menuPanel.add(searchBox);
+
+        button = new Button("Search");
+        button.addActionListener(e -> reloadDebugData(searchBox.getText().trim()));
+        menuPanel.add(button);
+
+        add(menuPanel, BorderLayout.NORTH);
+    }
 
     public void reloadDebugData(String filter)
     {
@@ -90,54 +135,5 @@ public class PanelJsonConsole extends JPanel
             return writer.toString();
         }
 
-    }
-
-    public JPanel buildConsoleTab()
-    {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-
-        //Init data for testing
-        addDebug("======================================");
-        addDebug("=========JSON debug list==============");
-        addDebug("======================================");
-
-
-        //Create list
-        dataLogList = new JList(debugDataListModel);
-        dataLogList.setLayoutOrientation(JList.VERTICAL);
-        dataLogList.setCellRenderer(new DebugDataCellRenderer());
-
-
-        //Create scroll panel
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setViewportView(dataLogList);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setPreferredSize(new Dimension(getWidth() - 100, getHeight() - 100));
-        scrollPane.setMinimumSize(new Dimension(getWidth() - 100, getHeight() - 100));
-        panel.add(scrollPane, BorderLayout.CENTER);
-
-        //Menu
-        JPanel menuPanel = new JPanel();
-        menuPanel.setMaximumSize(new Dimension(-1, 100));
-        Button button = new Button("Reload");
-        button.addActionListener(e -> reloadDebugData(null));
-        menuPanel.add(button);
-
-        JTextField searchBox = new JTextField();
-        searchBox.setMinimumSize(new Dimension(200, -1));
-        searchBox.setPreferredSize(new Dimension(200, 30));
-        searchBox.setToolTipText("Search filter");
-        menuPanel.add(searchBox);
-
-        button = new Button("Search");
-        button.addActionListener(e -> reloadDebugData(searchBox.getText().trim()));
-        menuPanel.add(button);
-
-
-        panel.add(menuPanel, BorderLayout.NORTH);
-
-        return panel;
     }
 }

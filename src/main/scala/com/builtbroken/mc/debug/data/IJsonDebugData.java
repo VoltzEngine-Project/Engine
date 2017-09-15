@@ -6,7 +6,17 @@ package com.builtbroken.mc.debug.data;
  */
 public interface IJsonDebugData
 {
+    /**
+     * Called to get a display string for default component
+     *
+     * @return string
+     */
     String buildDebugLineDisplay();
 
-    void onDoubleClicked();
+    /**
+     * Called when default component is double clicked
+     */
+    default void onDoubleClicked()
+    {
+    }
 }

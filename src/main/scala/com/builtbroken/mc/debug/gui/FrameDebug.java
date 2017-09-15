@@ -1,8 +1,8 @@
 package com.builtbroken.mc.debug.gui;
 
-import com.builtbroken.mc.debug.gui.panels.PanelJsonConsole;
-import com.builtbroken.mc.debug.gui.panels.PanelJsonData;
-import com.builtbroken.mc.debug.gui.panels.PanelRecipes;
+import com.builtbroken.mc.debug.gui.panels.json.PanelJsonConsole;
+import com.builtbroken.mc.debug.gui.panels.json.PanelJsonData;
+import com.builtbroken.mc.debug.gui.panels.recipes.PanelRecipes;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 
 import javax.swing.*;
@@ -16,9 +16,10 @@ import java.net.URL;
  */
 public class FrameDebug extends JFrame
 {
-    public void init()
+    public FrameDebug()
     {
         //Setup this
+        setMinimumSize(new Dimension(800, 600));
         setSize(new Dimension(1000, 800));
         setResizable(false);
         setTitle("JSON debug window");
@@ -31,13 +32,13 @@ public class FrameDebug extends JFrame
         //Create console panel
         PanelJsonConsole consolePanel = new PanelJsonConsole();
         JsonContentLoader.INSTANCE.debug.add(new PanelJsonConsole.DebugListener(consolePanel));
-        tabbedPane.addTab("Debug", icon, consolePanel,
+        tabbedPane.addTab("Json Console", icon, consolePanel,
                 "Shows debug output console");
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
         //Create data panel
         JComponent jsonDataPanel = new PanelJsonData();
-        tabbedPane.addTab("Data", icon, jsonDataPanel,
+        tabbedPane.addTab("Json Data", icon, jsonDataPanel,
                 "Shows list of loaded JSON data");
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 
