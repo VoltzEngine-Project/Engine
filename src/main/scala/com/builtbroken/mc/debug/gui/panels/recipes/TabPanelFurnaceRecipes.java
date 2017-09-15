@@ -2,6 +2,7 @@ package com.builtbroken.mc.debug.gui.panels.recipes;
 
 import com.builtbroken.mc.debug.data.IJsonDebugData;
 import com.builtbroken.mc.debug.gui.panels.imp.PanelDataList;
+import com.builtbroken.mc.lib.data.StringComparator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -74,10 +75,10 @@ public class TabPanelFurnaceRecipes extends PanelDataList<TabPanelFurnaceRecipes
 
         public String getMod(ItemStack stack)
         {
-            if(stack != null && stack.getItem() != null)
+            if (stack != null && stack.getItem() != null)
             {
                 String regName = Item.itemRegistry.getNameForObject(stack.getItem());
-                if(regName != null)
+                if (regName != null)
                 {
                     return regName.split(":")[0];
                 }
@@ -112,6 +113,13 @@ public class TabPanelFurnaceRecipes extends PanelDataList<TabPanelFurnaceRecipes
 
     public static class FurnaceDataSorter implements Comparator<FurnaceData>
     {
+        protected final StringComparator stringComparator;
+
+        public FurnaceDataSorter()
+        {
+            stringComparator = new StringComparator();
+        }
+
         @Override
         public int compare(FurnaceData o1, FurnaceData o2)
         {
@@ -127,41 +135,12 @@ public class TabPanelFurnaceRecipes extends PanelDataList<TabPanelFurnaceRecipes
                 return 1;
             }
 
-            int result = compareString(o1.getMod(), o2.getMod());
+            int result = stringComparator.compare(o1.getMod(), o2.getMod());
             if (result == 0)
             {
-                return compareString(o1.getName(), o2.getName());
+                return stringComparator.compare(o1.getName(), o2.getName());
             }
             return result;
-        }
-
-        protected int compareString(String o1, String o2)
-        {
-            if (o1.equalsIgnoreCase(o2))
-            {
-                return 0;
-            }
-            else if (o1 == null)
-            {
-                return -1;
-            }
-            else if (o2 == null)
-            {
-                return 1;
-            }
-
-            int l = o1.length() < o2.length() ? o1.length() : o2.length();
-            for (int i = 0; i < l; i++)
-            {
-                char c = o1.charAt(i);
-                char c2 = o2.charAt(i);
-                int result = Character.compare(c, c2);
-                if (result != 0)
-                {
-                    return result;
-                }
-            }
-            return Integer.compare(o1.length(), o2.length());
         }
     }
 }
