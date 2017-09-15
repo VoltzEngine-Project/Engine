@@ -8,7 +8,6 @@ import com.builtbroken.mc.core.registry.implement.ILoadComplete;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
-import com.builtbroken.mc.debug.gui.GuiJsonDebug;
 import com.builtbroken.mc.framework.json.event.JsonProcessorRegistryEvent;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
@@ -77,8 +76,6 @@ public final class JsonContentLoader extends AbstractLoadable
     /** Object used to wrap the logger to produce clearner debug messages */
     public DebugPrinter debug;
 
-    public GuiJsonDebug debugWindow;
-
     /**
      * Left public for JUnit testing
      * use {@link #INSTANCE} to access system
@@ -113,24 +110,9 @@ public final class JsonContentLoader extends AbstractLoadable
         debug.end();
     }
 
-    protected void displayDebug(String msg)
-    {
-        if (debugWindow != null)
-        {
-            debugWindow.addDebug(msg);
-        }
-    }
-
     @Override
     public void preInit()
     {
-        if (Engine.runningAsDev && !GraphicsEnvironment.isHeadless())
-        {
-            debugWindow = new GuiJsonDebug();
-            debugWindow.init();
-            debugWindow.setVisible(true);
-            debug.add(new GuiJsonDebug.DebugListener(debugWindow));
-        }
         debug.start("Phase: Pre-Init");
         //---------------------------------------------------------------------------
 

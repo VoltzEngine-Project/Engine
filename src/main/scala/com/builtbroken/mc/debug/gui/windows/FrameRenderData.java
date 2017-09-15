@@ -1,4 +1,4 @@
-package com.builtbroken.mc.debug.gui.render;
+package com.builtbroken.mc.debug.gui.windows;
 
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
@@ -18,14 +18,14 @@ import java.util.Map;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 9/6/2017.
  */
-public class GuiJsonDebugRender extends JFrame
+public class FrameRenderData extends JFrame
 {
     JList dataLogList;
     DefaultListModel<IJsonDebugData> debugDataListModel = new DefaultListModel();
 
     RenderData renderData;
 
-    public GuiJsonDebugRender(RenderData renderData)
+    public FrameRenderData(RenderData renderData)
     {
         this.renderData = renderData;
         setSize(new Dimension(400, 400));
@@ -132,7 +132,7 @@ public class GuiJsonDebugRender extends JFrame
             data.add("item." + i, state);
         }
 
-        GuiJsonDebugRender gui = new GuiJsonDebugRender(data);
+        FrameRenderData gui = new FrameRenderData(data);
 
         gui.show();
     }

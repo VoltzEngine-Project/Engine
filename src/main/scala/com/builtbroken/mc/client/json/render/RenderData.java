@@ -5,7 +5,7 @@ import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.debug.gui.render.GuiJsonDebugRender;
+import com.builtbroken.mc.debug.gui.windows.FrameRenderData;
 import com.builtbroken.mc.debug.IJsonDebugDisplay;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
@@ -36,7 +36,7 @@ public class RenderData extends JsonGenData implements IJsonDebugDisplay
     /** Map for quickly looking up name of the state with it's render ID */
     public HashMap<String, IRenderState> renderStatesByName = new HashMap();
 
-    GuiJsonDebugRender debugWindow;
+    FrameRenderData debugWindow;
 
     public RenderData(IJsonProcessor processor, String contentID, String type)
     {
@@ -167,7 +167,7 @@ public class RenderData extends JsonGenData implements IJsonDebugDisplay
         {
             if (debugWindow == null)
             {
-                debugWindow = new GuiJsonDebugRender(this);
+                debugWindow = new FrameRenderData(this);
             }
 
             debugWindow.show();

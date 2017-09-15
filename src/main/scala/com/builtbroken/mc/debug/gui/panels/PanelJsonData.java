@@ -1,4 +1,4 @@
-package com.builtbroken.mc.debug.gui.json;
+package com.builtbroken.mc.debug.gui.panels;
 
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.debug.IJsonDebugDisplay;
@@ -20,14 +20,14 @@ import java.util.Map;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 9/6/2017.
  */
-public class JsonDataPanel extends JPanel
+public class PanelJsonData extends JPanel
 {
     JTabbedPane jsonDataPanel;
 
     HashMap<String, JPanel> processorToPanel = new HashMap();
     HashMap<String, DefaultListModel<IJsonDebugData>> processorToDataModel = new HashMap();
 
-    public JsonDataPanel()
+    public PanelJsonData()
     {
         setLayout(new BorderLayout());
 
