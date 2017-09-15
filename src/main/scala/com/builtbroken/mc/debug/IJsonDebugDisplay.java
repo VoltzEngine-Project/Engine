@@ -1,4 +1,4 @@
-package com.builtbroken.mc.framework.json.debug;
+package com.builtbroken.mc.debug;
 
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 

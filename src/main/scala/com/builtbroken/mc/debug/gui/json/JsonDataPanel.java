@@ -1,11 +1,11 @@
-package com.builtbroken.mc.framework.json.debug.gui.json;
+package com.builtbroken.mc.debug.gui.json;
 
 import com.builtbroken.mc.framework.json.JsonContentLoader;
-import com.builtbroken.mc.framework.json.debug.IJsonDebugDisplay;
-import com.builtbroken.mc.framework.json.debug.component.DebugDataCellRenderer;
-import com.builtbroken.mc.framework.json.debug.data.DebugData;
-import com.builtbroken.mc.framework.json.debug.data.DebugJsonData;
-import com.builtbroken.mc.framework.json.debug.data.IJsonDebugData;
+import com.builtbroken.mc.debug.IJsonDebugDisplay;
+import com.builtbroken.mc.debug.component.DebugDataCellRenderer;
+import com.builtbroken.mc.debug.data.DebugData;
+import com.builtbroken.mc.debug.data.DebugJsonData;
+import com.builtbroken.mc.debug.data.IJsonDebugData;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 
 import javax.swing.*;

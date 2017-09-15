@@ -1,7 +1,7 @@
 package com.builtbroken.mc.client.json.render.state;
 
 import com.builtbroken.mc.client.json.imp.IRenderState;
-import com.builtbroken.mc.framework.json.debug.IJsonDebugDisplay;
+import com.builtbroken.mc.debug.IJsonDebugDisplay;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 
 import java.util.List;

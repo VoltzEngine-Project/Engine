@@ -1,11 +1,11 @@
-package com.builtbroken.mc.framework.json.debug.gui;
+package com.builtbroken.mc.debug.gui;
 
 import com.builtbroken.jlib.debug.DebugPrinter;
 import com.builtbroken.jlib.debug.IDebugPrintListener;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.framework.json.debug.component.DebugDataCellRenderer;
-import com.builtbroken.mc.framework.json.debug.data.DebugData;
-import com.builtbroken.mc.framework.json.debug.gui.json.JsonDataPanel;
+import com.builtbroken.mc.debug.component.DebugDataCellRenderer;
+import com.builtbroken.mc.debug.data.DebugData;
+import com.builtbroken.mc.debug.gui.json.JsonDataPanel;
 
 import javax.swing.*;
 import java.awt.*;

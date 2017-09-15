@@ -1,6 +1,6 @@
-package com.builtbroken.mc.framework.json.debug.component;
+package com.builtbroken.mc.debug.component;
 
-import com.builtbroken.mc.framework.json.debug.data.IJsonDebugData;
+import com.builtbroken.mc.debug.data.IJsonDebugData;
 
 import javax.swing.*;
 import java.awt.*;

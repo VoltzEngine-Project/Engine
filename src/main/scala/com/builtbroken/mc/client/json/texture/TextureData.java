@@ -1,7 +1,7 @@
 package com.builtbroken.mc.client.json.texture;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
-import com.builtbroken.mc.framework.json.debug.IJsonDebugDisplay;
+import com.builtbroken.mc.debug.IJsonDebugDisplay;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.client.renderer.texture.IIconRegister;

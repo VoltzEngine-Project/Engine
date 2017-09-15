@@ -1,6 +1,6 @@
-package com.builtbroken.mc.framework.json.debug.data;
+package com.builtbroken.mc.debug.data;
 
-import com.builtbroken.mc.framework.json.debug.IJsonDebugDisplay;
+import com.builtbroken.mc.debug.IJsonDebugDisplay;
 
 import java.util.ArrayList;
 import java.util.List;

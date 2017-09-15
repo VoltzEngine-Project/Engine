@@ -2,7 +2,7 @@ package com.builtbroken.mc.client.json.models;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.framework.json.debug.IJsonDebugDisplay;
+import com.builtbroken.mc.debug.IJsonDebugDisplay;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import com.builtbroken.mc.lib.render.RenderUtility;

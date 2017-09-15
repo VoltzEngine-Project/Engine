@@ -8,10 +8,11 @@ import com.builtbroken.mc.core.registry.implement.ILoadComplete;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
-import com.builtbroken.mc.framework.json.debug.gui.GuiJsonDebug;
+import com.builtbroken.mc.debug.gui.GuiJsonDebug;
 import com.builtbroken.mc.framework.json.event.JsonProcessorRegistryEvent;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.imp.JsonLoadPhase;
 import com.builtbroken.mc.framework.json.loading.JsonEntry;
 import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import com.builtbroken.mc.framework.json.loading.ProcessorKeySorter;
@@ -157,6 +158,7 @@ public final class JsonContentLoader extends AbstractLoadable
                 }
             }
         }
+        triggerPhase(JsonLoadPhase.HANDLERS);
         debug.end("Done...");
         //===========================================================================
 
@@ -179,8 +181,32 @@ public final class JsonContentLoader extends AbstractLoadable
         processEntries();
         debug.end("Done... " + jsonEntries.size() + " entries left");
 
+        triggerPhase(JsonLoadPhase.BLOCKS); //TODO load at end of each processor run
+        triggerPhase(JsonLoadPhase.ITEMS);
+        triggerPhase(JsonLoadPhase.CONTENT);
+        triggerPhase(JsonLoadPhase.ENTITIES);
+        triggerPhase(JsonLoadPhase.LOAD_PHASE_ONE);
         //---------------------------------------------------------------------------
         debug.end("Done...");
+    }
+
+    /**
+     * Called to trigger a load phase on an object.
+     * <p>
+     * Phases are used to allow objects to register
+     * content at key times.
+     *
+     * @param phase
+     */
+    public void triggerPhase(JsonLoadPhase phase)
+    {
+        for (List<IJsonGenObject> list : generatedObjects.values())
+        {
+            for (IJsonGenObject object : list)
+            {
+                object.onPhase(phase);
+            }
+        }
     }
 
     @Override
@@ -190,6 +216,9 @@ public final class JsonContentLoader extends AbstractLoadable
         debug.start("Process Run[2]");
         processEntries();
         debug.end("Done... " + jsonEntries.size() + " entries left");
+
+        triggerPhase(JsonLoadPhase.RECIPES);
+        triggerPhase(JsonLoadPhase.LOAD_PHASE_TWO);
         debug.end("Done...");
     }
 
@@ -204,12 +233,13 @@ public final class JsonContentLoader extends AbstractLoadable
         debug.start("Doing post handling for generated objects");
         //Using pre-sorted processor list we can loop generated objects in order
         final List<String> sortingProcessorList = getSortedProcessorList();
-        for (String proccessorKey : sortingProcessorList)
+        for (String processorKey : sortingProcessorList)
         {
-            handlePostCalls(generatedObjects.get(proccessorKey));
+            handlePostCalls(generatedObjects.get(processorKey));
         }
         debug.end("Done... " + jsonEntries.size() + " entries left");
 
+        triggerPhase(JsonLoadPhase.LOAD_PHASE_THREE);
         debug.end("Done...");
     }
 
@@ -265,6 +295,7 @@ public final class JsonContentLoader extends AbstractLoadable
             }
         }
 
+        triggerPhase(JsonLoadPhase.COMPLETED);
         clear();
         debug.end("Done...");
     }

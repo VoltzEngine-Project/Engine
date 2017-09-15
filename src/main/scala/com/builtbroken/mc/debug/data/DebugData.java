@@ -1,4 +1,4 @@
-package com.builtbroken.mc.framework.json.debug.data;
+package com.builtbroken.mc.debug.data;
 
 /**
  * Used to store debug data for GUI display

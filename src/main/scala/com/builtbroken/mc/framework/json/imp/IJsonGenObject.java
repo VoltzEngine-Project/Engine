@@ -29,6 +29,11 @@ public interface IJsonGenObject
     }
 
 
+    default void onPhase(JsonLoadPhase phase)
+    {
+
+    }
+
     /**
      * Called when the gen object has
      * been created and registered to
