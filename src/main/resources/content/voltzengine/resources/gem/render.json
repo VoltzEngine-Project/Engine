@@ -1,0 +1,71 @@
+{
+  "render": {
+    "contentID": "voltzengine:gems",
+    "type": "item",
+    "states": [
+      {
+        "forEach": {
+          "values": [
+            {
+              "gem": "amazonite"
+            },
+            {
+              "gem": "quartz"
+            },
+            {
+              "gem": "quartz.smoky"
+            },
+            {
+              "gem": "onyx.black"
+            },
+            {
+              "gem": "onyx.red"
+            },
+            {
+              "gem": "garnet.green"
+            },
+            {
+              "gem": "garnet.orange"
+            },
+            {
+              "gem": "garnet.red"
+            },
+            {
+              "gem": "garnet.yellow"
+            },
+            {
+              "gem": "emerald"
+            }
+          ],
+          "forEach": {
+            "values": [
+              {
+                "type": "ore"
+              },
+              {
+                "type": "raw"
+              },
+              {
+                "type": "uncut"
+              },
+              {
+                "type": "cut"
+              },
+              {
+                "type": "polished"
+              }
+            ],
+            "data": {
+              "id": "%gem%.%type%",
+              "renderType": "item",
+              "texture": {
+                "domain": "voltzengine",
+                "name": "gem.%gem%.%type%"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}
