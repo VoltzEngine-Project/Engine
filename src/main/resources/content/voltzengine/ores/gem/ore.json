@@ -24,49 +24,93 @@
         "id": "amazonite",
         "meta": 0,
         "name": "oreAmazonite",
-        "ore": "oreAmazonite"
+        "ore": "oreAmazonite",
+        "itemToDrop": {
+          "item": "item@voltzengine:gems",
+          "meta": "amazonite.ore"
+        },
+        "useFortuneDropBonus": true
       },
       {
         "id": "quartz.smoky",
         "meta": 1,
         "name": "oreQuartzSmoky",
-        "ore": "oreQuartzSmoky"
+        "ore": "oreQuartzSmoky",
+        "itemToDrop": {
+          "item": "item@voltzengine:gems",
+          "meta": "quartz.smoky.ore"
+        },
+        "useFortuneDropBonus": true
       },
       {
         "id": "onyx.black",
         "meta": 2,
         "name": "oreOnyxBlack",
-        "ore": "oreOnyxBlack"
+        "ore": "oreOnyxBlack",
+        "itemToDrop": {
+          "item": "item@voltzengine:gems",
+          "meta": "onyx.black.ore"
+        },
+        "useFortuneDropBonus": true
       },
       {
         "id": "onyx.red",
         "meta": 3,
         "name": "oreOnyxRed",
-        "ore": "oreOnyxRed"
+        "ore": "oreOnyxRed",
+        "itemToDrop": {
+          "item": "item@voltzengine:gems",
+          "meta": "onyx.red.ore"
+        },
+        "useFortuneDropBonus": true
       },
       {
         "id": "garnet.green",
         "meta": 4,
         "name": "oreGarnetGreen",
-        "ore": "oreGarnetGreen"
+        "ore": "oreGarnetGreen",
+        "itemToDrop": {
+          "item": "item@voltzengine:gems",
+          "meta": "garnet.green.ore"
+        },
+        "randomDropBonus": 3,
+        "useFortuneDropBonus": true
       },
       {
         "id": "garnet.orange",
         "meta": 5,
         "name": "oreGarnetOrange",
-        "ore": "oreGarnetOrange"
+        "ore": "oreGarnetOrange",
+        "itemToDrop": {
+          "item": "item@voltzengine:gems",
+          "meta": "garnet.orange.ore"
+        },
+        "randomDropBonus": 3,
+        "useFortuneDropBonus": true
       },
       {
         "id": "garnet.red",
         "meta": 6,
         "name": "oreGarnetRed",
-        "ore": "oreGarnetRed"
+        "ore": "oreGarnetRed",
+        "itemToDrop": {
+          "item": "item@voltzengine:gems",
+          "meta": "garnet.red.ore"
+        },
+        "randomDropBonus": 3,
+        "useFortuneDropBonus": true
       },
       {
         "id": "garnet.yellow",
         "meta": 7,
         "name": "oreGarnetYellow",
-        "ore": "oreGarnetYellow"
+        "ore": "oreGarnetYellow",
+        "itemToDrop": {
+          "item": "item@voltzengine:gems",
+          "meta": "garnet.yellow.ore"
+        },
+        "randomDropBonus": 3,
+        "useFortuneDropBonus": true
       }
     ]
   }
