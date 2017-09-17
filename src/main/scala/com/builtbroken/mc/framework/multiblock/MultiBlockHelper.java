@@ -235,7 +235,7 @@ public class MultiBlockHelper
                         else if (block == Engine.multiBlock)
                         {
                             TileEntity tileEntity = world.getTileEntity(location.xi(), location.yi(), location.zi());
-                            if (tileEntity instanceof IMultiTile && ((IMultiTile) tileEntity).getHost() != null)
+                            if (tileEntity instanceof IMultiTile && ((IMultiTile) tileEntity).getHost() != null && ((IMultiTile) tileEntity).getHost() != tile)
                             {
                                 return false;
                             }
