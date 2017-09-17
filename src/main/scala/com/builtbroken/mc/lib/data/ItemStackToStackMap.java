@@ -33,8 +33,22 @@ public class ItemStackToStackMap extends HashMapNotNull<ItemStack, ItemStack>
         else
         {
             ModContainer container = Loader.instance().activeModContainer();
-            Engine.logger().error("ItemStackToStackMap: " + (container != null ? container.getName() : "Something") + " tried to insert an invalid value of [K: " + key + " V: " + value + "] into map '" + name + "'", new RuntimeException());
+            Engine.logger().error("ItemStackToStackMap: " + (container != null ? container.getName() : "Something") + " tried to insert an invalid value of [K: " + asString(key) + " V: " + asString(key) + "] into map '" + name + "'", new RuntimeException());
         }
         return null;
     }
+
+    protected String asString(ItemStack stack)
+    {
+        if (stack != null)
+        {
+            if (stack.getItem() != null)
+            {
+                return stack.getUnlocalizedName() + " (" + stack.toString() + ")";
+            }
+            return "null item";
+        }
+        return "null";
+    }
+
 }
