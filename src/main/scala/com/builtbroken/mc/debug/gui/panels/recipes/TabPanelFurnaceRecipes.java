@@ -3,10 +3,10 @@ package com.builtbroken.mc.debug.gui.panels.recipes;
 import com.builtbroken.mc.debug.data.IJsonDebugData;
 import com.builtbroken.mc.debug.gui.panels.imp.PanelDataList;
 import com.builtbroken.mc.lib.data.StringComparator;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.util.StatCollector;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,7 +61,7 @@ public class TabPanelFurnaceRecipes extends PanelDataList<TabPanelFurnaceRecipes
                 if (stack.getItem() != null)
                 {
                     final String name = Item.itemRegistry.getNameForObject(stack.getItem()).split(":")[0];
-                    return "[" + name + " : " + getName(stack) + "]";
+                    return "[" + name + " : " + InventoryUtility.getDisplayName(stack) + "]";
                 }
                 return "null item";
             }
@@ -70,45 +70,15 @@ public class TabPanelFurnaceRecipes extends PanelDataList<TabPanelFurnaceRecipes
 
         public String getMod()
         {
-            return getMod(input);
-        }
-
-        public String getMod(ItemStack stack)
-        {
-            if (stack != null && stack.getItem() != null)
-            {
-                String regName = Item.itemRegistry.getNameForObject(stack.getItem());
-                if (regName != null)
-                {
-                    return regName.split(":")[0];
-                }
-            }
-            return "null";
+            return InventoryUtility.getModID(input);
         }
 
         public String getName()
         {
-            return getName(input);
+            return InventoryUtility.getDisplayName(input);
         }
 
-        public String getName(ItemStack stack)
-        {
-            final String regName = Item.itemRegistry.getNameForObject(stack.getItem());
-            final String name = regName.split(":")[1];
 
-            for (String value : new String[]{stack.getDisplayName(), stack.getUnlocalizedName(), name, StatCollector.translateToLocal(stack.getItem().getUnlocalizedName()) + " " + stack.getItemDamage()})
-            {
-                if (value != null)
-                {
-                    value = value.trim();
-                    if (!value.isEmpty() && !value.toLowerCase().startsWith("null"))
-                    {
-                        return value;
-                    }
-                }
-            }
-            return stack.getItem().getUnlocalizedName() + "@" + stack.getItemDamage();
-        }
     }
 
     public static class FurnaceDataSorter implements Comparator<FurnaceData>

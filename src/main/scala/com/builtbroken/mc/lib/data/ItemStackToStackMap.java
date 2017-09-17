@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.data;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import net.minecraft.item.ItemStack;
@@ -40,15 +41,7 @@ public class ItemStackToStackMap extends HashMapNotNull<ItemStack, ItemStack>
 
     protected String asString(ItemStack stack)
     {
-        if (stack != null)
-        {
-            if (stack.getItem() != null)
-            {
-                return stack.getUnlocalizedName() + " (" + stack.toString() + ")";
-            }
-            return "null item";
-        }
-        return "null";
+        return InventoryUtility.getModID(stack) + " : " + InventoryUtility.getDisplayName(stack);
     }
 
 }
