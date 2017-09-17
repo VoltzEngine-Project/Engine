@@ -11,6 +11,7 @@ import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
@@ -163,18 +164,38 @@ public class MultiBlockHelper
         }
     }
 
-    public static boolean canBuild(World world, IMultiTileHost tile, boolean offset)
+    /**
+     * Called to check if the multi-block's structure can be generated
+     *
+     * @param world  - world to generate inside
+     * @param tile   - tile to pull data from and check against
+     * @param offset - true to offset structure map by center of tile
+     * @return true if the structure can be generated
+     */
+    public static boolean canBuild(IBlockAccess world, IMultiTileHost tile, boolean offset)
     {
         if (world != null && tile != null && Engine.multiBlock != null)
         {
             //Get layout of multi-block for it's current state
             Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
-            return canBuild(world, tile.xi(), tile.yi(), tile.zi(), map, offset);
+            return canBuild(world, tile.xi(), tile.yi(), tile.zi(), tile, map, offset);
         }
         return false;
     }
 
-    public static boolean canBuild(World world, int x, int y, int z, Map<IPos3D, String> map, boolean offset)
+    /**
+     * Called to check if a multi-block structure can be generated at the location
+     *
+     * @param world  - world to generate inside
+     * @param x      - position
+     * @param y      - position
+     * @param z      - position
+     * @param tile   - can be null, host that will take control of the structure
+     * @param map    - blocks to place
+     * @param offset - true to offset placement map by center
+     * @return true if the structure can be generated
+     */
+    public static boolean canBuild(IBlockAccess world, int x, int y, int z, IMultiTileHost tile, Map<IPos3D, String> map, boolean offset)
     {
         if (world != null && Engine.multiBlock != null)
         {
@@ -204,7 +225,7 @@ public class MultiBlockHelper
                         //Moves the position based on the location of the host
                         if (offset)
                         {
-                            location = new Location(world, x, y, z).add(location);
+                            location = new Pos(x, y, z).add(location);
                         }
                         Block block = world.getBlock(location.xi(), location.yi(), location.zi());
                         if (!block.isAir(world, location.xi(), location.yi(), location.zi()) && !block.isReplaceable(world, location.xi(), location.yi(), location.zi()))
