@@ -1,18 +1,32 @@
-Log contains changes made to the project after the last version but before the number was changed. Any changes made after number change are considered part of the next release. This is regardless if versions are still being released. 
+# INFO
+This log contains changes made to the project. Each entry contains changed made after the last version but before the number was changed. Any changes made after a number change are considered part of the next release. This is regardless if versions are still being released with that version number attached. 
 
-Use exact build numbers to track specific changes. As each build logs the git-hash it was created from.
+If this is a problem, use exact build numbers to track changes. As each build logs the git-hash it was created from to better understand changes made.
 
-# 1.9.10
+It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
-# 1.9.9
+# Versions
+## 1.9.10
+### Runtime Changes
+
+### Develoment Changes
+
+## 1.9.9
+### Runtime Changes
 Added: Reflection injection into Furnace recipes to prevent Null ItemStack entries
         Fixes: Problems with mods that generate items and create invalid recipes by mistake
         Fixes: NPE crash due to null entries with Mekanism cloning furnace recipes
-        
+     
+
+Fixed: canBuild() check failing and printing errors due to running client side with no data
+
+### Develoment Changes
 Added: Furnace recipe display for Debug GUI
 Added: Shaped crafting recipe display for Debug GUI
 
-Fixed: canBuild() check failing and printing errors due to running client side with no data
+Added: isSolid handling for JSON blocks
+Added: isNormalCube handling for JSON blocks
+Added: Methods to get ItemStack name and mod
 
 Changed: canBuild() to use IWorldAccess allowing it to be used with world handlers or wrappers
 Changed: Debug GUI to load from Voltz Engine instead of JSON content loader
@@ -23,12 +37,12 @@ Improved: JSON debug GUI
 Renamed: JSON debug GUI to Debug GUI
 Reworked: JSON debug GUI to be used for anything
 
-# 1.9.8
+## 1.9.8
 Reworked: JSON debug GUI and system
 Added: Loading phase events for JSON. 
        Can be used to register content via JSON generated objects at key moements.
 
-# 1.9.7
+## 1.9.7
 Converted: Metal ore to JSON (block, item, recipes, world gen, render)
 Converted: Unfinished gem ore to JSON block, item, recipes, world gen, render)
 Converted: Gem items to a single item, may result in slight item loss for non-standard usage of gems
@@ -49,13 +63,13 @@ Added: item drop support for JSON blocks
 Removed: Ore-loading call method
 
 
-# 1.9.6
+## 1.9.6
 Converted: Infinite inventory to JSON and node system
 
 Added: listener support for changing block light level
 Improved: JSON file loading
 
-# 1.9.5
+## 1.9.5
 Added: For loop support for JSON textures
 Added: Model rotation stacking (child rotation + parent rotation)
 Added: Texture loading to BlockState - reduces work required to add textures
@@ -72,16 +86,16 @@ Fixed: infinite inventory handling and render
 Fixed: world edit queue not running if edits per tick was zero
 Fixed: NPE due to no world when packets are sent during world load
 
-# 1.9.4
+## 1.9.4
 Added: Helpers in TileNode for handling GUI packets
 Added: IPlayerUsing interface to TileNode by default
 Added: basic gui packet handling to TileNode by default
 Added: ways to modify packet sent per player
 
-# 1.9.3
+## 1.9.3
 Fixed: Json items not showing in creative tab
 
-# 1.9.2
+## 1.9.2
 Added: NEI support for 4x4 recipes
 Added: Expanded JSON debug menu
 Added: fail catch to ASM tests
@@ -93,5 +107,5 @@ Improved: creative tab handling
 
 Changed: ASM disable run argument to turn off all ASM instead of just templates (which were removed)
 
-# x.x.x - 1.9.1
-Anything before this is not logged for sanity as this log was made 9/18/2017. Which is long after many of these versions were created. If you wish to expand the log feel free to pull request.
+## x.x.x - 1.9.1
+Anything before this is not logged for sanity as this log was made 9/18/2017. This is long after many of these versions were created. If you wish to expand the log feel free to pull request.
