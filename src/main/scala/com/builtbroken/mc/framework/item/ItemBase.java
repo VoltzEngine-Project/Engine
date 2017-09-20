@@ -57,6 +57,8 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     /** Was the content registered */
     protected boolean registered = false;
 
+    public CreativeTabs[] creativeTabsToDisplayOn;
+
     /**
      * @param node - logic controller and property call back for the item
      */
@@ -89,27 +91,6 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
             return "item." + this.unlocalizedName + "." + stack.getItemDamage(); //TODO maybe check if has translation
         }
         return "item." + this.unlocalizedName;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List items)
-    {
-        boolean added = false;
-        if (getHasSubtypes())
-        {
-            for (ItemNodeSubType type : node.subTypeHashMap.values())
-            {
-                items.add(new ItemStack(item, 1, type.index));
-                added = true;
-            }
-        }
-
-        //Backup for if getHashSubTypes is false or didn't add items
-        if (!added)
-        {
-            items.add(new ItemStack(item, 1, 0));
-        }
     }
 
     @Override
@@ -160,6 +141,106 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
             }
         }
         //TODO add listener support
+    }
+
+    //=============================================
+    //============== Creative Tab =================
+    //=============================================
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(Item item, CreativeTabs tab, List items)
+    {
+        if (tab != null)
+        {
+            String tabName = tab.getTabLabel(); //TODO add conversion if needed
+            if (tabName != null)
+            {
+                collectSubTypes(items, tabName);
+            }
+        }
+    }
+
+    public void collectSubTypes(List items, String tab)
+    {
+        if (getHasSubtypes() && !node.subTypeHashMap.values().isEmpty())
+        {
+            for (ItemNodeSubType type : node.subTypeHashMap.values())
+            {
+                getSubItems(type, tab, items);
+            }
+        }
+        //Backup for if getHashSubTypes is false or didn't add items
+        else if (tab == null || tab.equalsIgnoreCase(node.getTabToDisplayOn()))
+        {
+            items.add(new ItemStack(this, 1, 0));
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected void getSubItems(ItemNodeSubType type, String tab, List items)
+    {
+        if (tab == null || tab.equalsIgnoreCase(type.getTabToDisplayOn()) || type.getTabToDisplayOn() == null && tab.equalsIgnoreCase(node.getTabToDisplayOn()))
+        {
+            items.add(new ItemStack(this, 1, type.index));
+        }
+    }
+
+    @Override
+    public CreativeTabs[] getCreativeTabs()
+    {
+        if (creativeTabsToDisplayOn == null)
+        {
+            List<String> tabNames = new ArrayList();
+            if (node.getTabToDisplayOn() != null)
+            {
+                tabNames.add(node.getTabToDisplayOn());
+            }
+
+            if (getHasSubtypes())
+            {
+                for (ItemNodeSubType type : node.subTypeHashMap.values())
+                {
+                    if (type.getTabToDisplayOn() != null)
+                    {
+                        String key = type.getTabToDisplayOn();
+                        if (!tabNames.contains(key))
+                        {
+                            tabNames.add(key);
+                        }
+                    }
+                }
+            }
+
+            if (!tabNames.isEmpty())
+            {
+                List<CreativeTabs> tabs = new ArrayList();
+                for (CreativeTabs tab : CreativeTabs.creativeTabArray)
+                {
+                    if (tab != getCreativeTab())
+                    {
+                        String key = tab.getTabLabel().toLowerCase();
+                        if (tabNames.contains(key))
+                        {
+                            tabs.add(tab);
+                        }
+                    }
+                }
+
+                creativeTabsToDisplayOn = new CreativeTabs[tabs.size() + 1];
+                creativeTabsToDisplayOn[0] = getCreativeTab();
+                int i = 1;
+                for (CreativeTabs tab : tabs)
+                {
+                    creativeTabsToDisplayOn[i++] = tab;
+                }
+            }
+            else
+            {
+                creativeTabsToDisplayOn = new CreativeTabs[]{getCreativeTab()};
+            }
+        }
+        return creativeTabsToDisplayOn;
     }
 
     //=============================================

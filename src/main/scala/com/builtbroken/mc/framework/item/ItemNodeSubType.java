@@ -27,6 +27,8 @@ public class ItemNodeSubType implements IJsonKeyDataProvider
 
     public String oreName;
 
+    private String tabToDisplayOn;
+
     //Injection handler for processing JSON
     private JsonProcessorInjectionMap<ItemNodeSubType> itemNodeSubTypeJsonProcessorInjectionMap = new JsonProcessorInjectionMap<>(ItemNodeSubType.class);
 
@@ -68,6 +70,17 @@ public class ItemNodeSubType implements IJsonKeyDataProvider
             //TODO add debug
             itemNodeSubTypeJsonProcessorInjectionMap.handle(this, elementEntry.getKey(), elementEntry.getValue());
         }
+    }
+
+    public String getTabToDisplayOn()
+    {
+        return tabToDisplayOn;
+    }
+
+    @JsonProcessorData(value = "creativeTab")
+    public void setTabToDisplayOn(String tabToDisplayOn)
+    {
+        this.tabToDisplayOn = tabToDisplayOn;
     }
 
     @JsonProcessorData("ore") //TODO add array version

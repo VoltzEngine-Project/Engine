@@ -43,6 +43,7 @@ public class ItemNode implements IItemEventListener, IJsonKeyDataProvider
     private boolean hasSubTypes = false;
     private int maxStackSize = 64;
     private String unlocalizedName;
+    private String tabToDisplayOn;
 
     //Subtypes of the item
     public HashMap<Integer, ItemNodeSubType> subTypeHashMap = new HashMap();
@@ -90,6 +91,17 @@ public class ItemNode implements IItemEventListener, IJsonKeyDataProvider
         item.setUnlocalizedName(owner + ":" + name);
     }
 
+    public String getTabToDisplayOn()
+    {
+        return tabToDisplayOn;
+    }
+
+    @JsonProcessorData(value = "creativeTab")
+    public void setTabToDisplayOn(String tabToDisplayOn)
+    {
+        this.tabToDisplayOn = tabToDisplayOn;
+    }
+
     @JsonProcessorData(value = "subTypes") //TODO find cleaner way to init
     public void setSubTypes(JsonElement data)
     {
@@ -100,7 +112,7 @@ public class ItemNode implements IItemEventListener, IJsonKeyDataProvider
                 if (element.isJsonObject()) //TODO move to JSON processor?
                 {
                     JsonObject itemData = element.getAsJsonObject();
-                    if(JsonForLoop.hasLoops(itemData))
+                    if (JsonForLoop.hasLoops(itemData))
                     {
                         JsonForLoop.handleLoops(itemData, e -> createItemSubType(e));
                     }
@@ -127,9 +139,9 @@ public class ItemNode implements IItemEventListener, IJsonKeyDataProvider
         ItemNodeSubType subType = new ItemNodeSubType(this.item, this, itemData);
 
         //Check if we should load
-        if(itemData.has("loadCondition"))
+        if (itemData.has("loadCondition"))
         {
-            if(!JsonConditional.isConditionalTrue(itemData.get("loadCondition"), this))
+            if (!JsonConditional.isConditionalTrue(itemData.get("loadCondition"), this))
             {
                 return;
             }
@@ -173,7 +185,7 @@ public class ItemNode implements IItemEventListener, IJsonKeyDataProvider
     @Override
     public Object getJsonKeyData(String key)
     {
-        if(key.equalsIgnoreCase("id"))
+        if (key.equalsIgnoreCase("id"))
         {
             return id;
         }
