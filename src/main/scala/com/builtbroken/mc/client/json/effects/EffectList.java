@@ -45,7 +45,13 @@ public class EffectList extends JsonGenData implements IEffectData
     @Override
     public String getContentID()
     {
-        return null;
+        return key;
+    }
+
+    @Override
+    public String getUniqueID()
+    {
+        return key;
     }
 
     @Override

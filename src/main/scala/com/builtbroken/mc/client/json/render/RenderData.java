@@ -96,6 +96,12 @@ public class RenderData extends JsonGenData implements IJsonDebugDisplay
         return contentID;
     }
 
+    @Override
+    public String getUniqueID()
+    {
+        return contentID;
+    }
+
     public boolean render(IItemRenderer.ItemRenderType type, String stateKey, Object item)
     {
         return render(getRenderKeyForState(type, stateKey, item));

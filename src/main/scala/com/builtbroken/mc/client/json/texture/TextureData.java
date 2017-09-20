@@ -67,6 +67,12 @@ public class TextureData extends JsonGenData implements IJsonDebugDisplay
     }
 
     @Override
+    public String getUniqueID()
+    {
+        return key;
+    }
+
+    @Override
     public String getDisplayName()
     {
         return getContentID();

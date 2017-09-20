@@ -14,20 +14,22 @@ public class JsonEntryCreationEvent extends JsonContentLoaderEvent
 {
     public final String mod;
     public final String id;
+    public final String contentID;
     public final IJsonGenObject object;
 
     /**
      * @param loader    - loader handling the content
      * @param loadPhase - may not reflect the load phase
      * @param mod       - might be null
-     * @param id        - might be null
+     * @param contentID        - might be null
      * @param object    - object created
      */
-    public JsonEntryCreationEvent(JsonContentLoader loader, JsonLoadPhase loadPhase, String mod, String id, IJsonGenObject object)
+    public JsonEntryCreationEvent(JsonContentLoader loader, JsonLoadPhase loadPhase, String mod, String id, String contentID, IJsonGenObject object)
     {
         super(loader, loadPhase);
         this.mod = mod;
         this.id = id;
+        this.contentID = contentID;
         this.object = object;
     }
 }

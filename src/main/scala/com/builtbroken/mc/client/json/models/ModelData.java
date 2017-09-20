@@ -115,6 +115,18 @@ public class ModelData extends JsonGenData implements IJsonDebugDisplay
     }
 
     @Override
+    public String getUniqueID()
+    {
+        return name; //TODO adjust to use key
+    }
+
+    @Override
+    public String getMod()
+    {
+        return domain; //TODO adjust to use key
+    }
+
+    @Override
     public String getDisplayName()
     {
         return getContentID();

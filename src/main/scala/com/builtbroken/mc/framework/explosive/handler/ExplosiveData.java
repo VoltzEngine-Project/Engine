@@ -84,4 +84,10 @@ public class ExplosiveData extends JsonGenData
     {
         return id;
     }
+
+    @Override
+    public String getUniqueID()
+    {
+        return id;
+    }
 }

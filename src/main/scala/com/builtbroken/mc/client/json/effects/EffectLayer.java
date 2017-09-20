@@ -47,7 +47,13 @@ public class EffectLayer extends JsonGenData implements IEffectData
     @Override
     public String getContentID()
     {
-        return null;
+        return key; //TODO fix to include mod
+    }
+
+    @Override
+    public String getUniqueID()
+    {
+        return key; //TODO fix to be id only
     }
 
     public void trigger(World world, double x, double y, double z, double mx, double my, double mz, boolean endPoint)

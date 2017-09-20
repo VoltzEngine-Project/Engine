@@ -659,6 +659,12 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     @Override
     public String getContentID()
     {
+        return getMod() + ":" + getUniqueID();
+    }
+
+    @Override
+    public String getUniqueID()
+    {
         return node.id;
     }
 

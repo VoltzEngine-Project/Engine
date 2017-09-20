@@ -40,6 +40,11 @@ public abstract class JsonSettingData extends JsonGenData
         return "setting." + key;
     }
 
+    public String getUniqueID()
+    {
+        return key;
+    }
+
     public byte getByte()
     {
         return 0;

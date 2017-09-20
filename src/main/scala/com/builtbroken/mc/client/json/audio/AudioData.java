@@ -76,7 +76,13 @@ public class AudioData extends JsonGenData
     @Override
     public String getContentID()
     {
-        return null;
+        return key; //TODO fix include mod reference
+    }
+
+    @Override
+    public String getUniqueID()
+    {
+        return key; //TODO fix to use only id
     }
 
     @Override

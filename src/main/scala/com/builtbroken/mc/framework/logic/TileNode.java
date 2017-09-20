@@ -474,8 +474,9 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
         return "";
     }
 
+
     @Override
-    public String uniqueContentID()
+    public String getUniqueID()
     {
         return id;
     }

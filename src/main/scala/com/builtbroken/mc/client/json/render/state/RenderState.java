@@ -29,13 +29,19 @@ public abstract class RenderState extends JsonGenData implements IRenderState, I
     @Override
     public String getContentID()
     {
-        return id;
+        return id; //TODO prefix mod?
     }
 
     @Override
     public String getDisplayName()
     {
         return id;
+    }
+
+    @Override
+    public String getUniqueID()
+    {
+        return id; //todo make sure doesn't contain mod
     }
 
     @Override

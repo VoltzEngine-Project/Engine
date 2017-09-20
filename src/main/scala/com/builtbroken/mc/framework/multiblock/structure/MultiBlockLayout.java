@@ -35,6 +35,12 @@ public class MultiBlockLayout extends JsonGenData
     @Override
     public String getContentID()
     {
-        return key;
+        return key; //TODO prefix with mod
+    }
+
+    @Override
+    public String getUniqueID()
+    {
+        return key; //TODO implement id only
     }
 }

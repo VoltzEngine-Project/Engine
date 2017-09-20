@@ -123,4 +123,10 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
     {
         return null;
     }
+
+    @Override
+    public String getUniqueID()
+    {
+        return null;
+    }
 }

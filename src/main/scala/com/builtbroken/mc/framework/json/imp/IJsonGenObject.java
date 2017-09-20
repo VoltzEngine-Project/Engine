@@ -68,19 +68,40 @@ public interface IJsonGenObject
      *
      * @return key for loader
      */
-    String getLoader();
+    default String getLoader()
+    {
+        return null;
+    }
 
     /**
      * Gets the mod this content belongs to
      *
      * @return mod domain ID
      */
-    String getMod();
+    default String getMod()
+    {
+        return null;
+    }
+
+    /**
+     * Reference ID for the content
+     * <p>
+     * Mod:ID
+     *
+     * @return
+     */
+    default String getContentID()
+    {
+        return getMod() + ":" + getUniqueID();
+    }
 
     /**
      * Unique ID for this content
      *
      * @return
      */
-    String getContentID();
+    default String getUniqueID()
+    {
+        return null;
+    }
 }

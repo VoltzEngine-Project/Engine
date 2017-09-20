@@ -372,7 +372,7 @@ public final class JsonContentLoader extends AbstractLoadable
                                     ((IRegistryInit) genObject).onRegistered();
                                 }
 
-                                JsonEntryCreationEvent entryCreationEvent = new JsonEntryCreationEvent(this, currentPhase, genObject.getMod(), genObject.getContentID(), genObject);
+                                JsonEntryCreationEvent entryCreationEvent = new JsonEntryCreationEvent(this, currentPhase, genObject.getMod(), genObject.getUniqueID(), genObject.getContentID(), genObject);
                                 MinecraftForge.EVENT_BUS.post(entryCreationEvent);
                             }
                         }
