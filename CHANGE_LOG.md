@@ -8,8 +8,22 @@ It is also important to note these changes are for several repos. As this reposi
 # Versions
 ## 1.9.10
 ### Runtime Changes
+New textures by Morton
+    Sheet metal
+    Gems
+    Rods
+    Ingots
+    Dust
+    Dust Impure
+    Stone tools
+    and others not listed
+    
+Converted: Sheet metal to JSON
 
 ### Develoment Changes
+Added: Creative tab selection for JSON items and sub items
+Added: Json object creation event that fires each time an json gen object is generated
+Added: Phase tracking for JSON content loader (will be improved on over time)
 
 ## 1.9.9
 ### Runtime Changes
