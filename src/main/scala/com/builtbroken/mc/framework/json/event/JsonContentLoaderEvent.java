@@ -1,5 +1,7 @@
 package com.builtbroken.mc.framework.json.event;
 
+import com.builtbroken.mc.framework.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.imp.JsonLoadPhase;
 import cpw.mods.fml.common.eventhandler.Event;
 
 /**
@@ -8,4 +10,12 @@ import cpw.mods.fml.common.eventhandler.Event;
  */
 public class JsonContentLoaderEvent extends Event
 {
+    public final JsonContentLoader contentLoader;
+    public final JsonLoadPhase phase;
+
+    public JsonContentLoaderEvent(JsonContentLoader contentLoader, JsonLoadPhase phase)
+    {
+        this.contentLoader = contentLoader;
+        this.phase = phase;
+    }
 }

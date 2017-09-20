@@ -8,6 +8,7 @@ import com.builtbroken.mc.core.registry.implement.ILoadComplete;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.framework.json.event.JsonEntryCreationEvent;
 import com.builtbroken.mc.framework.json.event.JsonProcessorRegistryEvent;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
@@ -76,6 +77,8 @@ public final class JsonContentLoader extends AbstractLoadable
     /** Object used to wrap the logger to produce clearner debug messages */
     public DebugPrinter debug;
 
+    protected JsonLoadPhase currentPhase = JsonLoadPhase.HANDLERS;
+
     /**
      * Left public for JUnit testing
      * use {@link #INSTANCE} to access system
@@ -97,7 +100,7 @@ public final class JsonContentLoader extends AbstractLoadable
         processors.put(processor.getJsonKey(), processor);
 
         //Fire event to hook processors
-        MinecraftForge.EVENT_BUS.post(new JsonProcessorRegistryEvent(processor));
+        MinecraftForge.EVENT_BUS.post(new JsonProcessorRegistryEvent(this, currentPhase, processor));
 
         //Register loaders
         if (processor instanceof ILoadable)
@@ -182,6 +185,7 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void triggerPhase(JsonLoadPhase phase)
     {
+        currentPhase = phase;
         for (List<IJsonGenObject> list : generatedObjects.values())
         {
             for (IJsonGenObject object : list)
@@ -339,14 +343,14 @@ public final class JsonContentLoader extends AbstractLoadable
                         boolean handled = process(entry.jsonKey, entry.element, objects);
 
                         //Register and add generated objects
-                        for (IJsonGenObject data : objects)
+                        for (IJsonGenObject genObject : objects)
                         {
-                            if (data != null)
+                            if (genObject != null)
                             {
                                 //Set author
                                 if (entry.author != null && !entry.author.isEmpty())
                                 {
-                                    data.setAuthor(entry.author);
+                                    genObject.setAuthor(entry.author);
                                 }
 
                                 //Add gen data to list
@@ -355,18 +359,21 @@ public final class JsonContentLoader extends AbstractLoadable
                                 {
                                     list = new ArrayList();
                                 }
-                                list.add(data);
+                                list.add(genObject);
                                 generatedObjects.put(processorKey, list);
 
                                 //validate data, can crash
-                                data.validate();
+                                genObject.validate();
 
                                 //Call registry methods
-                                data.register();
-                                if (data instanceof IRegistryInit)
+                                genObject.register();
+                                if (genObject instanceof IRegistryInit)
                                 {
-                                    ((IRegistryInit) data).onRegistered();
+                                    ((IRegistryInit) genObject).onRegistered();
                                 }
+
+                                JsonEntryCreationEvent entryCreationEvent = new JsonEntryCreationEvent(this, currentPhase, genObject.getMod(), genObject.getContentID(), genObject);
+                                MinecraftForge.EVENT_BUS.post(entryCreationEvent);
                             }
                         }
 
