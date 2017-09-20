@@ -1,72 +1,19 @@
 package com.builtbroken.mc.core.content.resources.items;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.References;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-
-import java.util.List;
 
 /**
  * Sheet metal item used only in crafting more complex recipes
  * Created by Dark on 8/25/2015.
  */
-@Deprecated //TODO move to JSON
-public class ItemSheetMetal extends Item
+@Deprecated
+public class ItemSheetMetal
 {
-    public ItemSheetMetal()
-    {
-        this.setHasSubtypes(true);
-        this.setUnlocalizedName(References.PREFIX + "sheetMetal");
-        this.setCreativeTab(CreativeTabs.tabMaterials);
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack)
-    {
-        if (stack.getItemDamage() >= 0 && stack.getItemDamage() < SheetMetal.values().length)
-        {
-            return super.getUnlocalizedName() + "." + SheetMetal.values()[stack.getItemDamage()].name;
-        }
-        return super.getUnlocalizedName();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List list)
-    {
-        for (SheetMetal sheet : SheetMetal.values())
-        {
-            list.add(new ItemStack(item, 1, sheet.ordinal()));
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg)
-    {
-        for (SheetMetal sheet : SheetMetal.values())
-        {
-            sheet.icon = reg.registerIcon(References.PREFIX + sheet.name);
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int meta)
-    {
-        if (meta >= 0 && meta < SheetMetal.values().length)
-        {
-            return SheetMetal.values()[meta].icon;
-        }
-        return SheetMetal.FULL.icon;
-    }
-
+    @Deprecated //TODO move to JSON
     public enum SheetMetal
     {
         /** Normal full 1 meter sized plate */

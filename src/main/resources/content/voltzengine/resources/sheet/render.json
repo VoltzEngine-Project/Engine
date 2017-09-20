@@ -1,0 +1,160 @@
+{
+  "render": {
+    "contentID": "voltzengine:veSheetMetal",
+    "type": "item",
+    "states": [
+      {
+        "id": "full",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet"
+        }
+      },
+      {
+        "id": "half",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.half"
+        }
+      },
+      {
+        "id": "quarter",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.quarter"
+        }
+      },
+      {
+        "id": "eighth",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.eighth"
+        }
+      },
+      {
+        "id": "third",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.third"
+        }
+      },
+      {
+        "id": "triangle",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.triangle"
+        }
+      },
+      {
+        "id": "cone.micro",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.cone.micro"
+        }
+      },
+      {
+        "id": "cone.small",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.cone.small"
+        }
+      },
+      {
+        "id": "curved.1",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.curve.1"
+        }
+      },
+      {
+        "id": "curved.2",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.curve.2"
+        }
+      },
+      {
+        "id": "curved.3",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.curve.3"
+        }
+      },
+      {
+        "id": "curved.4",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.curve.4"
+        }
+      },
+      {
+        "id": "cylinder.small",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.cylinder.small"
+        }
+      },
+      {
+        "id": "cylinder.half",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.cylinder.half"
+        }
+      },
+      {
+        "id": "cylinder",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.cylinder"
+        }
+      },
+      {
+        "id": "rivets",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "rivets"
+        }
+      },
+      {
+        "id": "fin.micro",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.fin.micro"
+        }
+      },
+      {
+        "id": "fin.small",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.fin.small"
+        }
+      },
+      {
+        "id": "cone.medium",
+        "renderType": "item",
+        "texture": {
+          "domain": "voltzengine",
+          "name": "sheet.cone.medium"
+        }
+      }
+    ]
+  }
+}

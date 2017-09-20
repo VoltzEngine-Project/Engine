@@ -1,0 +1,126 @@
+{
+  "loadCondition": "setting@content.load.ores",
+  "item": {
+    "id": "veSheetMetal",
+    "mod": "voltzengine",
+    "name": "sheetMetal",
+    "hasSubTypes": true,
+    "creativeTab":"materials",
+    "subTypes": [
+      {
+        "id": "full",
+        "name": "metalSheet",
+        "ore": "sheetMetal",
+        "index": 0
+      },
+      {
+        "id": "half",
+        "name": "metalSheet_half",
+        "ore": "halfSheetMetal",
+        "index": 1
+      },
+      {
+        "id": "quarter",
+        "name": "metalSheet_quarter",
+        "ore": "quarterSheetMetal",
+        "index": 2
+      },
+      {
+        "id": "eighth",
+        "name": "metalSheet_quarter",
+        "ore": "quarterSheetMetal",
+        "index": 3
+      },
+      {
+        "id": "third",
+        "name": "metalSheet_third",
+        "ore": "shirtSheetMetal",
+        "index": 4
+      },
+      {
+        "id": "triangle",
+        "name": "metalSheetTriangle",
+        "ore": "triangleSheetMetal",
+        "index": 5
+      },
+      {
+        "id": "cone.micro",
+        "name": "metalCone_micro",
+        "ore": "sheetMicroConeMetal",
+        "index": 6
+      },
+      {
+        "id": "cone.small",
+        "name": "metalCone_small",
+        "ore": "sheetSmallConeMetal",
+        "index": 7
+      },
+      {
+        "id": "curved.1",
+        "name": "metalSheet_curved1",
+        "ore": "sheetCurvedOneMetal",
+        "index": 8
+      },
+      {
+        "id": "curved.2",
+        "name": "metalSheet_curved2",
+        "ore": "sheetCurvedTwoMetal",
+        "index": 9
+      },
+      {
+        "id": "curved.3",
+        "name": "metalSheet_curved3",
+        "ore": "sheetCurvedThreeMetal",
+        "index": 10
+      },
+      {
+        "id": "curved.4",
+        "name": "metalSheet_curved4",
+        "ore": "sheetCurvedFourMetal",
+        "index": 11
+      },
+      {
+        "id": "cylinder.small",
+        "name": "metalSheet_smallCylinder",
+        "ore": "sheetSmallCylinderMetal",
+        "index": 12
+      },
+      {
+        "id": "cylinder.half",
+        "name": "metalSheet_halfCylinder",
+        "ore": "halfSheetCylinderMetal",
+        "index": 13
+      },
+      {
+        "id": "cylinder",
+        "name": "metalSheet_cylinder",
+        "ore": "sheetCylinderMetal",
+        "index": 14
+      },
+      {
+        "id": "rivets",
+        "name": "rivets",
+        "ore": "rivetSheetMetal",
+        "index": 15
+      },
+      {
+        "id": "fin.micro",
+        "name": "metalSheet_microFin",
+        "ore": "sheetMicroFinMetal",
+        "index": 16
+      },
+      {
+        "id": "fin.small",
+        "name": "metalSheet_smallFin",
+        "ore": "sheetSmallFinMetal",
+        "index": 17
+      },
+      {
+        "id": "cone.medium",
+        "name": "metalCone_medium",
+        "ore": "sheetMediumConeMetal",
+        "index": 18
+      }
+    ]
+  }
+}
