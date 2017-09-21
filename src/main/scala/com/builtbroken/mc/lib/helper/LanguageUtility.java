@@ -1,6 +1,7 @@
 package com.builtbroken.mc.lib.helper;
 
 import com.builtbroken.mc.core.Engine;
+import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
@@ -14,7 +15,7 @@ import java.util.List;
  * Utility class to handle working with Strings
  *
  * @author Darkguardsman
- *         based on Calclavia version from Resonant Engine but has been mostly rewritten so no longer marked as author
+ * based on Calclavia version from Resonant Engine but has been mostly rewritten so no longer marked as author
  */
 public class LanguageUtility
 {
@@ -171,20 +172,37 @@ public class LanguageUtility
 
     public static List<String> splitByLine(String string, int charsPerLine)
     {
+        //Single line
+        if (string.length() < charsPerLine)
+        {
+            return Lists.newArrayList(string);
+        }
+
+        //Break string into words
         String[] words = toWordArray(string);
+
+        //Turn words back into lines
         List<String> lines = new ArrayList(); //TODO predict size for faster runtime
         String line = "";
         for (String word : words)
         {
+            //Add each word to the line until we hit line max
             if (word.length() + line.length() <= charsPerLine)
             {
                 line += word;
             }
+            //Create new line, add old
             else
             {
                 lines.add(line);
                 line = word;
             }
+        }
+
+        //Fix if single line was entered with a lot of spaces
+        if (lines.isEmpty())
+        {
+            lines.add(line);
         }
         return lines;
     }
