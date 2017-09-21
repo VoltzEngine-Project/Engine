@@ -511,3 +511,12 @@ blockTile.error.onBlockActivated=Unexpected error while click machine, see conso
 generator.voidTestWorld=Void Test World
 generator.stoneTestWorld=Stone Test World
 generator.chessTestWorld=Chess Test World
+
+## Entity Entry Names or Set Names
+entry.type.living=Living Creatures
+entry.type.players=Players
+entry.type.flying=Flying
+entry.type.animals=Animals
+entry.type.tameable=Tamed Creatures
+entry.type.mobs=Monsters
+entry.type.npcs=Villagers
