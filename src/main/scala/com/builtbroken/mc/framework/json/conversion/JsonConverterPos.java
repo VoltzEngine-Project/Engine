@@ -20,7 +20,7 @@ public class JsonConverterPos extends JsonConverter<Pos>
     }
 
     @Override
-    public Pos convert(JsonElement element)
+    public Pos convert(JsonElement element, String... args)
     {
         return fromJson(element);
     }

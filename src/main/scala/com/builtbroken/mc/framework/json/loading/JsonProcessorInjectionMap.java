@@ -24,6 +24,7 @@ public class JsonProcessorInjectionMap<O extends Object>
     public final HashMap<String, Field> injectionFields = new HashMap();
     public final HashMap<String, Method> injectionMethods = new HashMap();
     public final HashMap<String, String> injectionTypes = new HashMap();
+    public final HashMap<String, String[]> injectionArgs = new HashMap();
 
     public JsonProcessorInjectionMap(Class clazz)
     {
@@ -47,9 +48,10 @@ public class JsonProcessorInjectionMap<O extends Object>
                     //Find our annotation, allow multiple for different keys
                     if (annotation instanceof JsonProcessorData)
                     {
+                        JsonProcessorData jAnno = ((JsonProcessorData) annotation);
                         //Get keys and add each
-                        final String[] values = ((JsonProcessorData) annotation).value();
-                        if (values != null && (loadServer && ((JsonProcessorData) annotation).loadForServer() || loadClient && ((JsonProcessorData) annotation).loadForClient()))
+                        final String[] values = jAnno.value();
+                        if (values != null && (loadServer && jAnno.loadForServer() || loadClient && jAnno.loadForClient()))
                         {
                             for (final String keyValue : values)
                             {
@@ -62,10 +64,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                                     }
 
                                     injectionFields.put(key, field);
-                                    if (((JsonProcessorData) annotation).type() != null && !((JsonProcessorData) annotation).type().equals("unknown"))
-                                    {
-                                        injectionTypes.put(key, ((JsonProcessorData) annotation).type().toLowerCase());
-                                    }
+                                    cacheAnnotationData(key, jAnno);
                                 }
                                 else
                                 {
@@ -112,10 +111,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                                     }
 
                                     injectionMethods.put(key, method);
-                                    if (((JsonProcessorData) annotation).type() != null && !((JsonProcessorData) annotation).type().equals("unknown"))
-                                    {
-                                        injectionTypes.put(key, ((JsonProcessorData) annotation).type().toLowerCase());
-                                    }
+                                    cacheAnnotationData(key, (JsonProcessorData) annotation);
                                 }
                                 else
                                 {
@@ -133,9 +129,25 @@ public class JsonProcessorInjectionMap<O extends Object>
         }
     }
 
-    public boolean handle(O objectToInjection, String keyValue, Object valueToInject)
+    /**
+     * Caches information about the annotation for reuse during handling
+     *
+     * @param key        - field key
+     * @param annotation - annotation containing data to cache
+     */
+    protected void cacheAnnotationData(String key, JsonProcessorData annotation)
     {
-        return handle(objectToInjection, keyValue, valueToInject, false, "");
+        //Save type
+        if (annotation.type() != null && !annotation.type().equals("unknown"))
+        {
+            injectionTypes.put(key, annotation.type().toLowerCase());
+        }
+        //Save args
+        if (annotation.args() != null && annotation.args().length > 0 && !annotation.args()[0].equals(""))
+        {
+            injectionArgs.put(key, annotation.args());
+        }
+        //TODO convert to object or save annotation itself into the map for reference
     }
 
     public boolean supports(String keyValue, boolean override, String overrideType)
@@ -181,7 +193,30 @@ public class JsonProcessorInjectionMap<O extends Object>
         return false;
     }
 
-    public <D extends IJsonGenObject> boolean handle(O objectToInjection, String keyValue, Object valueToInject, boolean override, String overrideType)
+    /**
+     * Called to handle injection for the object
+     *
+     * @param objectToInjection - object to inject data into
+     * @param keyValue          - key to inject
+     * @param valueToInject     - value
+     * @return
+     */
+    public boolean handle(O objectToInjection, String keyValue, Object valueToInject)
+    {
+        return handle(objectToInjection, keyValue, valueToInject, false, "");
+    }
+
+    /**
+     * Called to handle injection for the object
+     *
+     * @param objectToInjection - object to inject data into
+     * @param keyValue          - key to inject
+     * @param valueToInject     - value
+     * @param override
+     * @param overrideType
+     * @return
+     */
+    public boolean handle(O objectToInjection, String keyValue, Object valueToInject, boolean override, String overrideType)
     {
         try
         {
@@ -360,12 +395,12 @@ public class JsonProcessorInjectionMap<O extends Object>
                             try
                             {
                                 String type = injectionTypes.get(injectionKeyID);
-                                if (type != null && JsonLoader.conversionHandlers.containsKey(type.toLowerCase()))
+                                if (type != null && JsonLoader.getConversionHandlers().containsKey(type.toLowerCase()))
                                 {
-                                    JsonConverter converter = JsonLoader.conversionHandlers.get(type.toLowerCase());
+                                    JsonConverter converter = JsonLoader.getConversionHandlers().get(type.toLowerCase());
                                     if (converter != null)
                                     {
-                                        Object conversion = converter.convert((JsonElement) valueToInject);
+                                        Object conversion = converter.convert((JsonElement) valueToInject, injectionArgs.get(injectionKeyID));
                                         if (conversion != null)
                                         {
                                             field.set(objectToInjection, conversion);
@@ -402,12 +437,12 @@ public class JsonProcessorInjectionMap<O extends Object>
                             {
                                 method.setAccessible(true);
                                 String type = injectionTypes.get(injectionKeyID);
-                                if (type != null && JsonLoader.conversionHandlers.containsKey(type.toLowerCase()))
+                                if (type != null && JsonLoader.getConversionHandlers().containsKey(type.toLowerCase()))
                                 {
-                                    JsonConverter converter = JsonLoader.conversionHandlers.get(type.toLowerCase());
+                                    JsonConverter converter = JsonLoader.getConversionHandlers().get(type.toLowerCase());
                                     if (converter != null)
                                     {
-                                        Object conversion = converter.convert((JsonElement) valueToInject);
+                                        Object conversion = converter.convert((JsonElement) valueToInject, injectionArgs.get(injectionKeyID));
                                         if (conversion != null)
                                         {
                                             method.invoke(objectToInjection, conversion);
@@ -554,7 +589,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                         else
                         {
                             Object object = field.get(objectToInject);
-                            if(object == null)
+                            if (object == null)
                             {
                                 throw new RuntimeException("JsonProcessorInjectionMap: Missing required value from JSON file '" + ((JsonProcessorData) annotation).value() + "'");
                             }

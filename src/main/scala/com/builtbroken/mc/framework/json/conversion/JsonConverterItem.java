@@ -19,7 +19,7 @@ public class JsonConverterItem extends JsonConverter<JsonItemEntry>
     }
 
     @Override
-    public JsonItemEntry convert(JsonElement element)
+    public JsonItemEntry convert(JsonElement element, String... args)
     {
         return fromJson(element.getAsJsonObject());
     }

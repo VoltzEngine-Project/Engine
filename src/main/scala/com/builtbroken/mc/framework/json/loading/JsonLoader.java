@@ -2,8 +2,11 @@ package com.builtbroken.mc.framework.json.loading;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.conversion.*;
+import com.builtbroken.mc.framework.json.conversion.arrays.JsonConverterStringArray;
 import com.builtbroken.mc.framework.json.conversion.data.JsonConverterEnergyBufferData;
 import com.builtbroken.mc.framework.json.conversion.data.JsonConverterEnergyChargeData;
+import com.builtbroken.mc.framework.json.conversion.primitives.*;
+import com.builtbroken.mc.framework.json.conversion.structures.JsonConverterHashMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -27,28 +30,48 @@ import java.util.Map;
  */
 public class JsonLoader
 {
-    /** Map of types to json data converts */
-    public static final HashMap<String, JsonConverter> conversionHandlers = new HashMap();
+    private static final HashMap<String, JsonConverter> conversionHandlers = new HashMap();
 
     static
     {
+        //Vector
         addConverter(new JsonConverterPos());
-        addConverter(new JsonConverterNBT());
-        addConverter(new JsonConverterStringArray());
         addConverter(new JsonConverterCube());
+
+        //Minecraft
         addConverter(new JsonConverterItem());
+        addConverter(new JsonConverterNBT());
+
+        //Data objects
         addConverter(new JsonConverterEnergyBufferData());
         addConverter(new JsonConverterEnergyChargeData());
+
+        //Arrays
+        addConverter(new JsonConverterStringArray());
+
+        //Data structures
+        addConverter(new JsonConverterHashMap());
+
+        //Primitives, these are here to wrapper JSON methods for simplicity... no complaints -.-
+        addConverter(new JsonConverterString());
+        addConverter(new JsonConverterByte());
+        addConverter(new JsonConverterShort());
+        addConverter(new JsonConverterInt());
+        addConverter(new JsonConverterLong());
+        addConverter(new JsonConverterFloat());
+        addConverter(new JsonConverterDouble());
     }
 
     public static void addConverter(JsonConverter converter)
     {
-        String key = converter.key.toLowerCase();
-        if (conversionHandlers.containsKey(key))
+        for(String key : converter.keys)
         {
-            Engine.logger().error("Overriding converter '" + key + "' with " + converter + ", previous value " + conversionHandlers.get(key));
+            if (getConversionHandlers().containsKey(key))
+            {
+                Engine.logger().error("Overriding converter '" + key + "' with " + converter + ", previous value " + getConversionHandlers().get(key));
+            }
+            getConversionHandlers().put(key, converter);
         }
-        conversionHandlers.put(key, converter);
     }
 
     /**
@@ -213,5 +236,22 @@ public class JsonLoader
                 || key.startsWith("_") // Ignore comments
                 || key.equalsIgnoreCase("loadCondition")  // Ignore load condition as its already handled
                 || key.equalsIgnoreCase("editorData");  // Ignore data stored by editor
+    }
+
+    /** Map of types to json data converts */
+    public static HashMap<String, JsonConverter> getConversionHandlers()
+    {
+        return conversionHandlers;
+    }
+
+    /**
+     * Gets the handler for the key
+     *
+     * @param key - unique id of the handler, forced to lower case
+     * @return handler
+     */
+    public static JsonConverter getConversionHandler(String key)
+    {
+        return conversionHandlers.get(key.toLowerCase());
     }
 }

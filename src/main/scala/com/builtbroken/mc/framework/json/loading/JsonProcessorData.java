@@ -24,6 +24,9 @@ public @interface JsonProcessorData
     /** Primitive type to load, only use for numbers */
     String type() default "Unknown";
 
+    /** Arguments to pass into type converter, optional in most cases */
+    String[] args() default "";
+
     /**
      * Enforced that a value is not null and contains data
      * <p>

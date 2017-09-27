@@ -19,7 +19,7 @@ public class JsonConverterEnergyBufferData extends JsonConverter<IEnergyBufferDa
     }
 
     @Override
-    public IEnergyBufferData convert(JsonElement element)
+    public IEnergyBufferData convert(JsonElement element, String... args)
     {
         return fromJson(element);
     }

@@ -20,7 +20,7 @@ public class JsonConverterCube extends JsonConverter<Cube>
     }
 
     @Override
-    public Cube convert(JsonElement element)
+    public Cube convert(JsonElement element, String... args)
     {
         return fromJson(element);
     }

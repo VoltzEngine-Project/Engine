@@ -21,7 +21,7 @@ public class JsonConverterNBT extends JsonConverter<NBTTagCompound>
     }
 
     @Override
-    public NBTTagCompound convert(JsonElement element)
+    public NBTTagCompound convert(JsonElement element, String... args)
     {
         return handle(element);
     }

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.json.conversion;
 
+import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import com.google.gson.JsonElement;
 
 /**
@@ -14,22 +15,48 @@ import com.google.gson.JsonElement;
 public abstract class JsonConverter<I extends Object>
 {
     /**
-     * Key used to ID this converter when matching data type.
-     * this is not the key in the json data, think int, float, double
+     * Keys used to ID this converter when matching data type.
+     * this is not the key in the json data, think (int, float, double)
      */
-    public final String key;
+    public final String[] keys;
 
-    public JsonConverter(String key)
+    public JsonConverter(String... keys)
     {
-        this.key = key;
+        this.keys = keys;
     }
+
 
     /**
      * Called to convert the json element into
      * an object.
      *
      * @param element - element that was marked with the type
+     * @param args    - array of arguments to use during conversion
      * @return object, or null if can't convert
      */
-    public abstract I convert(JsonElement element);
+    public I convert(JsonElement element, String... args)
+    {
+        return convert(element);
+    }
+
+
+    /**
+     * Internal method to get converter via {@link JsonLoader#getConversionHandler(String)} and
+     * call {@link #convert(JsonElement, String...)} for the type given.
+     *
+     * @param type - type (int, double, pos, block, item, etc)
+     * @param data - json to convert
+     * @param args - arguments to pass into the converter, see each converter for usage
+     * @return object generated from JSON data
+     * @throws Exception if data is invalid for the conversion type
+     */
+    protected static Object convertElement(String type, JsonElement data, String... args)
+    {
+        JsonConverter converter = JsonLoader.getConversionHandlers().get(type);
+        if (converter != null)
+        {
+            return converter.convert(data, args);
+        }
+        return null;
+    }
 }

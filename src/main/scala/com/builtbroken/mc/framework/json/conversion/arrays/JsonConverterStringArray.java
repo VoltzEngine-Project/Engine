@@ -1,5 +1,6 @@
-package com.builtbroken.mc.framework.json.conversion;
+package com.builtbroken.mc.framework.json.conversion.arrays;
 
+import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
@@ -15,7 +16,7 @@ public class JsonConverterStringArray extends JsonConverter<String[]>
     }
 
     @Override
-    public String[] convert(JsonElement element)
+    public String[] convert(JsonElement element, String... args)
     {
         if (element instanceof JsonArray)
         {
