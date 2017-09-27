@@ -6,6 +6,32 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.9.12
+### Runtime Changes
+Add: Item Render baker
+    Can be used to bake item renders to file for uses in websites or external programs
+    Can be activated in game by pressing 'ctrl' and 'end' keys at the same time
+    Will print in chat when it starts and ends
+    
+Fixed: left ctrl being forced for developer keys, right ctrl should now work as well
+Fixed: JSON debug window not opening when pressing 'ctrl' and 'home' keys
+
+### Develoment Changes
+Add: JSON to hash map converter
+Add: JSON to primitive (int, double, float, string, etc) converters
+Changed: JSON converters to allow several registry keys per instance
+
+# Versions
+## 1.9.11
+### Runtime Changes
+Add: translations for entity type sets (used by armory mod)
+Fixed: splitByLine method not working for single lines (fixes armory mod sentry gun tooltip GUIs)
+
+### Development Changes
+Added: getUnquidID() method to all JSON generated content to seperate out name from contentID and modID
+        This is only implemented on some objects as not all objects use content IDs or IDs in general.
+
+# Versions
 ## 1.9.10
 ### Runtime Changes
 New textures by Morton

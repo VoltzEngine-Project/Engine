@@ -41,8 +41,7 @@ public abstract class JsonConverter<I extends Object>
 
 
     /**
-     * Internal method to get converter via {@link JsonLoader#getConversionHandler(String)} and
-     * call {@link #convert(JsonElement, String...)} for the type given.
+     * Wrapper for calling {@link JsonLoader#convertElement(String, JsonElement, String...)}
      *
      * @param type - type (int, double, pos, block, item, etc)
      * @param data - json to convert
@@ -52,11 +51,6 @@ public abstract class JsonConverter<I extends Object>
      */
     protected static Object convertElement(String type, JsonElement data, String... args)
     {
-        JsonConverter converter = JsonLoader.getConversionHandlers().get(type);
-        if (converter != null)
-        {
-            return converter.convert(data, args);
-        }
-        return null;
+        return JsonLoader.convertElement(type, data, args);
     }
 }

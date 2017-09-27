@@ -64,7 +64,7 @@ public class JsonLoader
 
     public static void addConverter(JsonConverter converter)
     {
-        for(String key : converter.keys)
+        for (String key : converter.keys)
         {
             if (getConversionHandlers().containsKey(key))
             {
@@ -72,6 +72,26 @@ public class JsonLoader
             }
             getConversionHandlers().put(key, converter);
         }
+    }
+
+    /**
+     * Helper method for getting {@link JsonLoader#getConversionHandler(String)} and
+     * call {@link JsonConverter#convert(JsonElement, String...)} for the type given.
+     *
+     * @param type - type (int, double, pos, block, item, etc)
+     * @param data - json to convert
+     * @param args - arguments to pass into the converter, see each converter for usage
+     * @return object generated from JSON data
+     * @throws Exception if data is invalid for the conversion type
+     */
+    public static Object convertElement(String type, JsonElement data, String... args)
+    {
+        JsonConverter converter = JsonLoader.getConversionHandlers().get(type);
+        if (converter != null)
+        {
+            return converter.convert(data, args);
+        }
+        return null;
     }
 
     /**

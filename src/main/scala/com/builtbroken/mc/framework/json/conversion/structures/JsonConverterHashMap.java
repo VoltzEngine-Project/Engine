@@ -55,7 +55,7 @@ public class JsonConverterHashMap extends JsonConverter<HashMap>
                         throw new RuntimeException("JsonConverterHashMap: failed to convert value data '" + valueData + "' to type '" + valueType + "'");
                     }
 
-                    map.put(keyObject, valueType);
+                    map.put(keyObject, valueObject);
                 }
                 else
                 {
