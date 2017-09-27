@@ -4,7 +4,7 @@ import com.builtbroken.jlib.lang.EnglishLetters;
 import com.builtbroken.jlib.type.Pair;
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
-import com.builtbroken.mc.framework.json.conversion.JsonConverterNBT;
+import com.builtbroken.mc.framework.json.conversion.data.mc.JsonConverterNBT;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.google.gson.*;
 import net.minecraft.block.Block;

@@ -1,4 +1,4 @@
-package com.builtbroken.mc.framework.json.conversion.structures;
+package com.builtbroken.mc.framework.json.conversion.structures.map;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.google.gson.JsonElement;

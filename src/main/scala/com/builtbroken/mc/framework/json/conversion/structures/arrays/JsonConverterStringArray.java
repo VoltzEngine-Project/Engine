@@ -1,4 +1,4 @@
-package com.builtbroken.mc.framework.json.conversion.arrays;
+package com.builtbroken.mc.framework.json.conversion.structures.arrays;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.google.gson.JsonArray;

@@ -1,12 +1,20 @@
 package com.builtbroken.mc.framework.json.loading;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.framework.json.conversion.*;
-import com.builtbroken.mc.framework.json.conversion.arrays.JsonConverterStringArray;
-import com.builtbroken.mc.framework.json.conversion.data.JsonConverterEnergyBufferData;
-import com.builtbroken.mc.framework.json.conversion.data.JsonConverterEnergyChargeData;
+import com.builtbroken.mc.framework.json.conversion.JsonConverter;
+import com.builtbroken.mc.framework.json.conversion.data.energy.JsonConverterEnergyBufferData;
+import com.builtbroken.mc.framework.json.conversion.data.energy.JsonConverterEnergyChargeData;
+import com.builtbroken.mc.framework.json.conversion.data.mc.JsonConverterBlock;
+import com.builtbroken.mc.framework.json.conversion.data.mc.JsonConverterItem;
+import com.builtbroken.mc.framework.json.conversion.data.mc.JsonConverterNBT;
+import com.builtbroken.mc.framework.json.conversion.data.transform.JsonConverterCube;
+import com.builtbroken.mc.framework.json.conversion.data.transform.JsonConverterPos;
 import com.builtbroken.mc.framework.json.conversion.primitives.*;
-import com.builtbroken.mc.framework.json.conversion.structures.JsonConverterHashMap;
+import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConverterByteArray;
+import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConverterIntegerArray;
+import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConverterShortArray;
+import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConverterStringArray;
+import com.builtbroken.mc.framework.json.conversion.structures.map.JsonConverterHashMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -40,6 +48,7 @@ public class JsonLoader
 
         //Minecraft
         addConverter(new JsonConverterItem());
+        addConverter(new JsonConverterBlock());
         addConverter(new JsonConverterNBT());
 
         //Data objects
@@ -48,6 +57,9 @@ public class JsonLoader
 
         //Arrays
         addConverter(new JsonConverterStringArray());
+        addConverter(new JsonConverterIntegerArray());
+        addConverter(new JsonConverterShortArray());
+        addConverter(new JsonConverterByteArray());
 
         //Data structures
         addConverter(new JsonConverterHashMap());

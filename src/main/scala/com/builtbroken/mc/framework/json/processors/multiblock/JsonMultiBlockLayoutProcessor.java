@@ -4,7 +4,7 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.multiblock.EnumMultiblock;
 import com.builtbroken.mc.framework.multiblock.structure.MultiBlockLayout;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import com.builtbroken.mc.framework.json.conversion.JsonConverterPos;
+import com.builtbroken.mc.framework.json.conversion.data.transform.JsonConverterPos;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

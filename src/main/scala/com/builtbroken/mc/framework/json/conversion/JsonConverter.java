@@ -34,10 +34,7 @@ public abstract class JsonConverter<I extends Object>
      * @param args    - array of arguments to use during conversion
      * @return object, or null if can't convert
      */
-    public I convert(JsonElement element, String... args)
-    {
-        return convert(element);
-    }
+    public abstract I convert(JsonElement element, String... args);
 
 
     /**
@@ -49,7 +46,7 @@ public abstract class JsonConverter<I extends Object>
      * @return object generated from JSON data
      * @throws Exception if data is invalid for the conversion type
      */
-    protected static Object convertElement(String type, JsonElement data, String... args)
+    public static Object convertElement(String type, JsonElement data, String... args)
     {
         return JsonLoader.convertElement(type, data, args);
     }

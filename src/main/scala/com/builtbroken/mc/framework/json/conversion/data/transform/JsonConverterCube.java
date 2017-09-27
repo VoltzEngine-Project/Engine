@@ -1,5 +1,6 @@
-package com.builtbroken.mc.framework.json.conversion;
+package com.builtbroken.mc.framework.json.conversion.data.transform;
 
+import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
@@ -31,7 +32,7 @@ public class JsonConverterCube extends JsonConverter<Cube>
         {
             return fromJsonObject((JsonObject) element);
         }
-        return null;
+        throw new IllegalArgumentException("JsonConverterCube: could not convert json to cube, json: " + element);
     }
 
     public static Cube fromJsonObject(JsonObject object)

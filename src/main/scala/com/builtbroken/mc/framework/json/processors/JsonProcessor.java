@@ -3,7 +3,7 @@ package com.builtbroken.mc.framework.json.processors;
 import com.builtbroken.jlib.debug.DebugPrinter;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
-import com.builtbroken.mc.framework.json.conversion.JsonConverterItem;
+import com.builtbroken.mc.framework.json.conversion.data.mc.JsonConverterItem;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorInjectionMap;

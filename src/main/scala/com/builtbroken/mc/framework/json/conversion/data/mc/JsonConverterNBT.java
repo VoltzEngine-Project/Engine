@@ -1,5 +1,6 @@
-package com.builtbroken.mc.framework.json.conversion;
+package com.builtbroken.mc.framework.json.conversion.data.mc;
 
+import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

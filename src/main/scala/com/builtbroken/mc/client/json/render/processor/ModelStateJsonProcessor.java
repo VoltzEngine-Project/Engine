@@ -3,7 +3,7 @@ package com.builtbroken.mc.client.json.render.processor;
 import com.builtbroken.mc.client.json.render.state.ModelState;
 import com.builtbroken.mc.client.json.render.tile.RenderStateTile;
 import com.builtbroken.mc.client.json.texture.TextureData;
-import com.builtbroken.mc.framework.json.conversion.JsonConverterPos;
+import com.builtbroken.mc.framework.json.conversion.data.transform.JsonConverterPos;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.google.gson.JsonArray;

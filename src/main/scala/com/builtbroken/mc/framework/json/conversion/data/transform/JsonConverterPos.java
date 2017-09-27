@@ -1,5 +1,6 @@
-package com.builtbroken.mc.framework.json.conversion;
+package com.builtbroken.mc.framework.json.conversion.data.transform;
 
+import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -42,12 +43,12 @@ public class JsonConverterPos extends JsonConverter<Pos>
             {
                 return new Pos(primitive.getAsDouble());
             }
-            else if(primitive.isString())
+            else if (primitive.isString())
             {
                 return new Pos(Double.parseDouble(primitive.getAsString()));
             }
         }
-        return null;
+        throw new IllegalArgumentException("JsonConverterPos: could not convert json to pos, json: " + element);
     }
 
     /**
@@ -80,7 +81,7 @@ public class JsonConverterPos extends JsonConverter<Pos>
         {
             return primitive.getAsDouble();
         }
-        else if(primitive.isString())
+        else if (primitive.isString())
         {
             return Double.parseDouble(primitive.getAsString());
         }

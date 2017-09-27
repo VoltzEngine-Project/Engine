@@ -1,4 +1,4 @@
-package com.builtbroken.mc.framework.json.conversion.data;
+package com.builtbroken.mc.framework.json.conversion.data.energy;
 
 import com.builtbroken.mc.api.data.energy.IEnergyBufferData;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
