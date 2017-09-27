@@ -8,7 +8,7 @@ It is also important to note these changes are for several repos. As this reposi
 # Versions
 ## 1.9.12
 ### Runtime Changes
-Add: Item Render baker
+Added: Item Render baker
     Can be used to bake item renders to file for uses in websites or external programs
     Can be activated in game by pressing 'ctrl' and 'end' keys at the same time
     Will print in chat when it starts and ends
@@ -17,8 +17,12 @@ Fixed: left ctrl being forced for developer keys, right ctrl should now work as 
 Fixed: JSON debug window not opening when pressing 'ctrl' and 'home' keys
 
 ### Develoment Changes
-Add: JSON to hash map converter
-Add: JSON to primitive (int, double, float, string, etc) converters
+Added: JSON to hash map converter
+Added: JSON to primitive (int, double, float, string, etc) converters
+Added: block entry for storing json data until blocks finish loading
+Added: JSON converter for blocks
+Added: JSON converter for materials
+
 Changed: JSON converters to allow several registry keys per instance
 
 # Versions
