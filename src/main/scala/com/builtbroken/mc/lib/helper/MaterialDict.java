@@ -27,6 +27,12 @@ public class MaterialDict
         add("metal", Material.iron);
         add("anvil", Material.anvil);
         add("water", Material.water);
+        add("lava", Material.lava);
+        add("leaves", Material.leaves);
+        add("plants", Material.plants);
+        add("vine", Material.vine);
+        add("sponge", Material.sponge);
+        add("cloth", Material.cloth);
         //TODO add rest
     }
 
