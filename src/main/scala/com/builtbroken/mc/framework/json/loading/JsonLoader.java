@@ -6,6 +6,7 @@ import com.builtbroken.mc.framework.json.conversion.data.energy.JsonConverterEne
 import com.builtbroken.mc.framework.json.conversion.data.energy.JsonConverterEnergyChargeData;
 import com.builtbroken.mc.framework.json.conversion.data.mc.JsonConverterBlock;
 import com.builtbroken.mc.framework.json.conversion.data.mc.JsonConverterItem;
+import com.builtbroken.mc.framework.json.conversion.data.mc.JsonConverterMaterial;
 import com.builtbroken.mc.framework.json.conversion.data.mc.JsonConverterNBT;
 import com.builtbroken.mc.framework.json.conversion.data.transform.JsonConverterCube;
 import com.builtbroken.mc.framework.json.conversion.data.transform.JsonConverterPos;
@@ -50,6 +51,7 @@ public class JsonLoader
         addConverter(new JsonConverterItem());
         addConverter(new JsonConverterBlock());
         addConverter(new JsonConverterNBT());
+        addConverter(new JsonConverterMaterial());
 
         //Data objects
         addConverter(new JsonConverterEnergyBufferData());
