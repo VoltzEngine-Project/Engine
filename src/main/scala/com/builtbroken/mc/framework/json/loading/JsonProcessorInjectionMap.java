@@ -23,6 +23,7 @@ public class JsonProcessorInjectionMap<O extends Object>
 {
     public final HashMap<String, Field> injectionFields = new HashMap();
     public final HashMap<String, Method> injectionMethods = new HashMap();
+
     public final HashMap<String, String> injectionTypes = new HashMap();
     public final HashMap<String, String[]> injectionArgs = new HashMap();
 
@@ -140,12 +141,12 @@ public class JsonProcessorInjectionMap<O extends Object>
         //Save type
         if (annotation.type() != null && !annotation.type().equals("unknown"))
         {
-            injectionTypes.put(key, annotation.type().toLowerCase());
+            injectionTypes.put(key.toLowerCase(), annotation.type().toLowerCase());
         }
         //Save args
         if (annotation.args() != null && annotation.args().length > 0 && !annotation.args()[0].equals(""))
         {
-            injectionArgs.put(key, annotation.args());
+            injectionArgs.put(key.toLowerCase(), annotation.args());
         }
         //TODO convert to object or save annotation itself into the map for reference
     }
@@ -395,9 +396,9 @@ public class JsonProcessorInjectionMap<O extends Object>
                             try
                             {
                                 String type = injectionTypes.get(injectionKeyID);
-                                if (type != null && JsonLoader.getConversionHandlers().containsKey(type.toLowerCase()))
+                                if (type != null && JsonLoader.hasConverterFor(type))
                                 {
-                                    JsonConverter converter = JsonLoader.getConversionHandlers().get(type.toLowerCase());
+                                    JsonConverter converter = JsonLoader.getConversionHandler(type);
                                     if (converter != null)
                                     {
                                         Object conversion = converter.convert((JsonElement) valueToInject, injectionArgs.get(injectionKeyID));
@@ -437,9 +438,9 @@ public class JsonProcessorInjectionMap<O extends Object>
                             {
                                 method.setAccessible(true);
                                 String type = injectionTypes.get(injectionKeyID);
-                                if (type != null && JsonLoader.getConversionHandlers().containsKey(type.toLowerCase()))
+                                if (type != null && JsonLoader.hasConverterFor(type))
                                 {
-                                    JsonConverter converter = JsonLoader.getConversionHandlers().get(type.toLowerCase());
+                                    JsonConverter converter = JsonLoader.getConversionHandler(type);
                                     if (converter != null)
                                     {
                                         Object conversion = converter.convert((JsonElement) valueToInject, injectionArgs.get(injectionKeyID));

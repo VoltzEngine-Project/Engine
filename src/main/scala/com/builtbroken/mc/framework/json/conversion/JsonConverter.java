@@ -3,6 +3,9 @@ package com.builtbroken.mc.framework.json.conversion;
 import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import com.google.gson.JsonElement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Handles taking data from json and converting it into something that can be injected.
  * <p>
@@ -18,11 +21,19 @@ public abstract class JsonConverter<I extends Object>
      * Keys used to ID this converter when matching data type.
      * this is not the key in the json data, think (int, float, double)
      */
-    public final String[] keys;
+    public final List<String> keys;
 
-    public JsonConverter(String... keys)
+    public JsonConverter(String string, String... extraKeys)
     {
-        this.keys = keys;
+        this.keys = new ArrayList();
+        this.keys.add(string);
+        if(extraKeys != null)
+        {
+            for(String key : extraKeys)
+            {
+                this.keys.add(key);
+            }
+        }
     }
 
 

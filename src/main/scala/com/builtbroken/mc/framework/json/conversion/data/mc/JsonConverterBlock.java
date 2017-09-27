@@ -10,6 +10,11 @@ import com.google.gson.JsonElement;
  */
 public class JsonConverterBlock extends JsonConverter<JsonBlockEntry>
 {
+    public JsonConverterBlock()
+    {
+        super("block");
+    }
+
     @Override
     public JsonBlockEntry convert(JsonElement element, String... args)
     {

@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.json.conversion.structures.map;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
+import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -39,6 +40,8 @@ public class JsonConverterHashMap extends JsonConverter<HashMap>
                 if (e.isJsonObject())
                 {
                     JsonObject object = e.getAsJsonObject();
+                    JsonProcessor.ensureValuesExist(object, key, value);
+
                     JsonElement keyData = object.get(key);
                     JsonElement valueData = object.get(value);
 

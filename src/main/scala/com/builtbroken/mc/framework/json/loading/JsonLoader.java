@@ -78,13 +78,14 @@ public class JsonLoader
 
     public static void addConverter(JsonConverter converter)
     {
-        for (String key : converter.keys)
+        final List<String> keys = converter.keys;
+        for (String key : keys)
         {
             if (getConversionHandlers().containsKey(key))
             {
                 Engine.logger().error("Overriding converter '" + key + "' with " + converter + ", previous value " + getConversionHandlers().get(key));
             }
-            getConversionHandlers().put(key, converter);
+            getConversionHandlers().put(key.toLowerCase(), converter);
         }
     }
 
@@ -100,7 +101,7 @@ public class JsonLoader
      */
     public static Object convertElement(String type, JsonElement data, String... args)
     {
-        JsonConverter converter = JsonLoader.getConversionHandlers().get(type);
+        JsonConverter converter = JsonLoader.getConversionHandler(type);
         if (converter != null)
         {
             return converter.convert(data, args);
@@ -287,5 +288,10 @@ public class JsonLoader
     public static JsonConverter getConversionHandler(String key)
     {
         return conversionHandlers.get(key.toLowerCase());
+    }
+
+    public static boolean hasConverterFor(String key)
+    {
+        return getConversionHandler(key) != null;
     }
 }
