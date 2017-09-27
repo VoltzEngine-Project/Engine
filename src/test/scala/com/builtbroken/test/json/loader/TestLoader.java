@@ -1,4 +1,4 @@
-package com.builtbroken.test.lib.json.loader;
+package com.builtbroken.test.json.loader;
 
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import junit.framework.TestCase;

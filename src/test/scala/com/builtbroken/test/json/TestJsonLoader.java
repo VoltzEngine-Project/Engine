@@ -1,4 +1,4 @@
-package com.builtbroken.test.lib.json;
+package com.builtbroken.test.json;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
