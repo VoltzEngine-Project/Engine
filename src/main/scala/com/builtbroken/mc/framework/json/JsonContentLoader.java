@@ -97,7 +97,7 @@ public final class JsonContentLoader extends AbstractLoadable
     public void add(IJsonProcessor processor)
     {
         debug.start("Added Processor< " + processor.getJsonKey() + ", " + processor + " >");
-        processors.put(processor.getJsonKey(), processor);
+        add(processor.getJsonKey(), processor);
 
         //Fire event to hook processors
         MinecraftForge.EVENT_BUS.post(new JsonProcessorRegistryEvent(this, currentPhase, processor));
@@ -111,6 +111,16 @@ public final class JsonContentLoader extends AbstractLoadable
         //TODO add item sub processors
 
         debug.end();
+    }
+
+    protected void add(String key, IJsonProcessor processor)
+    {
+        processors.put(processor.getJsonKey(), processor);
+    }
+
+    public IJsonProcessor get(String key)
+    {
+        return processors.get(key);
     }
 
     @Override
@@ -255,7 +265,7 @@ public final class JsonContentLoader extends AbstractLoadable
             Engine.logger().info("Failed to process all JSON entries. This is most likely a bug if the count is high.");
             for (Map.Entry<String, List<JsonEntry>> set : jsonEntries.entrySet())
             {
-                boolean exists = processors.containsKey(set.getKey());
+                boolean exists = get(set.getKey()) != null;
                 if (exists)
                 {
                     processorExists = exists;
@@ -699,7 +709,7 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public boolean process(String key, JsonElement element, List<IJsonGenObject> objects)
     {
-        final IJsonProcessor processor = processors.get(key);
+        final IJsonProcessor processor = get(key);
         if (processor != null)
         {
             if (processor.canProcess(key, element))

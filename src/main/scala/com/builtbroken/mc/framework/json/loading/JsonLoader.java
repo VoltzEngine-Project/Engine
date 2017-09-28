@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.json.loading;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.framework.json.conversion.data.energy.JsonConverterEnergyBufferData;
 import com.builtbroken.mc.framework.json.conversion.data.energy.JsonConverterEnergyChargeData;
@@ -17,6 +18,8 @@ import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConver
 import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConverterStringArray;
 import com.builtbroken.mc.framework.json.conversion.structures.list.JsonConverterList;
 import com.builtbroken.mc.framework.json.conversion.structures.map.JsonConverterHashMap;
+import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
+import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -100,15 +103,34 @@ public class JsonLoader
      * @param type - type (int, double, pos, block, item, etc)
      * @param data - json to convert
      * @param args - arguments to pass into the converter, see each converter for usage
-     * @return object generated from JSON data
+     * @return object generated from JSON data, or list of objects
      * @throws Exception if data is invalid for the conversion type
      */
     public static Object convertElement(String type, JsonElement data, String... args)
     {
+        //Try converter set first
         JsonConverter converter = JsonLoader.getConversionHandler(type);
         if (converter != null)
         {
             return converter.convert(data, args);
+        }
+        //Try processor set next
+        //Note: Processors work the same as converters with slightly different rules
+        IJsonProcessor processor = JsonContentLoader.INSTANCE.get(type);
+        if (processor != null && processor.canProcess(type, data))
+        {
+            final List<IJsonGenObject> objects = new ArrayList();
+            if (processor.process(data, objects))
+            {
+                if (objects.size() == 1)
+                {
+                    return objects.get(0);
+                }
+                else if (objects.size() > 1)
+                {
+                    return objects;
+                }
+            }
         }
         return null;
     }
