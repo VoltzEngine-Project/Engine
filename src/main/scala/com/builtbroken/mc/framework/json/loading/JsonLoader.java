@@ -15,6 +15,7 @@ import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConver
 import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConverterIntegerArray;
 import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConverterShortArray;
 import com.builtbroken.mc.framework.json.conversion.structures.arrays.JsonConverterStringArray;
+import com.builtbroken.mc.framework.json.conversion.structures.list.JsonConverterList;
 import com.builtbroken.mc.framework.json.conversion.structures.map.JsonConverterHashMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -65,6 +66,9 @@ public class JsonLoader
 
         //Data structures
         addConverter(new JsonConverterHashMap());
+
+        //List
+        addConverter(new JsonConverterList());
 
         //Primitives, these are here to wrapper JSON methods for simplicity... no complaints -.-
         addConverter(new JsonConverterString());
