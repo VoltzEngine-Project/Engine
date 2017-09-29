@@ -56,7 +56,7 @@ public class DelayedActionHandler
             list = worldToActions.get(delayedAction.world.provider.dimensionId);
         }
 
-        if (list != null)
+        if (list == null)
         {
             list = new ArrayList();
         }
