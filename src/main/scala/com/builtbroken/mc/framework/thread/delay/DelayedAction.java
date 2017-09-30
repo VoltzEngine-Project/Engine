@@ -10,9 +10,9 @@ public abstract class DelayedAction
 {
     public final World world;
 
-    protected int ticksToWait = 0;
+    public int ticksToWait = 0;
 
-    protected boolean isAlive = true;
+    public boolean isAlive = true;
 
     public DelayedAction(World world, int ticks)
     {
