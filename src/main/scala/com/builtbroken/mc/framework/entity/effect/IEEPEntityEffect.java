@@ -21,13 +21,45 @@ public class IEEPEntityEffect implements IExtendedEntityProperties
     public static final String NBT_EFFECTS = "effects";
     public static final String NBT_EFFECT_ID = "effectID";
 
+    /** Map of effects by id */
     protected final Map<String, EntityEffect> effects = new HashMap();
 
+    /** Entity the effect should modify */
     public Entity entity;
 
+    /**
+     * Called to add an effect
+     *
+     * @param entityEffect
+     */
     public void addEffect(EntityEffect entityEffect)
     {
-        effects.put(entityEffect.id.toLowerCase(), entityEffect); //TODO merge effects?
+        final String id = entityEffect.id.toLowerCase();
+        final EntityEffect original = getEffect(id);
+        if (original != null)
+        {
+            original.merge(entityEffect);
+        }
+        else
+        {
+            effects.put(id, entityEffect);
+        }
+    }
+
+    /**
+     * Called to get an effect
+     *
+     * @param id
+     * @return
+     */
+    public EntityEffect getEffect(String id)
+    {
+        id = id.toLowerCase();
+        if (effects.containsKey(id))
+        {
+            return effects.get(id);
+        }
+        return null;
     }
 
     @Override

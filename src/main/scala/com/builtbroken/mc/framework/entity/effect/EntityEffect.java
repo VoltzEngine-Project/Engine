@@ -1,12 +1,10 @@
 package com.builtbroken.mc.framework.entity.effect;
 
 import com.builtbroken.mc.api.ISave;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Similar to MC potion system allowing for time based effects to be applied to an entity
@@ -14,20 +12,26 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 9/30/2017.
  */
-public class EntityEffect  implements ISave
+public abstract class EntityEffect implements ISave
 {
+    /** Unique id of the effect, normally prefix with mod ID */
     public final String id;
+    /** mod that owns the effect */
+    public final String mod;
 
+    /** Is the effect alive */
     public boolean isAlive = true;
-    public int ticks = 0;
+    /** Current life tick of the effect */
+    public int tick = 0;
 
+    /** Entity to modify for the effect */
     public Entity entity;
+    /** Entity's world */
     public World world;
 
-    protected final List<EntityEffect> effects = new ArrayList();
-
-    public EntityEffect(String id)
+    public EntityEffect(String mod, String id)
     {
+        this.mod = mod;
         this.id = id;
     }
 
@@ -58,5 +62,41 @@ public class EntityEffect  implements ISave
     {
         this.entity = entity;
         this.world = world;
+    }
+
+    /**
+     * Called to merge two effects. Only
+     * merged effects if they can actually stack.
+     * If they can't stack store effect as sub-object
+     * and tick via {@link #update()}
+     *
+     * @param entityEffect
+     */
+    public abstract void merge(EntityEffect entityEffect);
+
+    /**
+     * Unlocalized name of the effect
+     *
+     * @return
+     */
+    public String getUnlocalizedName()
+    {
+        return "entity.effect." + mod + ":" + id + ".name";
+    }
+
+    /**
+     * Display name of the effect
+     *
+     * @return
+     */
+    public String getDisplayName()
+    {
+        String translation = LanguageUtility.getLocal(getUnlocalizedName());
+        if (translation != null)
+        {
+            translation = translation.trim();
+            return !translation.isEmpty() ? translation : getUnlocalizedName();
+        }
+        return getUnlocalizedName();
     }
 }
