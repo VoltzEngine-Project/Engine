@@ -1,12 +1,22 @@
 package com.builtbroken.mc.framework.entity.effect;
 
+import com.builtbroken.jlib.debug.DebugPrinter;
+import com.builtbroken.jlib.lang.StringHelpers;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.framework.entity.effect.effects.BleedingEffect;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.WorldEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -16,21 +26,26 @@ import java.util.function.Function;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 9/30/2017.
  */
-public class EntityEffectHandler
+public final class EntityEffectHandler
 {
     public static final String ENTITY_EXTENDED_PROPERTY_IDENTIFIER = References.PREFIX + "effecthandler";
-
-    public static Map<Integer, IEEPEntityEffect> entityToHandler = new HashMap();
-    public static Map<String, Function<Entity, EntityEffect>> effectCreators = new HashMap();
-
-    public EntityEffectHandler INSTANCE = new EntityEffectHandler();
 
     //Effects created by VE
     public static final String BLEEDING_EFFECT = "bleeding";
 
+    public static final EntityEffectHandler INSTANCE = new EntityEffectHandler();
+
+    public static boolean doDebug = false;
+
+
+    private static Map<String, Function<Entity, EntityEffect>> effectCreators = new HashMap();
+
+    private DebugPrinter debugPrinter;
+
     private EntityEffectHandler()
     {
-        addEffectCreator(BLEEDING_EFFECT, e -> new BleedingEffect(e, 0, 0));
+        //do nothing
+        debugPrinter = new DebugPrinter(Engine.logger());
     }
 
     /**
@@ -41,7 +56,10 @@ public class EntityEffectHandler
      */
     public static void addEffectCreator(String id, Function<Entity, EntityEffect> function)
     {
-        effectCreators.put(id.toLowerCase(), function);
+        if (id != null && function != null)
+        {
+            effectCreators.put(id.toLowerCase(), function);
+        }
     }
 
     /**
@@ -54,11 +72,17 @@ public class EntityEffectHandler
     {
         if (entity != null && entityEffect != null)
         {
-            int id = entity.getEntityId();
-            IEEPEntityEffect property = entityToHandler.get(id);
-            if (property != null)
+            IExtendedEntityProperties prop = entity.getExtendedProperties(ENTITY_EXTENDED_PROPERTY_IDENTIFIER);
+            if (!(prop instanceof IEEPEntityEffect))
             {
-                property.addEffect(entityEffect);
+                prop = createEffectProperty(entity);
+            }
+
+            //Apply effect
+            if (prop instanceof IEEPEntityEffect)
+            {
+                prop.init(entity, entity.worldObj);
+                ((IEEPEntityEffect) prop).addEffect(entityEffect);
             }
         }
     }
@@ -67,7 +91,7 @@ public class EntityEffectHandler
      * Creates an entity effect for the given entity
      *
      * @param id     - unique key to locate the effect
-     * @param entity - entity to create the effect for
+     * @param entity - entity to create the effect for, can be null
      * @return effect, or null if not found
      */
     public static EntityEffect create(String id, Entity entity)
@@ -79,15 +103,97 @@ public class EntityEffectHandler
         return null;
     }
 
+    protected static IEEPEntityEffect createEffectProperty(Entity entity)
+    {
+        if (entity != null && entity.worldObj != null)
+        {
+            //Create property object
+            IEEPEntityEffect effectProperty = new IEEPEntityEffect();
+            entity.registerExtendedProperties(ENTITY_EXTENDED_PROPERTY_IDENTIFIER, effectProperty);
+            effectProperty.init(entity, entity.worldObj);
+            return effectProperty;
+        }
+        return null;
+    }
+
     @SubscribeEvent
     public void onEntityCreated(EntityEvent.EntityConstructing event)
     {
-        Entity entity = event.entity;
-        int id = entity.getEntityId();
+        createEffectProperty(event.entity);
+    }
 
-        IEEPEntityEffect effectProperty = new IEEPEntityEffect();
-        entity.registerExtendedProperties(ENTITY_EXTENDED_PROPERTY_IDENTIFIER, effectProperty);
+    @SubscribeEvent
+    public void onWorldTick(TickEvent.WorldTickEvent event)
+    {
+        World world = event.world;
+        if (event.phase == TickEvent.Phase.END)
+        {
+            debugPrinter.start("EntityEffectHandler", "onWorldTick(" + world.provider.dimensionId + ")", doDebug);
+            try
+            {
+                long time = System.nanoTime();
+                //Copy list to prevent concurrent mod errors
+                final List loadedEntityList = new ArrayList();
+                loadedEntityList.addAll(world.loadedEntityList);
+                time = System.nanoTime() - time;
+                debugPrinter.log("copy list time: " + StringHelpers.formatNanoTime(time));
+                time = System.nanoTime();
 
-        entityToHandler.put(id, effectProperty);
+                //Loop entities
+                for (int i = 0; i < loadedEntityList.size(); i++)
+                {
+                    //Validate content
+                    final Object object = loadedEntityList.get(i);
+                    if (object instanceof Entity)
+                    {
+                        //Get property
+                        IExtendedEntityProperties prop = ((Entity) object).getExtendedProperties(ENTITY_EXTENDED_PROPERTY_IDENTIFIER);
+                        if (prop instanceof IEEPEntityEffect)
+                        {
+                            try
+                            {
+                                //Tick property to update effects
+                                ((IEEPEntityEffect) prop).onWorldTick();
+                            }
+                            catch (Exception e)
+                            {
+                                Engine.logger().error("EntityEffectHandler#onWorldTick("
+                                        + event.world.provider.dimensionId
+                                        + ") >> unexpected error updating "
+                                        + prop
+                                        + " for "
+                                        + object, e);
+                            }
+                        }
+                    }
+                }
+                time = System.nanoTime() - time;
+                debugPrinter.log("Entities: " + loadedEntityList.size());
+                debugPrinter.log("RunTime: " + StringHelpers.formatNanoTime(time));
+            }
+            catch (Exception e)
+            {
+                Engine.logger().error("EntityEffectHandler#onWorldTick(" + event.world.provider.dimensionId + ") >> unexpected error updating effect providers");
+            }
+            debugPrinter.end();
+        }
+    }
+
+    //@SubscribeEvent
+    public void onEntityDeath(LivingDeathEvent event)
+    {
+        //TODO trigger unique effects?
+    }
+
+    //@SubscribeEvent
+    public void chunkUnloadEvent(ChunkEvent.Unload event)
+    {
+        //TODO notify effect of chunk unload
+    }
+
+    //@SubscribeEvent
+    public void onWorldUnload(WorldEvent.Unload event)
+    {
+        //TODO notify effect of world unload
     }
 }

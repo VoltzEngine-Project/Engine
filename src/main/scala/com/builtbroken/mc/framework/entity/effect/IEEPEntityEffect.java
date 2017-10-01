@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -43,6 +44,22 @@ public class IEEPEntityEffect implements IExtendedEntityProperties
         else
         {
             effects.put(id, entityEffect);
+        }
+    }
+
+    /**
+     * Called each world tick
+     */
+    public void onWorldTick()
+    {
+        Iterator<EntityEffect> it = effects.values().iterator();
+        while (it.hasNext())
+        {
+            EntityEffect entityEffect = it.next();
+            if (entityEffect.onWorldTick())
+            {
+                it.remove();
+            }
         }
     }
 

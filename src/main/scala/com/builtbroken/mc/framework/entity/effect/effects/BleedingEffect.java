@@ -1,11 +1,16 @@
 package com.builtbroken.mc.framework.entity.effect.effects;
 
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.entity.effect.EntityEffect;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.entity.damage.DamageBleeding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,46 +29,77 @@ public class BleedingEffect extends EntityEffect
     public Object source;
     public List<BleedingEffect> subEffects = new ArrayList();
 
-    public BleedingEffect(Object source, float damage, int duration)
+    public BleedingEffect(Entity entity)
     {
         super(References.DOMAIN, "bleeding");
+        this.entity = entity;
+        this.world = Engine.getWorld(entity.worldObj.provider.dimensionId);
+    }
+
+    public void setDamageValues(Object source, float damage, int duration)
+    {
         this.source = source;
         this.damage = damage;
         this.duration = duration;
     }
 
     @Override
-    public boolean update()
+    public boolean onWorldTick()
     {
-        boolean kill = super.update();
-
-        //Damage
-        entity.attackEntityFrom(new DamageBleeding(source), damage);
-
-        //Iterator over sub effects
-        Iterator<BleedingEffect> it = subEffects.iterator();
-        while (it.hasNext())
+        if (this.entity instanceof EntityLivingBase && this.entity.isEntityAlive() && !this.entity.isEntityInvulnerable())
         {
-            BleedingEffect next = it.next();
-            //Trigger sub effect
-            if (next.update())
+            EntityLivingBase entity = (EntityLivingBase) this.entity;
+            boolean kill = super.onWorldTick();
+
+            //Damage
+            float hp = entity.getHealth();
+            DamageSource damageSource = source != null ? new DamageBleeding(source) : new DamageBleeding();
+
+            //Remove HP silently to bypass resistance checks and avoid hurt animation being triggered
+            if (hp - damage > 0)
             {
-                //done
-                it.remove();
+                //Fire event allow damage to be blocked
+                if (ForgeHooks.onLivingAttack(entity, damageSource, damage))
+                {
+                    return false;
+                }
+                entity.setHealth(hp - damage);
             }
-            //Replace current with effect
-            else if (kill)
+            //If entity is almost dead, fire normal damage to trigger death correctly
+            else
             {
-                kill = false;
-                damage = next.damage;
-                duration = next.duration;
-                source = next.source;
-                //sub effects should not have nested effects
-                it.remove(); //Remove as it has become current
+                entity.hurtResistantTime = 0;
+                entity.attackEntityFrom(damageSource, damage);
             }
+
+            //Iterator over sub effects
+            Iterator<BleedingEffect> it = subEffects.iterator();
+            while (it.hasNext())
+            {
+                BleedingEffect next = it.next();
+                //Trigger sub effect
+                if (next.onWorldTick())
+                {
+                    //done
+                    it.remove();
+                }
+                //Replace current with effect
+                else if (kill)
+                {
+                    kill = false;
+                    damage = next.damage;
+                    duration = next.duration;
+                    source = next.source;
+                    //sub effects should not have nested effects
+                    it.remove(); //Remove as it has become current
+                }
+            }
+
+            //TODO trigger event to render blood drops and play audio
+            world.newEffect("bleeding", new Pos(entity.posX, entity.posY + (entity.height / 2), entity.posZ)).send(); //TODO get wound location for better effect
+            return kill || duration <= tick;
         }
-        //TODO render blood drops
-        return kill || duration <= tick;
+        return true;
     }
 
     @Override

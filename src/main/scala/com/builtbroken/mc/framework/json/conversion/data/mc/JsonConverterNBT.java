@@ -41,20 +41,26 @@ public class JsonConverterNBT extends JsonConverter<NBTTagCompound>
     {
         for (Map.Entry<String, JsonElement> entry : object.entrySet())
         {
+            final String entryKey = entry.getKey();
+            //Objects are considered nested NBT structures
             if (entry.getValue() instanceof JsonObject)
             {
                 NBTTagCompound tag = new NBTTagCompound();
                 handle((JsonObject) entry.getValue(), tag, depth++); //TODO add depth limit
-                nbt.setTag(entry.getKey(), tag);
+                nbt.setTag(entryKey, tag);
             }
+            //Primitives are data points
             else if (entry.getValue() instanceof JsonPrimitive)
             {
                 JsonPrimitive primitive = (JsonPrimitive) entry.getValue();
                 if (primitive.isNumber())
                 {
-                    String[] split = entry.getKey().split(":");
-                    String key = split[0];
-                    String type = split[1].toLowerCase();
+                    //Separate out key from data type
+                    final String[] split = entryKey.split(":"); //TODO error if more than two
+                    final String key = split[0];
+                    final String type = split[1].toLowerCase();
+
+                    //Match type to nbt structure
                     if (type.equals("int") || type.equals("integer"))
                     {
                         nbt.setInteger(key, primitive.getAsInt());

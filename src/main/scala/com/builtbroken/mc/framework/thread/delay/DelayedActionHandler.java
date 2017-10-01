@@ -17,31 +17,34 @@ public class DelayedActionHandler
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        final World world = event.world;
-        final int dimID = world.provider.dimensionId;
-        if (worldToActions.containsKey(dimID))
+        if(event.phase == TickEvent.Phase.END)
         {
-            List<DelayedAction> actions = worldToActions.get(dimID);
-            if (actions != null && actions.size() > 0)
+            final World world = event.world;
+            final int dimID = world.provider.dimensionId;
+            if (worldToActions.containsKey(dimID))
             {
-                Iterator<DelayedAction> it = actions.iterator();
-                while (it.hasNext())
+                List<DelayedAction> actions = worldToActions.get(dimID);
+                if (actions != null && actions.size() > 0)
                 {
-                    DelayedAction action = it.next();
-                    if (action.isAlive)
+                    Iterator<DelayedAction> it = actions.iterator();
+                    while (it.hasNext())
                     {
-                        action.ticksToWait--;
-                        if (action.ticksToWait <= 0)
+                        DelayedAction action = it.next();
+                        if (action.isAlive)
                         {
-                            if(action.trigger())
+                            action.ticksToWait--;
+                            if (action.ticksToWait <= 0)
                             {
-                                it.remove();
+                                if (action.trigger())
+                                {
+                                    it.remove();
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        it.remove();
+                        else
+                        {
+                            it.remove();
+                        }
                     }
                 }
             }

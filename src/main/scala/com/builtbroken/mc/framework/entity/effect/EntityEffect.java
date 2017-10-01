@@ -1,6 +1,8 @@
 package com.builtbroken.mc.framework.entity.effect;
 
 import com.builtbroken.mc.api.ISave;
+import com.builtbroken.mc.api.abstraction.world.IWorld;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,7 +29,7 @@ public abstract class EntityEffect implements ISave
     /** Entity to modify for the effect */
     public Entity entity;
     /** Entity's world */
-    public World world;
+    public IWorld world;
 
     public EntityEffect(String mod, String id)
     {
@@ -41,7 +43,7 @@ public abstract class EntityEffect implements ISave
      *
      * @return true to remove the effect
      */
-    public boolean update()
+    public boolean onWorldTick()
     {
         return !isAlive;
     }
@@ -61,14 +63,14 @@ public abstract class EntityEffect implements ISave
     public void init(Entity entity, World world)
     {
         this.entity = entity;
-        this.world = world;
+        this.world = Engine.getWorld(world.provider.dimensionId);
     }
 
     /**
      * Called to merge two effects. Only
      * merged effects if they can actually stack.
      * If they can't stack store effect as sub-object
-     * and tick via {@link #update()}
+     * and tick via {@link #onWorldTick()}
      *
      * @param entityEffect
      */
@@ -98,5 +100,15 @@ public abstract class EntityEffect implements ISave
             return !translation.isEmpty() ? translation : getUnlocalizedName();
         }
         return getUnlocalizedName();
+    }
+
+    protected boolean isServer()
+    {
+        return !world.isServer();
+    }
+
+    protected boolean isClient()
+    {
+        return world.isClient();
     }
 }
