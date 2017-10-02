@@ -376,7 +376,7 @@ public final class JsonContentLoader extends AbstractLoadable
                                 genObject.validate();
 
                                 //Call registry methods
-                                genObject.register();
+                                genObject.onCreated();
                                 if (genObject instanceof IRegistryInit)
                                 {
                                     ((IRegistryInit) genObject).onRegistered();

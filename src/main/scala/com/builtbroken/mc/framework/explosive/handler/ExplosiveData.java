@@ -34,7 +34,7 @@ public class ExplosiveData extends JsonGenData
     }
 
     @Override
-    public void register()
+    public void onCreated()
     {
         try
         {

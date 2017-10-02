@@ -36,7 +36,7 @@ public abstract class JsonRecipeData extends JsonGenData implements IJsonGenObje
 
 
     @Override
-    public void register()
+    public void onCreated()
     {
 
     }

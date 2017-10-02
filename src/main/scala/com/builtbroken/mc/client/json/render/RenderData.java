@@ -85,7 +85,7 @@ public class RenderData extends JsonGenData implements IJsonDebugDisplay
     }
 
     @Override
-    public void register()
+    public void onCreated()
     {
         ClientDataHandler.INSTANCE.addRenderData(contentID, this);
     }

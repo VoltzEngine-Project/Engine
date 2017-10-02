@@ -68,7 +68,7 @@ public class AudioData extends JsonGenData
     }
 
     @Override
-    public void register()
+    public void onCreated()
     {
         ClientDataHandler.INSTANCE.addAudio(key, this);
     }

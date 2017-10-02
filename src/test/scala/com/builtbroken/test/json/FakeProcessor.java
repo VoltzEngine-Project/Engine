@@ -55,7 +55,7 @@ public class FakeProcessor extends JsonProcessor
         }
 
         @Override
-        public void register()
+        public void onCreated()
         {
             registered = true;
         }

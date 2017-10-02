@@ -27,7 +27,7 @@ public class MultiBlockLayout extends JsonGenData
     }
 
     @Override
-    public void register()
+    public void onCreated()
     {
         MultiBlockLayoutHandler.register(this);
     }

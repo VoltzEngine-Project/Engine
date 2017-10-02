@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.json.imp;
 
+import com.builtbroken.mc.api.IModObject;
 import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 
@@ -9,10 +10,10 @@ import com.builtbroken.mc.framework.json.IJsonGenMod;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/26/2016.
  */
-public interface IJsonGenObject
+public interface IJsonGenObject extends IModObject
 {
     /**
-     * Called at some point after {@link #register()}
+     * Called at some point after {@link #onCreated()}
      * to register the content to the game itself.
      * <p>
      * This is called several times so make sure
@@ -39,8 +40,15 @@ public interface IJsonGenObject
      * been created and registered to
      * {@link com.builtbroken.mc.framework.json.JsonContentLoader}
      */
+    default void onCreated()
+    {
+        register();
+    }
+
+    @Deprecated //use onCreated()
     default void register()
     {
+
     }
 
     /**
@@ -69,38 +77,6 @@ public interface IJsonGenObject
      * @return key for loader
      */
     default String getLoader()
-    {
-        return null;
-    }
-
-    /**
-     * Gets the mod this content belongs to
-     *
-     * @return mod domain ID
-     */
-    default String getMod()
-    {
-        return null;
-    }
-
-    /**
-     * Reference ID for the content
-     * <p>
-     * Mod:ID
-     *
-     * @return
-     */
-    default String getContentID()
-    {
-        return getMod() + ":" + getUniqueID();
-    }
-
-    /**
-     * Unique ID for this content
-     *
-     * @return
-     */
-    default String getUniqueID()
     {
         return null;
     }

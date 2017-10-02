@@ -55,7 +55,7 @@ public class TextureData extends JsonGenData implements IJsonDebugDisplay
     }
 
     @Override
-    public void register()
+    public void onCreated()
     {
         ClientDataHandler.INSTANCE.addTexture(key, this);
     }

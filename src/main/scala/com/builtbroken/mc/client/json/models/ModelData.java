@@ -103,7 +103,7 @@ public class ModelData extends JsonGenData implements IJsonDebugDisplay
     }
 
     @Override
-    public void register()
+    public void onCreated()
     {
         ClientDataHandler.INSTANCE.addModel(key, this);
     }

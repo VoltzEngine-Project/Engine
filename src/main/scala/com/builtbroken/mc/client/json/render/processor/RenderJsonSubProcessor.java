@@ -108,7 +108,7 @@ public abstract class RenderJsonSubProcessor<S extends IRenderState>
                     }
                     list.add(data);
                     JsonContentLoader.INSTANCE.generatedObjects.put("texture", list);
-                    data.register();
+                    data.onCreated();
                 }
             }
         }

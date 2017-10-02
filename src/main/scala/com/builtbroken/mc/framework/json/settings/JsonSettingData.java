@@ -29,7 +29,7 @@ public abstract class JsonSettingData extends JsonGenData
     }
 
     @Override
-    public void register()
+    public void onCreated()
     {
         Engine.addSetting(this);
     }

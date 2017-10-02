@@ -35,7 +35,7 @@ public abstract class JsonGenData implements IJsonGenObject
     }
 
     @Override
-    public void register()
+    public void onCreated()
     {
 
     }

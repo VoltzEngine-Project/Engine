@@ -39,7 +39,7 @@ public class EffectLayer extends JsonGenData implements IEffectData
     }
 
     @Override
-    public void register()
+    public void onCreated()
     {
         ClientDataHandler.INSTANCE.addEffect(key, this);
     }
