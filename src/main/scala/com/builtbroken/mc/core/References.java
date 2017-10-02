@@ -48,6 +48,7 @@ public final class References
     //=============================================
 
     public static final String LASER_EFFECT = "VEP_laser";
+    public static final String BLEEDING_EFFECT = "VEP_bleeding";
 
     //=============================================
     //============== File System ==================

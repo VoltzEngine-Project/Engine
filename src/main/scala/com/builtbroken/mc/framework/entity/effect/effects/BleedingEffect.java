@@ -32,8 +32,11 @@ public class BleedingEffect extends EntityEffect
     public BleedingEffect(Entity entity)
     {
         super(References.DOMAIN, "bleeding");
-        this.entity = entity;
-        this.world = Engine.getWorld(entity.worldObj.provider.dimensionId);
+        if(entity != null && entity.worldObj != null)
+        {
+            this.entity = entity;
+            this.world = Engine.getWorld(entity.worldObj.provider.dimensionId);
+        }
     }
 
     public void setDamageValues(Object source, float damage, int duration)
@@ -48,7 +51,9 @@ public class BleedingEffect extends EntityEffect
     {
         if (this.entity instanceof EntityLivingBase && this.entity.isEntityAlive() && !this.entity.isEntityInvulnerable())
         {
-            EntityLivingBase entity = (EntityLivingBase) this.entity;
+            final EntityLivingBase entity = (EntityLivingBase) this.entity;
+
+            //Tick super and check for end condition
             boolean kill = super.onWorldTick();
 
             //Damage
@@ -96,7 +101,12 @@ public class BleedingEffect extends EntityEffect
             }
 
             //TODO trigger event to render blood drops and play audio
-            world.newEffect("bleeding", new Pos(entity.posX, entity.posY + (entity.height / 2), entity.posZ)).send(); //TODO get wound location for better effect
+            //TODO get wound location for better effect
+
+            //Play effects to help indicate the entity is hurt
+            world.newEffect(References.BLEEDING_EFFECT, new Pos(entity.posX, entity.posY + (entity.height / 2), entity.posZ)).send();
+
+            //end
             return kill || duration <= tick;
         }
         return true;

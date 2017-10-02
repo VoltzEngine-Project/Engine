@@ -28,18 +28,22 @@ import java.util.function.Function;
  */
 public final class EntityEffectHandler
 {
+    /** Key used to register and get the effect property on an entity {@link Entity#getExtendedProperties(String)} */
     public static final String ENTITY_EXTENDED_PROPERTY_IDENTIFIER = References.PREFIX + "effecthandler";
 
     //Effects created by VE
     public static final String BLEEDING_EFFECT = "bleeding";
 
+    /** Instance of the handler, only used for event handling */
     public static final EntityEffectHandler INSTANCE = new EntityEffectHandler();
 
+    /** Enabled console debug */
     public static boolean doDebug = false;
 
-
+    //map of effect id to its creation function
     private static Map<String, Function<Entity, EntityEffect>> effectCreators = new HashMap();
 
+    //Console debug printer
     private DebugPrinter debugPrinter;
 
     private EntityEffectHandler()
@@ -122,7 +126,7 @@ public final class EntityEffectHandler
         createEffectProperty(event.entity);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent //TODO find a better way to trigger updates
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
         World world = event.world;
@@ -132,14 +136,17 @@ public final class EntityEffectHandler
             try
             {
                 long time = System.nanoTime();
+
                 //Copy list to prevent concurrent mod errors
                 final List loadedEntityList = new ArrayList();
                 loadedEntityList.addAll(world.loadedEntityList);
+
+                //Debug time taken to clone list
                 time = System.nanoTime() - time;
                 debugPrinter.log("copy list time: " + StringHelpers.formatNanoTime(time));
                 time = System.nanoTime();
 
-                //Loop entities
+                //Loop entities, keep index loop to prevent concurrent modification exceptions from being thrown
                 for (int i = 0; i < loadedEntityList.size(); i++)
                 {
                     //Validate content
@@ -167,6 +174,8 @@ public final class EntityEffectHandler
                         }
                     }
                 }
+
+                //Debug time taken to update all entities
                 time = System.nanoTime() - time;
                 debugPrinter.log("Entities: " + loadedEntityList.size());
                 debugPrinter.log("RunTime: " + StringHelpers.formatNanoTime(time));
