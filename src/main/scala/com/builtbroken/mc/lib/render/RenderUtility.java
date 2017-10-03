@@ -593,6 +593,52 @@ public class RenderUtility
     }
 
     /**
+     * Renders a cube with custom block boundaries.
+     */
+    public static void renderCubeWithOverrides(double x1, double y1, double z1, double x2, double y2, double z2, Block block, IIcon[] overrideTextures, int meta)
+    {
+        GL11.glPushMatrix();
+        if (RenderManager.instance != null && RenderManager.instance.renderEngine != null && TextureMap.locationBlocksTexture != null)
+        {
+            RenderManager.instance.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        }
+        Tessellator t = Tessellator.instance;
+
+        GL11.glColor4f(1, 1, 1, 1);
+
+        getBlockRenderer().setRenderBounds(x1, y1, z1, x2, y2, z2);
+
+        t.startDrawingQuads();
+
+        IIcon useTexture = overrideTextures[0] != null ? overrideTextures[0] : getTextureSafe(block, 0, meta);
+        t.setNormal(0.0F, -1.0F, 0.0F);
+        getBlockRenderer().renderFaceYNeg(block, 0, 0, 0, useTexture);
+
+        useTexture = overrideTextures[1] != null ? overrideTextures[1] : getTextureSafe(block, 1, meta);
+        t.setNormal(0.0F, 1.0F, 0.0F);
+        getBlockRenderer().renderFaceYPos(block, 0, 0, 0, useTexture);
+
+        useTexture = overrideTextures[2] != null ? overrideTextures[2] : getTextureSafe(block, 2, meta);
+        t.setNormal(0.0F, 0.0F, -1.0F);
+        getBlockRenderer().renderFaceZNeg(block, 0, 0, 0, useTexture);
+
+        useTexture = overrideTextures[3] != null ? overrideTextures[3] : getTextureSafe(block, 3, meta);
+        t.setNormal(0.0F, 0.0F, 1.0F);
+        getBlockRenderer().renderFaceZPos(block, 0, 0, 0, useTexture);
+
+        useTexture = overrideTextures[4] != null ? overrideTextures[4] : getTextureSafe(block, 4, meta);
+        t.setNormal(-1.0F, 0.0F, 0.0F);
+        getBlockRenderer().renderFaceXNeg(block, 0, 0, 0, useTexture);
+
+        useTexture = overrideTextures[5] != null ? overrideTextures[5] : getTextureSafe(block, 5, meta);
+        t.setNormal(1.0F, 0.0F, 0.0F);
+        getBlockRenderer().renderFaceXPos(block, 0, 0, 0, useTexture);
+        t.draw();
+
+        GL11.glPopMatrix();
+    }
+
+    /**
      * Gets the texture for the block and side
      * <p>
      * If the return value is null then the icon
