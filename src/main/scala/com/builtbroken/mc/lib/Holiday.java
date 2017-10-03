@@ -11,7 +11,11 @@ import java.util.Calendar;
 public final class Holiday //TODO move to core eventually
 {
     private static boolean XMAS;
+    private static boolean halloween;
+
+
     private static boolean init = false;
+
 
     private Holiday()
     {
@@ -24,9 +28,17 @@ public final class Holiday //TODO move to core eventually
             init = true;
             Calendar calendar = Calendar.getInstance();
 
-            if (calendar.get(2) + 1 == 12 && calendar.get(5) >= 24 && calendar.get(5) <= 26)
+            int month = calendar.get(2) + 1;
+            int day = calendar.get(5);
+
+            if (month == 12 && day >= 24 && day <= 26)
             {
                 XMAS = true;
+            }
+
+            if (month == 10 && day > 20)
+            {
+                halloween = true;
             }
         }
     }
@@ -35,5 +47,11 @@ public final class Holiday //TODO move to core eventually
     {
         init();
         return XMAS;
+    }
+
+    public static boolean isHalloween()
+    {
+        init();
+        return halloween;
     }
 }
