@@ -43,6 +43,21 @@ public interface IDestroyedListener extends ITileEventListener
         return false;
     }
 
+    /**
+     * Can the player harvest the block at the location. This is not
+     * called by MC's canHarvest check but the wrapper block's own harvest
+     * checks.
+     *
+     * @param player - player who is harvesting the block
+     * @param meta   - meta value of the block
+     * @return true if can harvest
+     */
+    default boolean canHarvest(EntityPlayer player, int meta)
+    {
+        return true;
+    }
+
+
     @Override
     default String getListenerKey()
     {
