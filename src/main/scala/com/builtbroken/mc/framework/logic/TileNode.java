@@ -357,6 +357,31 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
         return MinecraftServer.getServer().func_152358_ax().func_152652_a(owner);
     }
 
+    /**
+     * Is the player the owner of the machine
+     * or has the same power as an owner
+     *
+     * @param player
+     * @return true if is an owner
+     */
+    public boolean isOwner(EntityPlayer player)
+    {
+        if (player != null)
+        {
+            if (getOwnerID() != null)
+            {
+                return getOwnerID().equals(player.getGameProfile().getId());
+            }
+            else if (getOwnerName() != null)
+            {
+                return player.getCommandSenderName().equalsIgnoreCase(getOwnerName());
+            }
+            //Fail state if no owner is set
+            return true;
+        }
+        return false;
+    }
+
     public void setOwnerID(UUID id)
     {
         this.owner = id;
