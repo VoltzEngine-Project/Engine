@@ -2,6 +2,8 @@ package com.builtbroken.mc.framework.multiblock;
 
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
+import com.builtbroken.mc.api.tile.node.ITileNodeHost;
+import com.builtbroken.mc.api.tile.provider.ITankProvider;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
@@ -16,6 +18,8 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidTank;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -182,5 +186,22 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     public String toString()
     {
         return getClass().getSimpleName() + "[ DIM@" + (worldObj != null && worldObj.provider != null ? worldObj.provider.dimensionId + " " : "null ") + xCoord + "x " + yCoord + "y " + zCoord + "z " + "]@" + hashCode();
+    }
+
+    public IFluidTank getTank(Fluid fluid)
+    {
+        IMultiTileHost host = getHost();
+        if (host != null)
+        {
+            if (host instanceof ITileNodeHost && ((ITileNodeHost) host).getTileNode() instanceof ITankProvider)
+            {
+                return ((ITankProvider) ((ITileNodeHost) host).getTileNode()).getTankForFluid(fluid);
+            }
+            else if (host instanceof ITankProvider)
+            {
+                return ((ITankProvider) host).getTankForFluid(fluid);
+            }
+        }
+        return null;
     }
 }
