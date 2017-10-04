@@ -16,6 +16,7 @@ import com.builtbroken.mc.framework.block.imp.IPlacementListener;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import com.builtbroken.mc.prefab.gui.ContainerBase;
 import com.builtbroken.mc.prefab.gui.ContainerDummy;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -24,6 +25,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -429,9 +431,9 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
 
     public void sendPacketToGuiUsers(IPacket packet)
     {
-        if (world() != null && isServer() && this instanceof IPlayerUsing && packet != null)
+        if (world() != null && isServer()&& packet != null)
         {
-            Iterator<EntityPlayer> players = ((IPlayerUsing) this).getPlayersUsing().iterator();
+            Iterator<EntityPlayer> players = getPlayersUsing().iterator();
             while (players.hasNext())
             {
                 EntityPlayer player = players.next();
@@ -452,9 +454,9 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
      */
     public void doUpdateGuiUsers()
     {
-        if (world() != null && isServer() && this instanceof IGuiTile && this instanceof IPlayerUsing)
+        if (world() != null && isServer() && this instanceof IGuiTile)
         {
-            Iterator<EntityPlayer> players = ((IPlayerUsing) this).getPlayersUsing().iterator();
+            Iterator<EntityPlayer> players = getPlayersUsing().iterator();
             while (players.hasNext())
             {
                 EntityPlayer player = players.next();
@@ -474,7 +476,19 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
 
     protected boolean isValidToSendGUIPacket(EntityPlayer player)
     {
-        return player instanceof EntityPlayerMP && player.openContainer instanceof ContainerDummy && ((ContainerDummy) player.openContainer).tile == this;
+        if(player instanceof EntityPlayerMP)
+        {
+            Container container = player.openContainer;
+            if(container instanceof ContainerDummy)
+            {
+                return ((ContainerDummy) container).tile == this;
+            }
+           else if(container instanceof ContainerBase)
+            {
+                return ((ContainerBase)container).host == this;
+            }
+        }
+        return false;
     }
 
     //==========================
