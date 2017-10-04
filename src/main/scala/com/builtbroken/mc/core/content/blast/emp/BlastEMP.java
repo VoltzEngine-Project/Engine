@@ -81,6 +81,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
                     double distance = new Pos(tile).add(0.5).distance(this);
                     if (distance < getEMPRange())
                     {
+                        //Power is starting power, not power at distance. As it will pass through blocks losing power
                         handle(tile, distance, getPower(distance), tileLocations, edits);
                     }
                 }
