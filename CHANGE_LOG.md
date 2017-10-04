@@ -6,6 +6,55 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.9.13
+### Runtime Changes
+Added: Entity Effect system (basicly a potion system with more flexibility)
+Added: Bleeding effect - tick based loss of HP
+
+Fixed: GUI helpers in TileNode not working with ContainerBase 
+        This caused older tiles to stop sending GUI packets to users
+
+Fixed: Container Base not storing host
+        This caused several issues including packets, gui actions, etc
+        
+Fixed: IPlayerUsing storing duplicates of the same player instance
+        Not really an issue but caused some players to get spammed by GUI packets
+        
+Fixed: TileNode not using getMod()
+        This caused issues with renders and listeners not working
+        
+Fixed: GUI's opening client side for JSON based blocks
+        Not a major issue but caused problems with interaction on tiles
+        
+Fixed: Multi-block interactions not passing to host client side
+        Caused a series of interaction problems
+
+Fixed: Fluid tank multi-block tiles not support TileNode framework
+        Caused problems with bucket interaction from other mods
+  
+
+### Develoment Changes
+Added: JSON converter for Array Lists
+Added: Hook to allow converter calls to use JSON processors
+Added: check for halloween season
+Added: isOwner(player) check to TileNode 
+Added: Early version of map trigger
+        This will be used to create event and location based triggers for a world.
+        The idea usage will be for AOE effects in ICBM and traps for map builders
+Added: Block render method that allows for overriding all 6 sided textures used
+Added: Tile listener for block harvest
+Added: Tile listener for block hardness (location and player based)
+Added: Tile listener for harvest tool and level
+Added: IMapArea and implemented in on 2d & 3d shapes
+        Will be used to abstract the shape of an area on the map.
+        The goal is to use it with any current map implementation and trigger system.
+
+Reworked: IJsonGenObject to extend IModObject
+        This fixed a few issues with overlap and confusion on method usage
+Reworked: Block breaking on BlockBase to implement custom harvest checks
+      
+Fixed: NPE when registering delay actions
+
 ## 1.9.12
 ### Runtime Changes
 Added: Item Render baker
