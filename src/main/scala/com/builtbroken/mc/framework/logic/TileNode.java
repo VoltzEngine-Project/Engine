@@ -527,7 +527,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     }
 
     @Override
-    public String modID()
+    public String getMod()
     {
         return mod;
     }
