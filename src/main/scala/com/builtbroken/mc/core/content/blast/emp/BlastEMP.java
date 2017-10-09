@@ -22,6 +22,7 @@ import com.builtbroken.mc.lib.world.map.tile.TileMapRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -151,23 +152,31 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
         //TODO consider spreading over several ticks if entity count > is greater than a pre-determined amount that results in lag
         //TODO use delay action to spread over several ticks
 
-        //get entities
-        Pos center = toPos();
-        Sphere sphere = new Sphere(center, size);
-        List<Entity> entities = sphere.getEntities(world.unwrap(), Entity.class);
-        if (entities != null && !entities.isEmpty())
+        if (!beforeBlocksPlaced)
         {
-            for (Entity entity : entities)
+            //get entities
+            Pos center = toPos();
+            Sphere sphere = new Sphere(center, size);
+            List<Entity> entities = sphere.getEntities(world.unwrap(), Entity.class);
+            if (entities != null && !entities.isEmpty())
             {
-                //TODO add entities based on equipment
-                //TODO damage entities based on equipment
-                if (entity instanceof IInventory)
+                for (Entity entity : entities)
                 {
-                    applyEmpEffect((IInventory) entity, entity, this, getPowerForRange(size), center.distance(entity));
-                }
-                else if (entity instanceof EntityPlayer)
-                {
-                    applyEmpEffect(((EntityPlayer) entity).inventory, entity, this, getPowerForRange(size), center.distance(entity));
+                    //TODO add entities based on equipment
+                    //TODO damage entities based on equipment
+                    if (entity instanceof IInventory)
+                    {
+                        applyEmpEffect((IInventory) entity, entity, this, getPowerForRange(size), center.distance(entity));
+                    }
+                    else if (entity instanceof EntityPlayer)
+                    {
+                        applyEmpEffect(((EntityPlayer) entity).inventory, entity, this, getPowerForRange(size), center.distance(entity));
+                        ((EntityPlayer) entity).inventoryContainer.detectAndSendChanges();
+                    }
+                    else if (entity instanceof EntityItem)
+                    {
+                        applyEmpEffect(entity, ((EntityItem) entity).getEntityItem(), 0, false, this, getPowerForRange(size), center.distance(entity));
+                    }
                 }
             }
         }
@@ -563,25 +572,30 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
             for (int slot = 0; slot < inventory.getSizeInventory(); slot++)
             {
                 boolean held = host instanceof EntityPlayer && slot == ((EntityPlayer) host).inventory.currentItem;
-                ItemStack stack = inventory.getStackInSlot(slot);
-                if (stack != null && stack.getItem() != null)
-                {
-                    Item item = stack.getItem();
-                    if (item instanceof IEMInterferenceItem)
-                    {
-                        ((IEMInterferenceItem) item).onElectromagneticRadiationApplied(stack, host, slot, held, distance, power, source, true);
-                        //TODO calculate power usage
-                    }
-                    else if (UniversalEnergySystem.isHandler(stack, null))
-                    {
-                        UniversalEnergySystem.drain(stack, power, true);
-                        //TODO calculate power usage and drain partial based on input power
-                    }
-                    //TODO handle items that contain items
-                    //TODO handle remote access points (AE remote, Ender bags)
-                    //TODO burn out AE drives or randomize items :P
-                }
+                applyEmpEffect(host, inventory.getStackInSlot(slot), slot, held, source, power, distance);
             }
+        }
+        return power;
+    }
+
+    public static double applyEmpEffect(Object host, ItemStack stack, int slot, boolean held, IVoltageTransmitter source, double power, double distance)
+    {
+        if (stack != null && stack.getItem() != null)
+        {
+            Item item = stack.getItem();
+            if (item instanceof IEMInterferenceItem)
+            {
+                return ((IEMInterferenceItem) item).onElectromagneticRadiationApplied(stack, host, slot, held, distance, power, source, true);
+            }
+            else if (UniversalEnergySystem.isHandler(stack, null))
+            {
+                UniversalEnergySystem.drain(stack, Integer.MAX_VALUE, true);
+                //TODO calculate power usage and drain partial based on input power
+                return power * 0.98;
+            }
+            //TODO handle items that contain items
+            //TODO handle remote access points (AE remote, Ender bags)
+            //TODO burn out AE drives or randomize items :P
         }
         return power;
     }
