@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.commands.debug;
 
 import com.builtbroken.mc.core.commands.prefab.SubCommand;
-import com.builtbroken.mc.lib.world.map.TileMapRegistry;
+import com.builtbroken.mc.lib.world.map.tile.TileMapRegistry;
 import com.builtbroken.mc.lib.world.map.radar.RadarMap;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarObject;
 import net.minecraft.command.ICommandSender;
