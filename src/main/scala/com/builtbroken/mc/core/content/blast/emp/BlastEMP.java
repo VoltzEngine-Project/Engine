@@ -1,20 +1,31 @@
 package com.builtbroken.mc.core.content.blast.emp;
 
+import com.builtbroken.jlib.debug.DebugPrinter;
+import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.api.edit.IWorldEdit;
 import com.builtbroken.mc.api.energy.IEMReceptiveDevice;
 import com.builtbroken.mc.api.energy.IVoltageTransmitter;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
+import com.builtbroken.mc.api.items.energy.IEMInterferenceItem;
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
+import com.builtbroken.mc.framework.explosive.blast.Blast;
+import com.builtbroken.mc.imp.transform.region.Sphere;
 import com.builtbroken.mc.imp.transform.sorting.Vector3DistanceComparator;
+import com.builtbroken.mc.imp.transform.vector.BlockPos;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
-import com.builtbroken.mc.lib.world.map.TileMapRegistry;
 import com.builtbroken.mc.lib.world.map.radar.RadarMap;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarObject;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarTile;
-import com.builtbroken.mc.framework.explosive.blast.Blast;
+import com.builtbroken.mc.lib.world.map.tile.TileMapRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -39,19 +50,28 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
     public static final String EDIT_AUDIO = "icbm:icbm.spark";
     public static final String END_AUDIO = "icbm:icbm.emp";
 
+    protected DebugPrinter debugPrinter;
+
 
     public BlastEMP(IExplosiveHandler handler)
     {
         super(handler);
+        debugPrinter = new DebugPrinter(Engine.logger());
     }
 
     @Override
     public void getEffectedBlocks(final List<IWorldEdit> edits)
     {
+        //Debug
+        debugPrinter.start("BlastEmp#getEffectedBlocks()", "Starting emp");
+        long time = System.nanoTime();
+
+        //Get tiles
         RadarMap map = TileMapRegistry.getRadarMapForWorld(oldWorld);
         if (map != null)
         {
-            LinkedList<Pos> tileLocations = new LinkedList();
+            //Store tiles in linked list to easily allow reordering, expansion, and removal with minimal CPU usage
+            LinkedList<BlockPos> tileLocations = new LinkedList();
 
             //Find all valid tiles
             List<RadarObject> objects = map.getRadarObjects(x(), z(), size);
@@ -59,39 +79,128 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
             {
                 if (object instanceof RadarTile)
                 {
+                    //Get tile and make sure its valid, no point in pathing invalid stuff
                     TileEntity tile = ((RadarTile) object).tile;
-                    if (!tile.isInvalid() && (tile instanceof IEMReceptiveDevice || UniversalEnergySystem.isHandler(tile, null)))
+                    if (!tile.isInvalid())
                     {
-                        tileLocations.add(new Pos(tile));
+                        //Handle if EMP or energy
+                        if ((tile instanceof IEMReceptiveDevice || UniversalEnergySystem.isHandler(tile, null)))
+                        {
+                            tileLocations.add(new BlockPos(tile.xCoord, tile.yCoord, tile.zCoord));
+                        }
+                        //Handle if inventory
+                        else if (tile instanceof IInventory)
+                        {
+                            IInventory inventory = (IInventory) tile;
+
+                            //Well only handle if has items that can be effected
+                            if (inventoryContainsElectricItems(inventory))
+                            {
+                                tileLocations.add(new BlockPos(tile.xCoord, tile.yCoord, tile.zCoord));
+                            }
+                            //TODO track emp value of inventory even if not added (e.g. chest full of iron will stop an emp)
+                        }
+                        else
+                        {
+                            //TODO add EMP handlers to allow EMP effects on tiles that are not normally EMP prone
+                        }
                     }
                 }
             }
 
-            //Sort based on distance, largest first
+            //Sort with largest distance moving to the front
             Collections.sort(tileLocations, new Vector3DistanceComparator(this, false));
+            //High distance is used to allow the path to go through all tiles before hitting the tile.
+            //  This way energy is consumed by the time it gets to the tile providing a weaker value.
+            //  Similar to how a real emp would work with the energy being absorbed by objects
 
             //Loop valid tiles
             while (!tileLocations.isEmpty())
             {
-                Pos pos = tileLocations.poll();
+                //Get next position
+                BlockPos pos = tileLocations.poll();
+
+                //Get tile at position
                 TileEntity tile = pos.getTileEntity(oldWorld);
 
+                //Ensure tile is valid
                 if (tile != null && !tile.isInvalid())
                 {
-                    double distance = new Pos(tile).add(0.5).distance(this);
+                    //Ensure position is inside of emp range
+                    double distance = pos.distance(this);
                     if (distance < getEMPRange())
                     {
+                        //Start emp path to target tile
+                        startEmpPath(tile, distance, getPowerForRange(distance), tileLocations, edits);
                         //Power is starting power, not power at distance. As it will pass through blocks losing power
-                        handle(tile, distance, getPower(distance), tileLocations, edits);
                     }
+                }
+            }
+        }
+
+        //Debug
+        time = System.nanoTime() - time;
+        debugPrinter.end("Done... " + StringHelpers.formatNanoTime(time));
+    }
+
+    @Override
+    public void doEffectOther(boolean beforeBlocksPlaced)
+    {
+        super.doEffectOther(beforeBlocksPlaced);
+        //TODO recode to run with the block ray trace to save on CPU resources
+        //TODO consider spreading over several ticks if entity count > is greater than a pre-determined amount that results in lag
+        //TODO use delay action to spread over several ticks
+
+        //get entities
+        Pos center = toPos();
+        Sphere sphere = new Sphere(center, size);
+        List<Entity> entities = sphere.getEntities(world.unwrap(), Entity.class);
+        if (entities != null && !entities.isEmpty())
+        {
+            for (Entity entity : entities)
+            {
+                //TODO add entities based on equipment
+                //TODO damage entities based on equipment
+                if (entity instanceof IInventory)
+                {
+                    applyEmpEffect((IInventory) entity, entity, this, getPowerForRange(size), center.distance(entity));
+                }
+                else if (entity instanceof EntityPlayer)
+                {
+                    applyEmpEffect(((EntityPlayer) entity).inventory, entity, this, getPowerForRange(size), center.distance(entity));
                 }
             }
         }
     }
 
-    protected double handle(TileEntity tile, double distance, double power, LinkedList<Pos> tileLocations, List<IWorldEdit> edits)
+    /**
+     * Called to start the emp path towards the target tile
+     *
+     * @param tile          - tile to hit, end point of ray trace
+     * @param distance      - distance to target
+     * @param power
+     * @param tileLocations
+     * @param edits
+     * @return
+     */
+    protected double startEmpPath(TileEntity tile, double distance, double power, LinkedList<BlockPos> tileLocations, List<IWorldEdit> edits)
     {
-        power = rayTraceBlocks(toPos().toVec3(), Vec3.createVectorHelper(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5), power, tileLocations, edits);
+        //TODO modify ray trace to not start from center each time
+        power = rayTraceBlocks(toPos().toVec3(), Vec3.createVectorHelper(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5), power, tileLocations, edits, true);
+        return handle(tile, distance, power, edits, true); //TODO check if the last tile is getting hit twice
+    }
+
+    /**
+     * Called to handle setting up the EMP effect for the tile
+     *
+     * @param tile     - affected tile
+     * @param distance - distance from center of EMP
+     * @param power    - power passing through tile
+     * @param edits    - list of edits, if tile is affected and edit will be added for said tile
+     * @return power left over after passing through tile
+     */
+    protected double handle(TileEntity tile, double distance, double power, List<IWorldEdit> edits, boolean doEdits)
+    {
         if (power > 1)
         {
             IWorldEdit edit = null;
@@ -99,11 +208,17 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
             if (tile instanceof IEMReceptiveDevice)
             {
                 powerUsed = ((IEMReceptiveDevice) tile).onElectromagneticRadiationApplied(this, distance, power, false);
-                edit = doEMP((IEMReceptiveDevice) tile, distance, power);
+                if (doEdits)
+                {
+                    edit = doEMP((IEMReceptiveDevice) tile, distance, power);
+                }
             }
             else if (UniversalEnergySystem.isHandler(tile, null))
             {
-                edit = drainEnergy(tile, distance, power);
+                if (doEdits)
+                {
+                    edit = drainEnergy(tile, distance, power);
+                }
                 //TODO calculate power used by EMP action
             }
             if (edit != null)
@@ -115,24 +230,53 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
         return power;
     }
 
+    protected IWorldEdit doEMPInventory(TileEntity tile, double distance, double power)
+    {
+        return null; //TODO implement inventory EMP
+    }
+
+    protected boolean inventoryContainsElectricItems(IInventory inventory)
+    {
+        return false;
+    }
+
+    protected IWorldEdit doEMPInventory(Entity tile, double distance, double power)
+    {
+        return null; //TODO implement inventory EMP
+    }
+
     protected IWorldEdit doEMP(IEMReceptiveDevice tile, double distance, double power)
     {
-        System.out.println("EMP tile effect: " + tile + " " + distance + " " + power);
+        //System.out.println("EMP tile effect: " + tile + " " + distance + " " + power);
         return new EmpEdit(new Location((TileEntity) tile), this, distance, power);
     }
 
     protected IWorldEdit drainEnergy(TileEntity tile, double distance, double power)
     {
-        System.out.println("EMP tile drain: " + tile + " " + distance + " " + power);
+        //System.out.println("EMP tile drain: " + tile + " " + distance + " " + power);
         return new EmpDrainEdit(new Location(tile), this, distance, power);
     }
 
+    /**
+     * Range of the EMP
+     *
+     * @return range in meters
+     */
     protected double getEMPRange()
     {
         return size;
     }
 
-    protected double getPower(double distance)
+    /**
+     * How much power will be released by the EMP for the
+     * given range. This is not the power at the location
+     * but rather the power released by the emp from
+     * the center point towards the distance value.
+     *
+     * @param distance - range of the emp in meters
+     * @return power
+     */
+    protected double getPowerForRange(double distance)
     {
         if (distance == -1)
         {
@@ -168,7 +312,19 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
         }
     }
 
-    public double rayTraceBlocks(Vec3 start, Vec3 end, double power, LinkedList<Pos> tileLocations, List<IWorldEdit> edits)
+    /**
+     * Custom ray trace implementation that doesn't stop when it hits a block. Instead it
+     * passes through the block apply effects then continuing to the next block.
+     *
+     * @param start         - point to begin the ray trace
+     * @param end           = point to stop the ray trace
+     * @param power         - power to use while ray tracing
+     * @param tileLocations - list of tile locations that will be traced it not hit. Will be modified
+     *                      as the ray hits tiles moving towards the target.
+     * @param edits         - list of edits created while pathing
+     * @return power left at the end of the ray
+     */
+    public double rayTraceBlocks(Vec3 start, Vec3 end, double power, LinkedList<BlockPos> tileLocations, List<IWorldEdit> edits, boolean doEdits)
     {
         if (!Double.isNaN(start.xCoord) && !Double.isNaN(start.yCoord) && !Double.isNaN(start.zCoord))
         {
@@ -268,7 +424,6 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
                         d5 = (d2 - start.zCoord) / d8;
                     }
 
-                    boolean flag5 = false;
                     byte b0;
 
                     if (d3 < d4 && d3 < d5)
@@ -343,7 +498,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
                     }
 
                     //Handle block location
-                    final Pos pos = new Pos(xx, yy, zz);
+                    final BlockPos pos = new BlockPos(xx, yy, zz);
                     if (tileLocations.contains(pos))
                     {
                         //O(2n)
@@ -353,7 +508,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
                     //Only do power hit if we have power, keep pathing to remove tiles behind current
                     if (power > 0)
                     {
-                        power -= onPassThroughTile(oldWorld, pos, power, tileLocations, edits);
+                        power -= onPassThroughTile(oldWorld, pos, power, edits, doEdits);
                     }
                 }
             }
@@ -361,7 +516,16 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
         return power;
     }
 
-    protected double onPassThroughTile(World world, Pos pos, double power, LinkedList<Pos> tileLocations, List<IWorldEdit> edits)
+    /**
+     * Called when the EMP ray passes through the block
+     *
+     * @param world
+     * @param pos   - position in the world
+     * @param power - power passing through the block
+     * @param edits - list of edits to add edits to when modifying blocks
+     * @return power left after passing through the block
+     */
+    protected double onPassThroughTile(World world, BlockPos pos, double power, List<IWorldEdit> edits, boolean doEdits)
     {
         Block block = pos.getBlock(world);
         int meta = pos.getBlockMetadata(world);
@@ -370,7 +534,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
             TileEntity tile = pos.getTileEntity(world);
             if (tile != null && !tile.isInvalid())
             {
-                return power - handle(tile, pos.distance(this), power, tileLocations, edits);
+                return power - handle(tile, pos.distance(this), power, edits, doEdits);
             }
 
             //https://en.wikipedia.org/wiki/Absorption_(electromagnetic_radiation) TODO figure out values
@@ -388,7 +552,51 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
         return 0;
     }
 
-    protected boolean canPassThrough(World world, Pos pos, Block block, int meta)
+    public static double applyEmpEffect(IInventory inventory, Object host, IVoltageTransmitter source, double power, double distance)
+    {
+        if (power > 1)
+        {
+            //TODO split power over items
+            //TODO hit held item first
+            //TODO hit armor next
+            //TODO then hit hot bar followed by inventory
+            for (int slot = 0; slot < inventory.getSizeInventory(); slot++)
+            {
+                boolean held = host instanceof EntityPlayer && slot == ((EntityPlayer) host).inventory.currentItem;
+                ItemStack stack = inventory.getStackInSlot(slot);
+                if (stack != null && stack.getItem() != null)
+                {
+                    Item item = stack.getItem();
+                    if (item instanceof IEMInterferenceItem)
+                    {
+                        ((IEMInterferenceItem) item).onElectromagneticRadiationApplied(stack, host, slot, held, distance, power, source, true);
+                        //TODO calculate power usage
+                    }
+                    else if (UniversalEnergySystem.isHandler(stack, null))
+                    {
+                        UniversalEnergySystem.drain(stack, power, true);
+                        //TODO calculate power usage and drain partial based on input power
+                    }
+                    //TODO handle items that contain items
+                    //TODO handle remote access points (AE remote, Ender bags)
+                    //TODO burn out AE drives or randomize items :P
+                }
+            }
+        }
+        return power;
+    }
+
+
+    /**
+     * Called to see if the ray can pass through the block unaffected
+     *
+     * @param world
+     * @param pos
+     * @param block
+     * @param meta
+     * @return true to ignore the block
+     */
+    protected boolean canPassThrough(World world, BlockPos pos, Block block, int meta)
     {
         //TODO list of blocks we don't care about (grass, glass, trees, water, etc)
         return !block.isOpaqueCube();
@@ -397,6 +605,6 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
     @Override
     public double getTotalVoltagePower()
     {
-        return getPower(-1);
+        return getPowerForRange(-1);
     }
 }
