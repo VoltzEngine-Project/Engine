@@ -64,7 +64,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
     public void getEffectedBlocks(final List<IWorldEdit> edits)
     {
         //Debug
-        debugPrinter.start("BlastEmp#getEffectedBlocks()", "Starting emp");
+        debugPrinter.start("BlastEmp#getEffectedBlocks()", "Starting emp", Engine.runningAsDev);
         long time = System.nanoTime();
 
         //Get tiles
