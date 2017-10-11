@@ -67,6 +67,44 @@ public class Render2DHelper
         drawTexturedModalRect(x, y + capTopHeight + midHeight, u, v + height - capBotHeight, width, capBotHeight);
     }
 
+    /**
+     * Renders a 2D image rect with the provides data
+     *
+     * @param x            - position to render
+     * @param y            - position to render
+     * @param u            - position in texture
+     * @param v            - position in texture
+     * @param height       - height of texture
+     * @param capTopWidth - height of cap
+     * @param capBotWidth - height of cap
+     * @param midWidth    - height of mid section
+     */
+    public static void renderWithRepeatHorizontal(int x, int y, int u, int v, int width, int height, int capTopWidth, int capBotWidth, int midWidth)
+    {
+        //Render top
+        drawTexturedModalRect(x, y, u, v, capTopWidth, height);
+
+        //Render middle
+        int sizeRender = 0;
+        int sectionSize =(int)Math.floor((width - capBotWidth - capTopWidth) / 2f);
+        int sections = (int) Math.ceil(midWidth / (float) sectionSize);
+        for (int s = 0; s < sections; s++)
+        {
+            if (s == sections - 1)
+            {
+                int remain = midWidth - sizeRender;
+                drawTexturedModalRect(x + capTopWidth + sizeRender, y, u + capTopWidth, v, remain, height);
+            }
+            else
+            {
+                drawTexturedModalRect(x + capTopWidth + sizeRender, y, u + capTopWidth, v, sectionSize, height);
+                sizeRender += sectionSize;
+            }
+        }
+        //Render bottom
+        drawTexturedModalRect(x + capTopWidth + midWidth, y, u + width - capBotWidth, v, capBotWidth, height);
+    }
+
     public static void drawHorizontalLine(int p_73730_1_, int p_73730_2_, int p_73730_3_, int p_73730_4_)
     {
         if (p_73730_2_ < p_73730_1_)
