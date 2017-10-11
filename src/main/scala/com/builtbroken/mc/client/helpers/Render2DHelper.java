@@ -48,7 +48,7 @@ public class Render2DHelper
 
         //Render middle
         int sizeRender = 0;
-        int sectionSize =(int)Math.floor((height - capBotHeight - capTopHeight) / 2f);
+        int sectionSize = (int) Math.floor((height - capBotHeight - capTopHeight) / 2f);
         int sections = (int) Math.ceil(midHeight / (float) sectionSize);
         for (int s = 0; s < sections; s++)
         {
@@ -70,100 +70,112 @@ public class Render2DHelper
     /**
      * Renders a 2D image rect with the provides data
      *
-     * @param x            - position to render
-     * @param y            - position to render
-     * @param u            - position in texture
-     * @param v            - position in texture
-     * @param height       - height of texture
-     * @param capTopWidth - height of cap
-     * @param capBotWidth - height of cap
-     * @param midWidth    - height of mid section
+     * @param x             - position to render
+     * @param y             - position to render
+     * @param u             - position in texture
+     * @param v             - position in texture
+     * @param height        - height of texture
+     * @param capLeftWidth  - height of cap
+     * @param capRightWidth - height of cap
+     * @param midWidth      - height of mid section
      */
-    public static void renderWithRepeatHorizontal(int x, int y, int u, int v, int width, int height, int capTopWidth, int capBotWidth, int midWidth)
+    public static void renderWithRepeatHorizontal(int x, int y, int u, int v, int width, int height, int capLeftWidth, int capRightWidth, int midWidth)
     {
-        //Render top
-        drawTexturedModalRect(x, y, u, v, capTopWidth, height);
-
-        //Render middle
-        int sizeRender = 0;
-        int sectionSize =(int)Math.floor((width - capBotWidth - capTopWidth) / 2f);
-        int sections = (int) Math.ceil(midWidth / (float) sectionSize);
-        for (int s = 0; s < sections; s++)
+        final int minWidth = (capLeftWidth + capRightWidth);
+        if (width >= minWidth)
         {
-            if (s == sections - 1)
+            //Render top
+            //GL11.glColor3f(1, 0, 0);
+            drawTexturedModalRect(x, y, u, v, capLeftWidth, height);
+
+            int xOffset = 0;
+            if (width > minWidth)
             {
-                int remain = midWidth - sizeRender;
-                drawTexturedModalRect(x + capTopWidth + sizeRender, y, u + capTopWidth, v, remain, height);
+                final int middleWidth = width - capRightWidth - capLeftWidth;
+                //Render middle
+                int sectionSize = (int) Math.floor(midWidth / 2f);
+                int sections = (int) Math.ceil(middleWidth / (float) sectionSize);
+                for (int s = 0; s < sections; s++)
+                {
+                    //GL11.glColor3f(0, 1, 0);
+                    if (s == sections - 1)
+                    {
+                        int remain = middleWidth - xOffset;
+                        drawTexturedModalRect(x + capLeftWidth + xOffset, y, u + capLeftWidth, v, remain, height);
+                        xOffset += remain;
+                    }
+                    else
+                    {
+                        drawTexturedModalRect(x + capLeftWidth + xOffset, y, u + capLeftWidth, v, sectionSize, height);
+                        xOffset += sectionSize;
+                    }
+                }
             }
-            else
-            {
-                drawTexturedModalRect(x + capTopWidth + sizeRender, y, u + capTopWidth, v, sectionSize, height);
-                sizeRender += sectionSize;
-            }
+            //Render bottom
+            //GL11.glColor3f(0, 0, 1);
+            drawTexturedModalRect(x + capLeftWidth + xOffset, y, u + midWidth, v, capRightWidth, height);
         }
-        //Render bottom
-        drawTexturedModalRect(x + capTopWidth + midWidth, y, u + width - capBotWidth, v, capBotWidth, height);
     }
 
-    public static void drawHorizontalLine(int p_73730_1_, int p_73730_2_, int p_73730_3_, int p_73730_4_)
+    public static void drawHorizontalLine(int x, int y, int size, int color)
     {
-        if (p_73730_2_ < p_73730_1_)
+        if (y < x)
         {
-            int i1 = p_73730_1_;
-            p_73730_1_ = p_73730_2_;
-            p_73730_2_ = i1;
+            int i1 = x;
+            x = y;
+            y = i1;
         }
 
-        drawRect(p_73730_1_, p_73730_3_, p_73730_2_ + 1, p_73730_3_ + 1, p_73730_4_);
+        drawRect(x, size, y + 1, size + 1, color);
     }
 
-    public static void drawVerticalLine(int p_73728_1_, int p_73728_2_, int p_73728_3_, int p_73728_4_)
+    public static void drawVerticalLine(int x, int y, int size, int color)
     {
-        if (p_73728_3_ < p_73728_2_)
+        if (size < y)
         {
-            int i1 = p_73728_2_;
-            p_73728_2_ = p_73728_3_;
-            p_73728_3_ = i1;
+            int i1 = y;
+            y = size;
+            size = i1;
         }
 
-        drawRect(p_73728_1_, p_73728_2_ + 1, p_73728_1_ + 1, p_73728_3_, p_73728_4_);
+        drawRect(x, y + 1, x + 1, size, color);
     }
 
     /**
      * Draws a solid color rectangle with the specified coordinates and color. Args: x1, y1, x2, y2, color
      */
-    public static void drawRect(int p_73734_0_, int p_73734_1_, int p_73734_2_, int p_73734_3_, int p_73734_4_)
+    public static void drawRect(int x1, int y1, int x2, int y2, int color)
     {
         int j1;
 
-        if (p_73734_0_ < p_73734_2_)
+        if (x1 < x2)
         {
-            j1 = p_73734_0_;
-            p_73734_0_ = p_73734_2_;
-            p_73734_2_ = j1;
+            j1 = x1;
+            x1 = x2;
+            x2 = j1;
         }
 
-        if (p_73734_1_ < p_73734_3_)
+        if (y1 < y2)
         {
-            j1 = p_73734_1_;
-            p_73734_1_ = p_73734_3_;
-            p_73734_3_ = j1;
+            j1 = y1;
+            y1 = y2;
+            y2 = j1;
         }
 
-        float f3 = (float) (p_73734_4_ >> 24 & 255) / 255.0F;
-        float f = (float) (p_73734_4_ >> 16 & 255) / 255.0F;
-        float f1 = (float) (p_73734_4_ >> 8 & 255) / 255.0F;
-        float f2 = (float) (p_73734_4_ & 255) / 255.0F;
+        float f3 = (float) (color >> 24 & 255) / 255.0F;
+        float f = (float) (color >> 16 & 255) / 255.0F;
+        float f1 = (float) (color >> 8 & 255) / 255.0F;
+        float f2 = (float) (color & 255) / 255.0F;
         Tessellator tessellator = Tessellator.instance;
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         GL11.glColor4f(f, f1, f2, f3);
         tessellator.startDrawingQuads();
-        tessellator.addVertex((double) p_73734_0_, (double) p_73734_3_, 0.0D);
-        tessellator.addVertex((double) p_73734_2_, (double) p_73734_3_, 0.0D);
-        tessellator.addVertex((double) p_73734_2_, (double) p_73734_1_, 0.0D);
-        tessellator.addVertex((double) p_73734_0_, (double) p_73734_1_, 0.0D);
+        tessellator.addVertex((double) x1, (double) y2, 0.0D);
+        tessellator.addVertex((double) x2, (double) y2, 0.0D);
+        tessellator.addVertex((double) x2, (double) y1, 0.0D);
+        tessellator.addVertex((double) x1, (double) y1, 0.0D);
         tessellator.draw();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
