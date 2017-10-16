@@ -32,8 +32,7 @@ to change.
 
 ### Team
 * <a href="http://www.patreon.com/darkcow"> [Dev]Darkguardsman </a>
-* <a href="http://www.patreon.com/maxwolf"> [Dev]Maxwolf</a>
-* [QA]Dmodoomsirius
+* [Tech]Dmodoomsirius
 
 
 ### Credits
