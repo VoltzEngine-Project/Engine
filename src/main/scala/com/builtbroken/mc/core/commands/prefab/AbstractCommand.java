@@ -85,7 +85,8 @@ public class AbstractCommand extends CommandBase
                 try
                 {
                     p = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e)
+                }
+                catch (NumberFormatException e)
                 {
 
                 }
@@ -128,14 +129,30 @@ public class AbstractCommand extends CommandBase
      */
     protected void printHelp(ICommandSender sender, int p)
     {
+        //Get help output
         List<String> items = new ArrayList();
         getHelpOutput(sender, items);
 
-        sender.addChatMessage(new ChatComponentText("====== help -" + getPrefix().replace("/", "") + "- page " + p + " ======"));
+        //Get total pages
+        int pages = items.size() / 10;
+
+        //Builder page header
+        String header = "====== help -" + getPrefix().replace("/", "");
+        if (pages > 1)
+        {
+            header += "- page " + p + " of " + pages; //TODO add colors to help read text
+        }
+
+        //print help page header
+        sender.addChatMessage(new ChatComponentText(header + " ======"));
+
+        //Print limited entries
         for (int i = 0 + (p * 10); i < 10 + (p * 10) && i < items.size(); i++)
         {
             sender.addChatMessage(new ChatComponentText(getPrefix() + " " + items.get(i)));
         }
+
+        //Add empty line to break up text
         sender.addChatMessage(new ChatComponentText(""));
     }
 
@@ -257,7 +274,9 @@ public class AbstractCommand extends CommandBase
     protected String[] removeFront(String[] array, int count)
     {
         if (count <= 0)
+        {
             count = 1;
+        }
 
         if (array.length > count)
         {
