@@ -42,7 +42,7 @@
             "renderType": "block",
             "texture": {
               "domain": "voltzengine",
-              "name": "stone_%id%_ore"
+              "name": "stone/ore_%id%"
             }
           }
         }

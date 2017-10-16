@@ -44,7 +44,7 @@
             "renderType": "block",
             "texture": {
               "domain": "voltzengine",
-              "name": "stone_%texture%_ore"
+              "name": "stone/ore_%texture%"
             }
           }
         }
