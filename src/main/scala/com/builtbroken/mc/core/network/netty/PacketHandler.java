@@ -47,7 +47,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket>
         addPacket(PacketRequestData.class);
     }
 
-    public void addPacket(Class<? extends IPacket> clazz)
+    public void addPacket(Class<? extends IPacket> clazz) //TODO code system to sync IDs to ensure 100% match client(s) to server
     {
         addDiscriminator(nextID++, clazz);
     }

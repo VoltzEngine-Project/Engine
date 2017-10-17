@@ -33,6 +33,9 @@ public class PacketManager extends AbstractLoadable
     public final String channel;
     protected EnumMap<Side, FMLEmbeddedChannel> channelEnumMap;
 
+    public PacketHandler packetHandler;
+    public PacketChannelHandler packetChannelHandler;
+
     public PacketManager(String channel)
     {
         this.channel = channel;
@@ -44,6 +47,7 @@ public class PacketManager extends AbstractLoadable
         new ByteBufWrapper.ByteBufWrapper(data).$less$less$less(sendData);
     }
 
+    @Deprecated
     public static PacketType getPacketFor(Object obj)
     {
         if (obj instanceof TileEntity)
@@ -73,7 +77,9 @@ public class PacketManager extends AbstractLoadable
     @Override
     public void init()
     {
-        this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(channel, new PacketHandler(), new PacketChannelHandler());
+        packetHandler = new PacketHandler();
+        packetChannelHandler = new PacketChannelHandler();
+        this.channelEnumMap = NetworkRegistry.INSTANCE.newChannel(channel, packetHandler, packetChannelHandler);
     }
 
     @Override
