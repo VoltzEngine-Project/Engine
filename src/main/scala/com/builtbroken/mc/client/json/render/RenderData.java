@@ -5,8 +5,8 @@ import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.debug.gui.windows.FrameRenderData;
 import com.builtbroken.mc.debug.IJsonDebugDisplay;
+import com.builtbroken.mc.debug.gui.windows.FrameRenderData;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.item.ItemStack;
@@ -31,7 +31,8 @@ public class RenderData extends JsonGenData implements IJsonDebugDisplay
     /** Type of render, defaults to VE render code */
     public final String renderType;
 
-    public int itemRenderLayers = 1;
+    protected int itemRenderLayers = 1;
+    protected HashMap<Integer, Integer> itemRenderLayerPerMeta = new HashMap();
 
     /** Map for quickly looking up name of the state with it's render ID */
     public HashMap<String, IRenderState> renderStatesByName = new HashMap();
@@ -145,6 +146,25 @@ public class RenderData extends JsonGenData implements IJsonDebugDisplay
     public void add(String name, IRenderState state)
     {
         renderStatesByName.put(name, state);
+    }
+
+    public int getItemRenderLayers(int meta)
+    {
+        if (itemRenderLayerPerMeta.containsKey(meta))
+        {
+            return itemRenderLayerPerMeta.get(meta);
+        }
+        return itemRenderLayers;
+    }
+
+    public void setItemLayers(int itemLayers)
+    {
+        this.itemRenderLayers = itemLayers;
+    }
+
+    public void setItemLayers(int meta, int itemLayers)
+    {
+        this.itemRenderLayerPerMeta.put(meta, itemLayers);
     }
 
     @Override

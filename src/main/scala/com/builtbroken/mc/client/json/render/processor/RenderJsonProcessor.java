@@ -54,25 +54,25 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
     @Override
     public RenderData process(JsonElement element)
     {
-        final JsonObject object = element.getAsJsonObject();
-        ensureValuesExist(object, "contentID", "states", "type");
+        final JsonObject renderDataJSON = element.getAsJsonObject();
+        ensureValuesExist(renderDataJSON, "contentID", "states", "type");
 
-        String contentID = object.get("contentID").getAsString();
-        String overAllRenderType = object.get("type").getAsString();
+        String contentID = renderDataJSON.get("contentID").getAsString();
+        String overAllRenderType = renderDataJSON.get("type").getAsString();
         RenderData data;
 
         if (overAllRenderType.equalsIgnoreCase("tile"))
         {
             data = new TileRenderData(this, contentID, overAllRenderType);
-            if (object.has("tileClass"))
+            if (renderDataJSON.has("tileClass"))
             {
                 try
                 {
-                    ((TileRenderData) data).tileClass = (Class<? extends TileEntity>) Class.forName(object.get("tileClass").getAsString());
+                    ((TileRenderData) data).tileClass = (Class<? extends TileEntity>) Class.forName(renderDataJSON.get("tileClass").getAsString());
                 }
                 catch (Exception e)
                 {
-                    throw new IllegalArgumentException("Failed to load class for name '" + object.get("tileClass").getAsString() + "'");
+                    throw new IllegalArgumentException("Failed to load class for name '" + renderDataJSON.get("tileClass").getAsString() + "'");
                 }
             }
         }
@@ -81,7 +81,26 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
             data = new RenderData(this, contentID, overAllRenderType);
         }
 
-        JsonArray array = object.get("states").getAsJsonArray();
+        if(renderDataJSON.has("renderLayers"))
+        {
+            data.setItemLayers(renderDataJSON.get("renderLayers").getAsInt());
+        }
+
+        if(renderDataJSON.has("renderLayerByState"))
+        {
+            JsonArray array = renderDataJSON.getAsJsonArray("renderLayerByState");
+            for(JsonElement arrayEntry : array)
+            {
+                JsonObject object = arrayEntry.getAsJsonObject();
+                int meta = object.get("meta").getAsInt();
+                int layers = object.get("layers").getAsInt();
+
+                data.setItemLayers(meta, layers);
+            }
+
+        }
+
+        JsonArray array = renderDataJSON.get("states").getAsJsonArray();
         for (JsonElement arrayElement : array)
         {
             if (arrayElement instanceof JsonObject)
