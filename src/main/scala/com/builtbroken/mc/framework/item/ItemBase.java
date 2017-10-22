@@ -275,7 +275,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(metadata));
         if (data != null)
         {
-            return data.itemRenderLayers;
+            return data.getItemRenderLayers(metadata);
         }
         return 1;
     }
@@ -405,21 +405,8 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
     {
         if (data != null)
         {
-            //TODO cache list for faster runtime
-            List<String> keys = new ArrayList();
-            if (node.hasSubTypes() && node.subTypeHashMap.containsKey(meta))
-            {
-                keys.add(RenderData.INVENTORY_RENDER_KEY + "." + node.subTypeHashMap.get(meta).id + "." + pass);
-                keys.add(RenderData.INVENTORY_RENDER_KEY + "." + node.subTypeHashMap.get(meta).id);
-                keys.add(node.subTypeHashMap.get(meta).id);
-            }
-            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + meta + "." + pass);
-            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + meta);
-            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + pass);
-            keys.add(RenderData.INVENTORY_RENDER_KEY);
-
             //Attempt to get meta
-            for (String key : keys)
+            for (String key : getPossibleRenderStateKeys(meta, pass))
             {
                 IRenderState state = data.getState(key);
                 if (state != null)
@@ -437,6 +424,48 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
             }
         }
         return getFallBackIcon();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getColorFromItemStack(ItemStack stack, int pass)
+    {
+        int meta = stack.getItemDamage();
+        RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(meta));
+        if (data != null)
+        {
+            for (String key : getPossibleRenderStateKeys(meta, pass))
+            {
+                IRenderState state = data.getState(key);
+                if (state != null)
+                {
+                    int color = state.getColorForTexture(pass);
+                    if (color != -1)
+                    {
+                        return color;
+                    }
+                }
+            }
+        }
+        return 16777215;
+    }
+
+    public List<String> getPossibleRenderStateKeys(int meta, int pass)
+    {
+        //TODO cache list for faster runtime
+        List<String> keys = new ArrayList();
+        if (node.hasSubTypes() && node.subTypeHashMap.containsKey(meta))
+        {
+            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + node.subTypeHashMap.get(meta).id + "." + pass);
+            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + node.subTypeHashMap.get(meta).id);
+            keys.add(node.subTypeHashMap.get(meta).id);
+            keys.add(node.subTypeHashMap.get(meta).id + "." + pass);
+        }
+        keys.add(RenderData.INVENTORY_RENDER_KEY + "." + meta + "." + pass);
+        keys.add(RenderData.INVENTORY_RENDER_KEY + "." + meta);
+        keys.add(RenderData.INVENTORY_RENDER_KEY + "." + pass);
+        keys.add(RenderData.INVENTORY_RENDER_KEY);
+        return keys;
     }
 
     /**
