@@ -265,7 +265,7 @@ public class JsonForLoop
                 HashMap<String, String> newKeys = new HashMap();
                 for (Map.Entry<String, JsonElement> entry : valueObject.entrySet())
                 {
-                    if(!entry.getKey().equalsIgnoreCase("runCondition"))
+                    if (!entry.getKey().equalsIgnoreCase("runCondition"))
                     {
                         if (entry.getValue().isJsonPrimitive())
                         {
@@ -310,48 +310,51 @@ public class JsonForLoop
     /**
      * Internal handling for each entry in a loop. Allows fo nested loops and injection of sub objects
      *
-     * @param currentJsonObject
-     * @param states
-     * @param injectionKeys
-     * @param depth
+     * @param json          - json being handled looking for loops or templates
+     * @param states        - list of states loaded
+     * @param injectionKeys - map of keys to inject into templates
+     * @param depth         - current depth of json
      */
-    public static void handle(JsonObject currentJsonObject, List<JsonObject> states, HashMap<String, String> injectionKeys, int depth)
+    public static void handle(JsonObject json, List<JsonObject> states, HashMap<String, String> injectionKeys, int depth)
     {
-        JsonObject template;
-        //Recursive loops
-        if (currentJsonObject.has("for"))
+        //Loop entries to allow for several data points inside of a loop
+        for (Map.Entry<String, JsonElement> entry : json.entrySet())
         {
-            if (depth >= MAX_FOR_LOOPS)
+            if (entry.getValue().isJsonObject())
             {
-                throw new RuntimeException("Too many for loops while building json element data, the limit is set to " + MAX_FOR_LOOPS + " to prevent infinite loop.");
+                //Get key, remove : separator
+                String key = entry.getKey();
+                if (key.contains(":"))
+                {
+                    key = key.split(":")[0];
+                }
+
+                //Recursive loops
+                if (key.equalsIgnoreCase("for"))
+                {
+                    if (depth >= MAX_FOR_LOOPS)
+                    {
+                        throw new RuntimeException("Too many for loops while building json element data, the limit is set to " + MAX_FOR_LOOPS + " to prevent infinite loop.");
+                    }
+
+                    JsonObject object = buildObjectFromTemplate(entry.getValue().getAsJsonObject(), injectionKeys, false);
+                    generateDataForLoop(object, states, injectionKeys, depth + 1);
+                }
+                //Recursive loops
+                else if (key.equalsIgnoreCase("forEach"))
+                {
+                    JsonObject object = buildObjectFromTemplate(entry.getValue().getAsJsonObject(), injectionKeys, false);
+                    generateDataForEachLoop(object, states, injectionKeys, depth + 1);
+                }
+                else if (key.equalsIgnoreCase("data") || key.equalsIgnoreCase("state"))
+                {
+                    states.add(buildObjectFromTemplate(entry.getValue().getAsJsonObject(), injectionKeys, true));
+                }
+                else
+                {
+                    throw new IllegalArgumentException("ForLoop could not understate layout, expected 'for', 'forEach', or 'data' entries in JSON object");
+                }
             }
-            template = currentJsonObject.getAsJsonObject("for");
-
-            JsonObject object = buildObjectFromTemplate(template, injectionKeys, false);
-            generateDataForLoop(object, states, injectionKeys, depth + 1);
-
-        }
-        //Recursive loops
-        else if (currentJsonObject.has("forEach"))
-        {
-            template = currentJsonObject.getAsJsonObject("forEach");
-            JsonObject object = buildObjectFromTemplate(template, injectionKeys, false);
-            generateDataForEachLoop(object, states, injectionKeys, depth + 1);
-        }
-        else if (currentJsonObject.has("data"))
-        {
-            template = currentJsonObject.getAsJsonObject("data");
-            states.add(buildObjectFromTemplate(template, injectionKeys, true));
-        }
-        //Legacy code
-        else if (currentJsonObject.has("state"))
-        {
-            template = currentJsonObject.getAsJsonObject("state");
-            states.add(buildObjectFromTemplate(template, injectionKeys, true));
-        }
-        else
-        {
-            throw new IllegalArgumentException("ForLoop could not understate layout, expected 'for', 'forEach', or 'data' entries in JSON object");
         }
     }
 
