@@ -61,54 +61,56 @@ public abstract class RenderJsonSubProcessor<S extends IRenderState>
                 String textureID = renderStateObject.get("texture").getAsString();
                 setMainTexture(state, textureID);
             }
-
-            //TODO add error state if textures are being loaded without being used
-            //Load all textures (mainly for blocks)
-            for (Map.Entry<String, JsonElement> elementEntry : renderStateObject.entrySet())
+            else
             {
-                //Lazy way to register textures
-                if (elementEntry.getKey().equalsIgnoreCase("texture")
-                        || elementEntry.getKey().contains(":") && elementEntry.getKey().split(":")[0].equalsIgnoreCase("texture"))
+                //TODO add error state if textures are being loaded without being used
+                //Load all textures (mainly for blocks)
+                for (Map.Entry<String, JsonElement> elementEntry : renderStateObject.entrySet())
                 {
-                    //Get data
-                    JsonObject textureData = elementEntry.getValue().getAsJsonObject();
-
-                    //Enforce minimal values
-                    JsonProcessor.ensureValuesExist(textureData, "domain", "name");
-
-                    //Read minimal values
-                    String domain = textureData.getAsJsonPrimitive("domain").getAsString();
-                    String name = textureData.getAsJsonPrimitive("name").getAsString();
-
-                    //Get key
-                    String key;
-
-                    //Get key in case it doesn't match texture name
-                    if (textureData.has("key"))
+                    //Lazy way to register textures
+                    if (elementEntry.getKey().equalsIgnoreCase("texture")
+                            || elementEntry.getKey().contains(":") && elementEntry.getKey().split(":")[0].equalsIgnoreCase("texture"))
                     {
-                        key = textureData.getAsJsonPrimitive("key").getAsString();
-                    }
-                    else
-                    {
-                        key = domain + ":" + name;
-                    }
+                        //Get data
+                        JsonObject textureData = elementEntry.getValue().getAsJsonObject();
 
-                    //Init texture ID
-                    if (!hasTexture(state))
-                    {
-                        setMainTexture(state, key);
-                    }
+                        //Enforce minimal values
+                        JsonProcessor.ensureValuesExist(textureData, "domain", "name");
 
-                    //Create and register texture
-                    TextureData data = new TextureData(null, key, domain, name, textureType);
-                    List<IJsonGenObject> list = JsonContentLoader.INSTANCE.generatedObjects.get("texture");
-                    if (list == null)
-                    {
-                        list = new ArrayList();
+                        //Read minimal values
+                        String domain = textureData.getAsJsonPrimitive("domain").getAsString();
+                        String name = textureData.getAsJsonPrimitive("name").getAsString();
+
+                        //Get key
+                        String key;
+
+                        //Get key in case it doesn't match texture name
+                        if (textureData.has("key"))
+                        {
+                            key = textureData.getAsJsonPrimitive("key").getAsString();
+                        }
+                        else
+                        {
+                            key = domain + ":" + name;
+                        }
+
+                        //Init texture ID
+                        if (!hasTexture(state))
+                        {
+                            setMainTexture(state, key);
+                        }
+
+                        //Create and register texture
+                        TextureData data = new TextureData(null, key, domain, name, textureType);
+                        List<IJsonGenObject> list = JsonContentLoader.INSTANCE.generatedObjects.get("texture");
+                        if (list == null)
+                        {
+                            list = new ArrayList();
+                        }
+                        list.add(data);
+                        JsonContentLoader.INSTANCE.generatedObjects.put("texture", list);
+                        data.onCreated();
                     }
-                    list.add(data);
-                    JsonContentLoader.INSTANCE.generatedObjects.put("texture", list);
-                    data.onCreated();
                 }
             }
         }
