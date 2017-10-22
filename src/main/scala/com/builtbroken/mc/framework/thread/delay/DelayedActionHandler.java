@@ -30,7 +30,7 @@ public class DelayedActionHandler
                     while (it.hasNext())
                     {
                         DelayedAction action = it.next();
-                        if (action.isAlive)
+                        if (action  != null && action.isAlive)
                         {
                             action.ticksToWait--;
                             if (action.ticksToWait <= 0)
@@ -53,19 +53,22 @@ public class DelayedActionHandler
 
     public static void add(DelayedAction delayedAction)
     {
-        List<DelayedAction> list = null;
-        if (worldToActions.containsKey(delayedAction.world.provider.dimensionId))
+        if(delayedAction != null && delayedAction.world != null && delayedAction.world.provider != null)
         {
-            list = worldToActions.get(delayedAction.world.provider.dimensionId);
+            List<DelayedAction> list = null;
+            if (worldToActions.containsKey(delayedAction.world.provider.dimensionId))
+            {
+                list = worldToActions.get(delayedAction.world.provider.dimensionId);
+            }
+
+            if (list == null)
+            {
+                list = new ArrayList();
+            }
+
+            list.add(delayedAction);
+
+            worldToActions.put(delayedAction.world.provider.dimensionId, list);
         }
-
-        if (list == null)
-        {
-            list = new ArrayList();
-        }
-
-        list.add(delayedAction);
-
-        worldToActions.put(delayedAction.world.provider.dimensionId, list);
     }
 }
