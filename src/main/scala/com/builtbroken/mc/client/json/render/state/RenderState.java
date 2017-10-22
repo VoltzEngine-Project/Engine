@@ -1,9 +1,12 @@
 package com.builtbroken.mc.client.json.render.state;
 
+import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IRenderState;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.debug.IJsonDebugDisplay;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -20,10 +23,70 @@ public abstract class RenderState extends JsonGenData implements IRenderState, I
     /** Super object / parent object of this render state, allows sharing state data */
     public IRenderState parentState;
 
+    private int colorCache = -2;
+
     public RenderState(String id)
     {
         super(null); //TODO
         this.id = id;
+    }
+
+    @Override
+    public int getColorForTexture(int side)
+    {
+        if (colorCache > -2)
+        {
+            return colorCache;
+        }
+        if (color != null)
+        {
+            if (color.contains(","))
+            {
+                try
+                {
+                    String[] split = color.split(",");
+                    if (split.length == 3)
+                    {
+                        colorCache = new Color(Integer.parseInt(split[0].trim()), Integer.parseInt(split[1].trim()), Integer.parseInt(split[2].trim())).getRGB();
+                    }
+                    else if (split.length == 4)
+                    {
+                        colorCache = new Color(Integer.parseInt(split[0].trim()), Integer.parseInt(split[1].trim()), Integer.parseInt(split[2].trim()), Integer.parseInt(split[3].trim())).getRGB();
+                    }
+                    else
+                    {
+                        Engine.logger().error("RenderState#getColorForTexture(" + side + ") Failed to convert [" + color + "] to color. Expected to see number separated list of 3-4 items (red, green, blue, alpha) value 0-255");
+                        colorCache = -1;
+                    }
+                }
+                catch (NumberFormatException e)
+                {
+                    colorCache = -1;
+                    Engine.logger().error("RenderState#getColorForTexture(" + side + ") Failed to convert [" + color + "] to color due to invalid number. Expected to see number separated list of 3-4 items (red, green, blue, alpha) value 0-255");
+                }
+            }
+            else if (ClientDataHandler.INSTANCE.canSupportColor(color))
+            {
+                return ClientDataHandler.INSTANCE.getColorAsInt(color);
+            }
+            else
+            {
+                try
+                {
+                    colorCache = Integer.parseInt(color);
+                    if (colorCache < 0)
+                    {
+                        colorCache = -1;
+                    }
+                }
+                catch (NumberFormatException e)
+                {
+                    colorCache = -1;
+                    Engine.logger().error("RenderState#getColorForTexture(" + side + ") Failed to convert [" + color + "] to color.");
+                }
+            }
+        }
+        return -1;
     }
 
     @Override
