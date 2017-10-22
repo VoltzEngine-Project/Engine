@@ -2,70 +2,148 @@
   "render": {
     "contentID": "voltzengine:gems",
     "type": "item",
+    "renderLayerByState": [
+      {
+        "meta": "1001",
+        "layers": 2
+      },
+      {
+        "meta": "1002",
+        "layers": 2
+      },
+      {
+        "meta": "1003",
+        "layers": 2
+      },
+      {
+        "meta": "1004",
+        "layers": 2
+      },
+      {
+        "meta": "1005",
+        "layers": 2
+      },
+      {
+        "meta": "1006",
+        "layers": 2
+      },
+      {
+        "meta": "1007",
+        "layers": 2
+      },
+      {
+        "meta": "1008",
+        "layers": 2
+      },
+      {
+        "meta": "1009",
+        "layers": 2
+      },
+      {
+        "meta": "1010",
+        "layers": 2
+      }
+    ],
     "states": [
       {
         "forEach": {
           "values": [
             {
-              "gem": "amazonite"
+              "gem": "amazonite",
+              "color1": "129,250,235"
             },
             {
-              "gem": "quartz"
+              "gem": "quartz",
+              "color1": "-1"
             },
             {
-              "gem": "quartz.smoky"
+              "gem": "quartz.smoky",
+              "color1": "176,152,123"
             },
             {
-              "gem": "onyx.black"
+              "gem": "onyx.black",
+              "color1": "44,44,44"
             },
             {
-              "gem": "onyx.red"
+              "gem": "onyx.red",
+              "color1": "214,89,30"
             },
             {
-              "gem": "garnet.green"
+              "gem": "garnet.green",
+              "color1": "8,169,12"
             },
             {
-              "gem": "garnet.orange"
+              "gem": "garnet.orange",
+              "color1": "184,110,0"
             },
             {
-              "gem": "garnet.red"
+              "gem": "garnet.red",
+              "color1": "233,17,17"
             },
             {
-              "gem": "garnet.yellow"
+              "gem": "garnet.yellow",
+              "color1": "209,211,16"
             },
             {
-              "gem": "emerald"
+              "gem": "emerald",
+              "color1": "-1"
             }
           ],
-          "forEach": {
-            "values": [
-              {
-                "type": "ore"
-              },
-              {
-                "type": "raw"
-              },
-              {
-                "type": "uncut"
-              },
-              {
-                "type": "cut"
-              },
-              {
-                "type": "polished"
-              }
-            ],
-            "data": {
-              "id": "%gem%.%type%",
-              "renderType": "item",
-              "texture": {
-                "domain": "voltzengine",
-                "name": "gem.%gem%.%type%"
-              }
-            }
+          "data:ore": {
+            "id": "%gem%.ore",
+            "color": "%color1%",
+            "renderType": "item",
+            "texture": "voltzengine:rubble"
+          },
+          "data:raw0": {
+            "id": "%gem%.raw.0",
+            "color": "%color1%",
+            "renderType": "item",
+            "texture": "voltzengine:gem.raw.0"
+          },
+          "data:raw1": {
+            "id": "%gem%.raw.1",
+            "renderType": "item",
+            "texture": "voltzengine:gem.raw.1"
+          },
+          "data:uncut": {
+            "id": "%gem%.uncut",
+            "color": "%color1%",
+            "renderType": "item",
+            "texture": "voltzengine:gem.raw.0"
+          },
+          "data:cut": {
+            "id": "%gem%.cut",
+            "color": "%color1%",
+            "renderType": "item",
+            "texture": "voltzengine:gemShape1"
+          },
+          "data:polished": {
+            "id": "%gem%.polished",
+            "color": "%color1%",
+            "renderType": "item",
+            "texture": "voltzengine:gemShape1"
           }
         }
       }
     ]
+  },
+  "texture": {
+    "key": "voltzengine:gem.raw.0",
+    "domain": "voltzengine",
+    "name": "gemUncut",
+    "type": "item"
+  },
+  "texture:1": {
+    "key": "voltzengine:gem.raw.1",
+    "domain": "voltzengine",
+    "name": "gemUncut_overlay",
+    "type": "item"
+  },
+  "texture:2": {
+    "key": "voltzengine:gemShape1",
+    "domain": "voltzengine",
+    "name": "gemShape_emerald",
+    "type": "item"
   }
 }

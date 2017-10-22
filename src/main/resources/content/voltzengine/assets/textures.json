@@ -4,5 +4,11 @@
     "domain": "voltzengine",
     "name": "tool-table",
     "type": "model"
+  },
+  "texture:1": {
+    "key": "voltzengine:rubble",
+    "domain": "voltzengine",
+    "name": "rubble",
+    "type": "item"
   }
 }
