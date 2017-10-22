@@ -5,6 +5,7 @@
     "mod": "voltzengine",
     "name": "gem",
     "hasSubTypes": true,
+    "creativeTab": "materials",
     "subTypes": [
       {
         "forEach": {
