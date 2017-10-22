@@ -33,5 +33,21 @@ public interface IRenderState
      */
     TextureData getTextureData(int side);
 
+    /**
+     * Color to apply to state, -1 is ignore
+     *
+     * @param side - side of the block or layer
+     * @return
+     */
+    default int getColorForTexture(int side)
+    {
+        return -1;
+    }
+
+    /**
+     * Parent render state
+     *
+     * @return
+     */
     IRenderState getParent();
 }
