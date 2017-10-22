@@ -411,14 +411,10 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
                 IRenderState state = data.getState(key);
                 if (state != null)
                 {
-                    state = data.getState(RenderData.INVENTORY_RENDER_KEY);
-                    if (state != null)
+                    IIcon icon = state.getIcon(pass);
+                    if (icon != null)
                     {
-                        IIcon icon = state.getIcon(pass);
-                        if (icon != null)
-                        {
-                            return icon;
-                        }
+                        return icon;
                     }
                 }
             }

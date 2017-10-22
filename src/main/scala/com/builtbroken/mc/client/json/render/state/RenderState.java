@@ -34,7 +34,7 @@ public abstract class RenderState extends JsonGenData implements IRenderState, I
     @Override
     public int getColorForTexture(int side)
     {
-        if (colorCache > -2)
+        if (colorCache != -2)
         {
             return colorCache;
         }

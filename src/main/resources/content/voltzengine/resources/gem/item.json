@@ -79,23 +79,7 @@
               {
                 "type": "uncut",
                 "ore": "gemUncut",
-                "index": "2%i%",
-                "runCondition": {
-                  "IfAllTrue": [
-                    {
-                      "type": "isNot",
-                      "field": "gem",
-                      "check": "emerald",
-                      "result": true
-                    },
-                    {
-                      "type": "isNot",
-                      "field": "gem",
-                      "check": "quartz",
-                      "result": true
-                    }
-                  ]
-                }
+                "index": "2%i%"
               },
               {
                 "type": "cut",
