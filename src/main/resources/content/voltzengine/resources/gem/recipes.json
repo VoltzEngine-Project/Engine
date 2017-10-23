@@ -38,7 +38,28 @@
         "subType": "tool",
         "output": {
           "item": "item@voltzengine:gems",
-          "meta": "%gem%.ore"
+          "meta": "%gem%.raw"
+        },
+        "grid": [
+          "H",
+          "C",
+          "G"
+        ],
+        "items": {
+          "H": "tool@hammer",
+          "C": "tool@chisel",
+          "G": {
+            "item": "item@voltzengine:gems",
+            "meta": "%gem%.ore"
+          }
+        }
+      },
+      "data:1": {
+        "type": "shaped",
+        "subType": "tool",
+        "output": {
+          "item": "item@voltzengine:gems",
+          "meta": "%gem%.uncut"
         },
         "grid": [
           "H",
@@ -51,6 +72,27 @@
           "G": {
             "item": "item@voltzengine:gems",
             "meta": "%gem%.raw"
+          }
+        }
+      },
+      "data:2": {
+        "type": "shaped",
+        "subType": "tool",
+        "output": {
+          "item": "item@voltzengine:gems",
+          "meta": "%gem%.cut"
+        },
+        "grid": [
+          "HC",
+          "FG"
+        ],
+        "items": {
+          "H": "tool@hammer",
+          "C": "tool@chisel",
+          "F": "tool@file",
+          "G": {
+            "item": "item@voltzengine:gems",
+            "meta": "%gem%.uncut"
           }
         }
       }
