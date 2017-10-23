@@ -1,0 +1,59 @@
+{
+  "craftingGridRecipe": {
+    "forEach": {
+      "values": [
+        {
+          "gem": "amazonite"
+        },
+        {
+          "gem": "quartz"
+        },
+        {
+          "gem": "quartz.smoky"
+        },
+        {
+          "gem": "onyx.black"
+        },
+        {
+          "gem": "onyx.red"
+        },
+        {
+          "gem": "garnet.green"
+        },
+        {
+          "gem": "garnet.orange"
+        },
+        {
+          "gem": "garnet.red"
+        },
+        {
+          "gem": "garnet.yellow"
+        },
+        {
+          "gem": "emerald"
+        }
+      ],
+      "data": {
+        "type": "shaped",
+        "subType": "tool",
+        "output": {
+          "item": "item@voltzengine:gems",
+          "meta": "%gem%.ore"
+        },
+        "grid": [
+          "H",
+          "C",
+          "G"
+        ],
+        "items": {
+          "H": "tool@hammer",
+          "C": "tool@chisel",
+          "G": {
+            "item": "item@voltzengine:gems",
+            "meta": "%gem%.raw"
+          }
+        }
+      }
+    }
+  }
+}
