@@ -54,18 +54,77 @@ tile.voltzengine:oreGarnetRed.name=Red Garnet Ore
 tile.voltzengine:oreGarnetOrange.name=Orange Garnet Ore
 tile.voltzengine:oreGarnetYellow.name=Yellow Garnet Ore
 
-## Gems
-item.voltzengine:gem.amazonite.uncut.name=Amazonite Gem
-item.voltzengine:gem.quartz.uncut.name=Quartz Gem
-item.voltzengine:gem.quartz.smokey.uncut.name=Smokey Quartz Gem
+## Gem Rubble
+item.voltzengine:gem.amazonite.ore.name=Amazonite Gem Rubble
+item.voltzengine:gem.quartz.ore.name= QuartzGem Rubble
+item.voltzengine:gem.quartz.smoky.ore.name=Smokey Quartz Gem Rubble
+item.voltzengine:gem.onyx.black.ore.name=Black Onyx Gem Rubble
+item.voltzengine:gem.onyx.red.ore.name=Red Onyx Gem Rubble
+item.voltzengine:gem.garnet.green.ore.name=Green Garnet Gem Rubble
+item.voltzengine:gem.garnet.orange.ore.name=Orange Garnet Gem Rubble
+item.voltzengine:gem.garnet.red.ore.name=Red Garnet Gem Rubble
+item.voltzengine:gem.garnet.yellow.ore.name=Yellow Garnet Gem Rubble
+item.voltzengine:gem.emerald.ore.name=Emerald Gem Rubble
+
+## Gem Raw
+item.voltzengine:gem.amazonite.raw.name=Stone Encrusted Amazonite Gem
+item.voltzengine:gem.quartz.raw.name=Stone Encrusted Quartz Gem
+item.voltzengine:gem.quartz.smoky.raw.name=Stone Encrusted Smokey Quartz Gem
+item.voltzengine:gem.onyx.black.raw.name=Stone Encrusted Black Onyx Gem
+item.voltzengine:gem.onyx.red.raw.name=Stone Encrusted Red Onyx Gem
+item.voltzengine:gem.garnet.green.raw.name=Stone Encrusted Green Garnet Gem
+item.voltzengine:gem.garnet.orange.raw.name=Stone Encrusted Orange Garnet Gem
+item.voltzengine:gem.garnet.red.raw.name=Stone Encrusted Red Garnet Gem
+item.voltzengine:gem.garnet.yellow.raw.name=Stone Encrusted Yellow Garnet Gem
+item.voltzengine:gem.emerald.raw.name=Stone Encrusted Emerald Gem
+
+## Gems Uncut
+item.voltzengine:gem.amazonite.uncut.name=Uncut Amazonite Gem
+item.voltzengine:gem.quartz.uncut.name=Uncut Quartz Gem
 item.voltzengine:gem.quartz.smoky.uncut.name=Uncut Smokey Quartz Gem
-item.voltzengine:gem.onyx.black.uncut.name=Black Onyx Gem
-item.voltzengine:gem.onyx.red.uncut.name=Red Onyx Gem
-item.voltzengine:gem.garnet.green.uncut.name=Green Garnet Gem
-item.voltzengine:gem.garnet.orange.uncut.name=Orange Garnet Gem
-item.voltzengine:gem.garnet.red.uncut.name=Red Garnet Gem
-item.voltzengine:gem.garnet.yellow.uncut.name=Yellow Garnet Gem
-item.voltzengine:gem.emerald.uncut.name=Emerald Gem
+item.voltzengine:gem.onyx.black.uncut.name=Uncut Black Onyx Gem
+item.voltzengine:gem.onyx.red.uncut.name=Uncut Red Onyx Gem
+item.voltzengine:gem.garnet.green.uncut.name=Uncut Green Garnet Gem
+item.voltzengine:gem.garnet.orange.uncut.name=Uncut Orange Garnet Gem
+item.voltzengine:gem.garnet.red.uncut.name=Uncut Red Garnet Gem
+item.voltzengine:gem.garnet.yellow.uncut.name=Uncut Yellow Garnet Gem
+item.voltzengine:gem.emerald.uncut.name=Uncut Emerald Gem
+
+## Gems Rough Cut (Hewn means rough)
+item.voltzengine:gem.amazonite.cut.name=Hewn Amazonite Gem
+item.voltzengine:gem.quartz.cut.name=Hewn Quartz Gem
+item.voltzengine:gem.quartz.smoky.cut.name=Hewn Smokey Quartz Gem
+item.voltzengine:gem.onyx.black.cut.name=Hewn Black Onyx Gem
+item.voltzengine:gem.onyx.red.cut.name=Hewn Red Onyx Gem
+item.voltzengine:gem.garnet.green.cut.name=Hewn Green Garnet Gem
+item.voltzengine:gem.garnet.orange.cut.name=Hewn Orange Garnet Gem
+item.voltzengine:gem.garnet.red.cut.name=Hewn Red Garnet Gem
+item.voltzengine:gem.garnet.yellow.cut.name=Hewn Yellow Garnet Gem
+item.voltzengine:gem.emerald.cut.name=Hewn Emerald Gem
+
+## Gems Polished
+item.voltzengine:gem.amazonite.polished.name=Polished Amazonite Gem
+item.voltzengine:gem.quartz.polished.name=Polished Quartz Gem
+item.voltzengine:gem.quartz.smoky.polished.name=Polished Smokey Quartz Gem
+item.voltzengine:gem.onyx.black.polished.name=Polished Black Onyx Gem
+item.voltzengine:gem.onyx.red.polished.name=Polished Red Onyx Gem
+item.voltzengine:gem.garnet.green.polished.name=Polished Green Garnet Gem
+item.voltzengine:gem.garnet.orange.polished.name=Polished Orange Garnet Gem
+item.voltzengine:gem.garnet.red.polished.name=Polished Red Garnet Gem
+item.voltzengine:gem.garnet.yellow.polished.name=Polished Yellow Garnet Gem
+item.voltzengine:gem.emerald.polished.name=Polished Emerald Gem
+
+## Gems Fine Cut
+item.voltzengine:gem.amazonite.cut.fine.name=Fine Amazonite Gem
+item.voltzengine:gem.quartz.cut.fine.name=Fine Quartz Gem
+item.voltzengine:gem.quartz.smoky.cut.fine.name=Fine Smokey Quartz Gem
+item.voltzengine:gem.onyx.black.cut.fine.name=Fine Black Onyx Gem
+item.voltzengine:gem.onyx.red.cut.fine.name=Fine Red Onyx Gem
+item.voltzengine:gem.garnet.green.cut.fine.name=Fine Green Garnet Gem
+item.voltzengine:gem.garnet.orange.cut.fine.name=Fine Orange Garnet Gem
+item.voltzengine:gem.garnet.red.cut.fine.name=Fine Red Garnet Gem
+item.voltzengine:gem.garnet.yellow.cut.fine.name=Fine Yellow Garnet Gem
+item.voltzengine:gem.emerald.cut.fine.name=Fine Emerald Gem
 
 ## Dust
 item.voltzengine:dustCopper.name=Copper Dust
