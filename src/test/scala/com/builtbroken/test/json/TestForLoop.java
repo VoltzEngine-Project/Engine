@@ -1,5 +1,6 @@
 package com.builtbroken.test.json;
 
+import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import com.builtbroken.mc.framework.json.struct.JsonForLoop;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -344,6 +345,73 @@ public class TestForLoop extends TestCase
         assertEquals("value.blue.large.0", elements.get(6).get("someVar").getAsString());
         assertEquals("value.blue.large.1", elements.get(7).get("someVar").getAsString());
         assertEquals("value.blue.large.2", elements.get(8).get("someVar").getAsString());
+    }
+
+    @Test
+    public void testForLoopInjection()
+    {
+        String jsonText = "{\n" +
+                "    \"forEach\": {\n" +
+                "      \"values\": [\n" +
+                "        {\n" +
+                "          \"gem\": \"amazonite\"\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"data\": {\n" +
+                "        \"contentID\": \"armorygemitems:sword.%gem%\",\n" +
+                "        \"type\": \"item\",\n" +
+                "        \"states\": [\n" +
+                "          {\n" +
+                "            \"id\": \"item.inventory\",\n" +
+                "            \"renderType\": \"item\",\n" +
+                "            \"texture\": {\n" +
+                "              \"domain\": \"armorygemitems\",\n" +
+                "              \"name\": \"sword.%gem%\"\n" +
+                "            }\n" +
+                "          }\n" +
+                "        ]\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }";
+
+        //Convert to JSON
+        JsonObject forLoop = JsonLoader.createElement(jsonText).getAsJsonObject().get("forEach").getAsJsonObject();
+
+        //Generate data using loop
+        List<JsonObject> elements = new ArrayList();
+        JsonForLoop.generateDataForEachLoop(forLoop, elements, new HashMap(), 0);
+
+        //Make sure we have one object
+        assertEquals(1, elements.size());
+
+        //Get object
+        JsonObject object = elements.get(0);
+        assertNotNull(object);
+
+        assertTrue(object.has("contentID"));
+        assertEquals("armorygemitems:sword.amazonite", object.getAsJsonPrimitive("contentID").getAsString());
+
+        assertTrue(object.has("type"));
+        assertEquals("item", object.getAsJsonPrimitive("type").getAsString());
+
+        assertTrue(object.has("states"));
+        JsonArray array = object.getAsJsonArray("states");
+        assertEquals(1, array.size());
+
+        JsonObject state = array.get(0).getAsJsonObject();
+
+        assertTrue(state.has("id"));
+        assertEquals("item.inventory", state.getAsJsonPrimitive("id").getAsString());
+
+        assertTrue(state.has("renderType"));
+        assertEquals("item", state.getAsJsonPrimitive("renderType").getAsString());
+
+        assertTrue(state.has("texture"));
+        JsonObject texture = state.getAsJsonObject("texture");
+        assertTrue(texture.has("domain"));
+        assertEquals("armorygemitems", texture.getAsJsonPrimitive("domain").getAsString());
+        assertTrue(texture.has("name"));
+        assertEquals("sword.amazonite", texture.getAsJsonPrimitive("name").getAsString());
     }
 
     private JsonObject buildLoopValue(String... strings)

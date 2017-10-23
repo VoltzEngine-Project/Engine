@@ -400,6 +400,7 @@ public class JsonForLoop
             {
                 clone.add(buildElementFromTemplate(element, injectionKeys, doNested));
             }
+            return clone;
         }
         return value;
     }
