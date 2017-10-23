@@ -1,0 +1,14 @@
+{
+  "oreName": {
+    "name": "gunpowder",
+    "item": "minecraft:gunpowder"
+  },
+  "oreName:1": {
+    "name": "string",
+    "item": "minecraft:string"
+  },
+  "oreName:2": {
+    "name": "flint",
+    "item": "minecraft:flint"
+  }
+}
