@@ -1,15 +1,9 @@
 package com.builtbroken.mc.client.json.texture;
 
 import com.builtbroken.mc.core.References;
-import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
-import com.builtbroken.mc.framework.json.struct.JsonForLoop;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -36,32 +30,13 @@ public class TextureJsonProcessor extends JsonProcessor<TextureData>
     }
 
     @Override
-    public boolean process(JsonElement element, List<IJsonGenObject> entries)
+    protected TextureData process(final JsonElement element)
     {
-        JsonObject object = element.getAsJsonObject();
-        List<JsonObject> elements = new ArrayList();
-
-        if (object.has("for"))
+        if(element.isJsonObject())
         {
-            JsonForLoop.generateDataForLoop(object.getAsJsonObject("for"), elements, new HashMap(), 0);
+            return handle((JsonObject) element);
         }
-        else if (object.has("forEach"))
-        {
-            JsonForLoop.generateDataForEachLoop(object.getAsJsonObject("forEach"), elements, new HashMap(), 0);
-        }
-
-        if (!elements.isEmpty())
-        {
-            for (JsonObject o : elements)
-            {
-                entries.add(handle(o));
-            }
-        }
-        else
-        {
-            entries.add(handle(object));
-        }
-        return true;
+        return null;
     }
 
     /**
