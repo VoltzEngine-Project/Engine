@@ -22,7 +22,7 @@ public class JsonItemEntry
     /** Reference to a damage value or state */
     public String damage;
     /** Stack size */
-    public int count;
+    public int count = 1;
     /** Extra item data */
     public NBTTagCompound nbt;
 
