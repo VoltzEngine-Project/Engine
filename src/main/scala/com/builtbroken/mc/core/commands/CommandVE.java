@@ -1,10 +1,6 @@
 package com.builtbroken.mc.core.commands;
 
-import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.commands.debug.CommandDebugChunk;
-import com.builtbroken.mc.core.commands.debug.CommandDebugItem;
-import com.builtbroken.mc.core.commands.debug.CommandDebugMap;
-import com.builtbroken.mc.core.commands.debug.CommandDebugRecipes;
+import com.builtbroken.mc.core.commands.debug.*;
 import com.builtbroken.mc.core.commands.energy.CommandChargeItem;
 import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
@@ -66,13 +62,11 @@ public class CommandVE extends ModularCommand
             addCommand(new CommandVEClear());
         }
 
-        if (Engine.runningAsDev)
-        {
-            addToDebugCommand(new CommandDebugRecipes());
-            addToDebugCommand(new CommandDebugItem());
-            addToDebugCommand(new CommandDebugMap());
-            addToDebugCommand(new CommandDebugChunk());
-        }
+        addToDebugCommand(new CommandDebugRecipes());
+        addToDebugCommand(new CommandDebugItem());
+        addToDebugCommand(new CommandDebugMap());
+        addToDebugCommand(new CommandDebugChunk());
+        addToDebugCommand(new CommandDebugInventory());
 
         addToJsonCommand(new CommandJsonRecipe());
         addToThreadCommand(new CommandThreadClear());
