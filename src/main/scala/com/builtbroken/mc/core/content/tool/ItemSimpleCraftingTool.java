@@ -106,9 +106,13 @@ public class ItemSimpleCraftingTool extends ItemAbstractCraftingTool implements 
 
     public static ItemStack getTool(String type)
     {
-        ItemStack stack = new ItemStack(Engine.itemSimpleCraftingTools);
-        Engine.itemSimpleCraftingTools.setToolType(stack, type);
-        return stack;
+        if(Engine.itemSimpleCraftingTools != null)
+        {
+            ItemStack stack = new ItemStack(Engine.itemSimpleCraftingTools);
+            Engine.itemSimpleCraftingTools.setToolType(stack, type);
+            return stack;
+        }
+        return null;
     }
 
     public static ItemStack getHammer()

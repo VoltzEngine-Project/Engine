@@ -1,6 +1,8 @@
 package com.builtbroken.mc.framework.json.processors;
 
 import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.debug.error.ExceptionErrorDebug;
+import com.builtbroken.mc.debug.error.IErrorDebug;
 import com.builtbroken.mc.framework.json.data.JsonItemEntry;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
@@ -12,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -28,6 +31,11 @@ public abstract class JsonGenData implements IJsonGenObject
 
     /** Processor that created this object */
     public final IJsonProcessor processor;
+
+    /** Internal check to note something broke during creation but didn't cause complete failure. aka safe to continue */
+    protected boolean broken = false;
+    /** List of errors/warning/problems that happened during creation */
+    protected List<IErrorDebug> errors;
 
     public JsonGenData(IJsonProcessor processor)
     {
@@ -225,5 +233,15 @@ public abstract class JsonGenData implements IJsonGenObject
             }
         }
         return object instanceof ItemStack ? (ItemStack) object : null;
+    }
+
+    protected void addError(String title, String message, Exception e)
+    {
+        if(errors == null)
+        {
+            errors = new ArrayList();
+        }
+        errors.add(new ExceptionErrorDebug(title, message, e));
+        broken = true;
     }
 }
