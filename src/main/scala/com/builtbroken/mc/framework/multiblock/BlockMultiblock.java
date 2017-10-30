@@ -157,8 +157,7 @@ public class BlockMultiblock extends BlockContainer
         IMultiTile tile = getTile(world, x, y, z);
         if (tile != null && tile.getHost() != null)
         {
-            Block block = ((TileEntity) tile.getHost()).getWorldObj().getBlock(((TileEntity) tile.getHost()).xCoord, ((TileEntity) tile.getHost()).yCoord, ((TileEntity) tile.getHost()).zCoord);
-            return block.getPickBlock(target, ((TileEntity) tile.getHost()).getWorldObj(), ((TileEntity) tile.getHost()).xCoord, ((TileEntity) tile.getHost()).yCoord, ((TileEntity) tile.getHost()).zCoord, player);
+           return tile.getHost().getHostAsStack(player, target);
         }
         return null;
     }
