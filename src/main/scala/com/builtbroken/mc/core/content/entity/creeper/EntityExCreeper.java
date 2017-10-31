@@ -1,4 +1,4 @@
-package com.builtbroken.mc.core.content.entity;
+package com.builtbroken.mc.core.content.entity.creeper;
 
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExCreeperHandler;

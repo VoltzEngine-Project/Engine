@@ -51,7 +51,7 @@ public class DelayedActionHandler
         }
     }
 
-    public static void add(DelayedAction delayedAction)
+    public static <T extends DelayedAction> T add(T delayedAction)
     {
         if(delayedAction != null && delayedAction.world != null && delayedAction.world.provider != null)
         {
@@ -70,5 +70,6 @@ public class DelayedActionHandler
 
             worldToActions.put(delayedAction.world.provider.dimensionId, list);
         }
+        return delayedAction;
     }
 }

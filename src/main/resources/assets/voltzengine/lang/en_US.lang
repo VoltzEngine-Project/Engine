@@ -16,6 +16,10 @@ text.general.feature.banned=Banned
 text.general.feature.disable=Disabled
 text.general.power.amount= %1 out of %2 units of power
 
+## Entity
+entity.ExCreeper.name=Explosive Creeper
+entity.ExBat.name=Explosive Bat
+
 ## RF text
 text.rf.power.amount= %1 out of %2 redstone flux
 
@@ -493,6 +497,8 @@ link.updated.name=Link Updated
 # Items
 item.voltzengine:screwdriver.name=Screwdriver
 item.voltzengine:screwdriver.tooltip=Used to configure blocks. Shift-right click to change mode.
+
+item.voltzengine:exSpawnEgg.name=Explosive Spawn Egg
 
 # Chips
 item.voltzengine:circuits.circuitBasic.name=Basic Circuit
