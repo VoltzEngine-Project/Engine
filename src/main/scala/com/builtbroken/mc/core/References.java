@@ -39,6 +39,7 @@ public final class References
 
     public static final String BLOCK_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "blocks/";
     public static final String ITEM_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "items/";
+    public static final String ENTITY_TEXTURE_DIRECTORY = TEXTURE_DIRECTORY + "entity/";
     public static final String MODEL_PATH = "models/";
     public static final String MODEL_DIRECTORY = DIRECTORY + MODEL_PATH;
 

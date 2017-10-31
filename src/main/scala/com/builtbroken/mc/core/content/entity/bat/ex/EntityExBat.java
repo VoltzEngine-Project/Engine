@@ -1,9 +1,10 @@
-package com.builtbroken.mc.core.content.entity.bat;
+package com.builtbroken.mc.core.content.entity.bat.ex;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.event.TriggerCause;
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
 import com.builtbroken.mc.api.explosive.IExplosiveHolder;
+import com.builtbroken.mc.core.content.entity.bat.EntityCreatureBat;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -17,6 +18,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 /**
  * Explosive version of the bat for use in {@link com.builtbroken.mc.api.explosive.IExplosiveHandler} for mods like ICBM
@@ -51,6 +53,7 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
 
     /** Type of AI to use */
     public int ai_type = 0;
+    private boolean isAISetup = false;
 
     //Explosive data
     protected double ex_size = 3;
@@ -87,11 +90,20 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
     }
 
     @Override
+    protected void jump()
+    {
+        this.motionY = 2;
+        this.isAirBorne = true;
+        ForgeHooks.onLivingJump(this);
+    }
+
+    @Override
     public void onUpdate()
     {
         //Setup AI
-        if (ticksExisted == 1)
+        if (!isAISetup)
         {
+            isAISetup = true;
             setupAI();
         }
 
@@ -99,9 +111,9 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
         if (this.isEntityAlive())
         {
             //Count down death timer
-            if (deathTime > 0)
+            if (explosiveTimer > 0)
             {
-                deathTime -= 1;
+                explosiveTimer -= 1;
             }
 
             //Trigger fuse if there is a target
@@ -118,6 +130,11 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
             //Tick timer up if its close enough
             if (isFuseActive())
             {
+                if(worldObj.isRemote)
+                {
+                    worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
+                    worldObj.spawnParticle("flame", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
+                }
                 setFuse(fuse + 1);
             }
             //Tick timer down
@@ -140,11 +157,7 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
     @Override
     public void doBatLogic()
     {
-        if (getAttackTarget() == null)
-        {
-            super.doBatLogic();
-        }
-        else if (isBatHanging())
+        if (isBatHanging())
         {
             //Stop hanging if there is a target to attack
             this.setIsBatHanging(false);
@@ -155,7 +168,7 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
 
     protected boolean isFuseActive()
     {
-        return enableFuse || deathTime == 0;
+        return enableFuse || explosiveTimer == 0;
     }
 
     @Override
@@ -212,7 +225,9 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
     public void writeEntityToNBT(NBTTagCompound nbt)
     {
         super.writeEntityToNBT(nbt);
-        nbt.setShort("Fuse", (short) this.fuseTicks);
+        nbt.setInteger("explosiveTimer", explosiveTimer);
+        nbt.setShort("fuse", (short) this.fuseTicks);
+        nbt.setInteger("ai_type", ai_type);
         if (ex != null)
         {
             nbt.setString("ex", ex.getID());
@@ -228,7 +243,12 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
     public void readEntityFromNBT(NBTTagCompound nbt)
     {
         super.readEntityFromNBT(nbt);
-        this.fuseTicks = nbt.getShort("Fuse");
+        if (nbt.hasKey("explosiveTimer"))
+        {
+            this.explosiveTimer = nbt.getInteger("explosiveTimer");
+        }
+        this.fuseTicks = nbt.getShort("fuse");
+        this.ai_type = nbt.getInteger("ai_type");
         if (nbt.hasKey("ex"))
         {
             ex = ExplosiveRegistry.get(nbt.getString("ex"));
@@ -276,7 +296,7 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
 
     public int getFuse()
     {
-        return this.dataWatcher.getWatchableObjectByte(DATA_FUSE_TIMER);
+        return this.dataWatcher.getWatchableObjectInt(DATA_FUSE_TIMER);
     }
 
     public void setFuse(int f)

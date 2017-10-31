@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.content.entity;
 
 import com.builtbroken.mc.api.explosive.IExplosiveHandler;
-import com.builtbroken.mc.core.content.entity.bat.EntityExBat;
+import com.builtbroken.mc.core.content.entity.bat.ex.EntityExBat;
 import com.builtbroken.mc.core.content.entity.creeper.EntityExCreeper;
 import com.builtbroken.mc.framework.explosive.ExplosiveRegistry;
 import com.builtbroken.mc.lib.data.item.ItemStackWrapper;
@@ -246,6 +246,7 @@ public class ItemExEntitySpawnEgg extends Item
                         ItemStack stack = new ItemStack(item, 1, i);
                         stack.setTagCompound(new NBTTagCompound());
                         stack.getTagCompound().setTag("ex", wrapper.itemStack.writeToNBT(new NBTTagCompound()));
+                        items.add(stack);
                     }
                 }
             }
