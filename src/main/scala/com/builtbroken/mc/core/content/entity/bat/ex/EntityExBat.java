@@ -92,7 +92,7 @@ public class EntityExBat extends EntityCreatureBat implements IExplosiveHolder, 
     @Override
     protected void jump()
     {
-        this.motionY = 2;
+        this.motionY = 1;
         this.isAirBorne = true;
         ForgeHooks.onLivingJump(this);
     }
