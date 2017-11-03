@@ -6,7 +6,48 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
-## 1.9.13
+## 1.9.14 - 11/3/2017
+### Runtime Changes
+Added: Improved help command page count (page # -> page # of #)
+Added: gems to materials tab (sorta a fix)
+Added: gem hand crafting recipes
+Added: Explosive bat (supports any explosive type, works same as ex creeper)
+Added: spawn egg for explosive bat and creeper (note not the same as vanilla, supports ICBM explosive types)
+Added: Waila support for MultiBlock tiles
+Fixed: NPE with delay event system
+Fixed: pick block for multiblock tiles
+Fixed: blocks droping on corner instead of center (only effected newer JSON blocks)
+Fixed: missing ore names for JSON blocks
+Fixed: unknown entry errors
+Fixed: ore names loading on wrong phase
+Fixed: BlockTile not dropping inventory
+Fixed: Blocks using old Tile system not dropping correctly (effected Armory and ICBM-Classic)
+Fixed: Projectiles colliding with riders (Fixes ICBM & ICBM-Classic missile riding)
+Fixed: Minor issues iterative over player inventory
+Implemented: EMP inventory handling (unfinished)
+Changed: EMP multiplier from 10 to 1
+Changed: Ore textures out for improved versions by Morton00000
+Updated: ore names for flint and gunpowder, converted to JSON system
+
+
+### Develoment Changes
+Added: non-VE tile scanning to map tile entities (will eventually be phased out)
+Added: Horizontal version of render with repeat 2D
+Added: AT for accessing player food stats
+Added: AT for accessing AI data
+Added: Support for several data fields in JSON for loops
+Added: Color support for JSON rendering
+Added: Improved support for simple tools in recipes
+Added: JSON support for block harvest tool and level
+Added: Redstone checks for TileNodeHost - allows entity versions to override world checks
+Fixed: JSON for loop not handling arrays correctly
+Fixed: Sphere get entity method not working
+Fixed: Sphere using an int for radius (now uses double)
+Fixed: BlockPos not using IPos3D for distance checks
+Updated: json processors to use for loops (excludes item and block)
+Updated: EnergyBuffer to have an abstract version without 'final int maxBuffer' field (designed for extending to make custom buffers)
+
+## 1.9.13 - 10/4/2017
 ### Runtime Changes
 Added: Entity Effect system (basicly a potion system with more flexibility)
 Added: Bleeding effect - tick based loss of HP
