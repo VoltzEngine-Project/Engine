@@ -29,11 +29,12 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URLDecoder;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Helper class for working with json files
@@ -319,5 +320,31 @@ public class JsonLoader
     public static boolean hasConverterFor(String key)
     {
         return getConversionHandler(key) != null;
+    }
+
+    //Based on http://www.uofr.net/~greg/java/get-resource-listing.html
+    public static String[] getResourceListing(URL resource) throws URISyntaxException, IOException
+    {
+        Set<String> result = new HashSet();
+        if (resource.getProtocol().equals("jar"))
+        {
+            //Get path to jar file
+            String jarPath = resource.getPath().substring(5, resource.getPath().indexOf("!"));
+
+            //open jar and get entities
+            JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+            Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+
+            //Loop entries
+            while (entries.hasMoreElements())
+            {
+                String filePath = entries.nextElement().getName();
+                if (!filePath.endsWith("/"))
+                {
+                    result.add(filePath);
+                }
+            }
+        }
+        return result.toArray(new String[result.size()]);
     }
 }

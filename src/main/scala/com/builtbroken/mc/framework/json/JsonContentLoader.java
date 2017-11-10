@@ -802,6 +802,7 @@ public final class JsonContentLoader extends AbstractLoadable
 
                 Map<String, Object> env = new HashMap<>();
                 env.put("create", "true");
+                env.put("encoding", "UTF-8");
 
                 try (FileSystem fs = FileSystems.newFileSystem(jar, env, getClass().getClassLoader()))
                 {

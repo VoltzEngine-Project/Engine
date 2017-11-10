@@ -30,7 +30,7 @@ Changed: Ore textures out for improved versions by Morton00000
 Updated: ore names for flint and gunpowder, converted to JSON system
 
 
-### Develoment Changes
+### Development Changes
 Added: non-VE tile scanning to map tile entities (will eventually be phased out)
 Added: Horizontal version of render with repeat 2D
 Added: AT for accessing player food stats
@@ -74,7 +74,7 @@ Fixed: Fluid tank multi-block tiles not support TileNode framework
         Caused problems with bucket interaction from other mods
   
 
-### Develoment Changes
+### Development Changes
 Added: JSON converter for Array Lists
 Added: Hook to allow converter calls to use JSON processors
 Added: check for halloween season
@@ -106,7 +106,7 @@ Added: Item Render baker
 Fixed: left ctrl being forced for developer keys, right ctrl should now work as well
 Fixed: JSON debug window not opening when pressing 'ctrl' and 'home' keys
 
-### Develoment Changes
+### Development Changes
 Added: JSON to hash map converter
 Added: JSON to primitive (int, double, float, string, etc) converters
 Added: block entry for storing json data until blocks finish loading
@@ -140,7 +140,7 @@ New textures by Morton
     
 Converted: Sheet metal to JSON
 
-### Develoment Changes
+### Development Changes
 Added: Creative tab selection for JSON items and sub items
 Added: Json object creation event that fires each time an json gen object is generated
 Added: Phase tracking for JSON content loader (will be improved on over time)
@@ -154,7 +154,7 @@ Added: Reflection injection into Furnace recipes to prevent Null ItemStack entri
 
 Fixed: canBuild() check failing and printing errors due to running client side with no data
 
-### Develoment Changes
+### Development Changes
 Added: Furnace recipe display for Debug GUI
 Added: Shaped crafting recipe display for Debug GUI
 

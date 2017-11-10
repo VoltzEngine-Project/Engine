@@ -1,6 +1,7 @@
 package com.builtbroken.test.json.loader;
 
 import com.builtbroken.mc.framework.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -18,12 +19,12 @@ public class TestLoader extends TestCase
     @Test
     public void testJarLoad() throws Exception
     {
-        File file = new File(System.getProperty("user.dir"), "src/test/resources/test.jar");
+        File file = new File(System.getProperty("user.dir"), "src/test/resources/test/test.jar");
 
         assertTrue(file.exists());
 
         Path path = Paths.get(file.getPath());
-        URI uri = new URI("jar", path.toUri().toString(),  null);
+        URI uri = new URI("jar", path.toUri().toString(), null);
 
         JsonContentLoader loader = new JsonContentLoader();
 
@@ -34,12 +35,12 @@ public class TestLoader extends TestCase
     @Test
     public void testJarLoadWithDot() throws Exception
     {
-        File file = new File(System.getProperty("user.dir"), "src/test/resources/.local/test.jar");
+        File file = new File(System.getProperty("user.dir"), "src/test/resources/test/.local/test.jar");
 
         assertTrue(file.exists());
 
         Path path = Paths.get(file.getPath());
-        URI uri = new URI("jar", path.toUri().toString(),  null);
+        URI uri = new URI("jar", path.toUri().toString(), null);
 
         JsonContentLoader loader = new JsonContentLoader();
 
@@ -48,18 +49,37 @@ public class TestLoader extends TestCase
     }
 
     @Test
-    public void testJarLoadWithFilePathSpace() throws Exception
+    public void testJarLoadWithUniqueChars() throws Exception
     {
-        File file = new File(System.getProperty("user.dir"), "src/test/resources/test test/test.jar");
+        for (String folderPath : new String[]{"[test]test", "{test}test", "test test", "test.test", "test_test", "test-test"})
+        {
+            File file = new File(System.getProperty("user.dir"), "src/test/resources/test/" + folderPath + "/test.jar");
+
+            assertTrue("No file with path: " + file, file.exists());
+
+            Path path = Paths.get(file.getPath());
+            URI uri = new URI("jar", path.toUri().toString(), null);
+
+            JsonContentLoader loader = new JsonContentLoader();
+
+            loader.loadResourcesFromPackage(uri, "content");
+            assertEquals("Failed for: " + folderPath, 1, loader.jsonEntries.size());
+        }
+    }
+
+    @Test
+    public void testJarPathDetector() throws Exception
+    {
+        File file = new File(System.getProperty("user.dir"), "src/test/resources/test/test.jar");
 
         assertTrue(file.exists());
 
         Path path = Paths.get(file.getPath());
-        URI uri = new URI("jar", path.toUri().toString(),  null);
+        URI uri = new URI("jar", path.toUri().toString() + "!/content/", null);
 
-        JsonContentLoader loader = new JsonContentLoader();
+        String[] files = JsonLoader.getResourceListing(uri.toURL());
 
-        loader.loadResourcesFromPackage(uri, "content");
-        assertEquals(1, loader.jsonEntries.size());
+        assertTrue(files != null);
+        assertEquals("content/test.json", files[0]);
     }
 }
