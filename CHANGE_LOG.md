@@ -6,6 +6,13 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.9.15 - 11/10/2017
+### Runtime Changes
+Fixed: issues with file paths crashing due to special characters [] {} %20
+
+### Development Changes
+Added: Apple Core to mods enum
+
 ## 1.9.14 - 11/3/2017
 ### Runtime Changes
 Added: Improved help command page count (page # -> page # of #)
