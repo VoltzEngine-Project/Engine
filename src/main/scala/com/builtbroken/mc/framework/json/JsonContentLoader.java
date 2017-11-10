@@ -771,8 +771,7 @@ public final class JsonContentLoader extends AbstractLoadable
             }
             if (url != null)
             {
-                URI uri = url.toURI();
-                loadResourcesFromPackage(uri, folder);
+                loadResourcesFromPackage(url);
             }
             else
             {
@@ -788,38 +787,43 @@ public final class JsonContentLoader extends AbstractLoadable
     /**
      * Loads package
      *
-     * @param folder - package your looking to load data from
      */
-    public void loadResourcesFromPackage(URI uri, String folder) throws Exception
+    public void loadResourcesFromPackage(URL url) throws Exception
     {
         try
         {
-            if ("jar".equals(uri.getScheme()))
+            if ("jar".equals(url.getProtocol()))
             {
                 debug.error("Jar detected, using secondary method to load resources.");
 
-                URI jar = new URI(uri.getScheme(), uri.getSchemeSpecificPart().replace("%20", " "), null);
-
-                Map<String, Object> env = new HashMap<>();
-                env.put("create", "true");
-                env.put("encoding", "UTF-8");
-
-                try (FileSystem fs = FileSystems.newFileSystem(jar, env, getClass().getClassLoader()))
+                List<String> files = JsonLoader.getResourceListing(url);
+                for(String file : files)
                 {
-                    walkPaths(fs.getPath(folder));
+                    Path nextPath = Paths.get(JsonLoader.getJarPath(url), file);
+                    String name = nextPath.getFileName().toString();
+                    if (name.lastIndexOf(".") > 1)
+                    {
+                        String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
+                        if (extensionsToLoad.contains(extension))
+                        {
+                            debug.log("Found " + name);
+                            JsonLoader.loadJson(nextPath.toAbsolutePath().toString(), Files.newBufferedReader(nextPath), jsonEntries);
+                        }
+                    }
                 }
             }
             else
             {
-                walkPaths(Paths.get(uri));
+                walkPaths(Paths.get(url.toURI()));
             }
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Failed to walk files from URI = " + uri, e);
+            throw new RuntimeException("Failed to detect files from URL = " + url, e);
         }
     }
 
+    //Old method, no longer used for .jars... keep for IDE usage
     private void walkPaths(Path filePath) throws IOException
     {
         debug.start("Loading files from " + filePath);

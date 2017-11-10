@@ -323,13 +323,13 @@ public class JsonLoader
     }
 
     //Based on http://www.uofr.net/~greg/java/get-resource-listing.html
-    public static String[] getResourceListing(URL resource) throws URISyntaxException, IOException
+    public static List<String> getResourceListing(URL resource) throws URISyntaxException, IOException
     {
-        Set<String> result = new HashSet();
+        List<String> result = new LinkedList(); //TODO check if this is faster than array list
         if (resource.getProtocol().equals("jar"))
         {
             //Get path to jar file
-            String jarPath = resource.getPath().substring(5, resource.getPath().indexOf("!"));
+            String jarPath = getJarPath(resource);
 
             //open jar and get entities
             JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
@@ -339,12 +339,18 @@ public class JsonLoader
             while (entries.hasMoreElements())
             {
                 String filePath = entries.nextElement().getName();
-                if (!filePath.endsWith("/"))
+                if (!filePath.endsWith("/") && !result.contains(filePath))
                 {
                     result.add(filePath);
                 }
             }
         }
-        return result.toArray(new String[result.size()]);
+        return result;
+    }
+
+    public static String getJarPath(URL resource)
+    {
+        String path = resource.toExternalForm().replace("jar:", "").replace("file:", "");
+        return path.substring(1, path.indexOf("!"));
     }
 }
