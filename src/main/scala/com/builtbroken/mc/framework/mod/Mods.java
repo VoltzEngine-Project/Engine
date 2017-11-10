@@ -28,7 +28,8 @@ public enum Mods
     NEI("NotEnoughItems"),
     //https://github.com/aidancbrady/Mekanism/blob/master/src/main/java/mekanism/common/Mekanism.java
     MEKANISM("Mekanism"),
-    PROJECT_E("ProjectE");
+    PROJECT_E("ProjectE"),
+    APPLE_CORE("AppleCore");
 
     public final String mod_id;
 
