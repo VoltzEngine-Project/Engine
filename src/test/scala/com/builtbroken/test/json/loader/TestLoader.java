@@ -16,41 +16,11 @@ import java.util.List;
 public class TestLoader extends TestCase
 {
     @Test
-    public void testJarLoad() throws Exception
+    public void testJarFilePathLoading() throws Exception
     {
-        File file = new File(System.getProperty("user.dir"), "src/test/resources/test/test.jar");
-
-        assertTrue(file.exists());
-
-        assertTrue("No file with path: " + file, file.exists());
-
-        JsonContentLoader loader = new JsonContentLoader();
-
-        loader.loadResourcesFromPackage(new URL("jar:file:/" + file.getAbsolutePath() + "!/content"));
-        assertEquals(1, loader.jsonEntries.size());
-    }
-
-    @Test
-    public void testJarLoadWithDot() throws Exception
-    {
-        File file = new File(System.getProperty("user.dir"), "src/test/resources/test/.local/test.jar");
-
-        assertTrue(file.exists());
-
-        assertTrue("No file with path: " + file, file.exists());
-
-        JsonContentLoader loader = new JsonContentLoader();
-
-        loader.loadResourcesFromPackage(new URL("jar:file:/" + file.getAbsolutePath() + "!/content"));
-        assertEquals(1, loader.jsonEntries.size());
-    }
-
-    @Test
-    public void testJarLoadWithUniqueChars() throws Exception
-    {
-        for (String folderPath : new String[]{"[test]test", "{test}test", "test test", "test.test", "test_test", "test-test"})
+        for (String folderPath : new String[]{"", "/[test]test", "/{test}test", "/test test", "/test.test", "/test_test", "/test-test", "/.local"})
         {
-            File file = new File(System.getProperty("user.dir"), "src/test/resources/test/" + folderPath + "/test.jar");
+            File file = new File(System.getProperty("user.dir"), "src/test/resources/test" + folderPath + "/test.jar");
 
             assertTrue("No file with path: " + file, file.exists());
 

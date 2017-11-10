@@ -32,11 +32,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.file.*;
 import java.util.*;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
 /**
@@ -786,7 +790,6 @@ public final class JsonContentLoader extends AbstractLoadable
 
     /**
      * Loads package
-     *
      */
     public void loadResourcesFromPackage(URL url) throws Exception
     {
@@ -794,21 +797,27 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             if ("jar".equals(url.getProtocol()))
             {
-                debug.error("Jar detected, using secondary method to load resources.");
+                debug.log("Jar detected, using secondary method to load resources.");
 
-                List<String> files = JsonLoader.getResourceListing(url);
-                for(String file : files)
+                //Get path to jar file
+                String jarPath = JsonLoader.getJarPath(url);
+
+                //open jar and get entities
+                JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+                Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+
+                List<String> listOfFilesParsed = new LinkedList();
+                //Loop entries
+                while (entries.hasMoreElements())
                 {
-                    Path nextPath = Paths.get(JsonLoader.getJarPath(url), file);
-                    String name = nextPath.getFileName().toString();
-                    if (name.lastIndexOf(".") > 1)
+                    final JarEntry entry = entries.nextElement();
+                    final String name = entry.getName();
+                    final String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
+                    if (extensionsToLoad.contains(extension))
                     {
-                        String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
-                        if (extensionsToLoad.contains(extension))
-                        {
-                            debug.log("Found " + name);
-                            JsonLoader.loadJson(nextPath.toAbsolutePath().toString(), Files.newBufferedReader(nextPath), jsonEntries);
-                        }
+                        listOfFilesParsed.add(name);
+                        debug.log("Found " + name);
+                        JsonLoader.loadJson(url.toExternalForm() + "/" + name, new InputStreamReader(jar.getInputStream(entry)), jsonEntries);
                     }
                 }
             }
