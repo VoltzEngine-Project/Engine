@@ -316,7 +316,18 @@ public class BlockUtility
      */
     public static byte determineRotation(double rotationYaw)
     {
-        int rotation = MathHelper.floor_double(rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        return rotationToDirection(getRotation(rotationYaw));
+    }
+
+    /**
+     * Converts a rotation value to a {@link ForgeDirection} or {@link com.builtbroken.mc.data.Direction} value index
+     *
+     * @param rotation - 0-3, will % to ensure is within value range
+     * @return 2-5
+     */
+    public static byte rotationToDirection(int rotation)
+    {
+        rotation = rotation % 4;
         if (rotation == 0)
         {
             return 3;
@@ -337,6 +348,53 @@ public class BlockUtility
         {
             return 0;
         }
+    }
+
+    public static byte directionToRotation(ForgeDirection direction)
+    {
+        return directionToRotation(direction.ordinal());
+    }
+
+    /**
+     * Converts a {@link ForgeDirection} or {@link com.builtbroken.mc.data.Direction} value index
+     * into a rotation value
+     *
+     * @param directionIndex 2-5
+     * @return 0-3, will return 0 if value is incorrect state (UP, DOWN, UNKNOWN)
+     */
+    public static byte directionToRotation(int directionIndex)
+    {
+        if (directionIndex == 3)
+        {
+            return 0;
+        }
+        else if (directionIndex == 4)
+        {
+            return 1;
+        }
+        else if (directionIndex == 2)
+        {
+            return 2;
+        }
+        else if (directionIndex == 5)
+        {
+            return 3;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
+     * Gets the rotation from the entity
+     *
+     * @param rotationYaw - rotation of the object
+     * @return 0-3
+     */
+    public static int getRotation(double rotationYaw)
+    {
+        return MathHelper.floor_double(rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
     }
 
     /**
