@@ -1,6 +1,6 @@
 package com.builtbroken.mc.client.json.imp;
 
-import com.builtbroken.mc.client.json.models.ModelData;
+import com.builtbroken.mc.client.json.models.ModelCustomData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -23,7 +23,7 @@ public interface IModelState extends IRenderState
     EulerAngle getRotation();
 
     /** Model to use */
-    ModelData getModel();
+    ModelCustomData getModel();
 
     /**
      * Gets the parts to render

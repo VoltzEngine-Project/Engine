@@ -2,7 +2,7 @@ package com.builtbroken.mc.client.json;
 
 import com.builtbroken.mc.client.json.audio.AudioData;
 import com.builtbroken.mc.client.json.imp.IEffectData;
-import com.builtbroken.mc.client.json.models.ModelData;
+import com.builtbroken.mc.client.json.models.ModelCustomData;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.core.Engine;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class ClientDataHandler
 {
     /** Model key to model data */
-    public HashMap<String, ModelData> models = new HashMap();
+    public HashMap<String, ModelCustomData> models = new HashMap();
     /** Texture key to texture data */
     public HashMap<String, TextureData> textures = new HashMap();
     /** Render key to render data */
@@ -46,7 +46,7 @@ public class ClientDataHandler
         textures.put(key.toLowerCase(), texture);
     }
 
-    public void addModel(String key, ModelData model)
+    public void addModel(String key, ModelCustomData model)
     {
         if (models.containsKey(key.toLowerCase()))
         {
@@ -101,7 +101,7 @@ public class ClientDataHandler
         return renderData.get(key.toLowerCase());
     }
 
-    public ModelData getModel(String key)
+    public ModelCustomData getModel(String key)
     {
         if (key == null || key.isEmpty())
         {

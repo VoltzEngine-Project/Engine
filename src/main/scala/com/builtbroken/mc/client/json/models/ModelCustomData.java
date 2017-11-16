@@ -17,7 +17,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 11/23/2016.
  */
-public class ModelData extends JsonGenData implements IJsonDebugDisplay
+public class ModelCustomData extends JsonGenData implements IJsonDebugDisplay
 {
     String key;
     String domain;
@@ -28,7 +28,7 @@ public class ModelData extends JsonGenData implements IJsonDebugDisplay
     private int errors = 0;
     private long lastError;
 
-    public ModelData(IJsonProcessor processor, String key, String domain, String name)
+    public ModelCustomData(IJsonProcessor processor, String key, String domain, String name)
     {
         super(processor);
         this.key = key;

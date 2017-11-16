@@ -5,7 +5,7 @@ import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
-import com.builtbroken.mc.client.json.models.ModelData;
+import com.builtbroken.mc.client.json.models.ModelCustomData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -53,7 +53,7 @@ public class ModelState extends RenderStateTexture implements IModelState
     public boolean render(boolean subRender, float yaw, float pitch, float roll)
     {
         TextureData textureData = getTexture();
-        ModelData modelData = getModel();
+        ModelCustomData modelData = getModel();
         if (modelData != null && modelData.getModel() != null)
         {
             //Starts rendering by storing previous matrix
@@ -283,9 +283,9 @@ public class ModelState extends RenderStateTexture implements IModelState
     }
 
     @Override
-    public ModelData getModel()
+    public ModelCustomData getModel()
     {
-        ModelData data = ClientDataHandler.INSTANCE.getModel(modelID);
+        ModelCustomData data = ClientDataHandler.INSTANCE.getModel(modelID);
         if (data != null && data.getModel() != null)
         {
             return data;
