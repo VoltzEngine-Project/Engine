@@ -351,6 +351,11 @@ public class JsonLoader
     public static String getJarPath(URL resource)
     {
         String path = resource.toExternalForm().replace("jar:", "").replace("file:", "");
+        //Fix for linux
+        if(path.indexOf(":") > 5)
+        {
+            path = "/" + path;
+        }
         return path.substring(1, path.indexOf("!"));
     }
 }

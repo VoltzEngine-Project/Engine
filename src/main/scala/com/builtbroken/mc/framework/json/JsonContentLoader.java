@@ -797,7 +797,7 @@ public final class JsonContentLoader extends AbstractLoadable
         {
             if ("jar".equals(url.getProtocol()))
             {
-                debug.log("Jar detected, using secondary method to load resources.");
+                debug.log("Jar detected, using secondary method to load resources. URL = " + url);
 
                 //Get path to jar file
                 String jarPath = JsonLoader.getJarPath(url);
