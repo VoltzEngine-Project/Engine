@@ -793,17 +793,22 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void loadResourcesFromPackage(URL url) throws Exception
     {
+        debug.log("Loading resources from URL[" + url + "]");
         try
         {
             if ("jar".equals(url.getProtocol()))
             {
-                debug.log("Jar detected, using secondary method to load resources. URL = " + url);
+                debug.log("Jar detected, loading using JarZip entry list.");
 
                 //Get path to jar file
                 String jarPath = JsonLoader.getJarPath(url);
+                String decodedPath = URLDecoder.decode(jarPath, "UTF-8");
+
+                debug.log("\tPath: " + jarPath);
+                debug.log("\tDecoded: " + decodedPath);
 
                 //open jar and get entities
-                JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+                JarFile jar = new JarFile(decodedPath);
                 Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
 
                 List<String> listOfFilesParsed = new LinkedList();

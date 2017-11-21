@@ -353,7 +353,7 @@ public class JsonLoader
         String path = resource.toExternalForm().replace("jar:", "").replace("file:", "");
         path = path.substring(1, path.indexOf("!")); //TODO fix need for starting at 1 for windows, as this is breaking linux paths
         //Fix for linux
-        if(!path.startsWith(File.separator) && path.indexOf(":") > 5)
+        if(!path.startsWith(File.separator) && (path.indexOf(":") > 5 || path.indexOf(":") < 0))
         {
             path = File.separator + path;
         }
