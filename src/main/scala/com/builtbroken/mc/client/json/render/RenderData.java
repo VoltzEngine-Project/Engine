@@ -31,6 +31,8 @@ public class RenderData extends JsonGenData implements IJsonDebugDisplay
     /** Type of render, defaults to VE render code */
     public final String renderType;
 
+    private int spriteIndexForItems = -1;
+
     protected int itemRenderLayers = 1;
     protected HashMap<Integer, Integer> itemRenderLayerPerMeta = new HashMap();
 
@@ -165,6 +167,16 @@ public class RenderData extends JsonGenData implements IJsonDebugDisplay
     public void setItemLayers(int meta, int itemLayers)
     {
         this.itemRenderLayerPerMeta.put(meta, itemLayers);
+    }
+
+    public int getSpriteIndexForItems()
+    {
+        return spriteIndexForItems;
+    }
+
+    public void setSpriteIndexForItems(int spriteIndexForItems)
+    {
+        this.spriteIndexForItems = spriteIndexForItems;
     }
 
     @Override

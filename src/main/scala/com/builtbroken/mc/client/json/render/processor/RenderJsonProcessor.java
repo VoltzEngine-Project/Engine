@@ -86,6 +86,11 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
             data.setItemLayers(renderDataJSON.get("renderLayers").getAsInt());
         }
 
+        if(renderDataJSON.has("spriteIndexForItems"))
+        {
+            data.setSpriteIndexForItems(renderDataJSON.get("spriteIndexForItems").getAsInt());
+        }
+
         if(renderDataJSON.has("renderLayerByState"))
         {
             JsonArray array = renderDataJSON.getAsJsonArray("renderLayerByState");
