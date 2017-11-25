@@ -6,6 +6,32 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.9.16 - 11/25/2017
+### Runtime Changes
+Fixed: issues with JSON loader using the wrong path on linux
+Fixed: block localization containing ${meta} causing some mods to fail
+Fixed: issues with block localization not working in some cases
+Fixed: VEP effects being run as JSON effects
+Fixed: issues with blocks returning light levels over 15
+Fixed: icon issues with ItemBlocks using JSON for rendering
+Fixed: inventory helpers not respecting max slot capacity
+Added: sub type for dev tool to test metadata only
+
+### Development Changes
+Added: new Rect constructor that takes the corner and size from the corner
+Added: add method for direction and a scale of that direction. Allows for incremental movements ex. (North, 0.1)
+Added: nbt saving to BlockPos
+Added: rotation listener that uses 0-3 instead of 2-5 as used by MC
+Added: code to bypass a block only rendering in a normal or alpha pass
+Added: json to note to render a block in several passes
+Added: json and code to set texture sheet ID to use for getting icons for ItemBlocks
+Added: host field to GuiContainerBase, uses generics to allow easier implementation
+Added: a few more rotation helpers to convert rotation to direction and back
+Added: early framework for JSON rendering static blocks
+Changed: basic inventory to no longer fire inventory change events while loading from save
+Renamed: RotationListener to RotationListnerMC to reduce confusion between two different classes
+
+
 ## 1.9.15 - 11/10/2017
 ### Runtime Changes
 Fixed: issues with file paths crashing due to special characters [] {} %20
