@@ -2,19 +2,18 @@ package com.builtbroken.mc.core.network.netty;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.api.data.IPacket;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketEntity;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
-import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
+import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -188,21 +187,29 @@ public class PacketManager extends AbstractLoadable
     public void sendToAllAround(IPacket message, World world, double x, double y, double z, double range)
     {
         if (world != null)
+        {
             sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, range));
+        }
     }
 
-    @SideOnly(Side.CLIENT)
     public void sendToServer(IPacket packet)
     {
         //Null check is for JUnit
         if (channelEnumMap != null)
         {
-            this.channelEnumMap.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-            this.channelEnumMap.get(Side.CLIENT).writeAndFlush(packet);
+            if (this.channelEnumMap.get(Side.CLIENT) != null)
+            {
+                this.channelEnumMap.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+                this.channelEnumMap.get(Side.CLIENT).writeAndFlush(packet);
+            }
+            else
+            {
+                Engine.error("PacketManager#sendToServer(packet): Attempted to fire client to server packet on server, this is not allowed. Packet = " + packet);
+            }
         }
         else
         {
-            Engine.error("Packet sent to server");
+            Engine.error("PacketManager#sendToServer(packet): Channel enum map is empty, can't send packet. Packet = " + packet);
         }
     }
 }
