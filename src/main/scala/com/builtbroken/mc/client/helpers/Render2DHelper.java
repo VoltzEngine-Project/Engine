@@ -1,5 +1,6 @@
 package com.builtbroken.mc.client.helpers;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -244,5 +245,22 @@ public class Render2DHelper
         tessellator.addVertexWithUV((double) (p_73729_1_ + p_73729_5_), (double) (p_73729_2_ + 0), (double) zLevel, (double) ((float) (p_73729_3_ + p_73729_5_) * f), (double) ((float) (p_73729_4_ + 0) * f1));
         tessellator.addVertexWithUV((double) (p_73729_1_ + 0), (double) (p_73729_2_ + 0), (double) zLevel, (double) ((float) (p_73729_3_ + 0) * f), (double) ((float) (p_73729_4_ + 0) * f1));
         tessellator.draw();
+    }
+
+    /**
+     * Used by the overlay to render text with shadow behind the text
+     * @param text
+     * @param x
+     * @param y
+     * @param colorRGB
+     */
+    public static void renderTextWithShadow(String text, int x, int y, int colorRGB)
+    {
+        FontRenderer fontrenderer = Minecraft.getMinecraft().fontRenderer;
+        fontrenderer.drawString(text, x + 1, y, 0);
+        fontrenderer.drawString(text, x - 1, y, 0);
+        fontrenderer.drawString(text, x, y + 1, 0);
+        fontrenderer.drawString(text, x, y - 1, 0);
+        fontrenderer.drawString(text, x, y, colorRGB);
     }
 }
