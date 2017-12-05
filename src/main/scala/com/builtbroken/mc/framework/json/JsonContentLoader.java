@@ -39,6 +39,7 @@ import java.net.URLDecoder;
 import java.nio.file.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
@@ -308,16 +309,23 @@ public final class JsonContentLoader extends AbstractLoadable
      */
     public void claimContent(IJsonGenMod mod)
     {
+        runActionOnGeneratedObjects(object -> {
+            if (object.getMod() != null && object.getMod().equals(mod.getDomain()))
+            {
+                object.register(mod, mod.getJsonContentManager());
+            }
+        });
+    }
+
+    public void runActionOnGeneratedObjects(Consumer<IJsonGenObject> c)
+    {
         for (List<IJsonGenObject> list : generatedObjects.values())
         {
             if (list != null && !list.isEmpty())
             {
                 for (IJsonGenObject object : list)
                 {
-                    if (object.getMod() != null && object.getMod().equals(mod.getDomain()))
-                    {
-                        object.register(mod, mod.getJsonContentManager());
-                    }
+                    c.accept(object);
                 }
             }
         }
