@@ -57,6 +57,18 @@ public interface IDestroyedListener extends ITileEventListener
         return true;
     }
 
+    /**
+     * Can the player harvest the block at the location using silk touch enchantment.
+     *
+     * @param player - player who is harvesting the block
+     * @param meta   - meta value of the block
+     * @return true if can harvest
+     */
+    default boolean canSilkHarvest(EntityPlayer player, int meta)
+    {
+        return false;
+    }
+
 
     @Override
     default String getListenerKey()

@@ -55,6 +55,19 @@ public interface IBlockStackListener extends ITileEventListener
 
 
     /**
+     * Gets the itemstack to drop when a player silk harvests the block
+     *
+     * @param player
+     * @param meta
+     * @return true to disable normal drop
+     */
+    default boolean collectSilkHarvestDrops(List<ItemStack> drops, EntityPlayer player, int meta)
+    {
+        return false;
+    }
+
+
+    /**
      * Gets the block to show int he creative tab
      * This is a client only method
      *
