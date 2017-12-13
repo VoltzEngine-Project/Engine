@@ -1,11 +1,12 @@
 package com.builtbroken.mc.framework.json.conversion.data.energy;
 
 import com.builtbroken.mc.api.data.energy.IEnergyBufferData;
+import com.builtbroken.mc.framework.energy.data.EnergyBufferData;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
-import com.builtbroken.mc.framework.energy.data.EnergyBufferData;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -22,6 +23,18 @@ public class JsonConverterEnergyBufferData extends JsonConverter<IEnergyBufferDa
     public IEnergyBufferData convert(JsonElement element, String... args)
     {
         return fromJson(element);
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if (data instanceof EnergyBufferData)
+        {
+            JsonObject object = new JsonObject();
+            object.add("power", new JsonPrimitive(((EnergyBufferData) data).getEnergyCapacity()));
+            return object;
+        }
+        return null;
     }
 
     public static IEnergyBufferData fromJson(JsonElement element)

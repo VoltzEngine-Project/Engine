@@ -5,6 +5,7 @@ import com.builtbroken.mc.framework.json.data.JsonItemEntry;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.item.ItemStack;
 
 /**
  * Used to convert json data to pos objects
@@ -23,6 +24,20 @@ public class JsonConverterItem extends JsonConverter<JsonItemEntry>
     public JsonItemEntry convert(JsonElement element, String... args)
     {
         return fromJson(element.getAsJsonObject());
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if (data instanceof JsonItemEntry)
+        {
+
+        }
+        else if (data instanceof ItemStack)
+        {
+
+        }
+        return null;
     }
 
     public static JsonItemEntry fromJson(JsonObject itemStackObject)
@@ -50,11 +65,11 @@ public class JsonConverterItem extends JsonConverter<JsonItemEntry>
             entry.count = itemStackObject.getAsJsonPrimitive("count").getAsInt();
             if (entry.count < 0)
             {
-                throw new RuntimeException("Recipe output count must be above zero");
+                throw new RuntimeException("Item count must be above zero");
             }
             else if (entry.count > 64)
             {
-                throw new RuntimeException("Recipe output count must be below 64 as this is the max stacksize for this version of Minecraft.");
+                throw new RuntimeException("Item count is limited to 64");
             }
         }
 
