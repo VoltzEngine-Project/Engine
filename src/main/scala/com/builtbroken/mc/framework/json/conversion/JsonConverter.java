@@ -27,9 +27,9 @@ public abstract class JsonConverter<I extends Object>
     {
         this.keys = new ArrayList();
         this.keys.add(string);
-        if(extraKeys != null)
+        if (extraKeys != null)
         {
-            for(String key : extraKeys)
+            for (String key : extraKeys)
             {
                 this.keys.add(key);
             }
@@ -61,4 +61,6 @@ public abstract class JsonConverter<I extends Object>
     {
         return JsonLoader.convertElement(type, data, args);
     }
+
+    public abstract JsonElement build(String type, Object data, String... args);
 }

@@ -3,7 +3,6 @@ package com.builtbroken.mc.framework.json.loading;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
-import com.builtbroken.mc.framework.json.override.JsonOverride;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -12,6 +11,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,11 +21,13 @@ import java.util.List;
  */
 public class JsonProcessorInjectionMap<O extends Object>
 {
-    public final HashMap<String, Field> injectionFields = new HashMap();
-    public final HashMap<String, Method> injectionMethods = new HashMap();
+    public final List<String> injectionKeys = new ArrayList();
 
-    public final HashMap<String, String> injectionTypes = new HashMap();
-    public final HashMap<String, String[]> injectionArgs = new HashMap();
+    public final HashMap<String, Field> jsonDataFields = new HashMap();
+    public final HashMap<String, Method> jsonDataSetters = new HashMap();
+    public final HashMap<String, Method> jsonDataGetters = new HashMap();
+
+    public final HashMap<String, JsonProcessorData> jsonDataAnnotation = new HashMap();
 
     public JsonProcessorInjectionMap(Class clazz)
     {
@@ -59,12 +61,13 @@ public class JsonProcessorInjectionMap<O extends Object>
                                 if (keyValue != null)
                                 {
                                     final String key = keyValue.toLowerCase();
-                                    if (injectionFields.containsKey(key))
+                                    if (jsonDataFields.containsKey(key))
                                     {
-                                        throw new NullPointerException("Duplicate key detected for  " + field + " owned by " + injectionFields.get(key));
+                                        throw new NullPointerException("Duplicate key detected for  " + field + " owned by " + jsonDataFields.get(key));
                                     }
 
-                                    injectionFields.put(key, field);
+                                    jsonDataFields.put(key, field);
+                                    injectionKeys.add(key);
                                     cacheAnnotationData(key, jAnno);
                                 }
                                 else
@@ -93,26 +96,29 @@ public class JsonProcessorInjectionMap<O extends Object>
                     //Find our annotation, allow multiple for different keys
                     if (annotation instanceof JsonProcessorData)
                     {
+                        JsonProcessorData jAnno = ((JsonProcessorData) annotation);
                         if (method.getParameterCount() != 1)
                         {
                             throw new NullPointerException("Method " + method + " should only have 1 parameter to use JsonProcessorData tag");
                         }
+
                         //Get keys and add each
-                        final String[] values = ((JsonProcessorData) annotation).value();
-                        if (values != null)
+                        final String[] values = jAnno.value();
+                        if (values != null && (loadServer && jAnno.loadForServer() || loadClient && jAnno.loadForClient()))
                         {
                             for (final String keyValue : values)
                             {
                                 if (keyValue != null)
                                 {
                                     final String key = keyValue.toLowerCase();
-                                    if (injectionMethods.containsKey(key))
+                                    if (jsonDataSetters.containsKey(key))
                                     {
-                                        throw new NullPointerException("Duplicate key detected for  " + method + " owned by " + injectionMethods.get(key));
+                                        throw new NullPointerException("Duplicate key detected for  " + method + " owned by " + jsonDataSetters.get(key));
                                     }
 
-                                    injectionMethods.put(key, method);
-                                    cacheAnnotationData(key, (JsonProcessorData) annotation);
+                                    jsonDataSetters.put(key, method);
+                                    injectionKeys.add(key);
+                                    cacheAnnotationData(key, jAnno);
                                 }
                                 else
                                 {
@@ -123,6 +129,35 @@ public class JsonProcessorInjectionMap<O extends Object>
                         else
                         {
                             throw new NullPointerException("Value for JsonProcessorData was null on " + method);
+                        }
+                    }
+                    else if(annotation instanceof JsonProcessorDataGetter)
+                    {
+                        JsonProcessorDataGetter jAnno = ((JsonProcessorDataGetter) annotation);
+                        //Get keys and add each
+                        final String[] values = jAnno.value();
+                        if (values != null)
+                        {
+                            for (final String keyValue : values)
+                            {
+                                if (keyValue != null)
+                                {
+                                    final String key = keyValue.toLowerCase();
+                                    if (jsonDataGetters.containsKey(key))
+                                    {
+                                        throw new NullPointerException("Duplicate key detected for  " + method + " owned by " + jsonDataGetters.get(key));
+                                    }
+                                    jsonDataGetters.put(key, method);
+                                }
+                                else
+                                {
+                                    throw new NullPointerException("Value for JsonProcessorDataGetter was null on " + method);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new NullPointerException("Value for JsonProcessorDataGetter was null on " + method);
                         }
                     }
                 }
@@ -138,58 +173,41 @@ public class JsonProcessorInjectionMap<O extends Object>
      */
     protected void cacheAnnotationData(String key, JsonProcessorData annotation)
     {
-        //Save type
-        if (annotation.type() != null && !annotation.type().equals("unknown"))
+        jsonDataAnnotation.put(key.toLowerCase(), annotation);
+    }
+
+    protected String getInjectionType(String key)
+    {
+        if (jsonDataAnnotation.containsKey(key))
         {
-            injectionTypes.put(key.toLowerCase(), annotation.type().toLowerCase());
+            return jsonDataAnnotation.get(key).type();
         }
-        //Save args
-        if (annotation.args() != null && annotation.args().length > 0 && !annotation.args()[0].equals(""))
+        return null;
+    }
+
+    protected String[] getInjectionArgs(String key)
+    {
+        if (jsonDataAnnotation.containsKey(key))
         {
-            injectionArgs.put(key.toLowerCase(), annotation.args());
+            return jsonDataAnnotation.get(key).args();
         }
-        //TODO convert to object or save annotation itself into the map for reference
+        return null;
+    }
+
+    protected boolean allowsRunTimeChanges(String key)
+    {
+        if (jsonDataAnnotation.containsKey(key))
+        {
+            return jsonDataAnnotation.get(key).allowRuntimeChanges();
+        }
+        return false;
     }
 
     public boolean supports(String keyValue, boolean override, String overrideType)
     {
-        if (injectionFields.containsKey(keyValue) || injectionMethods.containsKey(keyValue))
+        if (jsonDataFields.containsKey(keyValue) || jsonDataSetters.containsKey(keyValue))
         {
-            if (override)
-            {
-                if (injectionFields.containsKey(keyValue))
-                {
-                    Field field = injectionFields.get(keyValue);
-                    Annotation[] annotations = field.getDeclaredAnnotations();
-                    if (annotations != null && annotations.length > 0)
-                    {
-                        for (Annotation annotation : annotations)
-                        {
-                            if (annotation instanceof JsonOverride)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                if (injectionMethods.containsKey(keyValue))
-                {
-                    Method method = injectionMethods.get(keyValue);
-                    Annotation[] annotations = method.getDeclaredAnnotations();
-                    if (annotations != null && annotations.length > 0)
-                    {
-                        for (Annotation annotation : annotations)
-                        {
-                            if (annotation instanceof JsonOverride)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
-            return true;
+            return !override || allowsRunTimeChanges(keyValue);
         }
         return false;
     }
@@ -231,9 +249,9 @@ public class JsonProcessorInjectionMap<O extends Object>
                         if (((JsonPrimitive) valueToInject).isBoolean())
                         {
                             Boolean bool = ((JsonPrimitive) valueToInject).getAsBoolean();
-                            if (injectionFields.containsKey(injectionKeyID))
+                            if (jsonDataFields.containsKey(injectionKeyID))
                             {
-                                Field field = injectionFields.get(injectionKeyID);
+                                Field field = jsonDataFields.get(injectionKeyID);
                                 try
                                 {
                                     field.setAccessible(true);
@@ -251,7 +269,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                             }
                             else
                             {
-                                Method method = injectionMethods.get(injectionKeyID);
+                                Method method = jsonDataSetters.get(injectionKeyID);
                                 try
                                 {
                                     method.setAccessible(true);
@@ -274,13 +292,13 @@ public class JsonProcessorInjectionMap<O extends Object>
                         }
                         else if (((JsonPrimitive) valueToInject).isNumber())
                         {
-                            if (injectionFields.containsKey(injectionKeyID))
+                            if (jsonDataFields.containsKey(injectionKeyID))
                             {
-                                Field field = injectionFields.get(injectionKeyID);
+                                Field field = jsonDataFields.get(injectionKeyID);
                                 try
                                 {
                                     field.setAccessible(true);
-                                    String type = injectionTypes.get(injectionKeyID);
+                                    String type = getInjectionType(injectionKeyID);
                                     if (type != null)
                                     {
                                         if (type.equals("int") || type.equals("integer"))
@@ -325,11 +343,11 @@ public class JsonProcessorInjectionMap<O extends Object>
                             }
                             else
                             {
-                                Method method = injectionMethods.get(injectionKeyID);
+                                Method method = jsonDataSetters.get(injectionKeyID);
                                 try
                                 {
                                     method.setAccessible(true);
-                                    String type = injectionTypes.get(injectionKeyID);
+                                    String type = getInjectionType(injectionKeyID);
                                     if (type != null)
                                     {
                                         if (type.equals("int") || type.equals("integer"))
@@ -389,19 +407,19 @@ public class JsonProcessorInjectionMap<O extends Object>
                     }
                     else
                     {
-                        if (injectionFields.containsKey(injectionKeyID))
+                        if (jsonDataFields.containsKey(injectionKeyID))
                         {
-                            Field field = injectionFields.get(injectionKeyID);
+                            Field field = jsonDataFields.get(injectionKeyID);
                             field.setAccessible(true);
                             try
                             {
-                                String type = injectionTypes.get(injectionKeyID);
+                                String type = getInjectionType(injectionKeyID);
                                 if (type != null && JsonLoader.hasConverterFor(type))
                                 {
                                     JsonConverter converter = JsonLoader.getConversionHandler(type);
                                     if (converter != null)
                                     {
-                                        Object conversion = converter.convert((JsonElement) valueToInject, injectionArgs.get(injectionKeyID));
+                                        Object conversion = converter.convert((JsonElement) valueToInject, getInjectionArgs(injectionKeyID));
                                         if (conversion != null)
                                         {
                                             field.set(objectToInjection, conversion);
@@ -433,17 +451,17 @@ public class JsonProcessorInjectionMap<O extends Object>
                         }
                         else
                         {
-                            Method method = injectionMethods.get(injectionKeyID);
+                            Method method = jsonDataSetters.get(injectionKeyID);
                             try
                             {
                                 method.setAccessible(true);
-                                String type = injectionTypes.get(injectionKeyID);
+                                String type = getInjectionType(injectionKeyID);
                                 if (type != null && JsonLoader.hasConverterFor(type))
                                 {
                                     JsonConverter converter = JsonLoader.getConversionHandler(type);
                                     if (converter != null)
                                     {
-                                        Object conversion = converter.convert((JsonElement) valueToInject, injectionArgs.get(injectionKeyID));
+                                        Object conversion = converter.convert((JsonElement) valueToInject, getInjectionArgs(injectionKeyID));
                                         if (conversion != null)
                                         {
                                             method.invoke(objectToInjection, conversion);
@@ -481,9 +499,9 @@ public class JsonProcessorInjectionMap<O extends Object>
                 }
                 else if (valueToInject instanceof String)
                 {
-                    if (injectionFields.containsKey(injectionKeyID))
+                    if (jsonDataFields.containsKey(injectionKeyID))
                     {
-                        Field field = injectionFields.get(injectionKeyID);
+                        Field field = jsonDataFields.get(injectionKeyID);
                         try
                         {
                             field.setAccessible(true);
@@ -501,7 +519,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                     }
                     else
                     {
-                        Method method = injectionMethods.get(injectionKeyID);
+                        Method method = jsonDataSetters.get(injectionKeyID);
                         try
                         {
                             method.setAccessible(true);
@@ -522,9 +540,9 @@ public class JsonProcessorInjectionMap<O extends Object>
                         }
                     }
                 }
-                else if (injectionFields.containsKey(injectionKeyID))
+                else if (jsonDataFields.containsKey(injectionKeyID))
                 {
-                    Field field = injectionFields.get(injectionKeyID);
+                    Field field = jsonDataFields.get(injectionKeyID);
                     try
                     {
                         field.setAccessible(true);
@@ -542,7 +560,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                 }
                 else
                 {
-                    Method method = injectionMethods.get(injectionKeyID);
+                    Method method = jsonDataSetters.get(injectionKeyID);
                     try
                     {
                         method.setAccessible(true);
@@ -573,7 +591,7 @@ public class JsonProcessorInjectionMap<O extends Object>
 
     public <D extends IJsonGenObject> void enforceRequired(D objectToInject) throws IllegalAccessException
     {
-        for (Field field : injectionFields.values())
+        for (Field field : jsonDataFields.values())
         {
             Annotation[] annotations = field.getDeclaredAnnotations();
             if (annotations != null && annotations.length > 0)

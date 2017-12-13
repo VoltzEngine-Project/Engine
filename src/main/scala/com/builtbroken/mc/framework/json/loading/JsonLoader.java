@@ -137,6 +137,27 @@ public class JsonLoader
     }
 
     /**
+     * Helper method for getting {@link JsonLoader#getConversionHandler(String)} and
+     * call {@link JsonConverter#build(String, Object, String...)} for the type given.
+     *
+     * @param type - type (int, double, pos, block, item, etc)
+     * @param data - data to build into JSON
+     * @param args - arguments to pass into the converter, see each converter for usage
+     * @return JSON element representing the object
+     * @throws Exception if data is invalid for the conversion type
+     */
+    public static JsonElement buildElement(String type, Object data, String... args)
+    {
+        //Try converter set first
+        JsonConverter converter = JsonLoader.getConversionHandler(type);
+        if (converter != null)
+        {
+            return converter.build(type, data, args);
+        }
+        return null;
+    }
+
+    /**
      * Loads a json file from the resource path
      *
      * @param resource - resource location
@@ -353,7 +374,7 @@ public class JsonLoader
         String path = resource.toExternalForm().replace("jar:", "").replace("file:", "");
         path = path.substring(1, path.indexOf("!")); //TODO fix need for starting at 1 for windows, as this is breaking linux paths
         //Fix for linux
-        if(!path.startsWith(File.separator) && (path.indexOf(":") > 5 || path.indexOf(":") < 0))
+        if (!path.startsWith(File.separator) && (path.indexOf(":") > 5 || path.indexOf(":") < 0))
         {
             path = File.separator + path;
         }

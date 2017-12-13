@@ -64,7 +64,7 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
                             }
                             else
                             {
-                                throw new IllegalArgumentException("Data for add action must used a json object for providing additions");
+                                throw new IllegalArgumentException("Data for add action must use a json object for providing additions");
                             }
                         }
                         else if ("remove".equals(action))
@@ -75,7 +75,7 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
                             }
                             else
                             {
-                                throw new IllegalArgumentException("Data for remove action must used a json array for providing additions");
+                                throw new IllegalArgumentException("Data for remove action must use a json array for providing changes");
                             }
                         }
                         else if ("replace".equals(action))
@@ -89,7 +89,7 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
                             }
                             else
                             {
-                                throw new IllegalArgumentException("Data for replace action must used a json object for providing additions");
+                                throw new IllegalArgumentException("Data for replace action must use a json object for providing changes");
                             }
                         }
                         else

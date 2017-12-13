@@ -17,11 +17,11 @@ public class TestProcessorInjection extends TestCase
     public void testInit()
     {
         JsonProcessorInjectionMap map = new JsonProcessorInjectionMap(InjectionTestClass.class);
-        assertTrue(map.injectionFields.containsKey("key"));
-        assertNotNull(map.injectionFields.get("key"));
+        assertTrue(map.jsonDataFields.containsKey("key"));
+        assertNotNull(map.jsonDataFields.get("key"));
 
-        assertTrue(map.injectionMethods.containsKey("key2"));
-        assertNotNull(map.injectionMethods.get("key2"));
+        assertTrue(map.jsonDataSetters.containsKey("key2"));
+        assertNotNull(map.jsonDataSetters.get("key2"));
     }
 
     @Test

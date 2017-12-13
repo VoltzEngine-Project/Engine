@@ -6,10 +6,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to simplify loading of data from JSON files into objects
+ * Used to give the JSON system access to a field or method for setting values. In the case of a field
+ * it also grants access to collect data as well.
  * <p>
- * Used over GSON and other systems to give better control on how loading works. Including
- * the ability to target methods.
+ * Can be fine tuned to control logic. Including the ability to define several JSON tags to use, data type to inject (int, double, etc),
+ * if the value can be changed during runtime, if the value is required for a JSON file, and if the value should load server/client.
+ * <p>
+ * For quick setup it is recommended to apply to a field. Then set a single name and data type.
+ * <p>
+ * For more controlled implement a method will work but this approach will require the use of {@link JsonProcessorDataGetter} in order for
+ * other systems to function fully.
  *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/7/2017.
@@ -21,11 +27,25 @@ public @interface JsonProcessorData
     /** List of keys to use */
     String[] value();
 
-    /** Primitive type to load, only use for numbers */
+    /** Data type to load data as, optional for boolean and strings */
     String type() default "Unknown";
 
     /** Arguments to pass into type converter, optional in most cases */
     String[] args() default "";
+
+    /**
+     * Allow the runtime to change the value. This means
+     * that anything can change the value including
+     * commands and configurations. For configuration
+     * only use the settings system instead.
+     * <p>
+     * Designed for use with the {@link com.builtbroken.mc.framework.json.override.JsonOverrideData}
+     * <p>
+     * Requires the use of {@link JsonProcessorDataGetter} if annotation is used with a method
+     *
+     * @return true to allow runtime changes
+     */
+    boolean allowRuntimeChanges() default false;
 
     /**
      * Enforced that a value is not null and contains data
