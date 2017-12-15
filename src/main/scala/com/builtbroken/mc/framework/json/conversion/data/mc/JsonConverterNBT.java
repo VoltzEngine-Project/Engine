@@ -27,6 +27,16 @@ public class JsonConverterNBT extends JsonConverter<NBTTagCompound>
         return handle(element);
     }
 
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if(data instanceof NBTTagCompound)
+        {
+            return toJson((NBTTagCompound) data);
+        }
+        return null;
+    }
+
     public static NBTTagCompound handle(JsonElement element)
     {
         NBTTagCompound nbt = new NBTTagCompound();

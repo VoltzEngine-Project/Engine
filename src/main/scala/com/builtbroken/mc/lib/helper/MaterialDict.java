@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class MaterialDict
 {
     private static HashMap<String, Material> map = new HashMap();
+    private static HashMap<Material, String> mapRev = new HashMap();
 
     static
     {
@@ -39,10 +40,16 @@ public class MaterialDict
     public static void add(String name, Material mat)
     {
         map.put(name.toLowerCase(), mat);
+        mapRev.put(mat, name.toLowerCase());
     }
 
     public static Material get(String name)
     {
         return map.containsKey(name.toLowerCase()) ? map.get(name.toLowerCase()) : Material.rock;
+    }
+
+    public static String getName(Material material)
+    {
+        return mapRev.get(material);
     }
 }

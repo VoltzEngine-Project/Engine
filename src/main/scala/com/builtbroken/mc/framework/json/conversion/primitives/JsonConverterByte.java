@@ -2,6 +2,7 @@ package com.builtbroken.mc.framework.json.conversion.primitives;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 
 /**
  * Wrapper for converting JSON element to string
@@ -24,5 +25,15 @@ public class JsonConverterByte extends JsonConverter<Byte>
             throw new IllegalArgumentException("JsonConverterByte: Invalid argument >> " + element);
         }
         return element.getAsByte();
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if (data instanceof Number)
+        {
+            return new JsonPrimitive(((Number) data).byteValue());
+        }
+        return null;
     }
 }

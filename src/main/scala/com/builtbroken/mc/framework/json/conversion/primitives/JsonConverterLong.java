@@ -2,6 +2,7 @@ package com.builtbroken.mc.framework.json.conversion.primitives;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 
 /**
  * Wrapper for converting JSON element to string
@@ -24,5 +25,15 @@ public class JsonConverterLong extends JsonConverter<Long>
             throw new IllegalArgumentException("JsonConverterLong: Invalid argument >> " + element);
         }
         return element.getAsLong();
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if (data instanceof Number)
+        {
+            return new JsonPrimitive(((Number) data).longValue());
+        }
+        return null;
     }
 }

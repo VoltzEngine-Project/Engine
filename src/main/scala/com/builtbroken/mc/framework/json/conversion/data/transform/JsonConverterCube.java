@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.json.conversion.data.transform;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
+import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
@@ -24,6 +25,19 @@ public class JsonConverterCube extends JsonConverter<Cube>
     public Cube convert(JsonElement element, String... args)
     {
         return fromJson(element);
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if(data instanceof Cube)
+        {
+            JsonObject object = new JsonObject();
+            object.add("min", JsonLoader.buildElement("pos", ((Cube) data).min()));
+            object.add("max", JsonLoader.buildElement("pos", ((Cube) data).max()));
+            return object;
+        }
+        return null;
     }
 
     public static Cube fromJson(JsonElement element)

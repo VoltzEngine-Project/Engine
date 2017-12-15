@@ -2,6 +2,7 @@ package com.builtbroken.mc.framework.json.conversion.primitives;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 
 /**
  * Wrapper for converting JSON element to string
@@ -24,5 +25,15 @@ public class JsonConverterBoolean extends JsonConverter<Boolean>
             throw new IllegalArgumentException("JsonConverterBoolean: Invalid argument >> " + element);
         }
         return element.getAsBoolean();
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if (data instanceof Boolean)
+        {
+            return new JsonPrimitive((boolean) data);
+        }
+        return null;
     }
 }

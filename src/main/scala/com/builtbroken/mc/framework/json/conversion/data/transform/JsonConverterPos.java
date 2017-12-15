@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.json.conversion.data.transform;
 
+import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.google.gson.JsonArray;
@@ -24,6 +25,20 @@ public class JsonConverterPos extends JsonConverter<Pos>
     public Pos convert(JsonElement element, String... args)
     {
         return fromJson(element);
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if(data instanceof IPos3D)
+        {
+            JsonObject object = new JsonObject();
+            object.add("x", new JsonPrimitive(((IPos3D) data).x())); //TODO add arg to allow limiting precision and forcing to int
+            object.add("y", new JsonPrimitive(((IPos3D) data).y()));
+            object.add("z", new JsonPrimitive(((IPos3D) data).z()));
+            return object;
+        }
+        return null;
     }
 
     public static Pos fromJson(JsonElement element)

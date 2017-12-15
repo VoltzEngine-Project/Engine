@@ -2,10 +2,12 @@ package com.builtbroken.mc.framework.json.conversion.structures.map;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Used to convert json data to pos objects
@@ -24,9 +26,9 @@ public class JsonConverterHashMap extends JsonConverter<HashMap>
     public HashMap convert(JsonElement element, String[] args)
     {
         HashMap map = new HashMap();
-        if (args.length != 4)
+        if (args.length != 1)
         {
-            throw new RuntimeException("JsonConverterHashMap: argument length should be 4 (key, type, value, type) for converting an entry to a hash map");
+            throw new RuntimeException("JsonConverterList: arguments needs to contain at least 1 value containing of conversion type in order to function");
         }
         if (element.isJsonArray())
         {
@@ -71,6 +73,35 @@ public class JsonConverterHashMap extends JsonConverter<HashMap>
             throw new RuntimeException("JsonConverterHashMap: json element needs to be an array in order to convert to hash map");
         }
         return map;
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if (args.length != 1)
+        {
+            throw new RuntimeException("JsonConverterList: arguments needs to contain at least 1 value containing of conversion type in order to function");
+        }
+        if(data instanceof Map)
+        {
+            String key = args[0];
+            String keyType = args[1];
+            String value = args[2];
+            String valueType = args[3];
+
+            Map<Object, Object> map = ((Map) data);
+
+            JsonArray array = new JsonArray();
+            for(Map.Entry entry : map.entrySet())
+            {
+                JsonObject object = new JsonObject();
+                object.add(key, buildElement(keyType, entry.getKey()));
+                object.add(value, buildElement(valueType, entry.getValue()));
+                array.add(object);
+            }
+            return array;
+        }
+        return null;
     }
 
 }

@@ -3,6 +3,7 @@ package com.builtbroken.mc.framework.json.conversion.data.mc;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.lib.helper.MaterialDict;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import net.minecraft.block.material.Material;
 
 /**
@@ -24,5 +25,15 @@ public class JsonConverterMaterial extends JsonConverter<Material>
             return MaterialDict.get(element.getAsString().trim());
         }
         throw new IllegalArgumentException("JsonConverterMaterial: could not convert json to material object, json: " + element);
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if(data instanceof Material)
+        {
+            return new JsonPrimitive(MaterialDict.getName((Material) data));
+        }
+        return null;
     }
 }

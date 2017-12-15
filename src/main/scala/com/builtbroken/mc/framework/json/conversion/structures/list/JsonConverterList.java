@@ -1,6 +1,7 @@
 package com.builtbroken.mc.framework.json.conversion.structures.list;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
@@ -54,6 +55,26 @@ public class JsonConverterList extends JsonConverter<List>
             throw new RuntimeException("JsonConverterHashMap: json element needs to be an array in order to convert to hash map");
         }
         return list;
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if (args.length != 1)
+        {
+            throw new RuntimeException("JsonConverterList: arguments needs to contain at least 1 value containing of conversion type in order to function");
+        }
+        final String listType = args[0];
+        if(data instanceof Collection)
+        {
+            JsonArray array = new JsonArray();
+            for(Object o : (Collection)data)
+            {
+                array.add(buildElement(listType, o));
+            }
+            return array;
+        }
+        return null;
     }
 
 }

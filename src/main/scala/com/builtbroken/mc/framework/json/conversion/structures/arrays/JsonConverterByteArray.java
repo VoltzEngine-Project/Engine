@@ -3,6 +3,7 @@ package com.builtbroken.mc.framework.json.conversion.structures.arrays;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -34,6 +35,21 @@ public class JsonConverterByteArray extends JsonConverter<byte[]>
                 }
             }
 
+            return array;
+        }
+        return null;
+    }
+
+    @Override
+    public JsonElement build(String type, Object data, String... args)
+    {
+        if(data instanceof Byte[])
+        {
+            JsonArray array = new JsonArray();
+            for(byte b : (byte[])data)
+            {
+                array.add(new JsonPrimitive(b));
+            }
             return array;
         }
         return null;

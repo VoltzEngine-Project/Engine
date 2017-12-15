@@ -2,9 +2,12 @@ package com.builtbroken.mc.framework.json.conversion.data.mc;
 
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.framework.json.data.JsonItemEntry;
+import com.builtbroken.mc.framework.json.loading.JsonLoader;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -31,11 +34,30 @@ public class JsonConverterItem extends JsonConverter<JsonItemEntry>
     {
         if (data instanceof JsonItemEntry)
         {
-
+            JsonObject object = new JsonObject();
+            object.add("item", new JsonPrimitive(((JsonItemEntry) data).item));
+            if (((JsonItemEntry) data).damage != null)
+            {
+                object.add("meta", new JsonPrimitive(((JsonItemEntry) data).damage));
+            }
+            object.add("count", new JsonPrimitive(((JsonItemEntry) data).count));
+            if (((JsonItemEntry) data).nbt != null)
+            {
+                object.add("nbt", JsonLoader.buildElement("nbt", ((JsonItemEntry) data).nbt));
+            }
+            return object;
         }
         else if (data instanceof ItemStack)
         {
-
+            JsonObject object = new JsonObject();
+            object.add("item", new JsonPrimitive("item@" + InventoryUtility.getRegistryName(((ItemStack) data).getItem())));
+            object.add("meta", new JsonPrimitive(((ItemStack) data).getItemDamage()));
+            object.add("count", new JsonPrimitive(((ItemStack) data).stackSize));
+            if (((ItemStack) data).getTagCompound() != null)
+            {
+                object.add("nbt", JsonLoader.buildElement("nbt", ((ItemStack) data).getTagCompound()));
+            }
+            return object;
         }
         return null;
     }

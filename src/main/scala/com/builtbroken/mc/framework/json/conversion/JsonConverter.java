@@ -62,5 +62,10 @@ public abstract class JsonConverter<I extends Object>
         return JsonLoader.convertElement(type, data, args);
     }
 
+    public static JsonElement buildElement(String type, Object data, String... args)
+    {
+        return JsonLoader.buildElement(type, data, args);
+    }
+
     public abstract JsonElement build(String type, Object data, String... args);
 }
