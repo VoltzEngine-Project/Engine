@@ -63,67 +63,78 @@ public class CommandJsonOverride extends SubCommand
                     if (processor instanceof IModifableJson)
                     {
                         //Get list
-                        List<IJsonGenObject> content = JsonContentLoader.INSTANCE.generatedObjects.get(type);
-                        if (content != null)
+                        List<IJsonGenObject> contentList = JsonContentLoader.INSTANCE.generatedObjects.get(type);
+                        if (contentList != null)
                         {
+                            IJsonGenObject targetContent = null;
                             //Search list for object
-                            for (IJsonGenObject object : content)
+                            for (IJsonGenObject content : contentList)
                             {
-                                if (object != null) //TODO add check for legacy mod:id system
+                                if (content != null) //TODO add check for legacy mod:id system
                                 {
-                                    boolean found;
-
                                     if (id.contains(":"))
                                     {
-                                        found = id.equalsIgnoreCase(object.getContentID());
-                                    }
-                                    else
-                                    {
-                                        found = id.equalsIgnoreCase(object.getUniqueID());
-                                    }
-
-                                    if (found)
-                                    {
-                                        sender.addChatMessage(new ChatComponentText("Found '" + type + ":" + id + "'"));
-
-                                        if (object.getContentID() != null)
+                                        if (id.equalsIgnoreCase(content.getContentID()))
                                         {
-                                            File outputFolder = JsonContentLoader.INSTANCE.externalContentFolder;
-
-                                            String path = (object.getMod() != null ? object.getMod() + "/" : "") + object.getContentID() + ".json";
-                                            path = path.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-
-                                            File outputFile = new File(outputFolder, path);
-                                            JsonObject jsonObject = ((IModifableJson) processor).getPossibleModificationsAsJson(object);
-                                            if (jsonObject != null)
-                                            {
-                                                sender.addChatMessage(new ChatComponentText("Writing file to: §n" + outputFile)); //TODO make link clickable
-                                                try (Writer writer = new FileWriter(outputFile))
-                                                {
-                                                    Gson gson = new GsonBuilder().create();
-                                                    gson.toJson(jsonObject, writer);
-
-                                                    sender.addChatMessage(new ChatComponentText("Completed generating modifications for JSON content '" + type + ":" + id + "'"));
-                                                }
-                                                catch (Exception e)
-                                                {
-                                                    e.printStackTrace();
-                                                    sender.addChatMessage(new ChatComponentText(Colors.RED.code + "ERROR: Failed to write file due to unexpected error, see console for details"));
-                                                }
-                                            }
-                                            else
-                                            {
-                                                sender.addChatMessage(new ChatComponentText(Colors.RED.code + "ERROR: Failed to get modification list for '" + type + ":" + id + "' " +
-                                                        "this either means the operation is unsupported or the object has not modifications accessible via JSON."));
-                                            }
+                                            targetContent = content;
                                         }
-                                        return true;
                                     }
-                                    else
+                                    else if (id.equalsIgnoreCase(content.getUniqueID()))
                                     {
-                                        sender.addChatMessage(new ChatComponentText(Colors.RED.code + "ERROR: Failed to find JSON content with ID '" + type + ":" + id + "'"));
+                                        targetContent = content;
                                     }
                                 }
+                            }
+
+                            if (targetContent != null)
+                            {
+                                sender.addChatMessage(new ChatComponentText("Found '" + type + ":" + id + "'"));
+
+                                if (targetContent.getContentID() != null)
+                                {
+                                    File outputFolder = JsonContentLoader.INSTANCE.externalContentFolder;
+
+                                    String path = (targetContent.getMod() != null ? targetContent.getMod() + "/" : "") + targetContent.getContentID() + ".json";
+                                    path = path.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+
+                                    File outputFile = new File(outputFolder, path);
+
+                                    if (outputFile.exists() && (args.length == 3 || !args[3].equalsIgnoreCase("override")))
+                                    {
+                                        sender.addChatMessage(new ChatComponentText(Colors.YELLOW.code + "Error: Can't write data as file already exists."));
+                                        sender.addChatMessage(new ChatComponentText(Colors.YELLOW.code + "Run with override at end to write over the file"));
+                                        sender.addChatMessage(new ChatComponentText(Colors.YELLOW.code + "File: §n" + outputFile));
+                                        return true;
+                                    }
+
+                                    JsonObject jsonObject = ((IModifableJson) processor).getPossibleModificationsAsJson(targetContent);
+                                    if (jsonObject != null)
+                                    {
+                                        sender.addChatMessage(new ChatComponentText("Writing file to: §n" + outputFile)); //TODO make link clickable
+                                        try (Writer writer = new FileWriter(outputFile))
+                                        {
+                                            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                                            gson.toJson(jsonObject, writer);
+
+                                            sender.addChatMessage(new ChatComponentText("Completed generating modifications for JSON content '" + type + "-" + id + "'"));
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            e.printStackTrace();
+                                            sender.addChatMessage(new ChatComponentText(Colors.RED.code + "ERROR: Failed to write file due to unexpected error, see console for details"));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        sender.addChatMessage(new ChatComponentText(Colors.RED.code + "ERROR: Failed to get modification list for '" + type + ":" + id + "' " +
+                                                "this either means the operation is unsupported or the object has not modifications accessible via JSON."));
+                                    }
+                                }
+                                return true;
+                            }
+                            else
+                            {
+                                sender.addChatMessage(new ChatComponentText(Colors.RED.code + "ERROR: Failed to find JSON content with ID '" + type + ":" + id + "'"));
                             }
                         }
                         else

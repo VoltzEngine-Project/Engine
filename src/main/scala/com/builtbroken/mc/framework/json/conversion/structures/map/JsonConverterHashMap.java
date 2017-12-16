@@ -26,9 +26,9 @@ public class JsonConverterHashMap extends JsonConverter<HashMap>
     public HashMap convert(JsonElement element, String[] args)
     {
         HashMap map = new HashMap();
-        if (args.length != 1)
+        if (args.length != 4)
         {
-            throw new RuntimeException("JsonConverterList: arguments needs to contain at least 1 value containing of conversion type in order to function");
+            throw new RuntimeException("JsonConverterMap: arguments needs to contain 4 value [keyName, keyType, valueName, valueType]");
         }
         if (element.isJsonArray())
         {
@@ -80,9 +80,9 @@ public class JsonConverterHashMap extends JsonConverter<HashMap>
     {
         if (args.length != 1)
         {
-            throw new RuntimeException("JsonConverterList: arguments needs to contain at least 1 value containing of conversion type in order to function");
+            throw new RuntimeException("JsonConverterMap: arguments needs to contain 4 value [keyName, keyType, valueName, valueType]");
         }
-        if(data instanceof Map)
+        if (data instanceof Map)
         {
             String key = args[0];
             String keyType = args[1];
@@ -92,7 +92,7 @@ public class JsonConverterHashMap extends JsonConverter<HashMap>
             Map<Object, Object> map = ((Map) data);
 
             JsonArray array = new JsonArray();
-            for(Map.Entry entry : map.entrySet())
+            for (Map.Entry entry : map.entrySet())
             {
                 JsonObject object = new JsonObject();
                 object.add(key, buildElement(keyType, entry.getKey()));
