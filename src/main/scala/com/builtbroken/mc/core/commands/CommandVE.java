@@ -6,8 +6,9 @@ import com.builtbroken.mc.core.commands.ext.GroupSubCommand;
 import com.builtbroken.mc.core.commands.ext.ModularCommandRemoveAdd;
 import com.builtbroken.mc.core.commands.ext.SubCommandWithName;
 import com.builtbroken.mc.core.commands.ext.UserSubCommand;
-import com.builtbroken.mc.core.commands.json.CommandJsonOverride;
 import com.builtbroken.mc.core.commands.json.CommandJsonRecipe;
+import com.builtbroken.mc.core.commands.json.override.CommandJOGen;
+import com.builtbroken.mc.core.commands.json.override.CommandJOGet;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandGroup;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandUser;
 import com.builtbroken.mc.core.commands.prefab.AbstractCommand;
@@ -63,15 +64,24 @@ public class CommandVE extends ModularCommand
             addCommand(new CommandVEClear());
         }
 
+        //Debug commands
         addToDebugCommand(new CommandDebugRecipes());
         addToDebugCommand(new CommandDebugItem());
         addToDebugCommand(new CommandDebugMap());
         addToDebugCommand(new CommandDebugChunk());
         addToDebugCommand(new CommandDebugInventory());
 
+        //Json recipe gen command
         addToJsonCommand(new CommandJsonRecipe());
-        addToJsonCommand(new CommandJsonOverride());
 
+        //Json override commands
+        ModularCommand commandJsonOverride = new ModularCommand("override");
+        commandJsonOverride.addCommand(new CommandJOGen("gen"));
+        commandJsonOverride.addCommand(new CommandJOGen("generate"));
+        commandJsonOverride.addCommand(new CommandJOGet());
+        addToJsonCommand(commandJsonOverride);
+
+        //Utility commands
         addToThreadCommand(new CommandThreadClear());
         addToPowerCommand(new CommandChargeItem());
     }

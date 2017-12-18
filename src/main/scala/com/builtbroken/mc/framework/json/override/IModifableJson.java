@@ -39,6 +39,15 @@ public interface IModifableJson<D extends IJsonGenObject>
     void replaceData(String key, JsonElement data, D generatedObject);
 
     /**
+     * Allows accessing the value of data stored in the object
+     *
+     * @param key
+     * @param generatedObject
+     * @return
+     */
+    Object getData(String key, D generatedObject);
+
+    /**
      * Called to get possible modifications for the object
      * <p>
      * Primary use is to generate templates for use with the

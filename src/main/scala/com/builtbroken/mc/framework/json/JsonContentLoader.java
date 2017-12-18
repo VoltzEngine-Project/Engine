@@ -931,6 +931,48 @@ public final class JsonContentLoader extends AbstractLoadable
         }
     }
 
+    public static IJsonProcessor getProcessor(String type)
+    {
+        //Fix for lowercase
+        for (String key : INSTANCE.generatedObjects.keySet())
+        {
+            if (key.equalsIgnoreCase(type))
+            {
+                type = key;
+                break;
+            }
+        }
+
+        return INSTANCE.get(type);
+    }
+
+    public static IJsonGenObject getContent(String type, String id)
+    {
+        List<IJsonGenObject> contentList = INSTANCE.generatedObjects.get(type);
+        if (contentList != null)
+        {
+            //Search list for object
+            for (IJsonGenObject content : contentList)
+            {
+                if (content != null)
+                {
+                    if (id.contains(":"))
+                    {
+                        if (id.equalsIgnoreCase(content.getContentID()))
+                        {
+                            return content;
+                        }
+                    }
+                    else if (id.equalsIgnoreCase(content.getUniqueID()))
+                    {
+                        return content;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Called to trim all data that is no needed outside
      * of the loading phase to free up RAM

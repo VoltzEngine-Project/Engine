@@ -9,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -34,13 +35,17 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
     @Override
     public void onLoadCompleted()
     {
+        //Get processor for type
         IJsonProcessor processor = JsonContentLoader.INSTANCE.processors.get(processorID);
         if (processor != null)
         {
+            //Ensure processor supports modifying json data
             if (processor instanceof IModifableJson)
             {
+                //Get content list for processor
                 if (JsonContentLoader.INSTANCE.generatedObjects.get(processorID) != null)
                 {
+                    //Find object
                     IJsonGenObject genObject = null;
                     for (IJsonGenObject obj : JsonContentLoader.INSTANCE.generatedObjects.get(processorID))
                     {
@@ -51,12 +56,15 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
                         }
                     }
 
+                    //If object is not null, apply changes
                     if (genObject != null)
                     {
+                        //Add data to JSON
                         if ("add".equals(action))
                         {
                             if (data instanceof JsonObject)
                             {
+                                removeComments((JsonObject) data);
                                 for (Map.Entry<String, JsonElement> entry : ((JsonObject) data).entrySet())
                                 {
                                     ((IModifableJson) processor).addData(entry.getKey(), entry.getValue(), genObject);
@@ -67,10 +75,12 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
                                 throw new IllegalArgumentException("Data for add action must use a json object for providing additions");
                             }
                         }
+                        //Remove data from JSON, aka reset to default or disable feature
                         else if ("remove".equals(action))
                         {
                             if (data instanceof JsonArray)
                             {
+                                //TODO clean up data before processing aka remove _comments
                                 //TODO do later
                             }
                             else
@@ -78,10 +88,12 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
                                 throw new IllegalArgumentException("Data for remove action must use a json array for providing changes");
                             }
                         }
-                        else if ("replace".equals(action))
+                        //Edit json data
+                        else if ("edit".equals(action))
                         {
                             if (data instanceof JsonObject)
                             {
+                                removeComments((JsonObject) data);
                                 for (Map.Entry<String, JsonElement> entry : ((JsonObject) data).entrySet())
                                 {
                                     ((IModifableJson) processor).replaceData(entry.getKey(), entry.getValue(), genObject);
@@ -89,7 +101,7 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
                             }
                             else
                             {
-                                throw new IllegalArgumentException("Data for replace action must use a json object for providing changes");
+                                throw new IllegalArgumentException("Data for edit action must use a json object for providing changes");
                             }
                         }
                         else
@@ -115,6 +127,19 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
         else
         {
             throw new IllegalArgumentException("Unknown processor[" + processorID + "] for override data");
+        }
+    }
+
+    protected void removeComments(JsonObject object)
+    {
+        Iterator<Map.Entry<String, JsonElement>> it = object.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<String, JsonElement> entry = it.next();
+            if (entry.getKey().startsWith("_"))
+            {
+                it.remove();
+            }
         }
     }
 
