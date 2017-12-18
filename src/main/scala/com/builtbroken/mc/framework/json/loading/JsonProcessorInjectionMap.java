@@ -54,31 +54,34 @@ public class JsonProcessorInjectionMap<O extends Object>
                         JsonProcessorData jAnno = ((JsonProcessorData) annotation);
                         //Get keys and add each
                         final String[] values = jAnno.value();
-                        if (values != null && (loadServer && jAnno.loadForServer() || loadClient && jAnno.loadForClient()))
+                        if(loadServer && jAnno.loadForServer() || loadClient && jAnno.loadForClient())
                         {
-                            for (final String keyValue : values)
+                            if (values != null)
                             {
-                                if (keyValue != null)
+                                for (final String keyValue : values)
                                 {
-                                    final String key = keyValue.toLowerCase();
-                                    if (jsonDataFields.containsKey(key))
+                                    if (keyValue != null)
                                     {
-                                        throw new NullPointerException("Duplicate key detected for  " + field + " owned by " + jsonDataFields.get(key));
-                                    }
+                                        final String key = keyValue.toLowerCase();
+                                        if (jsonDataFields.containsKey(key))
+                                        {
+                                            throw new NullPointerException("Duplicate key detected for  " + field + " owned by " + jsonDataFields.get(key));
+                                        }
 
-                                    jsonDataFields.put(key, field);
-                                    injectionKeys.add(key);
-                                    cacheAnnotationData(key, jAnno);
-                                }
-                                else
-                                {
-                                    throw new NullPointerException("Value for JsonProcessorData was null on " + field);
+                                        jsonDataFields.put(key, field);
+                                        injectionKeys.add(key);
+                                        cacheAnnotationData(key, jAnno);
+                                    }
+                                    else
+                                    {
+                                        throw new NullPointerException("Value for JsonProcessorData was null on " + field);
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            throw new NullPointerException("Value for JsonProcessorData was null on " + field);
+                            else
+                            {
+                                throw new NullPointerException("Value for JsonProcessorData was null on " + field);
+                            }
                         }
                     }
                 }
@@ -102,33 +105,36 @@ public class JsonProcessorInjectionMap<O extends Object>
                             throw new NullPointerException("Method " + method + " should only have 1 parameter to use JsonProcessorData tag");
                         }
 
-                        //Get keys and add each
-                        final String[] values = jAnno.value();
-                        if (values != null && (loadServer && jAnno.loadForServer() || loadClient && jAnno.loadForClient()))
+                        if(loadServer && jAnno.loadForServer() || loadClient && jAnno.loadForClient())
                         {
-                            for (final String keyValue : values)
+                            //Get keys and add each
+                            final String[] values = jAnno.value();
+                            if (values != null)
                             {
-                                if (keyValue != null)
+                                for (final String keyValue : values)
                                 {
-                                    final String key = keyValue.toLowerCase();
-                                    if (jsonDataSetters.containsKey(key))
+                                    if (keyValue != null)
                                     {
-                                        throw new NullPointerException("Duplicate key detected for  " + method + " owned by " + jsonDataSetters.get(key));
-                                    }
+                                        final String key = keyValue.toLowerCase();
+                                        if (jsonDataSetters.containsKey(key))
+                                        {
+                                            throw new NullPointerException("Duplicate key detected for  " + method + " owned by " + jsonDataSetters.get(key));
+                                        }
 
-                                    jsonDataSetters.put(key, method);
-                                    injectionKeys.add(key);
-                                    cacheAnnotationData(key, jAnno);
-                                }
-                                else
-                                {
-                                    throw new NullPointerException("Value for JsonProcessorData was null on " + method);
+                                        jsonDataSetters.put(key, method);
+                                        injectionKeys.add(key);
+                                        cacheAnnotationData(key, jAnno);
+                                    }
+                                    else
+                                    {
+                                        throw new NullPointerException("Value for JsonProcessorData was null on " + method);
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            throw new NullPointerException("Value for JsonProcessorData was null on " + method);
+                            else
+                            {
+                                throw new NullPointerException("Value for JsonProcessorData was null on " + method);
+                            }
                         }
                     }
                     else if (annotation instanceof JsonProcessorDataGetter)
