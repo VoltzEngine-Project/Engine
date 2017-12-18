@@ -18,16 +18,18 @@ public interface IModifableJson<D extends IJsonGenObject>
      * @param key
      * @param data
      * @param generatedObject
+     * @return true if data was added
      */
-    void addData(String key, JsonElement data, D generatedObject);
+    boolean addData(String key, JsonElement data, D generatedObject);
 
     /**
      * Called to remove data from an object
      *
      * @param key
      * @param generatedObject
+     * @return true if data was added
      */
-    void removeData(String key, D generatedObject);
+    boolean removeData(String key, D generatedObject);
 
     /**
      * Called to replace or set data for an object
@@ -35,8 +37,9 @@ public interface IModifableJson<D extends IJsonGenObject>
      * @param key
      * @param data
      * @param generatedObject
+     * @return true if data was added
      */
-    void replaceData(String key, JsonElement data, D generatedObject);
+    boolean replaceData(String key, JsonElement data, D generatedObject);
 
     /**
      * Allows accessing the value of data stored in the object

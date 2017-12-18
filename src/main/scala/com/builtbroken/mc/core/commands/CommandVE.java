@@ -9,6 +9,7 @@ import com.builtbroken.mc.core.commands.ext.UserSubCommand;
 import com.builtbroken.mc.core.commands.json.CommandJsonRecipe;
 import com.builtbroken.mc.core.commands.json.override.CommandJOGen;
 import com.builtbroken.mc.core.commands.json.override.CommandJOGet;
+import com.builtbroken.mc.core.commands.json.override.CommandJOSet;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandGroup;
 import com.builtbroken.mc.core.commands.permissions.sub.CommandUser;
 import com.builtbroken.mc.core.commands.prefab.AbstractCommand;
@@ -79,6 +80,7 @@ public class CommandVE extends ModularCommand
         commandJsonOverride.addCommand(new CommandJOGen("gen"));
         commandJsonOverride.addCommand(new CommandJOGen("generate"));
         commandJsonOverride.addCommand(new CommandJOGet());
+        commandJsonOverride.addCommand(new CommandJOSet());
         addToJsonCommand(commandJsonOverride);
 
         //Utility commands
