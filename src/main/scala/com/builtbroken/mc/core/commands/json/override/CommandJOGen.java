@@ -69,14 +69,14 @@ public class CommandJOGen extends SubCommand
                                 {
                                     sender.addChatMessage(new ChatComponentText(Colors.YELLOW.code + "Error: Can't write data as file already exists."));
                                     sender.addChatMessage(new ChatComponentText(Colors.YELLOW.code + "Run with override at end to write over the file"));
-                                    sender.addChatMessage(new ChatComponentText(Colors.YELLOW.code + "File: §n" + outputFile));
+                                    sender.addChatMessage(new ChatComponentText(Colors.YELLOW.code + "File: \u00A7n" + outputFile));
                                     return true;
                                 }
 
                                 JsonObject jsonObject = ((IModifableJson) processor).getPossibleModificationsAsJson(targetContent);
                                 if (jsonObject != null)
                                 {
-                                    sender.addChatMessage(new ChatComponentText("Writing file to: §n" + outputFile)); //TODO make link clickable
+                                    sender.addChatMessage(new ChatComponentText("Writing file to: \u00A7n" + outputFile)); //TODO make link clickable
                                     try (Writer writer = new FileWriter(outputFile))
                                     {
                                         Gson gson = new GsonBuilder().setPrettyPrinting().create();
