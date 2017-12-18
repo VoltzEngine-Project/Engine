@@ -742,6 +742,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                     {
                         throw new RuntimeException("Failed to get number type for " + field);
                     }
+                    return true;
                 }
                 else
                 {
@@ -786,7 +787,6 @@ public class JsonProcessorInjectionMap<O extends Object>
                 throw new RuntimeException("Error injecting " + valueToInject + " into method " + method, e);
             }
         }
-        return false;
     }
 
     @Deprecated //Replace with handle type methods
