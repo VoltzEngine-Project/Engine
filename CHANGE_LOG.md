@@ -6,6 +6,28 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.9.17 - 12/18/2017
+### Runtime Changes
+Added: JSON override commands
+        /ve json override gen [type] [id]                       - generate override file in /.minecraft/configs/bbm/json
+        /ve json override get [type] [id] [fieldName]           - allows checking  fields that support override system
+        /ve json override set [type] [id] [fieldName] [value]   - allows modifying fields that support override system
+Finished: JSON override system
+Fixed: server trying to send a client side packet to itself causing a crash
+Fixed: infinite loop where multiblock thought it was the host block
+Fixed: items not showing in NEI
+Fixed: some minor NEI problems, not all problems are solve yet
+
+
+### Development Changes
+Added: helper to render text similiar to XP bar
+Added: lambda support for looping over JSON generated content
+Added: ability to convert objects to json using json converts (reverse mode basicly)
+Added: Silk harvest support for JSON blocks
+Added: Listener to handle silk harvest properties
+Added: way to get AABB from cube without running validation checks
+Fixed: missing isNormalCube() method for JSON blocks causing redstone to break
+
 ## 1.9.16 - 11/25/2017
 ### Runtime Changes
 Fixed: issues with JSON loader using the wrong path on linux
