@@ -130,6 +130,11 @@ public class ItemDevData extends ItemAbstract
             {
                 player.addChatComponentMessage(new ChatComponentText(" Meta: " + meta));
             }
+            //Position
+            else if (stack.getItemDamage() == 3)
+            {
+                player.addChatComponentMessage(new ChatComponentText(" Pos: " + x + ", " + y + ", " + z));
+            }
         }
         return false;
     }
@@ -153,5 +158,6 @@ public class ItemDevData extends ItemAbstract
         list.add(new ItemStack(item, 1, 0));
         list.add(new ItemStack(item, 1, 1));
         list.add(new ItemStack(item, 1, 2));
+        list.add(new ItemStack(item, 1, 3));
     }
 }
