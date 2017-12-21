@@ -454,10 +454,18 @@ toolmode.general.name=General
 toolmode.rotation.name=Rotation
 
 item.voltzengine:devDataTool.name=Dev Data Tool
+
 item.voltzengine:devDataTool.0.name=[DEV] Simple Block Data
 item.voltzengine:devDataTool.0.info=Outputs into chat basic block data
+
 item.voltzengine:devDataTool.1.name=[DEV] Reflective Tile Data
 item.voltzengine:devDataTool.1.info=Outputs into chat advanced block data, by reflectively dumping values, of fields and objects
+
+item.voltzengine:devDataTool.2.name=[DEV] Meta Data
+item.voltzengine:devDataTool.2.info=Outputs into metadata value of the block
+
+item.voltzengine:devDataTool.3.name=[DEV] Position Data
+item.voltzengine:devDataTool.3.info=Outputs the position of the click into chat
 
 item.voltzengine:ve.instanthole.name=[DEV] Instant Hole
 item.voltzengine:ve.instanthole.info=Used to debug generation underground, by removing common materials, in a chunk to see ores or structures

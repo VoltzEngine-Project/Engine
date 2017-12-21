@@ -59,9 +59,9 @@ public class ItemDevData extends ItemAbstract
             if (player instanceof EntityPlayer && !player.worldObj.isRemote)
             {
                 ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("Entity: " + hit));
-                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("ID: " + hit.getEntityId()));
-                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("Name: " + hit.getCommandSenderName()));
-                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("Class: " + hit.getClass()));
+                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("  ID: " + hit.getEntityId()));
+                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("  Name: " + hit.getCommandSenderName()));
+                ((EntityPlayer) player).addChatComponentMessage(new ChatComponentText("  Class: " + hit.getClass()));
             }
             return true;
         }
@@ -80,13 +80,13 @@ public class ItemDevData extends ItemAbstract
             if (stack.getItemDamage() == 0)
             {
                 player.addChatComponentMessage(new ChatComponentText("Block: " + block));
-                player.addChatComponentMessage(new ChatComponentText(" Extended: " + ExtendedBlockDataManager.SERVER.getValue(world, x, y, z)));
-                player.addChatComponentMessage(new ChatComponentText(" Meta: " + meta));
-                player.addChatComponentMessage(new ChatComponentText(" Class: " + block.getClass()));
+                player.addChatComponentMessage(new ChatComponentText("  Extended: " + ExtendedBlockDataManager.SERVER.getValue(world, x, y, z)));
+                player.addChatComponentMessage(new ChatComponentText("  Meta: " + meta));
+                player.addChatComponentMessage(new ChatComponentText("  Class: " + block.getClass()));
                 if (tile != null)
                 {
                     player.addChatComponentMessage(new ChatComponentText(" Tile: " + tile));
-                    player.addChatComponentMessage(new ChatComponentText("  Class: " + tile.getClass()));
+                    player.addChatComponentMessage(new ChatComponentText("   Class: " + tile.getClass()));
                 }
             }
             //Super tile data mode
