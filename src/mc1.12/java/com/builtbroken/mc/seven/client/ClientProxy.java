@@ -7,11 +7,13 @@ import com.builtbroken.mc.client.effects.providers.VEProviderRocketTrail;
 import com.builtbroken.mc.client.effects.providers.VEProviderShockWave;
 import com.builtbroken.mc.client.effects.providers.VEProviderSmokeStream;
 import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.IJsonRenderStateProvider;
 import com.builtbroken.mc.client.json.audio.AudioJsonProcessor;
 import com.builtbroken.mc.client.json.effects.EffectJsonProcessor;
 import com.builtbroken.mc.client.json.effects.EffectListJsonProcessor;
 import com.builtbroken.mc.client.json.models.ModelJsonProcessor;
 import com.builtbroken.mc.client.json.render.RenderData;
+import com.builtbroken.mc.client.json.render.mc.VoltzEngineModelLoader;
 import com.builtbroken.mc.client.json.render.processor.RenderJsonProcessor;
 import com.builtbroken.mc.client.json.render.tile.TileRenderData;
 import com.builtbroken.mc.client.json.texture.TextureJsonProcessor;
@@ -40,11 +42,18 @@ import com.builtbroken.mc.seven.client.listeners.blocks.RotatableIconListener;
 import com.builtbroken.mc.seven.framework.block.BlockBase;
 import com.builtbroken.mc.seven.framework.block.json.JsonBlockListenerProcessor;
 import com.builtbroken.mc.seven.framework.block.listeners.RotatableListener;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -66,6 +75,76 @@ public class ClientProxy extends CommonProxy
     public void onLoad()
     {
         Engine.minecraft = MinecraftWrapper.INSTANCE = new MinecraftWrapperClient();
+    }
+
+    @SubscribeEvent
+    public static void registerAllModels(ModelRegistryEvent event)
+    {
+        ModelLoaderRegistry.registerLoader(new VoltzEngineModelLoader());
+        registerItemJsonRenders("VE-Item", "item", "tile", "block");
+    }
+
+    public static int registerItemJsonRenders(String... keys)
+    {
+        int count = 0;
+        for (List<IJsonGenObject> list : JsonContentLoader.INSTANCE.generatedObjects.values())
+        {
+            if (list != null && !list.isEmpty())
+            {
+                for (IJsonGenObject obj : list)
+                {
+                    Item item = null;
+                    if (obj instanceof Item)
+                    {
+                        item = (Item) obj;
+                    }
+                    else if (obj instanceof Block)
+                    {
+                        item = Item.getItemFromBlock((Block) obj);
+                    }
+                    if (item != null)
+                    {
+                        if (registerItemJsonRender(item, keys))
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+
+    public static boolean registerItemJsonRender(Item item, String... keys)
+    {
+        if (item instanceof IJsonRenderStateProvider)
+        {
+            List<String> ids = ((IJsonRenderStateProvider) item).getRenderContentIDs(); //TODO see if we should register all ids
+            for (String id : ids)
+            {
+                RenderData data = ClientDataHandler.INSTANCE.getRenderData(id); //TODO see if we should register per state
+                if (data != null)
+                {
+                    for (String key : keys) //TODO see if we should register per key
+                    {
+                        if (data.renderType.equalsIgnoreCase(key))
+                        {
+                            String mod = data.contentID.substring(0, data.contentID.indexOf(":"));
+                            String itemID = data.contentID.substring(data.contentID.indexOf(":") + 1, data.contentID.length());
+
+                            String loc = String.format("%s%s/%s", VoltzEngineModelLoader.PREFIX, mod, itemID, key);
+
+                            final ModelResourceLocation location = new ModelResourceLocation( loc, "inventory");
+                            ModelLoader.setCustomMeshDefinition(item, stack -> location);
+                            ModelBakery.registerItemVariants(item, location);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override

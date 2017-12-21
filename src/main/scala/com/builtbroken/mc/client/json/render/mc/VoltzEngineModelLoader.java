@@ -17,17 +17,12 @@ import java.io.IOException;
  */
 public class VoltzEngineModelLoader implements ICustomModelLoader
 {
-    public final String domain;
-
-    public VoltzEngineModelLoader(String domain)
-    {
-        this.domain = domain;
-    }
+    public static String PREFIX = "vejson_";
 
     @Override
     public boolean accepts(ResourceLocation modelLocation)
     {
-        if(modelLocation.getResourceDomain().equals(domain) && modelLocation.getResourcePath().startsWith("json_"))
+        if(modelLocation.getResourcePath().startsWith(PREFIX))
         {
             return true;
         }
@@ -45,10 +40,10 @@ public class VoltzEngineModelLoader implements ICustomModelLoader
 
         //Key examples
         // string >> json_domain/contentID/renderStateKey/keyPart1/keyPart2..../keyPart(n)
-        // json_icbm/missile/item/inventory
+        // vejson_icbm/missile/item/inventory
 
         //Remove json_ front
-        String path = modelLocation.getResourcePath().replaceFirst("json_", "");
+        String path = modelLocation.getResourcePath().replaceFirst(PREFIX, "");
 
         //lower case since we do not care about case anyways
         path = path.toLowerCase();
