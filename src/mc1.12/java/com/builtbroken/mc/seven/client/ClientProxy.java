@@ -78,10 +78,12 @@ public class ClientProxy extends CommonProxy
     }
 
     @SubscribeEvent
-    public static void registerAllModels(ModelRegistryEvent event)
+    public void registerAllModels(ModelRegistryEvent event)
     {
         ModelLoaderRegistry.registerLoader(new VoltzEngineModelLoader());
         registerItemJsonRenders("VE-Item", "item", "tile", "block");
+
+        ModelLoader.setCustomModelResourceLocation(Engine.itemWrench, 0, new ModelResourceLocation(Engine.itemWrench.getRegistryName(), "inventory"));
     }
 
     public static int registerItemJsonRenders(String... keys)

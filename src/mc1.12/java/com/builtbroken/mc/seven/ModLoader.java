@@ -145,20 +145,12 @@ public class ModLoader extends EngineLoader
         MinecraftForge.EVENT_BUS.register(proxy);
         MinecraftForge.EVENT_BUS.register(SaveManager.instance());
         MinecraftForge.EVENT_BUS.register(new InteractionHandler());
-
         MinecraftForge.EVENT_BUS.register(RadarRegistry.INSTANCE);
-        FMLCommonHandler.instance().bus().register(RadarRegistry.INSTANCE);
-
         MinecraftForge.EVENT_BUS.register(TileMapRegistry.INSTANCE);
-        FMLCommonHandler.instance().bus().register(TileMapRegistry.INSTANCE);
-
         MinecraftForge.EVENT_BUS.register(RadioRegistry.INSTANCE);
-        FMLCommonHandler.instance().bus().register(RadioRegistry.INSTANCE);
-
-        FMLCommonHandler.instance().bus().register(new WorldActionQue());
-        FMLCommonHandler.instance().bus().register(TileTaskTickHandler.INSTANCE);
-
-        FMLCommonHandler.instance().bus().register(proxy);
+        MinecraftForge.EVENT_BUS.register(new WorldActionQue());
+        MinecraftForge.EVENT_BUS.register(TileTaskTickHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(proxy);
 
         //Load heat configs
         enabledHeatMap = References.heatDataConfig.getBoolean("EnabledHeatMap", Configuration.CATEGORY_GENERAL, true, "Heat map handles interaction of heat based energy and the world. Disable only if it causes issues or you want to reduce world file size. If disabled it can prevent machines from working.");
