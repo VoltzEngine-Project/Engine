@@ -84,6 +84,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 
@@ -236,24 +237,29 @@ public class ModLoader extends EngineLoader
         }
         JsonContentLoader.INSTANCE.claimItems(instance, event);
 
-        for (IJsonGenObject object : JsonContentLoader.INSTANCE.generatedObjects.get(References.JSON_BLOCK_KEY))
+        //Register item blocks for blocks, TODO add way to remove item block via JSON
+        List<IJsonGenObject> generatedBlocks = JsonContentLoader.INSTANCE.generatedObjects.get(References.JSON_BLOCK_KEY);
+        if(generatedBlocks != null)
         {
-            if (object instanceof Block && ((Block) object).getRegistryName().getResourceDomain() == References.DOMAIN)
+            for (IJsonGenObject object : generatedBlocks)
             {
-                if (object instanceof BlockMeta)
+                if (object instanceof Block && ((Block) object).getRegistryName().getResourceDomain() == References.DOMAIN)
                 {
-                    Item itemBlock = new ItemBlockMeta((Block) object).setRegistryName(((Block) object).getRegistryName());
-                    event.getRegistry().register(itemBlock);
-                }
-                else if (object instanceof BlockBase)
-                {
-                    Item itemBlock = new ItemBlockBase((Block) object).setRegistryName(((Block) object).getRegistryName());
-                    event.getRegistry().register(itemBlock);
-                }
-                else
-                {
-                    Item itemBlock = new ItemBlock((Block) object).setRegistryName(((Block) object).getRegistryName());
-                    event.getRegistry().register(itemBlock);
+                    if (object instanceof BlockMeta)
+                    {
+                        Item itemBlock = new ItemBlockMeta((Block) object).setRegistryName(((Block) object).getRegistryName());
+                        event.getRegistry().register(itemBlock);
+                    }
+                    else if (object instanceof BlockBase)
+                    {
+                        Item itemBlock = new ItemBlockBase((Block) object).setRegistryName(((Block) object).getRegistryName());
+                        event.getRegistry().register(itemBlock);
+                    }
+                    else
+                    {
+                        Item itemBlock = new ItemBlock((Block) object).setRegistryName(((Block) object).getRegistryName());
+                        event.getRegistry().register(itemBlock);
+                    }
                 }
             }
         }
