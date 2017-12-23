@@ -60,6 +60,10 @@ public class IEEPEntityEffect implements IExtendedEntityProperties
             {
                 it.remove();
             }
+            else
+            {
+                entityEffect.tick++;
+            }
         }
     }
 
