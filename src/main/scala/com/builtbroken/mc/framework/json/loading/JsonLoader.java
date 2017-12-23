@@ -2,6 +2,7 @@ package com.builtbroken.mc.framework.json.loading;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
+import com.builtbroken.mc.framework.json.conversion.IJsonConverter;
 import com.builtbroken.mc.framework.json.conversion.JsonConverter;
 import com.builtbroken.mc.framework.json.conversion.data.energy.JsonConverterEnergyBufferData;
 import com.builtbroken.mc.framework.json.conversion.data.energy.JsonConverterEnergyChargeData;
@@ -44,7 +45,7 @@ import java.util.jar.JarFile;
  */
 public class JsonLoader
 {
-    private static final HashMap<String, JsonConverter> conversionHandlers = new HashMap();
+    private static final HashMap<String, IJsonConverter> conversionHandlers = new HashMap();
 
     static
     {
@@ -74,7 +75,7 @@ public class JsonLoader
         //List
         addConverter(new JsonConverterList());
 
-        //Primitives, these are here to wrapper JSON methods for simplicity... no complaints -.-
+        //Primitives, these are here to wrapper JSON methods for simplicity... no complaints plz -.-
         addConverter(new JsonConverterString());
         addConverter(new JsonConverterByte());
         addConverter(new JsonConverterShort());
@@ -84,9 +85,9 @@ public class JsonLoader
         addConverter(new JsonConverterDouble());
     }
 
-    public static void addConverter(JsonConverter converter)
+    public static void addConverter(IJsonConverter converter)
     {
-        final List<String> keys = converter.keys;
+        final List<String> keys = converter.getKeys();
         for (String key : keys)
         {
             if (getConversionHandlers().containsKey(key))
@@ -110,7 +111,7 @@ public class JsonLoader
     public static Object convertElement(String type, JsonElement data, String... args)
     {
         //Try converter set first
-        JsonConverter converter = JsonLoader.getConversionHandler(type);
+        IJsonConverter converter = JsonLoader.getConversionHandler(type);
         if (converter != null)
         {
             return converter.convert(data, args);
@@ -149,7 +150,7 @@ public class JsonLoader
     public static JsonElement buildElement(String type, Object data, String... args)
     {
         //Try converter set first
-        JsonConverter converter = JsonLoader.getConversionHandler(type);
+        IJsonConverter converter = JsonLoader.getConversionHandler(type);
         if (converter != null)
         {
             return converter.build(type, data, args);
@@ -322,7 +323,7 @@ public class JsonLoader
     }
 
     /** Map of types to json data converts */
-    public static HashMap<String, JsonConverter> getConversionHandlers()
+    public static HashMap<String, IJsonConverter> getConversionHandlers()
     {
         return conversionHandlers;
     }
@@ -333,7 +334,7 @@ public class JsonLoader
      * @param key - unique id of the handler, forced to lower case
      * @return handler
      */
-    public static JsonConverter getConversionHandler(String key)
+    public static IJsonConverter getConversionHandler(String key)
     {
         return conversionHandlers.get(key.toLowerCase());
     }

@@ -1,7 +1,7 @@
 package com.builtbroken.mc.framework.json.loading;
 
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.framework.json.conversion.JsonConverter;
+import com.builtbroken.mc.framework.json.conversion.IJsonConverter;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 import com.google.gson.JsonElement;
@@ -277,7 +277,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                                 String type = getInjectionType(injectionKeyID);
                                 if (type != null && JsonLoader.hasConverterFor(type))
                                 {
-                                    JsonConverter converter = JsonLoader.getConversionHandler(type);
+                                    IJsonConverter converter = JsonLoader.getConversionHandler(type);
                                     if (converter != null)
                                     {
                                         Object conversion = converter.convert((JsonElement) valueToInject, getInjectionArgs(injectionKeyID));
@@ -319,7 +319,7 @@ public class JsonProcessorInjectionMap<O extends Object>
                                 String type = getInjectionType(injectionKeyID);
                                 if (type != null && JsonLoader.hasConverterFor(type))
                                 {
-                                    JsonConverter converter = JsonLoader.getConversionHandler(type);
+                                    IJsonConverter converter = JsonLoader.getConversionHandler(type);
                                     if (converter != null)
                                     {
                                         Object conversion = converter.convert((JsonElement) valueToInject, getInjectionArgs(injectionKeyID));

@@ -8,6 +8,7 @@ import com.builtbroken.mc.core.registry.implement.ILoadComplete;
 import com.builtbroken.mc.core.registry.implement.IPostInit;
 import com.builtbroken.mc.core.registry.implement.IRecipeContainer;
 import com.builtbroken.mc.core.registry.implement.IRegistryInit;
+import com.builtbroken.mc.framework.json.conversion.IJsonConverter;
 import com.builtbroken.mc.framework.json.event.JsonEntryCreationEvent;
 import com.builtbroken.mc.framework.json.event.JsonProcessorRegistryEvent;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
@@ -113,19 +114,40 @@ public final class JsonContentLoader extends AbstractLoadable
             Engine.loaderInstance.getModuleLoader().applyModule((ILoadable) processor);
             debug.log("-is loadable");
         }
-        //TODO add item sub processors
+        if (processor instanceof IJsonConverter)
+        {
+            JsonLoader.addConverter((IJsonConverter) processor);
+            debug.log("-is converter");
+        }
 
+        //TODO add item sub processors
         debug.end();
     }
 
     protected void add(String key, IJsonProcessor processor)
     {
-        processors.put(processor.getJsonKey(), processor);
+        processors.put(key, processor);
     }
 
     public IJsonProcessor get(String key)
     {
         return processors.get(key);
+    }
+
+    public IJsonProcessor find(String key)
+    {
+        IJsonProcessor processor = get(key);
+        if (processor == null)
+        {
+            for (IJsonProcessor p : processors.values())
+            {
+                if (p.getJsonKey().equalsIgnoreCase(key))
+                {
+                    return p;
+                }
+            }
+        }
+        return processor;
     }
 
     @Override
@@ -247,58 +269,69 @@ public final class JsonContentLoader extends AbstractLoadable
     @Override
     public void loadComplete()
     {
-        debug.start("Phase: Load-Complete");
-        final List<String> sortingProcessorList = getSortedProcessorList();
-        for (String proccessorKey : sortingProcessorList)
+        if (currentPhase == JsonLoadPhase.LOAD_PHASE_THREE)
         {
-            if (generatedObjects.get(proccessorKey) != null && !generatedObjects.get(proccessorKey).isEmpty())
+            debug.start("Phase: Load-Complete");
+            triggerPhase(JsonLoadPhase.COMPLETED);
+
+            final List<String> sortingProcessorList = getSortedProcessorList();
+            for (String proccessorKey : sortingProcessorList)
             {
-                for (IJsonGenObject obj : generatedObjects.get(proccessorKey))
+                if (generatedObjects.get(proccessorKey) != null && !generatedObjects.get(proccessorKey).isEmpty())
                 {
-                    if (obj instanceof ILoadComplete)
+                    for (IJsonGenObject obj : generatedObjects.get(proccessorKey))
                     {
-                        ((ILoadComplete) obj).onLoadCompleted();
+                        if (obj instanceof ILoadComplete)
+                        {
+                            try
+                            {
+                                ((ILoadComplete) obj).onLoadCompleted();
+                            }
+                            catch (Exception e)
+                            {
+                                Engine.logger().error("JsonContentLoad#loadComplete(): Unexpected error while firing load complete events for '" + obj + "' from processor group '" + proccessorKey + "'", e);
+                            }
+                        }
                     }
                 }
             }
-        }
-        debug.log("Clearing data");
+            debug.log("Clearing data");
 
-        if (jsonEntries.size() > 0 && Engine.runningAsDev && !GraphicsEnvironment.isHeadless())
-        {
-            boolean processorExists = false;
-            Engine.logger().info("Failed to process all JSON entries. This is most likely a bug if the count is high.");
-            for (Map.Entry<String, List<JsonEntry>> set : jsonEntries.entrySet())
+            if (jsonEntries.size() > 0 && Engine.runningAsDev && !GraphicsEnvironment.isHeadless())
             {
-                boolean exists = get(set.getKey()) != null;
-                if (exists)
+                boolean processorExists = false;
+                Engine.logger().info("Failed to process all JSON entries. This is most likely a bug if the count is high.");
+                for (Map.Entry<String, List<JsonEntry>> set : jsonEntries.entrySet())
                 {
-                    processorExists = exists;
+                    boolean exists = get(set.getKey()) != null;
+                    if (exists)
+                    {
+                        processorExists = exists;
+                    }
+                    Engine.logger().info("\tProcessor: " + set.getKey() + " has register processor '" + exists + "'");
+                    for (JsonEntry entry : set.getValue())
+                    {
+                        Engine.logger().info("\t\tEntry: " + entry + "\n");
+                    }
                 }
-                Engine.logger().info("\tProcessor: " + set.getKey() + " has register processor '" + exists + "'");
-                for (JsonEntry entry : set.getValue())
+
+                if (processorExists)
                 {
-                    Engine.logger().info("\t\tEntry: " + entry + "\n");
+                    int option = JOptionPane.showConfirmDialog(Display.getParent(), "Not all JSON entries have been processed. " +
+                                    "\n JsonEntries left = " + jsonEntries.size() +
+                                    "\n Do you want to continue loading?",
+                            "JsonContentLoader Error", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+
+                    if (option != JOptionPane.OK_OPTION)
+                    {
+                        FMLCommonHandler.instance().exitJava(-1, false);
+                    }
                 }
             }
 
-            if (processorExists)
-            {
-                int option = JOptionPane.showConfirmDialog(Display.getParent(), "Not all JSON entries have been processed. " +
-                                "\n JsonEntries left = " + jsonEntries.size() +
-                                "\n Do you want to continue loading?",
-                        "JsonContentLoader Error", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
-
-                if (option != JOptionPane.OK_OPTION)
-                {
-                    FMLCommonHandler.instance().exitJava(-1, false);
-                }
-            }
+            clear();
+            debug.end("Done...");
         }
-
-        triggerPhase(JsonLoadPhase.COMPLETED);
-        clear();
-        debug.end("Done...");
     }
 
     /**
