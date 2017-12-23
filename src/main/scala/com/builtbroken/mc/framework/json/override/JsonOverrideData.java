@@ -10,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,18 +37,19 @@ public class JsonOverrideData extends JsonGenData implements ILoadComplete
     public void onLoadCompleted()
     {
         //Get processor for type
-        IJsonProcessor processor = JsonContentLoader.INSTANCE.processors.get(processorID);
+        IJsonProcessor processor = JsonContentLoader.INSTANCE.find(processorID);
         if (processor != null)
         {
             //Ensure processor supports modifying json data
             if (processor instanceof IModifableJson)
             {
                 //Get content list for processor
-                if (JsonContentLoader.INSTANCE.generatedObjects.get(processorID) != null)
+                List<IJsonGenObject> list = JsonContentLoader.INSTANCE.generatedObjects.get(processor.getJsonKey());
+                if (list != null)
                 {
                     //Find object
                     IJsonGenObject genObject = null;
-                    for (IJsonGenObject obj : JsonContentLoader.INSTANCE.generatedObjects.get(processorID))
+                    for (IJsonGenObject obj : list)
                     {
                         if (obj != null && contentID.equalsIgnoreCase(obj.getContentID()))
                         {
