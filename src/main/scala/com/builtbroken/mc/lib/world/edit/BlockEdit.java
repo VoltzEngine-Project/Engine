@@ -312,9 +312,18 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
             {
                 InventoryUtility.dropBlockAsItem(world, xi(), yi() + 1, zi(), true);
             }
+            onBlockPlaced();
             return BlockEditResult.PLACED;
         }
         return BlockEditResult.BLOCKED;
+    }
+
+    /**
+     * Called after the block was placed
+     */
+    protected void onBlockPlaced()
+    {
+
     }
 
     public List<ItemStack> getDrops()
@@ -377,6 +386,7 @@ public class BlockEdit extends AbstractLocation<BlockEdit> implements IBlastEdit
         return false;
     }
 
+    @Override
     public String toString()
     {
         return "BlockEdit[ " + (oldWorld() != null && oldWorld().provider != null ? oldWorld().provider.dimensionId : null) + "d, " + xi() + "x, " + yi() + "y, " + zi() + "z]";

@@ -46,6 +46,9 @@ import java.util.List;
  */
 public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWorldPosition, IWorldChangeAudio, IWorldChangeGraphics, IBlast, IByteBufReader, IByteBufWriter
 {
+    public static final int NO_THREAD = -1;
+    public static final int INSTANT_THREAD = -2;
+
     @Deprecated
     public World oldWorld;
 
@@ -191,7 +194,7 @@ public abstract class Blast<B extends Blast> implements IWorldChangeAction, IWor
     @Override
     public int shouldThreadAction()
     {
-        return size > 4 ? -2 : -1;
+        return size > 4 ? INSTANT_THREAD : NO_THREAD;
     }
 
     @Override
