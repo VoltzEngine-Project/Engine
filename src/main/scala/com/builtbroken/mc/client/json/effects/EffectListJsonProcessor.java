@@ -60,8 +60,6 @@ public class EffectListJsonProcessor extends JsonProcessor<EffectList>
                 data.layers.add(EffectJsonProcessor.INSTANCE.process(object));
             }
         }
-
-        processAdditionalKeys(data, effectDataJson);
         return data;
     }
 }

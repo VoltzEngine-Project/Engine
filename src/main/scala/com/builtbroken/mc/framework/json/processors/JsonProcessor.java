@@ -75,6 +75,7 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
                     D data = process(out, o);
                     if (data != null)
                     {
+                        processAdditionalKeys(data, o);
                         objects.add(data);
                     }
                 });
@@ -86,6 +87,10 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
         D data = process(out, element);
         if (data != null)
         {
+            if (element.isJsonObject())
+            {
+                processAdditionalKeys(data, element.getAsJsonObject());
+            }
             objects.add(data);
         }
     }
@@ -142,26 +147,29 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
      */
     protected void processAdditionalKeys(D objectToInject, JsonObject jsonData, List<String> keysToIgnore)
     {
-        try
+        if(keyHandler != null)
         {
-            //Call to process extra tags from file
-            for (Map.Entry<String, JsonElement> entry : jsonData.entrySet())
+            try
             {
-                if ((keysToIgnore == null || !keysToIgnore.contains(entry.getKey()))
-                        && keyHandler.handle(objectToInject, entry.getKey().toLowerCase(), entry.getValue()))
+                //Call to process extra tags from file
+                for (Map.Entry<String, JsonElement> entry : jsonData.entrySet())
                 {
-                    if (Engine.runningAsDev)
+                    if ((keysToIgnore == null || !keysToIgnore.contains(entry.getKey()))
+                            && keyHandler.handle(objectToInject, entry.getKey().toLowerCase(), entry.getValue()))
                     {
-                        debugPrinter.log("Injected Key: " + entry.getKey());
+                        if (Engine.runningAsDev)
+                        {
+                            debugPrinter.log("Injected Key: " + entry.getKey());
+                        }
                     }
                 }
-            }
 
-            keyHandler.enforceRequired(objectToInject);
-        }
-        catch (IllegalAccessException e)
-        {
-            e.printStackTrace(); //Technically can't happen
+                keyHandler.enforceRequired(objectToInject);
+            }
+            catch (IllegalAccessException e)
+            {
+                e.printStackTrace(); //Technically can't happen
+            }
         }
     }
 

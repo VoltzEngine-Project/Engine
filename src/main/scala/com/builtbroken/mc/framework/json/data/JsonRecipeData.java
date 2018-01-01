@@ -2,6 +2,7 @@ package com.builtbroken.mc.framework.json.data;
 
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
+import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
 import net.minecraft.item.ItemStack;
 
@@ -15,6 +16,12 @@ public abstract class JsonRecipeData extends JsonGenData implements IJsonGenObje
 {
     /** Output of the recipe */
     public Object output;
+
+    @JsonProcessorData("id")
+    public String author;
+
+    @JsonProcessorData("group")
+    public String group;
 
     public JsonRecipeData(IJsonProcessor processor, Object output)
     {

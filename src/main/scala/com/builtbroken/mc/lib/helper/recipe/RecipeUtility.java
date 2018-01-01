@@ -16,198 +16,189 @@ import java.util.List;
 @Deprecated
 public class RecipeUtility
 {
-	public static final String CATEGORY = "crafting";
+    public static final String CATEGORY = "crafting";
 
-	public static List<IRecipe> getRecipesByOutput(ItemStack output)
-	{
-		List<IRecipe> list = new ArrayList<>();
+    public static List<IRecipe> getRecipesByOutput(ItemStack output)
+    {
+        List<IRecipe> list = new ArrayList<>();
 
-		for (Object obj : CraftingManager.getInstance().getRecipeList())
-		{
-			if (obj instanceof IRecipe)
-			{
-				if (ItemStack.areItemStacksEqual(((IRecipe) obj).getRecipeOutput(), output))
-				{
-					list.add((IRecipe) obj);
-				}
-			}
-		}
+        for (Object obj : CraftingManager.getInstance().getRecipeList())
+        {
+            if (obj instanceof IRecipe)
+            {
+                if (ItemStack.areItemStacksEqual(((IRecipe) obj).getRecipeOutput(), output))
+                {
+                    list.add((IRecipe) obj);
+                }
+            }
+        }
 
-		return list;
-	}
+        return list;
+    }
 
-	/**
-	 * Replaces a recipe with a new IRecipe.
-	 *
-	 * @return True if successful
-	 */
-	public static boolean replaceRecipe(IRecipe recipe, IRecipe newRecipe)
-	{
-		for (Object obj : CraftingManager.getInstance().getRecipeList())
-		{
-			if (obj instanceof IRecipe)
-			{
-				if (obj.equals(recipe) || obj == recipe)
-				{
-					CraftingManager.getInstance().getRecipeList().remove(obj);
-					CraftingManager.getInstance().getRecipeList().add(newRecipe);
-					return true;
-				}
-			}
-		}
+    /**
+     * Replaces a recipe with a new IRecipe.
+     *
+     * @return True if successful
+     */
+    public static boolean replaceRecipe(IRecipe recipe, IRecipe newRecipe)
+    {
+        for (Object obj : CraftingManager.getInstance().getRecipeList())
+        {
+            if (obj instanceof IRecipe)
+            {
+                if (obj.equals(recipe) || obj == recipe)
+                {
+                    CraftingManager.getInstance().getRecipeList().remove(obj);
+                    CraftingManager.getInstance().getRecipeList().add(newRecipe);
+                    return true;
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Replaces a recipe with the resulting ItemStack with a new IRecipe.
-	 *
-	 * @return True if successful
-	 */
-	public static boolean replaceRecipe(ItemStack recipe, IRecipe newRecipe)
-	{
-		if (removeRecipe(recipe))
-		{
-			CraftingManager.getInstance().getRecipeList().add(newRecipe);
-			return true;
-		}
+    /**
+     * Replaces a recipe with the resulting ItemStack with a new IRecipe.
+     *
+     * @return True if successful
+     */
+    public static boolean replaceRecipe(ItemStack recipe, IRecipe newRecipe)
+    {
+        if (removeRecipe(recipe))
+        {
+            CraftingManager.getInstance().getRecipeList().add(newRecipe);
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Removes a recipe by its IRecipe class.
-	 *
-	 * @return True if successful
-	 */
-	public static boolean removeRecipe(IRecipe recipe)
-	{
-		for (Object obj : CraftingManager.getInstance().getRecipeList())
-		{
-			if (obj != null)
-			{
-				if (obj instanceof IRecipe)
-				{
-					if (obj.equals(recipe) || obj == recipe)
-					{
-						CraftingManager.getInstance().getRecipeList().remove(obj);
-						return true;
-					}
-				}
-			}
-		}
+    /**
+     * Removes a recipe by its IRecipe class.
+     *
+     * @return True if successful
+     */
+    public static boolean removeRecipe(IRecipe recipe)
+    {
+        for (Object obj : CraftingManager.getInstance().getRecipeList())
+        {
+            if (obj != null)
+            {
+                if (obj instanceof IRecipe)
+                {
+                    if (obj.equals(recipe) || obj == recipe)
+                    {
+                        CraftingManager.getInstance().getRecipeList().remove(obj);
+                        return true;
+                    }
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Removes the first recipe found by its output.
-	 *
-	 * @return True if successful
-	 */
-	public static boolean removeRecipe(ItemStack stack)
-	{
-		for (Object obj : CraftingManager.getInstance().getRecipeList())
-		{
-			if (obj != null)
-			{
-				if (obj instanceof IRecipe)
-				{
-					if (((IRecipe) obj).getRecipeOutput() != null)
-					{
-						if (((IRecipe) obj).getRecipeOutput().isItemEqual(stack))
-						{
-							CraftingManager.getInstance().getRecipeList().remove(obj);
-							return true;
-						}
-					}
-				}
-			}
-		}
+    /**
+     * Removes the first recipe found by its output.
+     *
+     * @return True if successful
+     */
+    public static boolean removeRecipe(ItemStack stack)
+    {
+        for (Object obj : CraftingManager.getInstance().getRecipeList())
+        {
+            if (obj != null)
+            {
+                if (obj instanceof IRecipe)
+                {
+                    if (((IRecipe) obj).getRecipeOutput() != null)
+                    {
+                        if (((IRecipe) obj).getRecipeOutput().isItemEqual(stack))
+                        {
+                            CraftingManager.getInstance().getRecipeList().remove(obj);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Removes all recipes found that has this output. You may use this with Forge Ore Dictionary to
-	 * remove all recipes with the FoD ID.
-	 *
-	 * @return True if successful
-	 */
-	public static boolean removeRecipes(ItemStack... itemStacks)
-	{
-		boolean didRemove = false;
+    /**
+     * Removes all recipes found that has this output. You may use this with Forge Ore Dictionary to
+     * remove all recipes with the FoD ID.
+     *
+     * @return True if successful
+     */
+    public static boolean removeRecipes(ItemStack... itemStacks)
+    {
+        boolean didRemove = false;
 
-		for (Iterator itr = CraftingManager.getInstance().getRecipeList().iterator(); itr.hasNext(); )
-		{
-			Object obj = itr.next();
+        for (Iterator itr = CraftingManager.getInstance().getRecipeList().iterator(); itr.hasNext(); )
+        {
+            Object obj = itr.next();
 
-			if (obj != null)
-			{
-				if (obj instanceof IRecipe)
-				{
-					if (((IRecipe) obj).getRecipeOutput() != null)
-					{
-						for (ItemStack itemStack : itemStacks)
-						{
-							if (((IRecipe) obj).getRecipeOutput().isItemEqual(itemStack))
-							{
-								itr.remove();
-								didRemove = true;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
+            if (obj != null)
+            {
+                if (obj instanceof IRecipe)
+                {
+                    if (((IRecipe) obj).getRecipeOutput() != null)
+                    {
+                        for (ItemStack itemStack : itemStacks)
+                        {
+                            if (((IRecipe) obj).getRecipeOutput().isItemEqual(itemStack))
+                            {
+                                itr.remove();
+                                didRemove = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-		return didRemove;
-	}
+        return didRemove;
+    }
 
-	/**
-	 * Use this function if you want to check if the recipe is allowed in the configuration file.
-	 */
-	public static void addRecipe(IRecipe recipe, String name, Configuration configuration, boolean defaultBoolean)
-	{
-		if (configuration != null)
-		{
-			configuration.load();
+    /**
+     * Use this function if you want to check if the recipe is allowed in the configuration file.
+     */
+    @Deprecated //No longer does configs
+    public static void addRecipe(IRecipe recipe, String name, Configuration configuration, boolean defaultBoolean)
+    {
+        GameRegistry.addRecipe(recipe);
+    }
 
-			if (configuration.get(CATEGORY, "Allow " + name + " Crafting", defaultBoolean).getBoolean(defaultBoolean))
-			{
-				GameRegistry.addRecipe(recipe);
-			}
+    public static void addRecipe(IRecipe recipe, Configuration config, boolean defaultBoolean)
+    {
+        addRecipe(recipe, recipe.getRecipeOutput().getUnlocalizedName(), config, defaultBoolean);
+    }
 
-			configuration.save();
-		}
-	}
+    /**
+     * Use this function if you want to check if the recipe is allowed in the configuration file.
+     */
+    public static void addShaplessRecipe(ItemStack itemStack, Object[] items, String name, Configuration configuration, boolean defaultBoolean)
+    {
+        if (configuration != null)
+        {
+            configuration.load();
 
-	public static void addRecipe(IRecipe recipe, Configuration config, boolean defaultBoolean)
-	{
-		addRecipe(recipe, recipe.getRecipeOutput().getUnlocalizedName(), config, defaultBoolean);
-	}
+            if (configuration.get(CATEGORY, "Allow " + name + " Crafting", defaultBoolean).getBoolean(defaultBoolean))
+            {
+                CraftingManager.getInstance().addShapelessRecipe(itemStack, items);
+            }
 
-	/**
-	 * Use this function if you want to check if the recipe is allowed in the configuration file.
-	 */
-	public static void addShaplessRecipe(ItemStack itemStack, Object[] items, String name, Configuration configuration, boolean defaultBoolean)
-	{
-		if (configuration != null)
-		{
-			configuration.load();
+            configuration.save();
+        }
+    }
 
-			if (configuration.get(CATEGORY, "Allow " + name + " Crafting", defaultBoolean).getBoolean(defaultBoolean))
-			{
-				CraftingManager.getInstance().addShapelessRecipe(itemStack, items);
-			}
-
-			configuration.save();
-		}
-	}
-
-	public static void addShaplessRecipe(ItemStack itemStack, Object[] items, Configuration config, boolean defaultBoolean)
-	{
-		addShaplessRecipe(itemStack, items, itemStack.getItem().getUnlocalizedName(), config, defaultBoolean);
-	}
+    public static void addShaplessRecipe(ItemStack itemStack, Object[] items, Configuration config, boolean defaultBoolean)
+    {
+        addShaplessRecipe(itemStack, items, itemStack.getItem().getUnlocalizedName(), config, defaultBoolean);
+    }
 }

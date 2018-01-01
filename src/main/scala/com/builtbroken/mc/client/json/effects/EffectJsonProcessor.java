@@ -47,8 +47,6 @@ public class EffectJsonProcessor extends JsonProcessor<EffectLayer>
         String effectID = effectDataJson.get("effectID").getAsString();
         String key = effectDataJson.get("key").getAsString().toLowerCase();
 
-        EffectLayer data = new EffectLayer(this, key, effectID);
-        processAdditionalKeys(data, effectDataJson);
-        return data;
+        return new EffectLayer(this, key, effectID);
     }
 }

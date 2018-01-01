@@ -1,11 +1,9 @@
 package com.builtbroken.mc.framework.json.processors.explosive;
 
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.framework.explosive.handler.ExplosiveData;
 import com.builtbroken.mc.framework.json.processors.JsonProcessor;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -21,17 +19,7 @@ public class JsonProcessorExplosive extends JsonProcessor<ExplosiveData>
     @Override
     public ExplosiveData process(JsonElement element)
     {
-        debugPrinter.start("ExplosiveProcessor", "Processing entry", Engine.runningAsDev);
-
-        JsonObject object = element.getAsJsonObject();
-
-        ExplosiveData data = new ExplosiveData(this);
-
-        //Handle injection keys
-        processAdditionalKeys(data, object);
-
-        debugPrinter.end("Done...");
-        return data;
+        return new ExplosiveData(this);
     }
 
     @Override
