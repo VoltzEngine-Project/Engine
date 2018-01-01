@@ -76,7 +76,7 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
         NetworkRegistry.INSTANCE.registerGuiHandler(this, getProxy());
 
         //Handle configs
-        if (this.getClass().toString().contains("com.builtbroken"))
+        if (this.getClass().toString().contains("com.builtbroken") && (configPath == null || !configPath.contains("bbm/")))
         {
             if (configPath == null || configPath.isEmpty())
             {
