@@ -10,15 +10,12 @@ import com.builtbroken.mc.api.items.energy.IEMInterferenceItem;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
 import com.builtbroken.mc.framework.explosive.blast.Blast;
+import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.region.Sphere;
 import com.builtbroken.mc.imp.transform.sorting.Vector3DistanceComparator;
 import com.builtbroken.mc.imp.transform.vector.BlockPos;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import com.builtbroken.mc.lib.world.map.radar.RadarMap;
-import com.builtbroken.mc.lib.world.map.radar.data.RadarObject;
-import com.builtbroken.mc.lib.world.map.radar.data.RadarTile;
-import com.builtbroken.mc.lib.world.map.tile.TileMapRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -31,6 +28,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -67,74 +65,64 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
         debugPrinter.start("BlastEmp#getEffectedBlocks()", "Starting emp", Engine.runningAsDev);
         long time = System.nanoTime();
 
-        //Get tiles
-        RadarMap map = TileMapRegistry.getRadarMapForWorld(oldWorld);
-        if (map != null)
+        //Store tiles in linked list to easily allow reordering, expansion, and removal with minimal CPU usage
+        LinkedList<BlockPos> tileLocations = new LinkedList();
+
+        //Find all valid tiles
+        List<TileEntity> tilesToCheck = collectTilesInRange();
+        for (TileEntity tile : tilesToCheck)
         {
-            //Store tiles in linked list to easily allow reordering, expansion, and removal with minimal CPU usage
-            LinkedList<BlockPos> tileLocations = new LinkedList();
-
-            //Find all valid tiles
-            List<RadarObject> objects = map.getRadarObjects(x(), z(), size);
-            for (RadarObject object : objects)
+            if (!tile.isInvalid())
             {
-                if (object instanceof RadarTile)
+                //Handle if EMP or energy
+                if ((tile instanceof IEMReceptiveDevice || UniversalEnergySystem.isHandler(tile, null)))
                 {
-                    //Get tile and make sure its valid, no point in pathing invalid stuff
-                    TileEntity tile = ((RadarTile) object).tile;
-                    if (!tile.isInvalid())
-                    {
-                        //Handle if EMP or energy
-                        if ((tile instanceof IEMReceptiveDevice || UniversalEnergySystem.isHandler(tile, null)))
-                        {
-                            tileLocations.add(new BlockPos(tile.xCoord, tile.yCoord, tile.zCoord));
-                        }
-                        //Handle if inventory
-                        else if (tile instanceof IInventory)
-                        {
-                            IInventory inventory = (IInventory) tile;
+                    tileLocations.add(new BlockPos(tile.xCoord, tile.yCoord, tile.zCoord));
+                }
+                //Handle if inventory
+                else if (tile instanceof IInventory)
+                {
+                    IInventory inventory = (IInventory) tile;
 
-                            //Well only handle if has items that can be effected
-                            if (inventoryContainsElectricItems(inventory))
-                            {
-                                tileLocations.add(new BlockPos(tile.xCoord, tile.yCoord, tile.zCoord));
-                            }
-                            //TODO track emp value of inventory even if not added (e.g. chest full of iron will stop an emp)
-                        }
-                        else
-                        {
-                            //TODO add EMP handlers to allow EMP effects on tiles that are not normally EMP prone
-                        }
+                    //Well only handle if has items that can be effected
+                    if (inventoryContainsElectricItems(inventory))
+                    {
+                        tileLocations.add(new BlockPos(tile.xCoord, tile.yCoord, tile.zCoord));
                     }
+                    //TODO track emp value of inventory even if not added (e.g. chest full of iron will stop an emp)
+                }
+                else
+                {
+                    //TODO add EMP handlers to allow EMP effects on tiles that are not normally EMP prone
                 }
             }
+        }
 
-            //Sort with largest distance moving to the front
-            Collections.sort(tileLocations, new Vector3DistanceComparator(this, false));
-            //High distance is used to allow the path to go through all tiles before hitting the tile.
-            //  This way energy is consumed by the time it gets to the tile providing a weaker value.
-            //  Similar to how a real emp would work with the energy being absorbed by objects
+        //Sort with largest distance moving to the front
+        Collections.sort(tileLocations, new Vector3DistanceComparator(this, false));
+        //High distance is used to allow the path to go through all tiles before hitting the tile.
+        //  This way energy is consumed by the time it gets to the tile providing a weaker value.
+        //  Similar to how a real emp would work with the energy being absorbed by objects
 
-            //Loop valid tiles
-            while (!tileLocations.isEmpty())
+        //Loop valid tiles
+        while (!tileLocations.isEmpty())
+        {
+            //Get next position
+            BlockPos pos = tileLocations.poll();
+
+            //Get tile at position
+            TileEntity tile = pos.getTileEntity(oldWorld);
+
+            //Ensure tile is valid
+            if (tile != null && !tile.isInvalid())
             {
-                //Get next position
-                BlockPos pos = tileLocations.poll();
-
-                //Get tile at position
-                TileEntity tile = pos.getTileEntity(oldWorld);
-
-                //Ensure tile is valid
-                if (tile != null && !tile.isInvalid())
+                //Ensure position is inside of emp range
+                double distance = pos.distance(this);
+                if (distance < getEMPRange())
                 {
-                    //Ensure position is inside of emp range
-                    double distance = pos.distance(this);
-                    if (distance < getEMPRange())
-                    {
-                        //Start emp path to target tile
-                        startEmpPath(tile, distance, getPowerForRange(distance), tileLocations, edits);
-                        //Power is starting power, not power at distance. As it will pass through blocks losing power
-                    }
+                    //Start emp path to target tile
+                    startEmpPath(tile, distance, getPowerForRange(distance), tileLocations, edits);
+                    //Power is starting power, not power at distance. As it will pass through blocks losing power
                 }
             }
         }
@@ -142,6 +130,29 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
         //Debug
         time = System.nanoTime() - time;
         debugPrinter.end("Done... " + StringHelpers.formatNanoTime(time));
+    }
+
+    public List<TileEntity> collectTilesInRange()
+    {
+        Cube cube = new Cube(toPos().sub(getEMPRange()), toPos().add(getEMPRange()));
+        List<Chunk> chunks = cube.getChunks(world.unwrap());
+        List<TileEntity> tiles = new LinkedList();
+
+        final Pos center = toPos();
+
+        //Get tiles
+        chunks.forEach(chunk -> chunk.chunkTileEntityMap.values().forEach(t -> {
+            if (t instanceof TileEntity)
+            {
+                TileEntity tile = (TileEntity) t;
+                if (center.distance(tile) > getEMPRange())
+                {
+                    tiles.add(tile);
+                }
+            }
+        }));
+
+        return tiles;
     }
 
     @Override
