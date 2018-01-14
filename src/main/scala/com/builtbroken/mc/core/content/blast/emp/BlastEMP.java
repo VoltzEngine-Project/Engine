@@ -145,7 +145,7 @@ public class BlastEMP extends Blast<BlastEMP> implements IVoltageTransmitter
             if (t instanceof TileEntity)
             {
                 TileEntity tile = (TileEntity) t;
-                if (center.distance(tile) > getEMPRange())
+                if (center.distance(tile) < getEMPRange())
                 {
                     tiles.add(tile);
                 }
