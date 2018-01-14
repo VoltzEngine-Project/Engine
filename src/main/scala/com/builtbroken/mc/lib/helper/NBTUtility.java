@@ -78,7 +78,7 @@ public class NBTUtility
             }
             else
             {
-                Engine.logger().info("Save file " + file + "\n\tdoes not exist in the save folder! Generating new NBT data in it's place.");
+                Engine.logger().error("Save file " + file + "\n\tdoes not exist in the save folder! Generating new NBT data in it's place.");
                 return new NBTTagCompound();
             }
         }
@@ -101,12 +101,22 @@ public class NBTUtility
      */
     public static NBTTagCompound loadData(File saveDirectory, String filename)
     {
-        return loadData(new File(saveDirectory, filename + (filename.endsWith(".dat") ? "" : ".dat")));
+        return loadData(getSaveFile(saveDirectory, filename));
     }
 
     public static NBTTagCompound loadData(String filename)
     {
-        return loadData(getSaveDirectory(MinecraftServer.getServer().getFolderName()), filename);
+        return loadData(getSaveFile(filename));
+    }
+
+    public static File getSaveFile(String filename)
+    {
+        return getSaveFile(getSaveDirectory(MinecraftServer.getServer().getFolderName()), filename);
+    }
+
+    public static File getSaveFile(File saveDirectory, String filename)
+    {
+        return new File(saveDirectory, filename + (filename.endsWith(".dat") ? "" : ".dat"));
     }
 
     public static File getSaveDirectory()
