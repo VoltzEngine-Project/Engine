@@ -12,6 +12,7 @@ import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -61,7 +62,8 @@ public class PacketManager extends AbstractLoadable
 
     public SPacketUpdateTileEntity toMCPacket(IPacket packet)
     {
-        return (SPacketUpdateTileEntity) channelEnumMap.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
+        Packet proxyPacket = channelEnumMap.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
+        return null;
     }
 
     @Override

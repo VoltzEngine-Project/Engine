@@ -235,7 +235,7 @@ public class ModLoader extends EngineLoader
         {
             for (IJsonGenObject object : generatedBlocks)
             {
-                if (object instanceof Block && ((Block) object).getRegistryName().getResourceDomain() == References.DOMAIN)
+                if (object instanceof Block && ((Block) object).getRegistryName() != null && ((Block) object).getRegistryName().getResourceDomain() == References.DOMAIN)
                 {
                     if (object instanceof BlockMeta)
                     {

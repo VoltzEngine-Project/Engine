@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fluids.{FluidStack, FluidTank}
 import net.minecraftforge.fml.common.network.ByteBufUtils
 
@@ -98,6 +99,7 @@ object ByteBufWrapper {
           case x: ItemStack => ByteBufUtils.writeItemStack(buf, x)
           case x: EnumFacing => x.ordinal().asInstanceOf[Byte]
           case x: Direction => x.ordinal().asInstanceOf[Byte]
+          case x: BlockPos => buf <<< x.getX; buf <<< x.getY; buf <<< x.getZ;
           case _ => throw new IllegalArgumentException(References.NAME + ": ByteBuf attempt to write an invalid object [" + data + "] of class [" + data.getClass + "]")
         }
       }
