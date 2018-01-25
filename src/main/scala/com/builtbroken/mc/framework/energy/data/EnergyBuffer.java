@@ -4,12 +4,13 @@ import com.builtbroken.mc.api.energy.IEnergyBuffer;
 import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.energy.IEnergyStorage;
 
 /**
  * Basic implementation of energy buffer
  * Created by Dark on 8/15/2015.
  */
-public class EnergyBuffer implements IEnergyBuffer
+public class EnergyBuffer implements IEnergyBuffer, IEnergyStorage
 {
     private final int maxStorage;
     private int energyStorage;
@@ -70,7 +71,7 @@ public class EnergyBuffer implements IEnergyBuffer
                         onPowerChange(prev, getEnergyStored(), EnergyActionType.REMOVE);
                     }
                 }
-                return maxStorage;
+                return getMaxBufferSize();
             }
             else
             {
@@ -106,16 +107,46 @@ public class EnergyBuffer implements IEnergyBuffer
     }
 
     @Override
+    public int receiveEnergy(int maxReceive, boolean simulate)
+    {
+        return addEnergyToStorage(maxReceive, !simulate);
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate)
+    {
+        return removeEnergyFromStorage(maxExtract, !simulate);
+    }
+
+    @Override
     public int getEnergyStored()
     {
         return energyStorage;
     }
 
     @Override
+    public int getMaxEnergyStored()
+    {
+        return getMaxBufferSize();
+    }
+
+    @Override
+    public boolean canExtract()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean canReceive()
+    {
+        return true;
+    }
+
+    @Override
     public void setEnergyStored(int energy)
     {
         int prev = getEnergyStored();
-        this.energyStorage = Math.min(maxStorage, Math.max(0, energy));
+        this.energyStorage = Math.min(getMaxBufferSize(), Math.max(0, energy));
         if (prev != energyStorage)
         {
             onPowerChange(prev, getEnergyStored(), EnergyActionType.SET);
