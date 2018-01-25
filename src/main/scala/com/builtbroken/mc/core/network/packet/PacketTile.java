@@ -11,6 +11,7 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 /**
  * Packet type designed to be used with Tiles
@@ -23,6 +24,8 @@ public class PacketTile extends PacketType
     public int x;
     public int y;
     public int z;
+
+    public String name;
 
     public PacketTile()
     {
@@ -37,9 +40,10 @@ public class PacketTile extends PacketType
      *             the tile is an instance of {@code IPacketIDReceiver}
      *             Should never be null
      */
-    public PacketTile(int x, int y, int z, Object... args)
+    public PacketTile(String name, int x, int y, int z, Object... args)
     {
         super(args);
+        this.name = name;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -51,14 +55,19 @@ public class PacketTile extends PacketType
      *             the tile is an instance of {@code IPacketIDReceiver}
      *             Should never be null
      */
-    public PacketTile(TileEntity tile, Object... args)
+    public PacketTile(String name, TileEntity tile, Object... args)
     {
-        this(tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), args);
+        this(name, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), args);
     }
 
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
+        buffer.writeBoolean(Engine.runningAsDev);
+        if(Engine.runningAsDev)
+        {
+            ByteBufUtils.writeUTF8String(buffer, name);
+        }
         buffer.writeInt(x);
         buffer.writeInt(y);
         buffer.writeInt(z);
@@ -68,10 +77,14 @@ public class PacketTile extends PacketType
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
+        if(buffer.readBoolean())
+        {
+            name = ByteBufUtils.readUTF8String(buffer);
+        }
         x = buffer.readInt();
         y = buffer.readInt();
         z = buffer.readInt();
-        data_$eq(buffer.slice());
+        data_$eq(buffer);
     }
 
     @Override
@@ -144,7 +157,7 @@ public class PacketTile extends PacketType
                 try
                 {
                     IPacketIDReceiver receiver = (IPacketIDReceiver) tile;
-                    ByteBuf buf = data().slice();
+                    ByteBuf buf = data();
 
                     int id;
                     try
@@ -153,7 +166,7 @@ public class PacketTile extends PacketType
                     }
                     catch (IndexOutOfBoundsException ex)
                     {
-                        Engine.logger().error(new PacketIDException(location));
+                        Engine.logger().error(new PacketIDException(location, name));
                         return;
                     }
                     receiver.read(buf, id, player, this);

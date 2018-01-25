@@ -66,7 +66,7 @@ public class PacketGui extends PacketType
                     }
                     catch (IndexOutOfBoundsException ex)
                     {
-                        Engine.logger().error(new PacketIDException(location));
+                        Engine.logger().error(new PacketIDException(location, "-"));
                         return;
                     }
                     receiver.read(buf, id, player, this);
@@ -144,7 +144,7 @@ public class PacketGui extends PacketType
                     }
                     catch (IndexOutOfBoundsException ex)
                     {
-                        Engine.logger().error(new PacketIDException(location));
+                        Engine.logger().error(new PacketIDException(location, "-"));
                         return;
                     }
                     receiver.read(buf, id, player, this);

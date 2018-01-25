@@ -20,20 +20,9 @@ public class PacketOpenGUI extends PacketTile
         //Needed for forge to construct the packet
     }
 
-    /**
-     * @param x     - location
-     * @param y     - location
-     * @param z     - location
-     * @param guiID
-     */
-    public PacketOpenGUI(int x, int y, int z, int guiID)
-    {
-        super(x, y, z, guiID);
-    }
-
     public PacketOpenGUI(TileEntity tile, int guiID)
     {
-        super(tile, guiID);
+        super("openGUI#" + guiID, tile, guiID);
     }
 
     @Override

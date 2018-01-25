@@ -215,7 +215,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     @Override
     public PacketTile getPacketForData(Object... data)
     {
-        return new PacketTile(this, data);
+        return new PacketTile("descWrapper",this, data);
     }
 
     @Override

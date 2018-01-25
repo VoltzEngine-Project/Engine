@@ -8,8 +8,8 @@ import com.builtbroken.mc.imp.transform.vector.Location;
  */
 public class PacketIDException extends PacketTileReadException
 {
-    public PacketIDException(Location location)
+    public PacketIDException(Location location, String name)
     {
-        super(location, "Packet provided an invalid or missing ID.");
+        super(location, "Packet[" + name + "] provided an invalid or missing ID.");
     }
 }
