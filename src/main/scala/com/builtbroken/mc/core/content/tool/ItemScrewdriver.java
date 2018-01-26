@@ -9,6 +9,7 @@ import com.builtbroken.mc.framework.recipe.item.RecipeTool;
 import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.lib.helper.recipe.OreNames;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +20,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraft")
 public class ItemScrewdriver extends Item implements IToolWrench, IPostInit
 {
     public ItemScrewdriver()

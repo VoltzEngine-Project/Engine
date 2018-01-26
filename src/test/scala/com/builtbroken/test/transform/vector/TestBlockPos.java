@@ -162,6 +162,31 @@ public class TestBlockPos extends AbstractTest
     }
 
     @Test
+    public void testListContains2()
+    {
+        List<BlockPos> list = new ArrayList();
+        list.add(new BlockPos(0, 0, 0));
+        for(Direction direction : Direction.DIRECTIONS)
+        {
+            list.add(new BlockPos(0, 0, 0).add(direction));
+        }
+
+        for(int i = 0; i < 1000; i++)
+        {
+            for(Direction direction : Direction.DIRECTIONS)
+            {
+                BlockPos pos = new BlockPos(0, 0, 0).add(direction);
+                if(!list.contains(pos))
+                {
+                    list.add(pos);
+                }
+            }
+        }
+
+        assertEquals(7, list.size());
+    }
+
+    @Test
     public void testMapContains()
     {
         HashMap<BlockPos, Boolean> map = new HashMap();

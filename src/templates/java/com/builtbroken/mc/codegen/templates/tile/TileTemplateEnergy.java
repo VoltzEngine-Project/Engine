@@ -9,6 +9,7 @@ import com.builtbroken.mc.api.tile.node.ITileNode;
 import com.builtbroken.mc.codegen.processor.TileWrappedTemplate;
 import com.builtbroken.mc.framework.energy.UniversalEnergySystem;
 import com.builtbroken.mc.seven.framework.logic.TileEntityWrapper;
+import cpw.mods.fml.common.Optional;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -17,6 +18,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  * Created by Dark(DarkGuardsman, Robert) on 4/1/2017.
  */
 @TileWrappedTemplate(annotationName = "Energy")
+@Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHCore")
 public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBufferProvider, IEnergyHandler
 {
     public TileTemplateEnergy(ITileNode controller)
@@ -36,6 +38,7 @@ public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBuff
     }
 
     @Override
+    @Optional.Method(modid = "CoFHCore")
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate)
     {
         IEnergyBuffer buffer = getEnergyBuffer(from);
@@ -48,6 +51,7 @@ public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBuff
     }
 
     @Override
+    @Optional.Method(modid = "CoFHCore")
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
     {
         IEnergyBuffer buffer = getEnergyBuffer(from);
@@ -60,6 +64,7 @@ public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBuff
     }
 
     @Override
+    @Optional.Method(modid = "CoFHCore")
     public int getEnergyStored(ForgeDirection from)
     {
         IEnergyBuffer buffer = getEnergyBuffer(from);
@@ -71,6 +76,7 @@ public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBuff
     }
 
     @Override
+    @Optional.Method(modid = "CoFHCore")
     public int getMaxEnergyStored(ForgeDirection from)
     {
         IEnergyBuffer buffer = getEnergyBuffer(from);
@@ -82,6 +88,7 @@ public class TileTemplateEnergy extends TileEntityWrapper implements IEnergyBuff
     }
 
     @Override
+    @Optional.Method(modid = "CoFHCore")
     public boolean canConnectEnergy(ForgeDirection from)
     {
         if (getTileNode() instanceof ITileConnection)
