@@ -5,7 +5,6 @@ import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.imp.transform.vector.Location;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -22,7 +21,7 @@ public class PacketOpenGUI extends PacketTile
 
     public PacketOpenGUI(TileEntity tile, int guiID)
     {
-        super("openGUI#" + guiID, tile, guiID);
+        super("openGUI#" + guiID, guiID, tile);
     }
 
     @Override
@@ -41,11 +40,9 @@ public class PacketOpenGUI extends PacketTile
             }
             if (guiTile != null)
             {
-                ByteBuf buf = data().slice();
-                int guiID = buf.readInt();
-                if (!guiTile.openGui(player, guiID))
+                if (!guiTile.openGui(player, id))
                 {
-                    Engine.logger().error("Failed to open gui with ID(" + guiID + ") at location " + new Location(player.world, x, y, z) + ", tile = " + tile);
+                    Engine.logger().error("Failed to open gui with ID(" + id + ") at location " + new Location(player.world, x, y, z) + ", tile = " + tile);
                 }
             }
             else if (Engine.runningAsDev)

@@ -15,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/7/2017.
  */
-public class PacketRequestData implements IPacket
+public class PacketRequestData implements IPacket<PacketRequestData>
 {
     int dim, x, z, type;
 
@@ -45,6 +45,12 @@ public class PacketRequestData implements IPacket
         dim = buffer.readInt();
         x = buffer.readInt();
         z = buffer.readInt();
+    }
+
+    @Override
+    public PacketRequestData addData(Object... objects)
+    {
+        return this;
     }
 
     @Override

@@ -1,12 +1,12 @@
 package com.builtbroken.mc.framework.multiblock;
 
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.handler.TileTaskTickHandler;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
-import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.data.Direction;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -106,7 +106,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     }
 
     @Override
-    public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type)
+    public boolean read(ByteBuf buf, int id, EntityPlayer player, IPacket type)
     {
         if (world.isRemote)
         {
@@ -161,11 +161,11 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         Pos pos = getHost() != null ? new Pos(getHost()) : new Pos();
         if (overrideRenderBounds != null)
         {
-            return new PacketTile("desc", this, 1, pos, shouldRenderBlock, true, overrideRenderBounds);
+            return new PacketTile("desc", 1, this).addData(pos, shouldRenderBlock, true, overrideRenderBounds);
         }
         else
         {
-            return new PacketTile("desc2",this, 1, pos, shouldRenderBlock, false);
+            return new PacketTile("desc2", 1, this).addData(pos, shouldRenderBlock, false);
         }
     }
 

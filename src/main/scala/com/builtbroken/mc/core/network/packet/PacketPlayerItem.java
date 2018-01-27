@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.network.packet;
 
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
-import com.builtbroken.mc.core.network.IPacketReceiver;
+import com.builtbroken.mc.core.network.packet.prefab.PacketBase;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,38 +12,40 @@ import net.minecraft.item.ItemStack;
  * @author tgame14
  * @since 26/05/14
  */
-public class PacketPlayerItem extends PacketType
+public class PacketPlayerItem extends PacketBase<PacketPlayerItem>
 {
     public int slotId;
+    public int id = 0;
 
     public PacketPlayerItem()
     {
         //Needed for forge to construct the packet
     }
 
-    public PacketPlayerItem(int slotId, Object... args)
+    public PacketPlayerItem(int slotId)
     {
-        super(args);
         this.slotId = slotId;
     }
 
-    public PacketPlayerItem(EntityPlayer player, Object... args)
+    public PacketPlayerItem(EntityPlayer player)
     {
-        this(player.inventory.currentItem, args);
+        this(player.inventory.currentItem);
     }
 
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
         buffer.writeInt(slotId);
-        buffer.writeBytes(data());
+        buffer.writeInt(id);
+        super.encodeInto(ctx, buffer);
     }
 
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
         slotId = buffer.readInt();
-        data_$eq(buffer.slice());
+        id = buffer.readInt();
+        super.decodeInto(ctx, buffer);
     }
 
     @Override
@@ -60,29 +62,18 @@ public class PacketPlayerItem extends PacketType
             final Item item = Item.getItemById(Math.abs(this.slotId));
             if (item != null)
             {
-                if (item instanceof IPacketReceiver)
+                if (item instanceof IPacketIDReceiver)
                 {
-                    ((IPacketReceiver) item).read(data(), player, this);
-                }
-                else if (item instanceof IPacketIDReceiver)
-                {
-                    ((IPacketIDReceiver) item).read(data(), data().readInt(), player, this);
+                    ((IPacketIDReceiver) item).read(data(), id, player, this);
                 }
             }
         }
         else
         {
             final ItemStack stack = player.inventory.getStackInSlot(this.slotId);
-            if (stack != null)
+            if (stack.getItem() instanceof IPacketIDReceiver)
             {
-                if (stack.getItem() instanceof IPacketReceiver)
-                {
-                    ((IPacketReceiver) stack.getItem()).read(data(), player, this);
-                }
-                else if (stack.getItem() instanceof IPacketIDReceiver)
-                {
-                    ((IPacketIDReceiver) stack.getItem()).read(data(), data().readInt(), player, this);
-                }
+                ((IPacketIDReceiver) stack.getItem()).read(data(), id, player, this);
             }
         }
     }

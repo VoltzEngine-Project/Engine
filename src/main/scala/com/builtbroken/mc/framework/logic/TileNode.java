@@ -10,7 +10,6 @@ import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
-import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.framework.block.imp.IPlacementListener;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
 import com.builtbroken.mc.imp.transform.vector.Location;
@@ -153,7 +152,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     //=============================================
 
     @Override
-    public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type)
+    public boolean read(ByteBuf buf, int id, EntityPlayer player, IPacket packet)
     {
         if (id == DESCRIPTION_PACKET_ID)
         {
@@ -167,7 +166,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     }
 
     @Override
-    public boolean shouldReadPacket(EntityPlayer player, IWorldPosition receiveLocation, PacketType packet)
+    public boolean shouldReadPacket(EntityPlayer player, IWorldPosition receiveLocation, IPacket packet)
     {
         return isClient() || new Location(player).distance(receiveLocation.x(), receiveLocation.y(), receiveLocation.z()) < 10 && packet instanceof PacketTile;
     }
@@ -177,9 +176,8 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     {
         try
         {
-            IPacket packet = getPacketForData();
-            packet.data().writeInt(DESCRIPTION_PACKET_ID);
-            writeDescPacket(packet.data());
+            IPacket packet = getPacketForData(DESCRIPTION_PACKET_ID);
+            //writeDescPacket(packet.data()); TODO implement
             return packet;
         }
         catch (Exception e)

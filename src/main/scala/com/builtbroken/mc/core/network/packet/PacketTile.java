@@ -2,9 +2,8 @@ package com.builtbroken.mc.core.network.packet;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
-import com.builtbroken.mc.core.network.IPacketReceiver;
-import com.builtbroken.mc.core.network.ex.PacketIDException;
 import com.builtbroken.mc.core.network.ex.PacketTileReadException;
+import com.builtbroken.mc.core.network.packet.prefab.PacketBase;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -19,11 +18,12 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
  * @author tgame14
  * @since 26/05/14
  */
-public class PacketTile extends PacketType
+public class PacketTile extends PacketBase<PacketTile>
 {
     public int x;
     public int y;
     public int z;
+    public int id;
 
     public String name;
 
@@ -33,17 +33,14 @@ public class PacketTile extends PacketType
     }
 
     /**
-     * @param x    - location
-     * @param y    - location
-     * @param z    - location
-     * @param args -  data to send, first arg should be packetID if
-     *             the tile is an instance of {@code IPacketIDReceiver}
-     *             Should never be null
+     * @param x - location
+     * @param y - location
+     * @param z - location
      */
-    public PacketTile(String name, int x, int y, int z, Object... args)
+    public PacketTile(String name, int id, int x, int y, int z)
     {
-        super(args);
         this.name = name;
+        this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -51,40 +48,44 @@ public class PacketTile extends PacketType
 
     /**
      * @param tile - TileEntity to send this packet to, only used for location data
-     * @param args -  data to send, first arg should be packetID if
-     *             the tile is an instance of {@code IPacketIDReceiver}
-     *             Should never be null
      */
-    public PacketTile(String name, TileEntity tile, Object... args)
+    public PacketTile(String name, int id, TileEntity tile)
     {
-        this(name, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), args);
+        this(name, id, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
     }
 
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
         buffer.writeBoolean(Engine.runningAsDev);
-        if(Engine.runningAsDev)
+        if (Engine.runningAsDev)
         {
             ByteBufUtils.writeUTF8String(buffer, name);
         }
+        buffer.writeInt(id);
         buffer.writeInt(x);
         buffer.writeInt(y);
         buffer.writeInt(z);
-        buffer.writeBytes(data());
+        super.encodeInto(ctx, buffer);
+    }
+
+    protected void writeData(Object object, ByteBuf buffer)
+    {
+
     }
 
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
-        if(buffer.readBoolean())
+        if (buffer.readBoolean())
         {
             name = ByteBufUtils.readUTF8String(buffer);
         }
+        id = buffer.readInt();
         x = buffer.readInt();
         y = buffer.readInt();
         z = buffer.readInt();
-        data_$eq(buffer);
+        super.decodeInto(ctx, buffer);
     }
 
     @Override
@@ -141,7 +142,6 @@ public class PacketTile extends PacketType
     {
         //TODO add checksum or hash to verify the packet is sent to the correct tile
         final Location location = new Location(player.world, x, y, z);
-        sender_$eq(player);
         if (tile == null)
         {
             Engine.logger().error(new PacketTileReadException(location, "Null tile"));
@@ -157,19 +157,7 @@ public class PacketTile extends PacketType
                 try
                 {
                     IPacketIDReceiver receiver = (IPacketIDReceiver) tile;
-                    ByteBuf buf = data();
-
-                    int id;
-                    try
-                    {
-                        id = buf.readInt();
-                    }
-                    catch (IndexOutOfBoundsException ex)
-                    {
-                        Engine.logger().error(new PacketIDException(location, name));
-                        return;
-                    }
-                    receiver.read(buf, id, player, this);
+                    receiver.read(dataToRead, id, player, this);
                 }
                 catch (IndexOutOfBoundsException e)
                 {
@@ -185,30 +173,6 @@ public class PacketTile extends PacketType
                 {
                     Engine.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
                     Engine.logger().error("Error: ", e);
-                }
-            }
-            else
-            {
-                Engine.logger().error("Error: " + tile + " rejected packet " + this + " due to invalid conditions.");
-            }
-        }
-        else if (tile instanceof IPacketReceiver)
-        {
-            if (((IPacketReceiver) tile).shouldReadPacket(player, location, this))
-            {
-                try
-                {
-                    IPacketReceiver receiver = (IPacketReceiver) tile;
-                    receiver.read(data().slice(), player, this);
-                }
-                catch (IndexOutOfBoundsException e)
-                {
-                    Engine.logger().error(new PacketTileReadException(location, "Packet was read past it's size."));
-                }
-                catch (Exception e)
-                {
-                    Engine.logger().error(new PacketTileReadException(location, "Failed to read packet", e));
-                    e.printStackTrace();
                 }
             }
             else

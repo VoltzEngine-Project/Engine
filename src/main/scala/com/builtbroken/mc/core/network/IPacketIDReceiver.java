@@ -1,7 +1,7 @@
 package com.builtbroken.mc.core.network;
 
 import com.builtbroken.mc.api.IWorldPosition;
-import com.builtbroken.mc.core.network.packet.PacketType;
+import com.builtbroken.mc.api.data.IPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -20,7 +20,7 @@ public interface IPacketIDReceiver
      * @param type   - packet object
      * @return true if the data was read
      */
-    boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type);
+    boolean read(ByteBuf buf, int id, EntityPlayer player, IPacket type);
 
     /**
      * Called to check if the packet should be read at all.
@@ -32,7 +32,7 @@ public interface IPacketIDReceiver
      *                        world packets without postion data, and null if non-world packets
      * @return true if the packet should be read
      */
-    default boolean shouldReadPacket(EntityPlayer player, IWorldPosition receiveLocation, PacketType packet)
+    default boolean shouldReadPacket(EntityPlayer player, IWorldPosition receiveLocation, IPacket packet)
     {
         return true;
     }

@@ -13,7 +13,7 @@ import net.minecraft.world.World;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/7/2017.
  */
-public class PacketAudio implements IPacket
+public class PacketAudio implements IPacket<PacketAudio>
 {
     int dim;
     double x, y, z;
@@ -59,6 +59,12 @@ public class PacketAudio implements IPacket
         pitch = buffer.readFloat();
         volume = buffer.readFloat();
         audioKey = ByteBufUtils.readUTF8String(buffer);
+    }
+
+    @Override
+    public PacketAudio addData(Object... objects)
+    {
+        return this;
     }
 
     @Override

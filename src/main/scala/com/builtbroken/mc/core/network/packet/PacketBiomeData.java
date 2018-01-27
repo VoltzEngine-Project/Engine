@@ -1,5 +1,6 @@
 package com.builtbroken.mc.core.network.packet;
 
+import com.builtbroken.mc.api.data.IPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +13,7 @@ import net.minecraft.world.chunk.Chunk;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/28/2016.
  */
-public class PacketBiomeData extends PacketType
+public class PacketBiomeData implements IPacket<PacketBiomeData>
 {
     int chunkX, chunkZ;
     byte[] biomes;
@@ -54,6 +55,12 @@ public class PacketBiomeData extends PacketType
                 biomes[i] = b;
             }
         }
+    }
+
+    @Override
+    public PacketBiomeData addData(Object... objects)
+    {
+        return this;
     }
 
     @Override

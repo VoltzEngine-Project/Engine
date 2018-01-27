@@ -9,7 +9,6 @@ import com.builtbroken.mc.api.tile.node.ITileNodeHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
-import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.framework.block.imp.*;
 import com.builtbroken.mc.framework.logic.imp.ITileDesc;
 import com.builtbroken.mc.imp.transform.region.Cube;
@@ -178,7 +177,7 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     //=============================================
 
     @Override
-    public boolean read(ByteBuf buf, int id, EntityPlayer player, PacketType type)
+    public boolean read(ByteBuf buf, int id, EntityPlayer player, IPacket type)
     {
         if (getTileNode() instanceof IPacketIDReceiver)
         {
@@ -213,9 +212,9 @@ public class TileEntityWrapper extends TileEntity implements ITileNodeHost, ITil
     }
 
     @Override
-    public PacketTile getPacketForData(Object... data)
+    public PacketTile getPacketForData(int id, Object... data)
     {
-        return new PacketTile("descWrapper",this, data);
+        return new PacketTile("descWrapper", id, this).addData(data);
     }
 
     @Override

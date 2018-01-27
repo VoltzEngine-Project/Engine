@@ -3,6 +3,7 @@ package com.builtbroken.mc.core.network.packet;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.abstraction.world.IWorld;
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.core.Engine;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,7 +16,7 @@ import java.util.Random;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2016.
  */
-public class PacketSpawnStream extends PacketType
+public class PacketSpawnStream implements IPacket<PacketSpawnStream>
 {
     public int dim;
 
@@ -79,6 +80,12 @@ public class PacketSpawnStream extends PacketType
         vx = buffer.readDouble();
         vy = buffer.readDouble();
         vz = buffer.readDouble();
+    }
+
+    @Override
+    public PacketSpawnStream addData(Object... objects)
+    {
+        return this;
     }
 
     @Override

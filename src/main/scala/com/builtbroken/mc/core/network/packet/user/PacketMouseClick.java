@@ -19,7 +19,8 @@ public class PacketMouseClick extends PacketPlayerItem
 
     public PacketMouseClick(int slotId, int button, boolean state)
     {
-        super(slotId, button, state);
+        super(slotId);
+        addData(button, state); //TODO move to encode and decode
     }
 
     @Override

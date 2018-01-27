@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by robert on 2/15/2015.
  */
-public class PacketSelectionData implements IPacket
+public class PacketSelectionData implements IPacket<PacketSelectionData>
 {
     List<Cube> cubes;
     List<Cube> regions;
@@ -85,6 +85,12 @@ public class PacketSelectionData implements IPacket
             {
                 RenderSelection.region_render_list.add(new Cube(buffer));
             }
+    }
+
+    @Override
+    public PacketSelectionData addData(Object... objects)
+    {
+        return this;
     }
 
     @Override

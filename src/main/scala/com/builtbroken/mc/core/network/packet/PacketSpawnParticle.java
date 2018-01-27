@@ -1,6 +1,7 @@
 package com.builtbroken.mc.core.network.packet;
 
 
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.client.effects.VisualEffectProvider;
 import com.builtbroken.mc.client.effects.VisualEffectRegistry;
 import com.builtbroken.mc.client.json.ClientDataHandler;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2016.
  */
-public class PacketSpawnParticle extends PacketType
+public class PacketSpawnParticle implements IPacket<PacketSpawnParticle>
 {
     String name;
     public int dim;
@@ -89,6 +90,12 @@ public class PacketSpawnParticle extends PacketType
         {
             otherData = ByteBufUtils.readTag(buffer);
         }
+    }
+
+    @Override
+    public PacketSpawnParticle addData(Object... objects)
+    {
+        return this;
     }
 
     @Override

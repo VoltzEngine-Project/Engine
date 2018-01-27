@@ -19,7 +19,8 @@ public class PacketPlayerItemMode extends PacketPlayerItem
 
     public PacketPlayerItemMode(int slotId, int mode)
     {
-        super(slotId, mode);
+        super(slotId);
+        addData(mode);
     }
 
     @Override

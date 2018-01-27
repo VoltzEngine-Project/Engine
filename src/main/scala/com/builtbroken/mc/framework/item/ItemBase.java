@@ -1,13 +1,13 @@
 package com.builtbroken.mc.framework.item;
 
 import com.builtbroken.jlib.data.Colors;
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.api.items.listeners.IItemActivationListener;
 import com.builtbroken.mc.api.items.listeners.IItemEventListener;
 import com.builtbroken.mc.api.items.listeners.IItemWithListeners;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.network.IPacketReceiver;
+import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketPlayerItem;
-import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.imp.IJsonGenObject;
 import io.netty.buffer.ByteBuf;
@@ -39,7 +39,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/9/2017.
  */
-public class ItemBase extends Item implements IJsonGenObject<Item>, IItemWithListeners, IPacketReceiver
+public class ItemBase extends Item implements IJsonGenObject<Item>, IItemWithListeners, IPacketIDReceiver
 {
     /** Handles item properties and main logic */
     public final ItemNode node;
@@ -314,7 +314,7 @@ public class ItemBase extends Item implements IJsonGenObject<Item>, IItemWithLis
     //=============================================
 
     @Override
-    public void read(ByteBuf buf, EntityPlayer player, PacketType packet)
+    public boolean read(ByteBuf buf, int id, EntityPlayer player, IPacket packet)
     {
         if (packet instanceof PacketPlayerItem)
         {
@@ -342,12 +342,14 @@ public class ItemBase extends Item implements IJsonGenObject<Item>, IItemWithLis
             {
                 Engine.logger().error("ItemBase#read() >> stack in slot[" + slot + "] item is null preventing packet reading.");
             }
+            return true;
         }
+        return false;
     }
 
     public PacketPlayerItem getPacket(int slotID, Object... args)
     {
-        return new PacketPlayerItem(slotID, args);
+        return new PacketPlayerItem(slotID).addData(args);
     }
 
     //=============================================

@@ -3,6 +3,7 @@ package com.builtbroken.mc.core.network.packet;
 
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -16,7 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2016.
  */
-public class PacketSpawnParticleCircle extends PacketType
+public class PacketSpawnParticleCircle implements IPacket<PacketSpawnParticleCircle>
 {
     /** Name of the particle effect */
     public String name;
@@ -105,6 +106,12 @@ public class PacketSpawnParticleCircle extends PacketType
         vz = buffer.readDouble();
         distance = buffer.readDouble();
         name = ByteBufUtils.readUTF8String(buffer);
+    }
+
+    @Override
+    public PacketSpawnParticleCircle addData(Object... objects)
+    {
+        return this;
     }
 
     @Override

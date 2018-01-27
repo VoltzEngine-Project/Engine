@@ -2,6 +2,7 @@ package com.builtbroken.mc.core.network.packet;
 
 
 import com.builtbroken.jlib.data.vector.IPos3D;
+import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,7 +13,7 @@ import net.minecraft.util.EnumParticleTypes;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 5/6/2016.
  */
-public class PacketSpawnParticleStream extends PacketType
+public class PacketSpawnParticleStream implements IPacket<PacketSpawnParticleStream>
 {
     public int dim;
     public Pos start;
@@ -44,6 +45,12 @@ public class PacketSpawnParticleStream extends PacketType
         dim = buffer.readInt();
         start = new Pos(buffer);
         end = new Pos(buffer);
+    }
+
+    @Override
+    public PacketSpawnParticleStream addData(Object... objects)
+    {
+        return this;
     }
 
     @Override
