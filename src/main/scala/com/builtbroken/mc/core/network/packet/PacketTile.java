@@ -69,11 +69,6 @@ public class PacketTile extends PacketBase<PacketTile>
         super.encodeInto(ctx, buffer);
     }
 
-    protected void writeData(Object object, ByteBuf buffer)
-    {
-
-    }
-
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {

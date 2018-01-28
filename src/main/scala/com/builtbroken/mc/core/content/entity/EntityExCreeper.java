@@ -119,7 +119,7 @@ public class EntityExCreeper extends EntityMob implements IExplosiveHolder, IEnt
             }
 
             //Tick timer up if its close enough
-            if (this.getAttackTarget() != null && this.getAttackTarget().getDistanceSqToEntity(this) < 9)
+            if (this.getAttackTarget() != null && this.getAttackTarget().getDistance(this) < 9)
             {
                 setFuse(f + 1);
             }
