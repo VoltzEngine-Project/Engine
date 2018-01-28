@@ -5,6 +5,7 @@ import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarEntity;
 import com.builtbroken.mc.lib.world.map.radar.data.RadarObject;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -14,7 +15,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -165,9 +165,9 @@ public final class RadarRegistry
      * @param cube  - area to search for contacts
      * @return list, never null
      */
-    public static List<Entity> getAllLivingObjectsWithin(World world, Cube cube, Predicate<Entity> selector)
+    public static <T extends Entity> List<T> getAllLivingObjectsWithin(World world, Cube cube, Predicate<T> selector)
     {
-        List<Entity> list = new ArrayList();
+        List<T> list = Lists.<T>newArrayList();
         if (RADAR_MAPS.containsKey(world.provider.getDimension()))
         {
             RadarMap map = getRadarMapForWorld(world);
@@ -179,9 +179,9 @@ public final class RadarRegistry
                     if (object instanceof RadarEntity && object.isValid())
                     {
                         Entity entity = ((RadarEntity) object).entity;
-                        if (entity != null && !entity.isDead && (selector == null || selector.test(entity)))
+                        if (entity != null && !entity.isDead && (selector == null || selector.test((T) entity)))
                         {
-                            list.add(entity);
+                            list.add((T) entity);
                         }
                     }
                 }
