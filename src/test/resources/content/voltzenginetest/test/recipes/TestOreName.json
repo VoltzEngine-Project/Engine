@@ -1,9 +1,0 @@
-{
-  "author": {
-    "name": "${voltzengine}"
-  },
-  "oreName": {
-    "name":"rock",
-    "item":"block@minecraft:cobblestone"
-  }
-}
