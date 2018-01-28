@@ -36,7 +36,7 @@ public class PacketBase<P extends PacketBase> implements IPacket<P>
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
-        dataToRead = buffer.slice();
+        dataToRead = buffer.slice().copy();
     }
 
     /**
