@@ -1,0 +1,19 @@
+{
+  "author": {
+    "name": "${voltzengine}"
+  },
+  "recipeRemoval": {
+    "type": "replace",
+    "craftingType": "grid",
+    "item": "item@minecraft:stick",
+    "craftingGridRecipe": {
+      "loadCondition": "devMode",
+      "type": "shaped",
+      "output": "item@minecraft:stick",
+      "grid": "C,C",
+      "items": {
+        "C": "block@minecraft:cobblestone"
+      }
+    }
+  }
+}

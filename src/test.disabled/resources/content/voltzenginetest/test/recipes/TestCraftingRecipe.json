@@ -1,0 +1,14 @@
+{
+  "author": {
+    "name": "${voltzengine}"
+  },
+  "craftingGridRecipe": {
+    "loadCondition":"devMode",
+    "type": "shaped",
+    "output":"item@minecraft:stick",
+    "grid": "...,.S.,...",
+    "items": {
+      "S": "item@minecraft:stick"
+    }
+  }
+}

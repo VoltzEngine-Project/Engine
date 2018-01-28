@@ -1,0 +1,47 @@
+{
+  "author": {
+    "name": "${voltzengine}"
+  },
+  "block": {
+    "name": "veTestBlock",
+    "id": "veTestBlock",
+    "mod":"voltzenginetest",
+    "material": "rock",
+    "listeners":[
+        "rotation",
+        "rotationIcon"
+    ]
+  },
+  "render": {
+    "contentID": "voltzenginetest:veTestBlock",
+    "type": "block",
+    "states": [
+      {
+        "id": "tile",
+        "sides": "stone",
+        "north":"planks",
+        "south":"logs",
+        "up": "planks",
+        "down":"logs"
+      }
+    ]
+  },
+  "texture": {
+    "key": "stone",
+    "domain": "minecraft",
+    "name": "stone",
+    "type": "block"
+  },
+  "texture:1": {
+    "key": "planks",
+    "domain": "minecraft",
+    "name": "planks_oak",
+    "type": "block"
+  },
+  "texture:2": {
+    "key": "logs",
+    "domain": "minecraft",
+    "name": "log_oak_top",
+    "type": "block"
+  }
+}
