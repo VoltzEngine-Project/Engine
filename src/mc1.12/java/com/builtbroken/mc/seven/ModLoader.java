@@ -94,7 +94,7 @@ import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 8/12/2017.
  */
-@Mod(modid = References.ID, name = References.NAME, version = References.VERSION, dependencies = "after:TConstruct")
+@Mod(modid = References.ID, name = References.NAME, version = References.VERSION)
 @Mod.EventBusSubscriber()
 public class ModLoader extends EngineLoader
 {
