@@ -31,6 +31,6 @@ public class EnginePreloader extends DummyModContainer
     @Override
     public boolean registerBus(EventBus bus, LoadController controller)
     {
-        return true;
+        return false;
     }
 }
