@@ -98,7 +98,7 @@ import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 @Mod.EventBusSubscriber()
 public class ModLoader extends EngineLoader
 {
-    @SidedProxy(clientSide = "com.builtbroken.mc.seven.client.ClientProxy", serverSide = "com.builtbroken.mc.core.ServerProxy")
+    @SidedProxy(clientSide = "com.builtbroken.mc.seven.client.ClientProxy", serverSide = "com.builtbroken.mc.seven.server.ServerProxy")
     public static CommonProxy proxy;
 
 
