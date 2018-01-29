@@ -41,7 +41,7 @@ public class EngineCoreMod implements IFMLLoadingPlugin
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[]{"com.builtbroken.mc.core.asm.ChunkTransformer", "com.builtbroken.mc.core.asm.template.ClassTransformer"};
+        return new String[0];//new String[]{"com.builtbroken.mc.core.asm.ChunkTransformer", "com.builtbroken.mc.core.asm.template.ClassTransformer"};
     }
 
     @Override
