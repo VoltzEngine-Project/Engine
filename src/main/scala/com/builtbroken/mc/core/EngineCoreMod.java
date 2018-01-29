@@ -12,7 +12,7 @@ import java.util.Map;
  * Created by Dark on 9/7/2015.
  * -Dfml.coreMods.load=com.builtbroken.mc.core.EngineCoreMod
  */
-@IFMLLoadingPlugin.MCVersion(value = "1.7.10")
+@IFMLLoadingPlugin.MCVersion()
 public class EngineCoreMod implements IFMLLoadingPlugin
 {
     /** Grab the mod's main logger, in theory should be the same logger */
