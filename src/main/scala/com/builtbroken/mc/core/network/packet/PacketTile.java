@@ -11,6 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Packet type designed to be used with Tiles
@@ -84,6 +86,7 @@ public class PacketTile extends PacketBase<PacketTile>
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void handleClientSide(EntityPlayer player)
     {
         if (player != null)
@@ -124,7 +127,15 @@ public class PacketTile extends PacketBase<PacketTile>
             }
             return;
         }
-        handle(player, player.getEntityWorld().getTileEntity(new BlockPos(this.x, this.y, this.z)));
+        final BlockPos pos = new BlockPos(this.x, this.y, this.z);
+        if (player.getEntityWorld().isBlockLoaded(pos))
+        {
+            handle(player, player.getEntityWorld().getTileEntity(pos));
+        }
+        else if (Engine.runningAsDev)
+        {
+            Engine.logger().error("PacketTile#handle(" + player + ") - block is not loaded for player while handling packet. ", new RuntimeException());
+        }
     }
 
     /**
