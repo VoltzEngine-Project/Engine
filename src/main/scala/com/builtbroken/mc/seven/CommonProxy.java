@@ -5,7 +5,6 @@ import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.content.entity.EntityExCreeper;
 import com.builtbroken.mc.framework.mod.AbstractProxy;
 import com.builtbroken.mc.seven.abstraction.MinecraftWrapper;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
@@ -14,12 +13,6 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
  */
 public class CommonProxy extends AbstractProxy
 {
-    @Deprecated
-    public EntityPlayer getClientPlayer()
-    {
-        return null;
-    }
-
     public void onLoad()
     {
         Engine.minecraft = MinecraftWrapper.INSTANCE = new MinecraftWrapper();

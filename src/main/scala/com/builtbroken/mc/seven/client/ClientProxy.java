@@ -44,7 +44,6 @@ import com.builtbroken.mc.seven.framework.block.json.JsonBlockListenerProcessor;
 import com.builtbroken.mc.seven.framework.block.listeners.RotatableListener;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -345,17 +344,5 @@ public class ClientProxy extends CommonProxy
         }
 
         return false;
-    }
-
-    @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-    {
-        return null;
-    }
-
-    @Override
-    public EntityPlayerSP getClientPlayer()
-    {
-        return Minecraft.getMinecraft().player;
     }
 }
