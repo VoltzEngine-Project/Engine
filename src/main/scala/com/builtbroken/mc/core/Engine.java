@@ -6,6 +6,7 @@ import com.builtbroken.mc.api.abstraction.world.IWorld;
 import com.builtbroken.mc.core.network.netty.PacketManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +31,9 @@ public class Engine
 
     @Deprecated
     public static Block heatedStone;
+    
     @Deprecated
+    @GameRegistry.ObjectHolder("voltzengine:multiblock")
     public static Block multiBlock;
 
     @Deprecated
