@@ -112,13 +112,13 @@ public class SaveManager
 
     /**
      * Call this to register a class with an id to be use in recreating an object from a save. Any
-     * object that is registered to this should use a no parm constructor. Unless the class plans to
+     * object that is registered to this should use a no param constructor. Unless the class plans to
      * construct itself without using the save manager.
      *
      * @param id    - string that will be used to save the class by
      * @param clazz - class to link with the id
      */
-    public static void registerClass(String id, Class<?> clazz)
+    public static void registerClass(String id, Class<?> clazz) //TODO replace with annotation driven system
     {
         synchronized (instance())
         {
@@ -178,9 +178,9 @@ public class SaveManager
                     Class<?> clazz = getClass(nbt.getString("id"));
                     if (clazz != null)
                     {
-                        if (args == null || args.length == 0)
+                        if (args != null && args.length > 0)
                         {
-                            Constructor<?> con = ReflectionUtility.getConstructorWithArgs(clazz, args);
+                            Constructor<?> con = ReflectionUtility.getConstructorWithArgs(clazz, args); //TODO phase out with factory methods
                             if (con != null)
                             {
                                 obj = con.newInstance(args);
@@ -265,10 +265,7 @@ public class SaveManager
                             file.mkdirs();
 
                             /* Create nbt save object */
-                            NBTTagCompound tag = new NBTTagCompound();
-                            object.save(tag);
-                            tag.setString("id", getID(object.getClass()));
-                            tag.setString("ve_version", References.VERSION);
+                            NBTTagCompound tag = generateSaveData(object);
 
                             /* Save data using NBTUtility */
                             NBTUtility.saveData(file, tag);
@@ -295,6 +292,17 @@ public class SaveManager
             e.printStackTrace();
         }
     }
+
+    public static NBTTagCompound generateSaveData(IVirtualObject object)
+    {
+        NBTTagCompound tag = new NBTTagCompound();
+        object.save(tag);
+        tag.setString("id", getID(object.getClass()));
+        tag.setString("ve_version", References.VERSION);
+
+        return tag;
+    }
+
 
     /**
      * Gets the ID that the class will be saved using
