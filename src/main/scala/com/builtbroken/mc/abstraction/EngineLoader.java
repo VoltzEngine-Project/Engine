@@ -2,7 +2,7 @@ package com.builtbroken.mc.abstraction;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
-import com.builtbroken.mc.framework.access.global.GlobalAccessSystem;
+import com.builtbroken.mc.framework.access.AccessModule;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.mod.loadable.LoadableHandler;
@@ -31,7 +31,7 @@ public abstract class EngineLoader implements IJsonGenMod
     public void loadHandler()
     {
         getModuleLoader().applyModule(GroupProfileHandler.GLOBAL);
-        getModuleLoader().applyModule(GlobalAccessSystem.instance);
+        getModuleLoader().applyModule(new AccessModule());
         getModuleLoader().applyModule(JsonContentLoader.INSTANCE);
     }
 
