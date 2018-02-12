@@ -2,7 +2,7 @@ package com.builtbroken.mc.abstraction;
 
 import com.builtbroken.mc.core.References;
 import com.builtbroken.mc.core.commands.permissions.GroupProfileHandler;
-import com.builtbroken.mc.framework.access.AccessModule;
+import com.builtbroken.mc.framework.access.load.AccessModule;
 import com.builtbroken.mc.framework.json.IJsonGenMod;
 import com.builtbroken.mc.framework.json.JsonContentLoader;
 import com.builtbroken.mc.framework.mod.loadable.LoadableHandler;
