@@ -6,8 +6,8 @@ import com.builtbroken.mc.framework.access.AccessGroup;
 import com.builtbroken.mc.framework.access.AccessProfile;
 import com.builtbroken.mc.framework.access.AccessUser;
 import com.builtbroken.mc.framework.access.api.IProfileContainer;
-import com.builtbroken.mc.lib.helper.NBTUtility;
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
+import com.builtbroken.mc.lib.helper.NBTUtility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -74,9 +74,14 @@ public class GroupProfileHandler extends AbstractLoadable implements IVirtualObj
     {
         //String version = nbt.getString("ve_version"); - for later
         if (nbt.hasKey("profile"))
-            profile = new AccessProfile(nbt.getCompoundTag("profile"));
+        {
+            profile = new AccessProfile();
+            profile.load(nbt.getCompoundTag("profile"));
+        }
         else
+        {
             generateNew();
+        }
     }
 
     @Override
