@@ -15,7 +15,7 @@ import com.builtbroken.mc.framework.mod.loadable.LoadableHandler;
  */
 public abstract class EngineLoader implements IJsonGenMod
 {
-    public static LoadableHandler loader = new LoadableHandler();
+    public LoadableHandler loader = new LoadableHandler(this); //TODO move to constructor
 
     public LoadableHandler getModuleLoader()
     {

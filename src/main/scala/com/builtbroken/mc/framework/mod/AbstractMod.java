@@ -54,7 +54,7 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
     public AbstractMod(String domain)
     {
         this.domain = domain;
-        loader = new LoadableHandler();
+        loader = new LoadableHandler(this);
         manager = new ModManager().setPrefix(domain);
         logger = LogManager.getLogger(domain);
     }
@@ -68,7 +68,7 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
     @Override
     public void loadJsonContentHandlers()
     {
-        getProxy().loadJsonContentHandlers();
+        loader.loadJsonContentHandlers();
     }
 
     public void preInit(FMLPreInitializationEvent event)

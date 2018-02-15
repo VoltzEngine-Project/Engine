@@ -1,5 +1,7 @@
 package com.builtbroken.mc.framework.mod.loadable;
 
+import com.builtbroken.mc.framework.json.IJsonGenMod;
+import com.builtbroken.mc.framework.mod.IMod;
 import cpw.mods.fml.common.Loader;
 
 import java.util.*;
@@ -27,6 +29,14 @@ public final class LoadableHandler
     private List<ILoadable> waitingToBeAdded = new ArrayList();
 
     private boolean running = false;
+
+    public final IMod host;
+
+    public LoadableHandler(IMod mod)
+    {
+        this.host = mod;
+    }
+
 
     public void applyModule(Class<?> clazz)
     {
@@ -95,6 +105,11 @@ public final class LoadableHandler
         }
     }
 
+    public void loadJsonContentHandlers()
+    {
+        load(LoadPhase.JSON);
+    }
+
     public void preInit()
     {
         load(LoadPhase.PREINIT);
@@ -135,40 +150,50 @@ public final class LoadableHandler
         {
             Map.Entry<ILoadable, List<LoadPhase>> proxy = it.next();
 
-            //Pre init and up
-            if (untilPhase.ordinal() >= LoadPhase.PREINIT.ordinal())
+            //Json and up
+            if (untilPhase.ordinal() >= LoadPhase.JSON.ordinal())
             {
-                if (!proxy.getValue().contains(LoadPhase.PREINIT))
+                if (host instanceof IJsonGenMod && !proxy.getValue().contains(LoadPhase.JSON))
                 {
-                    proxy.getValue().add(LoadPhase.PREINIT);
-                    proxy.getKey().preInit();
+                    proxy.getValue().add(LoadPhase.JSON);
+                    proxy.getKey().loadJsonContentHandlers();
                 }
 
-                //Init and up
-                if (untilPhase.ordinal() >= LoadPhase.INIT.ordinal())
+                //Pre init and up
+                if (untilPhase.ordinal() >= LoadPhase.PREINIT.ordinal())
                 {
-                    if (!proxy.getValue().contains(LoadPhase.INIT))
+                    if (!proxy.getValue().contains(LoadPhase.PREINIT))
                     {
-                        proxy.getValue().add(LoadPhase.INIT);
-                        proxy.getKey().init();
+                        proxy.getValue().add(LoadPhase.PREINIT);
+                        proxy.getKey().preInit();
                     }
 
-                    //Post init and up
-                    if (untilPhase.ordinal() >= LoadPhase.POSTINIT.ordinal())
+                    //Init and up
+                    if (untilPhase.ordinal() >= LoadPhase.INIT.ordinal())
                     {
-                        if (!proxy.getValue().contains(LoadPhase.POSTINIT))
+                        if (!proxy.getValue().contains(LoadPhase.INIT))
                         {
-                            proxy.getValue().add(LoadPhase.POSTINIT);
-                            proxy.getKey().postInit();
+                            proxy.getValue().add(LoadPhase.INIT);
+                            proxy.getKey().init();
                         }
 
-                        //Last phase
-                        if (untilPhase.ordinal() >= LoadPhase.LOAD_COMPLETE.ordinal())
+                        //Post init and up
+                        if (untilPhase.ordinal() >= LoadPhase.POSTINIT.ordinal())
                         {
-                            if (!proxy.getValue().contains(LoadPhase.LOAD_COMPLETE))
+                            if (!proxy.getValue().contains(LoadPhase.POSTINIT))
                             {
-                                proxy.getKey().loadComplete();
-                                proxy.getValue().add(LoadPhase.LOAD_COMPLETE);
+                                proxy.getValue().add(LoadPhase.POSTINIT);
+                                proxy.getKey().postInit();
+                            }
+
+                            //Last phase
+                            if (untilPhase.ordinal() >= LoadPhase.LOAD_COMPLETE.ordinal())
+                            {
+                                if (!proxy.getValue().contains(LoadPhase.LOAD_COMPLETE))
+                                {
+                                    proxy.getKey().loadComplete();
+                                    proxy.getValue().add(LoadPhase.LOAD_COMPLETE);
+                                }
                             }
                         }
                     }
@@ -188,6 +213,7 @@ public final class LoadableHandler
     public enum LoadPhase
     {
         PRELAUNCH,
+        JSON,
         PREINIT,
         INIT,
         POSTINIT,
