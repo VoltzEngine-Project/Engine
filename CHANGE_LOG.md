@@ -6,6 +6,42 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.10.0 - 12/15/2018
+### Runtime Changes
+Added: gift box blast
+Added: button to copy access profile ID
+Added: * support in profiles for groups and users
+Added: simple friends list for global profiles
+Improved: EMP's tile discovery system
+Fixed: Several issues with access system
+Fixed: Save manager failing to build objects
+Fixed: access profiles using username over UUID or instance
+Fixed: perm checks for profiles, mainly on users
+Fixed: refresh profile button crashing client
+Fixed: NPE crash when group id is null in GUI
+Fixed: Crash with underground biomes due to localization names
+Fixed: Missing TileInfinite when running in dev mode
+Fixed: issues dropping NBT driven items
+Fixed: issues with protection systems due to block break event
+Fixed: placement listeners running client side causing odd render issues
+Fixed: placement listener pathfinder inf looping
+Fixed: global access profiles staying after sever/world switch
+Fixed: tooltip drawing in GUIs rendering behind NEI
+
+### Development Changes
+Added: Delayed spawn object - allows spawning entities after a timer
+Added: Question button for use as a help button on GUIs
+Added: can edit check to profile, groups, and users - allows for locking settings
+Added: method to load profile GUI with a profile to load by default
+Added: rotation listener for 0-3 meta values
+Added: way to override render pass
+Changed: groups to use lowercase names
+Reworked: processors to handle annotations by default
+Reworked: Global access system seperating it from profile system
+Reworked: multiblocks to no longer handle dropping of items
+Reworked: item dropping, system can handle NBT in normal MC methods
+Removed: Tile map - chunks store tile locations already
+
 ## 1.9.18 - 12/24/2017
 ### Runtime Changes
 Fixed: crash while parsing JSON tags marked as client or server only
