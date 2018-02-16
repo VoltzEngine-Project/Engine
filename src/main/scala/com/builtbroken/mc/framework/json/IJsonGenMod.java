@@ -26,8 +26,13 @@ public interface IJsonGenMod extends IMod
      * fixes issues with nested loaders such as
      * {@link ITileEventListener} loading which is only run
      * once.
+     *
+     * Do not run logic or registry calls at this time. This should
+     * only be used to add JSON handlers and converters to the system.
+     * This way the content system can load as many data points as possible
+     * before blocks and items are created.
      */
-    default void loadJsonContentHandlers()
+    default void loadJsonContentHandlers() //TODO replace with event call
     {
 
     }

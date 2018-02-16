@@ -68,6 +68,10 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
     @Override
     public void loadJsonContentHandlers()
     {
+        //Proxy needs to be loaded before running loader calls
+        loader.applyModule(getProxy());
+
+        //Run JSON loading for proxies
         loader.loadJsonContentHandlers();
     }
 
@@ -99,9 +103,6 @@ public abstract class AbstractMod implements IMod, IJsonGenMod
             }
         }
         getConfig().load();
-
-        //Load default handlers
-        loader.applyModule(getProxy());
 
         //Call nub friendly loader methods
         loadHandlers(loader);
