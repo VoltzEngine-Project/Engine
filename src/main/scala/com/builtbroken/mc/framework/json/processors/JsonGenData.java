@@ -57,7 +57,7 @@ public abstract class JsonGenData implements IJsonGenObject
     @Override
     public String getLoader()
     {
-        return processor.getJsonKey();
+        return processor != null ? processor.getJsonKey() : null;
     }
 
     @Override
@@ -237,7 +237,7 @@ public abstract class JsonGenData implements IJsonGenObject
 
     protected void addError(String title, String message, Exception e)
     {
-        if(errors == null)
+        if (errors == null)
         {
             errors = new ArrayList();
         }
