@@ -6,6 +6,10 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.10.1 - 12/17/2018
+### Development Changes
+Implemented early data and methods for guide book
+
 ## 1.10.0 - 12/15/2018
 ### Runtime Changes
 Added: gift box blast
