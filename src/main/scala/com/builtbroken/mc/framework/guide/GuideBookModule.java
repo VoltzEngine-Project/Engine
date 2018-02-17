@@ -46,8 +46,6 @@ public class GuideBookModule implements ILoadableProxy
         JsonContentLoader.INSTANCE.add(jsonProcessorChapter = new JsonProcessorChapter());
         JsonContentLoader.INSTANCE.add(jsonProcessorSection = new JsonProcessorSection());
         JsonContentLoader.INSTANCE.add(jsonProcessorPage = new JsonProcessorPage());
-
-
     }
 
     @Override

@@ -24,6 +24,7 @@ public class Page extends GuidePart
     @JsonProcessorData("name")
     public String name;
 
+    //TODO find a way to store by language.. as we are not dumping a ton of entries into the localization system
     List<PageComponent> components = new LinkedList();
 
     public Page(IJsonProcessor processor)
