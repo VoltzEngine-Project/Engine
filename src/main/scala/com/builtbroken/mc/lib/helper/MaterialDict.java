@@ -34,6 +34,27 @@ public class MaterialDict
         add("vine", Material.vine);
         add("sponge", Material.sponge);
         add("cloth", Material.cloth);
+        add("fire", Material.fire);
+        add("sand", Material.sand);
+        add("circuits", Material.circuits);
+        add("circuits", Material.circuits);
+        add("carpet", Material.carpet);
+        add("glass", Material.glass);
+        add("redstoneLight", Material.redstoneLight);
+        add("tnt", Material.tnt);
+        add("coral", Material.coral);
+        add("ice", Material.ice);
+        add("packedIce", Material.packedIce);
+        add("snow", Material.snow);
+        add("craftedSnow", Material.craftedSnow);
+        add("cactus", Material.cactus);
+        add("clay", Material.clay);
+        add("gourd", Material.gourd);
+        add("dragonEgg", Material.dragonEgg);
+        add("portal", Material.portal);
+        add("cake", Material.cake);
+        add("web", Material.web);
+        add("piston", Material.piston);
         //TODO add rest
     }
 
@@ -45,7 +66,7 @@ public class MaterialDict
 
     public static Material get(String name)
     {
-        return map.containsKey(name.toLowerCase()) ? map.get(name.toLowerCase()) : Material.rock;
+        return map.containsKey(name.toLowerCase()) ? map.get(name.toLowerCase()) : Material.air;
     }
 
     public static String getName(Material material)
