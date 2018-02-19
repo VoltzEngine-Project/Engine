@@ -16,6 +16,7 @@ public class GuideEntry
     public final String page;
 
     private String id;
+    private GuideEntryType type;
 
     public GuideEntry(String book, String chapter, String section, String page)
     {
@@ -51,6 +52,31 @@ public class GuideEntry
         return id;
     }
 
+    public GuideEntryType getType()
+    {
+        if (type == null)
+        {
+            if (book != null)
+            {
+                if (chapter != null)
+                {
+                    if (section != null)
+                    {
+                        if (page != null)
+                        {
+                            return type = GuideEntryType.PAGE;
+                        }
+                        return type = GuideEntryType.SECTION;
+                    }
+                    return type = GuideEntryType.CHAPTER;
+                }
+                return type = GuideEntryType.BOOK;
+            }
+            return type = GuideEntryType.INVALID;
+        }
+        return type;
+    }
+
     @Override
     public boolean equals(Object object)
     {
@@ -66,4 +92,5 @@ public class GuideEntry
     {
         return id();
     }
+
 }
