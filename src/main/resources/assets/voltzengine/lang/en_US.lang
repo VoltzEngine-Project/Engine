@@ -593,3 +593,7 @@ entry.type.animals=Animals
 entry.type.tameable=Tamed Creatures
 entry.type.mobs=Monsters
 entry.type.npcs=Villagers
+
+## User tool kit GUI
+gui.voltzengine:usertools.header=VoltzEngine User Tools
+gui.voltzengine:button.back.name=Back
