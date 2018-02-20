@@ -8,16 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Prefab for objects that are part of the guide book
+ *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 2/16/2018.
  */
 public abstract class GuidePart extends JsonGenData
 {
+    /** Unique id, lowercase */
     @JsonProcessorData("id")
     public String id;
-    @JsonProcessorData("name")
-    public String name;
-    @JsonProcessorData(value = "previous_names", type = "list.array", args = "string")
+    /** Unlocalized name for translation */
+    @JsonProcessorData("unlocalized")
+    public String unlocalized;
+
+    /** Previous list of ids used for some level of backwards compat */
+    @JsonProcessorData(value = "previous_ids", type = "list.array", args = "string")
     public List<String> previous_names = new ArrayList();
 
     public GuidePart(IJsonProcessor processor)
@@ -27,8 +33,8 @@ public abstract class GuidePart extends JsonGenData
 
     public <D extends GuidePart> D init(String id, String name)
     {
-        this.id = id;
-        this.name = name;
+        this.id = id.toLowerCase();
+        this.unlocalized = name;
         return (D) this;
     }
 }

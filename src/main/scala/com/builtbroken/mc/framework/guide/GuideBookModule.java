@@ -81,17 +81,13 @@ public class GuideBookModule implements ILoadableProxy
         {
             Book book = new Book(jsonProcessorBook).init("test", "Test Data");
 
-            Chapter chapter1 = book.add(new Chapter(jsonProcessorChapter).init("chapter1", "Chapter 1"));
-            Section section1A = chapter1.add(new Section(jsonProcessorSection).init("section1", "Section 1"));
+            Chapter chapter1 = new Chapter(jsonProcessorChapter).init("chapter1", "Chapter 1");
+            book.add(chapter1);
+            Section section1A = new Section(jsonProcessorSection).init("section1", "Section 1");
+            chapter1.add(section1A);
             section1A.add(new Page(jsonProcessorPage).init("page1", "Page 1"));
             section1A.add(new Page(jsonProcessorPage).init("page2", "Page 2"));
             section1A.add(new Page(jsonProcessorPage).init("page3", "Page 3"));
-
-            Chapter chapter2 = book.add(new Chapter(jsonProcessorChapter).init("chapter1", "Chapter 1"));
-            Section section2A = chapter2.add(new Section(jsonProcessorSection).init("section1", "Section 1"));
-            section2A.add(new Page(jsonProcessorPage).init("pageA", "Page A"));
-            section2A.add(new Page(jsonProcessorPage).init("pageB", "Page B"));
-            section2A.add(new Page(jsonProcessorPage).init("pageC", "Page C"));
 
             addBook(book);
         }
@@ -222,6 +218,15 @@ public class GuideBookModule implements ILoadableProxy
 
             //Sort keys, will sort by name using chars over standard sort using length
             Collections.sort(names, new StringComparator());
+
+            for (String key : names)
+            {
+                Book book = getBook(key);
+                if (book != null)
+                {
+                    sortedBookList.add(book);
+                }
+            }
         }
         return sortedBookList;
     }
@@ -234,30 +239,9 @@ public class GuideBookModule implements ILoadableProxy
 
     /**
      * Called to open the Book List GUI
-     *
      */
     @SideOnly(Side.CLIENT)
     public static void openGUI()
-    {
-        if (!(Minecraft.getMinecraft().currentScreen instanceof GuiBookList)) //TODO check previous GUI to prevent bugs (e.g. prevent opening on death screen)
-        {
-            //Close previous
-            if (Minecraft.getMinecraft().currentScreen != null)
-            {
-                Minecraft.getMinecraft().currentScreen.onGuiClosed();
-            }
-
-            //Create and set profile to load
-            GuiBookList gui = new GuiBookList();
-            //TODO cache previous open GUI to restore that GUI
-
-            //Open
-            Minecraft.getMinecraft().displayGuiScreen(gui);
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void openGUI(GuideEntry entry)
     {
         if (!(Minecraft.getMinecraft().currentScreen instanceof GuiBookList)) //TODO check previous GUI to prevent bugs (e.g. prevent opening on death screen)
         {
@@ -268,12 +252,22 @@ public class GuideBookModule implements ILoadableProxy
                 prev_gui.onGuiClosed();
             }
 
-            //Create and set profile to load
-            GuiBookPage gui = new GuiBookPage(entry, new RestorePrevGui(prev_gui));
-            //TODO cache previous open GUI to restore that GUI
-
             //Open
-            Minecraft.getMinecraft().displayGuiScreen(gui);
+            Minecraft.getMinecraft().displayGuiScreen(new GuiBookList(new RestorePrevGui(prev_gui)));
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void openGUI(GuideEntry entry)
+    {
+        final GuiScreen prev_gui = Minecraft.getMinecraft().currentScreen;
+        //Close previous
+        if (prev_gui != null)
+        {
+            prev_gui.onGuiClosed();
+        }
+
+        //Open
+        Minecraft.getMinecraft().displayGuiScreen(new GuiBookPage(entry, new RestorePrevGui(prev_gui)));
     }
 }

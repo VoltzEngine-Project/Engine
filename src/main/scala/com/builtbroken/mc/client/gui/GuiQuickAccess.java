@@ -65,16 +65,19 @@ public class GuiQuickAccess extends GuiScreenBase
         //Draw background
         this.drawDefaultBackground();
 
-        Color a = new Color(122, 122, 122, 143);
-        Color b = new Color(122, 122, 122, 143);
+        //Colors
+        final Color color_a = new Color(122, 122, 122, 143);
+        final Color color_b = new Color(122, 122, 122, 143);
 
         //Side bar
-        this.drawGradientRect(0, 15, 109 + 4, this.height, a.getRGB(), b.getRGB());
+        this.drawGradientRect(0, 15, 109 + 4, this.height, color_a.getRGB(), color_b.getRGB());
         this.drawVerticalLine(109 + 3, 14, this.height, Color.BLACK.getRGB());
 
         //Header
-        this.drawGradientRect(0, 0, this.width, 15, a.getRGB(), b.getRGB());
+        this.drawGradientRect(0, 0, this.width, 15, color_a.getRGB(), color_b.getRGB());
         this.drawRect(0, 14, this.width, 15, Color.BLACK.getRGB());
+
+        //GUI title
         final String key = "gui.voltzengine:usertools.header";
         this.drawCenteredString(this.fontRendererObj, LanguageUtility.getLocal(key), this.width / 2, 3, 16777215);
 

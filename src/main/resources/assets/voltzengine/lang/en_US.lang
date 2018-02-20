@@ -596,4 +596,7 @@ entry.type.npcs=Villagers
 
 ## User tool kit GUI
 gui.voltzengine:usertools.header=VoltzEngine User Tools
+
+## Generic GUI
 gui.voltzengine:button.back.name=Back
+info.voltzengine:button.back.name=Back
