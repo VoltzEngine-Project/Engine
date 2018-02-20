@@ -52,12 +52,6 @@ public class GuiBookPage extends GuiScreenBase
             //Load data
             loadBook();
 
-            //Setup titles
-            add(new GuiLabel(0, 0, currentBook != null ? currentBook.unlocalized : "Book Title"));
-            add(new GuiLabel(0, 20, currentChapter != null ? currentChapter.unlocalized : "Chapter Title"));
-            add(new GuiLabel(0, 40, currentSection != null ? currentSection.unlocalized : "Section Title"));
-            add(new GuiLabel(0, 60, currentPage != null ? currentPage.name : "Page Title"));
-
             if (returnGuiHandler != null)
             {
                 add(new GuiLeftRightArrowButton(BUTTON_BACK, 2, 2, true).setOnMousePressFunction(b -> {
@@ -112,11 +106,11 @@ public class GuiBookPage extends GuiScreenBase
     {
         if (currentPage != null)
         {
-            add(new GuiLabel(0, 80, currentPage.toString()));
+            add(new GuiLabel(width / 2, 80, currentPage.toString()));
         }
         else
         {
-            add(new GuiLabel(0, 80, "Missing data for page: " + targetPage.page));
+            add(new GuiLabel(width / 2, 80, "Missing data for page: " + targetPage.page));
         }
     }
 
@@ -128,11 +122,11 @@ public class GuiBookPage extends GuiScreenBase
         if (currentSection != null)
         {
             //TODO show description and index
-            add(new GuiLabel(0, 80, currentSection.toString()));
+            add(new GuiLabel(width / 2, 80, currentSection.toString()));
         }
         else
         {
-            add(new GuiLabel(0, 80, "Missing data for section: " + targetPage.section));
+            add(new GuiLabel(width / 2, 80, "Missing data for section: " + targetPage.section));
         }
     }
 
@@ -144,11 +138,11 @@ public class GuiBookPage extends GuiScreenBase
         if (currentChapter != null)
         {
             //TODO show description and index
-            add(new GuiLabel(0, 80, currentChapter.toString()));
+            add(new GuiLabel(width / 2, 80, currentChapter.toString()));
         }
         else
         {
-            add(new GuiLabel(0, 80, "Missing data for chapter: " + targetPage.chapter));
+            add(new GuiLabel(width / 2, 80, "Missing data for chapter: " + targetPage.chapter));
         }
     }
 
@@ -160,11 +154,11 @@ public class GuiBookPage extends GuiScreenBase
         if (currentSection != null)
         {
             //TODO show description and index
-            add(new GuiLabel(0, 80, currentSection.toString()));
+            add(new GuiLabel(width / 2, 80, currentSection.toString()));
         }
         else
         {
-            add(new GuiLabel(0, 80, "Missing data for book: " + targetPage.book));
+            add(new GuiLabel(width / 2, 80, "Missing data for book: " + targetPage.book));
         }
     }
 
@@ -194,20 +188,38 @@ public class GuiBookPage extends GuiScreenBase
     @Override
     public void drawScreen(int mouse_x, int mouse_y, float d)
     {
+        final int headerSize = 14;
+        final int sideSize = (int) (width * .1);
         //Draw background
         this.drawDefaultBackground();
 
         //Colors
-        final Color color_a = new Color(122, 122, 122, 143);
-        final Color color_b = new Color(122, 122, 122, 143);
+        Color color_a = new Color(122, 122, 122, 143);
+        Color color_b = new Color(122, 122, 122, 143);
 
-        //Side bar
-        this.drawGradientRect(0, 15, 109 + 4, this.height, color_a.getRGB(), color_b.getRGB());
-        this.drawVerticalLine(109 + 3, 14, this.height, Color.BLACK.getRGB());
+        //Left Side bar
+        this.drawGradientRect(0, headerSize + 1, sideSize + 4, this.height, color_a.getRGB(), color_b.getRGB());
+        this.drawVerticalLine(sideSize + 3, headerSize, this.height, Color.BLACK.getRGB());
+
+        //Right Side bar
+        this.drawGradientRect(width - sideSize - 3, headerSize + 1, width, this.height, color_a.getRGB(), color_b.getRGB());
+        this.drawVerticalLine(width - sideSize - 3, headerSize, this.height, Color.BLACK.getRGB());
 
         //Header
-        this.drawGradientRect(0, 0, this.width, 15, color_a.getRGB(), color_b.getRGB());
-        this.drawRect(0, 14, this.width, 15, Color.BLACK.getRGB());
+        this.drawGradientRect(0, 0, this.width, headerSize + 1, color_a.getRGB(), color_b.getRGB());
+        this.drawRect(0, headerSize, this.width, 15, Color.BLACK.getRGB());
+
+        String header = currentBook != null ? "Book: " + currentBook.unlocalized : "Book Title";
+        header += " >> " + (currentChapter != null ? currentChapter.unlocalized : "Chapter Title");
+        header += " >> " + (currentSection != null ? currentSection.unlocalized : "Section Title");
+        header += " >> " + (currentPage != null ? currentPage.name : "Page Title");
+        this.drawString(this.fontRendererObj, header, 50, 3, 16777215);
+
+        //Middle
+        color_a = new Color(45, 45, 45, 143);
+        color_b = new Color(122, 122, 122, 143);
+
+        this.drawGradientRect(sideSize + 4, headerSize + 1, width- sideSize - 3, this.height, color_a.getRGB(), color_b.getRGB());
 
         //Draw everything else
         super.drawScreen(mouse_x, mouse_y, d);

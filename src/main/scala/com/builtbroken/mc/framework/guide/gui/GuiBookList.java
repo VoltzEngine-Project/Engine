@@ -49,18 +49,18 @@ public class GuiBookList extends GuiScreenBase
         bookButtons.clear();
 
         final int button_cols = 4;
-        final int button_rows = 4;
+        final int button_rows = 7;
         final int spacing_row = 20;
 
         int row_width = this.width - spacing_row * (button_cols + 1); //20 spacer each side, 20 space between each button
-        int buttonWidth = row_width / button_cols;
+        int buttonWidth = Math.min(200, row_width / button_cols);
         int row = 0;
         int col = 0;
 
         for (Book book : GuideBookModule.INSTANCE.getBooksSorted())
         {
-            int x = spacing_row + row * buttonWidth + spacing_row * row;
-            int y = 20 + col * 30;
+            int x = spacing_row + col * buttonWidth + spacing_row * col;
+            int y = 20 + row * 30;
 
             //Make button
             GuiButton2 bookButton = new GuiButton2(-1, x, y, LanguageUtility.getLocal(book.unlocalized));

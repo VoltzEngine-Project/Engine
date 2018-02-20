@@ -90,6 +90,11 @@ public class GuideBookModule implements ILoadableProxy
             section1A.add(new Page(jsonProcessorPage).init("page3", "Page 3"));
 
             addBook(book);
+
+            for (int i = 0; i <= 30; i++)
+            {
+                addBook(new Book(jsonProcessorBook).init("test" + i, "Test Data " + i));
+            }
         }
     }
 
