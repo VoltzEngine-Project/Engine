@@ -53,11 +53,11 @@ public class GuideEntry
 
     /**
      * Called to get the type of the entry.
-     *
+     * <p>
      * Type is used to identify how deep in the book
      * the entry is referencing. As well how much data
      * the entry actually contains.
-     *
+     * <p>
      * Ex. if entry only contains entry for book and section
      * then type would be section. As the entry can only navigate
      * to the section index.
@@ -99,5 +99,20 @@ public class GuideEntry
     public String toString()
     {
         return id();
+    }
+
+    public GuideEntry getWithChapter(String chapter)
+    {
+        return new GuideEntry(book, chapter, null, null);
+    }
+
+    public GuideEntry getWithSection(String section)
+    {
+        return new GuideEntry(book, chapter, section, null);
+    }
+
+    public GuideEntry getWithPage(String page)
+    {
+        return new GuideEntry(book, chapter, section, page);
     }
 }

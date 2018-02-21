@@ -9,7 +9,11 @@ import com.builtbroken.mc.framework.guide.parts.Book;
 import com.builtbroken.mc.framework.guide.parts.Chapter;
 import com.builtbroken.mc.framework.guide.parts.Page;
 import com.builtbroken.mc.framework.guide.parts.Section;
+import com.builtbroken.mc.framework.guide.parts.imp.GuidePart;
+import com.builtbroken.mc.framework.guide.parts.imp.GuidePartContainer;
+import com.builtbroken.mc.lib.helper.LanguageUtility;
 import com.builtbroken.mc.lib.helper.MathUtility;
+import com.builtbroken.mc.prefab.gui.GuiButton2;
 import com.builtbroken.mc.prefab.gui.buttons.GuiLeftRightArrowButton;
 import com.builtbroken.mc.prefab.gui.components.GuiLabel;
 import com.builtbroken.mc.prefab.gui.screen.GuiScreenBase;
@@ -18,6 +22,7 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -42,6 +47,11 @@ public class GuiBookPage extends GuiScreenBase
     protected Section currentSection;
     protected Page currentPage;
 
+    /** Start of the center on the left side */
+    protected int leftSideStartX;
+    /** Size of the center in pixels */
+    protected int centerWidthX;
+
     public GuiBookPage(GuideEntry targetPage, Consumer<GuiScreen> returnGuiHandler)
     {
         this.targetPage = targetPage;
@@ -52,48 +62,61 @@ public class GuiBookPage extends GuiScreenBase
     public void initGui()
     {
         super.initGui();
-        if (targetPage != null)
+
+        //Calculate start x for center
+        leftSideStartX = (int) (width * .1) + 10;
+        //Calculate width of the center
+        centerWidthX = width - (leftSideStartX * 2);
+
+        try
         {
-            //Load data
-            loadBook();
+            if (targetPage != null)
+            {
+                //Load data
+                loadBook();
 
-            if (returnGuiHandler != null)
-            {
-                add(new GuiLeftRightArrowButton(BUTTON_BACK, 2, 2, true).setOnMousePressFunction(b -> {
-                    returnToPrevGUI();
-                    return true;
-                }));
-            }
+                if (returnGuiHandler != null)
+                {
+                    add(new GuiLeftRightArrowButton(BUTTON_BACK, 2, 2, true).setOnMousePressFunction(b -> {
+                        returnToPrevGUI();
+                        return true;
+                    }));
+                }
 
-            //TODO home button -> takes the user back to the books GUI
-            //TODO index button -> opens the index, keeps track of current page
-            //TODO back button -> moves up one component (page -> section -> chapter -> book)
+                //TODO home button -> takes the user back to the books GUI
+                //TODO index button -> opens the index, keeps track of current page
+                //TODO back button -> moves up one component (page -> section -> chapter -> book)
 
-            loadPageDisplay();
-            if (targetPage.getType() == GuideEntryType.PAGE)
-            {
-                //loadPageDisplay();
-            }
-            else if (targetPage.getType() == GuideEntryType.SECTION)
-            {
-                //loadSectionIndex();
-            }
-            else if (targetPage.getType() == GuideEntryType.CHAPTER)
-            {
-                //loadChapterIndex();
-            }
-            else if (targetPage.getType() == GuideEntryType.BOOK)
-            {
-                //loadBookIndex();
+                if (targetPage.getType() == GuideEntryType.PAGE)
+                {
+                    loadPageDisplay();
+                }
+                else if (targetPage.getType() == GuideEntryType.SECTION)
+                {
+                    loadSectionIndex();
+                }
+                else if (targetPage.getType() == GuideEntryType.CHAPTER)
+                {
+                    loadChapterIndex();
+                }
+                else if (targetPage.getType() == GuideEntryType.BOOK)
+                {
+                    loadBookIndex();
+                }
+                else
+                {
+                    //TODO page is invalid, either show error or send to book list
+                }
             }
             else
             {
                 //TODO page is invalid, either show error or send to book list
             }
         }
-        else
+        catch (Exception e)
         {
-            //TODO page is invalid, either show error or send to book list
+            add(new GuiLabel(20, width / 2, Colors.RED.code + "Error: " + e.getMessage()));
+            e.printStackTrace();
         }
     }
 
@@ -112,52 +135,59 @@ public class GuiBookPage extends GuiScreenBase
     {
         if (currentPage != null)
         {
-            //add(new GuiLabel(width / 2, 80, currentPage.toString()));
-        }
-        else
-        {
-            //add(new GuiLabel(width / 2, 80, "Missing data for page: " + targetPage.page));
-        }
-
-        try
-        {
-            int sideSize = (int) (width * .1) + 10;
-            int lineSplit = width - (sideSize * 2);
 
 
-            int currentLine = 0;
+            //Track y
+            int currentY = 20;
+
+            //Generate some random junk to test rendering TODO replace with components
             for (int i = 0; i < 4; i++)
             {
-                //String textBlock = makeRandomText(200); //TODO replace with real data, as text block component
-                List<String> lines = new ArrayList();//splitLines(textBlock, lineSplit);
-                for(int c = 0; c < 6; c++)
+                List<String> lines = new ArrayList();
+                for (int c = 0; c < 6; c++)
                 {
                     lines.add(c + ": " + makeRandomText(200));
                 }
 
-                for (String line : lines)
-                {
-                    //Create
-                    GuiLabel label = new GuiLabel(sideSize, 20 + currentLine * 10, line);
-                    label.setWidth(lineSplit);
-
-                    //Add
-                    add(label);
-
-                    //Increment
-                    currentLine++;
-                }
-                currentLine++;
+                currentY = buildParagraph(lines, leftSideStartX, currentY, centerWidthX);
+                currentY += 10;
             }
         }
-        catch (Exception e)
+        else
         {
-            add(new GuiLabel(20, width / 2, Colors.RED.code + "Error: " + e.getMessage()));
-            e.printStackTrace();
+            add(new GuiLabel(width / 2, 80, "Missing data for page: " + targetPage.page));
         }
     }
 
-    public String makeRandomText(int count)
+    /**
+     * Builds a paragraph for display
+     *
+     * @param lines
+     * @param x
+     * @param y
+     * @param width
+     * @return last y value, used for spacing
+     */
+    protected int buildParagraph(List<String> lines, int x, int y, int width)
+    {
+        final int lineSpace = 10;
+        int currentLine = 0;
+        for (String line : lines)
+        {
+            //Create
+            GuiLabel label = new GuiLabel(x, y + currentLine * lineSpace, line);
+            label.setWidth(width);
+
+            //Add
+            add(label);
+
+            //Increment
+            currentLine++;
+        }
+        return y + (currentLine - lineSpace) * lineSpace;
+    }
+
+    public String makeRandomText(int count) //TODO remove later
     {
         String textBlock = "";
         for (int i = 0; i < count; i++)
@@ -174,7 +204,7 @@ public class GuiBookPage extends GuiScreenBase
         return textBlock;
     }
 
-    public List<String> splitLines(final String textBlock, final int pixelWidth)
+    public List<String> splitLines(final String textBlock, final int pixelWidth) //TODO move to helper
     {
         //Copy to not modify original
         String copy = textBlock;
@@ -187,7 +217,7 @@ public class GuiBookPage extends GuiScreenBase
         while (!copy.isEmpty() && ++index < copy.length())
         {
             //Exit case
-            if(index + 1 == copy.length())
+            if (index + 1 == copy.length())
             {
                 lines.add(copy);
                 return lines;
@@ -234,12 +264,71 @@ public class GuiBookPage extends GuiScreenBase
     {
         if (currentSection != null)
         {
-            //TODO show description and index
-            add(new GuiLabel(width / 2, 80, currentSection.toString()));
+            int currentY = 20;
+            boolean hasDescription = true; //TODO check if a section has a description
+            if (hasDescription)
+            {
+                //Description header
+                add(new GuiLabel(leftSideStartX, currentY, "Description"));
+                //Description paragraph
+                String desc = makeRandomText(100);
+                List<String> lines = splitLines(desc, centerWidthX);
+                currentY = buildParagraph(lines, leftSideStartX, currentY + 10, centerWidthX);
+            }
+
+            //Section Header
+            currentY += 15;
+            add(new GuiLabel(leftSideStartX, currentY, "Pages"));
+
+            buildGrid(currentSection);
+
         }
         else
         {
             add(new GuiLabel(width / 2, 80, "Missing data for section: " + targetPage.section));
+        }
+    }
+
+    protected void buildGrid(GuidePartContainer container)
+    {
+        //Pages
+        final int buttonsPerRow = 4;
+        final int spacing = 10;
+        final int rowWidth = centerWidthX - (spacing * (buttonsPerRow + 1));
+        final int widthPerButton = rowWidth / buttonsPerRow;
+
+        int col = 0;
+        int row = 0;
+
+        Iterator<GuidePart> it = container.iterator();
+        while (it.hasNext())
+        {
+            GuidePart part = it.next();
+
+            //Assign name and action
+            if (part != null)
+            {
+                //Create button
+                GuiButton2 pageButton = new GuiButton2(-1, leftSideStartX + col * widthPerButton + col * spacing, row * 20, "");
+                pageButton.setWidth(widthPerButton);
+
+                pageButton.displayString = LanguageUtility.getLocal(part.unlocalized);
+                pageButton.setOnMousePressFunction(g -> {
+                    GuideBookModule.openGUI(part.getGuideEntry());
+                    return true;
+                });
+
+
+                //Add
+                add(pageButton);
+
+                //Increment
+                col++;
+                if (col == 4)
+                {
+                    row++;
+                }
+            }
         }
     }
 
@@ -250,8 +339,23 @@ public class GuiBookPage extends GuiScreenBase
     {
         if (currentChapter != null)
         {
-            //TODO show description and index
-            add(new GuiLabel(width / 2, 80, currentChapter.toString()));
+            int currentY = 20;
+            boolean hasDescription = true; //TODO check if a section has a description
+            if (hasDescription)
+            {
+                //Description header
+                add(new GuiLabel(leftSideStartX, currentY, "Description"));
+                //Description paragraph
+                String desc = makeRandomText(100);
+                List<String> lines = splitLines(desc, centerWidthX);
+                currentY = buildParagraph(lines, leftSideStartX, currentY + 10, centerWidthX);
+            }
+
+            //Section Header
+            currentY += 15;
+            add(new GuiLabel(leftSideStartX, currentY, "Sections"));
+
+            buildGrid(currentChapter);
         }
         else
         {
@@ -264,10 +368,25 @@ public class GuiBookPage extends GuiScreenBase
      */
     protected void loadBookIndex()
     {
-        if (currentSection != null)
+        if (currentBook != null)
         {
-            //TODO show description and index
-            add(new GuiLabel(width / 2, 80, currentSection.toString()));
+            int currentY = 20;
+            boolean hasDescription = true; //TODO check if a section has a description
+            if (hasDescription)
+            {
+                //Description header
+                add(new GuiLabel(leftSideStartX, currentY, "Description"));
+                //Description paragraph
+                String desc = makeRandomText(100);
+                List<String> lines = splitLines(desc, centerWidthX);
+                currentY = buildParagraph(lines, leftSideStartX, currentY + 10, centerWidthX);
+            }
+
+            //Section Header
+            currentY += 15;
+            add(new GuiLabel(leftSideStartX, currentY, "Chapters"));
+
+            buildGrid(currentBook);
         }
         else
         {

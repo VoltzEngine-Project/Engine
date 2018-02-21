@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.guide.parts;
 
+import com.builtbroken.mc.framework.guide.GuideEntry;
 import com.builtbroken.mc.framework.guide.parts.comp.PageComponent;
 import com.builtbroken.mc.framework.guide.parts.imp.GuidePart;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
@@ -16,7 +17,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 2/15/2018.
  */
-public class Page extends GuidePart
+public class Page extends GuidePart<Section>
 {
     @JsonProcessorData("id")
     public String id;
@@ -30,5 +31,11 @@ public class Page extends GuidePart
     public Page(IJsonProcessor processor)
     {
         super(processor);
+    }
+
+    @Override
+    public GuideEntry getGuideEntry()
+    {
+        return parent != null ? parent.getGuideEntry().getWithPage(id) : null;
     }
 }

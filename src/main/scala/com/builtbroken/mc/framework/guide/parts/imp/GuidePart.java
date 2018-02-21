@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.guide.parts.imp;
 
+import com.builtbroken.mc.framework.guide.GuideEntry;
 import com.builtbroken.mc.framework.json.imp.IJsonProcessor;
 import com.builtbroken.mc.framework.json.loading.JsonProcessorData;
 import com.builtbroken.mc.framework.json.processors.JsonGenData;
@@ -13,7 +14,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 2/16/2018.
  */
-public abstract class GuidePart extends JsonGenData
+public abstract class GuidePart<P extends GuidePartContainer> extends JsonGenData
 {
     /** Unique id, lowercase */
     @JsonProcessorData("id")
@@ -26,6 +27,8 @@ public abstract class GuidePart extends JsonGenData
     @JsonProcessorData(value = "previous_ids", type = "list.array", args = "string")
     public List<String> previous_names = new ArrayList();
 
+    public P parent;
+
     public GuidePart(IJsonProcessor processor)
     {
         super(processor);
@@ -37,4 +40,6 @@ public abstract class GuidePart extends JsonGenData
         this.unlocalized = name;
         return (D) this;
     }
+
+    public abstract GuideEntry getGuideEntry();
 }
