@@ -16,7 +16,6 @@ public class GuideEntry
     public final String page;
 
     private String id;
-    private GuideEntryType type;
 
     public GuideEntry(String book, String chapter, String section, String page)
     {
@@ -52,29 +51,38 @@ public class GuideEntry
         return id;
     }
 
+    /**
+     * Called to get the type of the entry.
+     *
+     * Type is used to identify how deep in the book
+     * the entry is referencing. As well how much data
+     * the entry actually contains.
+     *
+     * Ex. if entry only contains entry for book and section
+     * then type would be section. As the entry can only navigate
+     * to the section index.
+     *
+     * @return type, based on data
+     */
     public GuideEntryType getType()
     {
-        if (type == null)
+        if (book != null)
         {
-            if (book != null)
+            if (chapter != null)
             {
-                if (chapter != null)
+                if (section != null)
                 {
-                    if (section != null)
+                    if (page != null)
                     {
-                        if (page != null)
-                        {
-                            return type = GuideEntryType.PAGE;
-                        }
-                        return type = GuideEntryType.SECTION;
+                        return GuideEntryType.PAGE;
                     }
-                    return type = GuideEntryType.CHAPTER;
+                    return GuideEntryType.SECTION;
                 }
-                return type = GuideEntryType.BOOK;
+                return GuideEntryType.CHAPTER;
             }
-            return type = GuideEntryType.INVALID;
+            return GuideEntryType.BOOK;
         }
-        return type;
+        return GuideEntryType.INVALID;
     }
 
     @Override
@@ -92,5 +100,4 @@ public class GuideEntry
     {
         return id();
     }
-
 }
