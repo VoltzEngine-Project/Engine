@@ -6,11 +6,21 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
-## 1.10.1 - 12/17/2018
+## 1.10.2 - 2/27/2018
+### Runtime Changes
+Added: Quick Access Gui (contains access to GuideBook, Access Profiles, and Settings)
+Added: Navigation for guide book (Still WIP)
+Changed: access GUI opening (ctrl + `) to open quick access GUI
+
+### Development Changes
+Added: Methods for working with Guide Book
+Moved: Access and Guide Book open calls to respective handlers
+
+## 1.10.1 - 2/17/2018
 ### Development Changes
 Implemented early data and methods for guide book
 
-## 1.10.0 - 12/15/2018
+## 1.10.0 - 2/15/2018
 ### Runtime Changes
 Added: gift box blast
 Added: button to copy access profile ID
