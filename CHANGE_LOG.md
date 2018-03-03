@@ -6,6 +6,18 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.10.3 - 3/3/2018
+### Runtime Changes
+Fixed: Client side Infinite loop crash caused by onNeighborBlockChange() and onNeighborChange()
+
+### Development Changes
+Fixed: ListenerIterator returning wrong value for getWorld()
+Added: blockExists checks to BlockBase's onNeighborBlockChange() and onNeighborChange()
+Deprecated: ModuleBuilder, will be replaced with a Registry system
+Disabled: Client side listener calls/events for onNeighborBlockChange() and onNeighborChange()
+Reworked: GuiLabel to no longer work as a disabled TextBox with no background
+Reworked: ModuleBuilder to use Class<? extends C> instead of Class<C>
+
 ## 1.10.2 - 2/27/2018
 ### Runtime Changes
 Added: Quick Access Gui (contains access to GuideBook, Access Profiles, and Settings)
