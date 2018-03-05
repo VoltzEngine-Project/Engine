@@ -6,6 +6,13 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.10.4 - 3/4/2018
+### Runtime Changes
+Fixed: Modules not loading NBT after being created (Fixes issues with ICBM and Basic Industries)
+
+### Development Changes
+Added: load() call to AbstractModule#new(ItemStack)
+
 ## 1.10.3 - 3/3/2018
 ### Runtime Changes
 Fixed: Client side Infinite loop crash caused by onNeighborBlockChange() and onNeighborChange()
