@@ -774,26 +774,26 @@ public final class JsonContentLoader extends AbstractLoadable
      * Recursive call that will go through all folders
      * in a folder.
      *
-     * @param folder
+     * @param currentFolder
      */
-    public void loadResourcesFromFolder(File folder)
+    public void loadResourcesFromFolder(final File currentFolder)
     {
-        for (File file : folder.listFiles())
+        for (File subFolderFile : currentFolder.listFiles())
         {
-            if (file.isDirectory())
+            if (subFolderFile.isDirectory())
             {
-                loadResourcesFromFolder(folder);
+                loadResourcesFromFolder(subFolderFile);
             }
             else
             {
-                String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());
+                String extension = subFolderFile.getName().substring(subFolderFile.getName().lastIndexOf(".") + 1, subFolderFile.getName().length());
                 if (extension.equalsIgnoreCase("jar"))
                 {
-                    externalJarFiles.add(file);
+                    externalJarFiles.add(subFolderFile);
                 }
                 else if (extensionsToLoad.contains(extension))
                 {
-                    externalFiles.add(file);
+                    externalFiles.add(subFolderFile);
                 }
             }
         }
