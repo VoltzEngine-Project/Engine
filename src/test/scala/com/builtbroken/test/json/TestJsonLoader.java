@@ -93,6 +93,22 @@ public class TestJsonLoader extends AbstractTest
         loader.postInit();
     }
 
+    public void testExternalResourceLoad()
+    {
+        File file = new File(System.getProperty("user.dir"), "src/test/resources/test/external");
+
+        assertTrue("Test folder should exist, File: " + file, file.exists());
+        assertTrue("Test folder should exist, File: " + file, file.isDirectory());
+        //TODO check that sub files exist
+
+        JsonContentLoader loader = new JsonContentLoader();
+        loader.loadResourcesFromFolder(file);
+
+        assertEquals("Should have found 3 test.jar files", 3, loader.externalJarFiles.size());
+        assertEquals("Should have found 4 test.json files", 4, loader.externalFiles.size());
+
+    }
+
     public void testFileSearch()
     {
 
