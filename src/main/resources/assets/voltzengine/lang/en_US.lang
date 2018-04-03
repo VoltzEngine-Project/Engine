@@ -50,7 +50,7 @@ tile.voltzengine:orePlatinum.name=Platinum Ore
 
 ## Ores, Gems
 tile.voltzengine:oreAmazonite.name=Amazonite Ore
-tile.voltzengine:oreSmokeyQuartz.name=Smoky Quartz Ore
+tile.voltzengine:oreQuartzSmoky.name=Smoky Quartz Ore
 tile.voltzengine:oreOnyxBlack.name=Black Banded Onyx Ore
 tile.voltzengine:oreOnyxRed.name=Red Banded Onyx Ore
 tile.voltzengine:oreGarnetGreen.name=Green Garnet Ore
