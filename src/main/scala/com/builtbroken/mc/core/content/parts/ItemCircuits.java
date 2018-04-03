@@ -43,9 +43,30 @@ public class ItemCircuits extends Item implements IRegistryInit, IPostInit
         }
         else
         {
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits), "wcw", "rpr", "wcw", 'w', OreNames.WIRE_TIN, 'p', OreNames.WOOD, 'c', "clay", 'r', OreNames.REDSTONE));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 1), "wcw", "rpr", "wcw", 'w', OreNames.WIRE_COPPER, 'p', OreNames.INGOT_IRON, 'c', "clay", 'r', OreNames.REDSTONE));
-            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 2), "wcw", "rpr", "wcw", 'w', OreNames.WIRE_GOLD, 'p', OreNames.INGOT_GOLD, 'c', "clay", 'r', OreNames.REDSTONE));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits),
+                    "wcw",
+                    "rpr",
+                    "wcw",
+                    'w', OreNames.WIRE_TIN,
+                    'p', OreNames.WOOD,
+                    'c', "clay",
+                    'r', OreNames.REDSTONE));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 1),
+                    "wcw",
+                    "rpr",
+                    "wcw",
+                    'w', OreNames.WIRE_COPPER,
+                    'p', OreNames.INGOT_IRON,
+                    'c', "clay",
+                    'r', OreNames.REDSTONE));
+            GameRegistry.addRecipe(new RecipeTool(new ItemStack(Engine.itemCircuits, 1, 2),
+                    "wcw",
+                    "rpr",
+                    "wcw",
+                    'w', OreNames.WIRE_GOLD,
+                    'p', OreNames.INGOT_GOLD,
+                    'c', "clay",
+                    'r', OreNames.REDSTONE));
         }
     }
 
