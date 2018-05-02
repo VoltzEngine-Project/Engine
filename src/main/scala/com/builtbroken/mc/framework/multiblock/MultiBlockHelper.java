@@ -201,9 +201,45 @@ public class MultiBlockHelper
         return list;
     }
 
+    public static List<IMultiTile> getMultiBlocks(IMultiTileHost tile, boolean offset)
+    {
+        //Rare edge case, should never happen
+        if (tile == null)
+        {
+            logger.error("MultiBlockHelper: buildMultiBlock was called with a null tile ", new RuntimeException());
+            return new ArrayList();
+        }
+        List<IMultiTile> list = new ArrayList();
+        //Get layout of multi-block for it's current state
+        Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
+        //Ensure the map is not null or empty in case there is no structure to generate
+        if (map != null && !map.isEmpty())
+        {
+            for (IPos3D pos : map.keySet())
+            {
+                BlockPos blockPos;
+                if (offset)
+                {
+                    blockPos = new BlockPos(pos.xi() + tile.xi(), pos.yi() + tile.yi(), pos.zi() + tile.zi());
+                }
+                else
+                {
+                    blockPos = new BlockPos(pos);
+                }
+
+                TileEntity tileEntity = blockPos.getTileEntity(tile.world().unwrap());
+                if (tileEntity instanceof IMultiTile)
+                {
+                    list.add((IMultiTile) tileEntity);
+                }
+            }
+        }
+        return list;
+    }
+
     /**
      * Called to check all blocks for the highest redstone level.
-     *
+     * <p>
      * Has a performance of O(n) so do not run often for larger structures.
      *
      * @param tile   - host
@@ -326,10 +362,13 @@ public class MultiBlockHelper
         return false;
     }
 
+    @Deprecated //Convert to a JSON system
     public static void setData(String dataString, IMultiTile ent)
     {
         if (ent instanceof TileMulti && dataString != null && !dataString.isEmpty())
         {
+            final TileMulti tile = ((TileMulti) ent);
+
             String[] data;
             if (dataString.contains("|"))
             {
@@ -350,7 +389,7 @@ public class MultiBlockHelper
                     {
                         if (value.equals("true"))
                         {
-                            ((TileMulti) ent).shouldRenderBlock = true;
+                            tile.shouldRenderBlock = true;
                         }
                     }
                     else if (lowerCase.startsWith("bounds"))
@@ -376,17 +415,27 @@ public class MultiBlockHelper
                                 }
                                 if (!failed)
                                 {
-                                    if (((TileMulti) ent).getWorldObj().isRemote)
+                                    if (tile.getWorldObj().isRemote)
                                     {
-                                        ((TileMulti) ent).overrideRenderBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
+                                        tile.overrideRenderBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
                                     }
-                                    ((TileMulti) ent).collisionBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
+                                    tile.collisionBounds = new Cube(ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]);
                                 }
                             }
                         }
                         else
                         {
-                            logger.error("Tile[" + ent + "] failed to parse bounds data " + d + " as it missing '{', '}, or ',");
+                            logger.error("Tile[" + ent + "] failed to parse bounds data " + d + " as it missing '{', '}', or ','");
+                        }
+                    }
+                    else if (lowerCase.startsWith("render"))
+                    {
+                        String[] split = value.split(";");
+                        tile.renderID = split[0];
+                        tile.renderState = split[1];
+                        if (split.length > 2)
+                        {
+                            tile.blockIDToFake = split[2];
                         }
                     }
                     else

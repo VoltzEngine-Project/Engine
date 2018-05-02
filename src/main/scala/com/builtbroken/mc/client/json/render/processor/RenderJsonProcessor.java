@@ -26,7 +26,8 @@ public class RenderJsonProcessor extends JsonProcessor<RenderData>
 
     static
     {
-        stateProcessors.add(new BlockStateJsonProcessor());
+        stateProcessors.add(new BlockModelStateJsonProcessor());
+        stateProcessors.add(new BlockTexturedStateJsonProcessor());
         stateProcessors.add(new ModelStateJsonProcessor());
         stateProcessors.add(new ItemStateJsonProcessor());
     }

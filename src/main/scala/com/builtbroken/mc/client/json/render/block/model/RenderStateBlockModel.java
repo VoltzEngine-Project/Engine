@@ -1,9 +1,13 @@
-package com.builtbroken.mc.client.json.render.block;
+package com.builtbroken.mc.client.json.render.block.model;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.models.cube.BlockModelData;
 import com.builtbroken.mc.client.json.render.state.RenderState;
 import com.builtbroken.mc.client.json.texture.TextureData;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 import java.util.List;
 
@@ -11,11 +15,12 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/4/2017.
  */
-public class RenderStateBlock extends RenderState
+public class RenderStateBlockModel extends RenderState
 {
-    public final String[] textureID = new String[6];
+    public String modelID;
+    protected BlockModelData model;
 
-    public RenderStateBlock(String id)
+    public RenderStateBlockModel(String id)
     {
         super(id);
     }
@@ -34,33 +39,39 @@ public class RenderStateBlock extends RenderState
     @Override
     public TextureData getTextureData(int side)
     {
-        if (side >= 0 && side < 6)
-        {
-            return textureID[side] != null ? ClientDataHandler.INSTANCE.getTexture(textureID[side]) : null;
-        }
-
-        if (parentState != null)
-        {
-            return parentState.getTextureData(side);
-        }
-        return getTextureData(0);
+        return null;
     }
 
     @Override
     public void addDebugLines(List<String> lines)
     {
         super.addDebugLines(lines);
-        int i = 0;
-        lines.add("Textures");
-        for (String s : textureID)
-        {
-            lines.add("  [" + i++ + "] = " + s);
-        }
+        lines.add("ModelID = " + modelID);
+        lines.add("Model = " + getModel());
     }
 
     @Override
     public String toString()
     {
         return "RenderStateBlock[" + id + "]@" + hashCode();
+    }
+
+    public BlockModelData getModel()
+    {
+        if (model == null)
+        {
+            model = ClientDataHandler.INSTANCE.getBlockModel(modelID);
+        }
+        return model;
+    }
+
+    public boolean render(IBlockAccess world, int x, int y, int z, Block block, RenderBlocks renderBlocks)
+    {
+        BlockModelData modelData = getModel();
+        if (modelData != null)
+        {
+            return modelData.render(world, x, y, z, block, renderBlocks);
+        }
+        return false;
     }
 }

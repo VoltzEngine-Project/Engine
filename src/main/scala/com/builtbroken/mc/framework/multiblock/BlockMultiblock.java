@@ -29,7 +29,6 @@ import java.util.Random;
  */
 public class BlockMultiblock extends BlockContainer
 {
-
     public BlockMultiblock()
     {
         super(Material.rock);

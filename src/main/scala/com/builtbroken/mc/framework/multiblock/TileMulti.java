@@ -11,11 +11,13 @@ import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Pos;
+import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -25,18 +27,40 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 /**
- * Basic implementation of a multi block
- * Created by Dark on 8/9/2015.
+ * Basic implementation of a multi block. Is extended to provide more complex implementation as needed.
+ * <p>
+ * Includes handling for rendering a standard block, faking rendering of another block, or render a complex cube.
+ * <p>
+ * Has call backs for several functions, including icons and interaction.
+ * <p>
+ * Tracks connected blocks and will auto decay if host is removed incorrectly.
+ *
+ * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
+ * Created by Dark(DarkGuardsman, Robert) on 8/9/2015.
  */
 public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiver
 {
     private WeakReference<IMultiTileHost> hostWeakReference;
+
+    /** Enables default rendering of the block, overridden by {@link #renderID} and {@link #renderState} */
     public boolean shouldRenderBlock = false;
+
+    //Box data
     public Cube overrideRenderBounds;
     public Cube collisionBounds;
 
+    /** Render ID to use to pull RenderData from {@link com.builtbroken.mc.client.json.ClientDataHandler#getRenderData(String)} */
+    public String renderID;
+    /** Render state to pull from RenderData */
+    public String renderState;
+    /** Block ID to render as an imitation (e.g. minecraft:sand) */
+    public String blockIDToFake;
+    /** Actual block instance of {@link #blockToFake} to fake rendering */
+    public Block blockToFake;
+
     public int ticks = 0;
 
+    /** Map of connected tiles */
     public HashMap<ForgeDirection, Block> connectedBlocks = new HashMap();
 
     @Override
@@ -63,6 +87,15 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         {
             Engine.packetHandler.sendToAllAround(getDescPacket(), this);
         }
+    }
+
+    public Block getBlockToRender()
+    {
+        if (blockToFake == null && blockIDToFake != null)
+        {
+            blockToFake = InventoryUtility.getBlock(blockIDToFake);
+        }
+        return blockToFake;
     }
 
     @Override
@@ -101,7 +134,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     {
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
         {
-            Pos pos = new Pos(this).add(dir);
+            Pos pos = new Pos((TileEntity) this).add(dir);
             Block b = pos.getBlock(getWorldObj());
             if (connectedBlocks.containsKey(dir))
             {
@@ -203,5 +236,29 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
             }
         }
         return null;
+    }
+
+    @Override
+    public World oldWorld()
+    {
+        return worldObj;
+    }
+
+    @Override
+    public double z()
+    {
+        return zCoord;
+    }
+
+    @Override
+    public double x()
+    {
+        return xCoord;
+    }
+
+    @Override
+    public double y()
+    {
+        return yCoord;
     }
 }

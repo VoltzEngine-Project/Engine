@@ -1,5 +1,9 @@
 package com.builtbroken.mc.framework.multiblock;
 
+import com.builtbroken.mc.client.json.ClientDataHandler;
+import com.builtbroken.mc.client.json.imp.IRenderState;
+import com.builtbroken.mc.client.json.render.RenderData;
+import com.builtbroken.mc.client.json.render.block.model.RenderStateBlockModel;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
@@ -31,12 +35,29 @@ public class MultiBlockRenderHelper implements ISimpleBlockRenderingHandler
     {
         TileEntity tile = world.getTileEntity(x, y, z);
 
-        if (tile instanceof TileMulti && ((TileMulti) tile).shouldRenderBlock)
+        if (tile instanceof TileMulti)
         {
-            System.out.println("Rendering block " + x + "x " + y + "y " + z + "z ");
-            block.setBlockBoundsBasedOnState(world, x, y, z);
-            renderBlocks.setRenderBoundsFromBlock(block);
-            return renderBlocks.renderStandardBlock(block, x, y, z);
+            TileMulti multi = ((TileMulti) tile);
+            if (multi.shouldRenderBlock)
+            {
+                System.out.println("Rendering block " + x + "x " + y + "y " + z + "z ");
+                block.setBlockBoundsBasedOnState(world, x, y, z);
+                renderBlocks.setRenderBoundsFromBlock(block);
+                return renderBlocks.renderStandardBlock(block, x, y, z);
+            }
+            else if (multi.renderID != null)
+            {
+                RenderData renderData = ClientDataHandler.INSTANCE.getRenderData(multi.renderID);
+                if (renderData != null)
+                {
+                    IRenderState state = renderData.getState(multi.renderState);
+                    if (state instanceof RenderStateBlockModel)
+                    {
+                        Block fakeBlock = multi.getBlockToRender();
+                        return ((RenderStateBlockModel) state).render(world, x, y, z, fakeBlock != null ? fakeBlock : block, renderBlocks);
+                    }
+                }
+            }
         }
         return false;
     }

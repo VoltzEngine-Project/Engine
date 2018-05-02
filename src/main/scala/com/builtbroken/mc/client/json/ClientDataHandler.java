@@ -4,6 +4,7 @@ import com.builtbroken.mc.client.json.audio.AudioData;
 import com.builtbroken.mc.client.json.imp.IEffectData;
 import com.builtbroken.mc.client.json.models.ModelCustomData;
 import com.builtbroken.mc.client.json.render.RenderData;
+import com.builtbroken.mc.client.json.models.cube.BlockModelData;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.core.Engine;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -23,6 +24,8 @@ public class ClientDataHandler
 {
     /** Model key to model data */
     public HashMap<String, ModelCustomData> models = new HashMap();
+    /** Model key to block model data (block models are just a series of cubes) */
+    public HashMap<String, BlockModelData> blockModels = new HashMap();
     /** Texture key to texture data */
     public HashMap<String, TextureData> textures = new HashMap();
     /** Render key to render data */
@@ -53,6 +56,15 @@ public class ClientDataHandler
             Engine.logger().error("Overriding " + models.get(key) + " with " + model);
         }
         models.put(key.toLowerCase(), model);
+    }
+
+    public void addBlockModel(String key, BlockModelData model)
+    {
+        if (blockModels.containsKey(key.toLowerCase()))
+        {
+            Engine.logger().error("Overriding " + blockModels.get(key) + " with " + model);
+        }
+        blockModels.put(key.toLowerCase(), model);
     }
 
     public void addRenderData(String key, RenderData data)
@@ -108,6 +120,15 @@ public class ClientDataHandler
             return null;
         }
         return models.get(key.toLowerCase());
+    }
+
+    public BlockModelData getBlockModel(String key)
+    {
+        if (key == null || key.isEmpty())
+        {
+            return null;
+        }
+        return blockModels.get(key.toLowerCase());
     }
 
     public TextureData getTexture(String key)

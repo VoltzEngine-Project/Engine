@@ -1,4 +1,4 @@
-package com.builtbroken.mc.client.json.render.block;
+package com.builtbroken.mc.client.json.render.block.model;
 
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;

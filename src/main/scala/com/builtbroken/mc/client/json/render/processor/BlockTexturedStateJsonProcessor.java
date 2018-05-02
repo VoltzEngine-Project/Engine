@@ -1,6 +1,6 @@
 package com.builtbroken.mc.client.json.render.processor;
 
-import com.builtbroken.mc.client.json.render.block.RenderStateBlock;
+import com.builtbroken.mc.client.json.render.block.RenderStateTexturedBlock;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.data.Direction;
 import com.google.gson.JsonObject;
@@ -9,25 +9,30 @@ import com.google.gson.JsonObject;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 5/2/2017.
  */
-public class BlockStateJsonProcessor extends RenderJsonSubProcessor<RenderStateBlock>
+public class BlockTexturedStateJsonProcessor extends RenderJsonSubProcessor<RenderStateTexturedBlock>
 {
-    public BlockStateJsonProcessor()
+    public BlockTexturedStateJsonProcessor()
     {
         super(TextureData.Type.BLOCK);
     }
 
     @Override
-    public RenderStateBlock process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
+    public RenderStateTexturedBlock process(JsonObject renderStateObject, String stateID, String globalRenderType, String subRenderType)
     {
-        RenderStateBlock renderState = new RenderStateBlock(stateID);
+        RenderStateTexturedBlock renderState = new RenderStateTexturedBlock(stateID);
+        handleTextures(renderState.textureIDs, renderStateObject);
+        return renderState;
+    }
 
+    public static void handleTextures(String[] textureID, JsonObject renderStateObject)
+    {
         //Load sides (2-5)
         if (renderStateObject.has("sides"))
         {
             String key = renderStateObject.getAsJsonPrimitive("sides").getAsString();
             for (int i = 2; i < 6; i++)
             {
-                renderState.textureID[i] = key;
+                textureID[i] = key;
             }
         }
 
@@ -35,21 +40,21 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor<RenderStateB
         if (renderStateObject.has("top"))
         {
             String key = renderStateObject.getAsJsonPrimitive("top").getAsString();
-            renderState.textureID[1] = key;
+            textureID[1] = key;
         }
 
         //Bot aka DOWN
         if (renderStateObject.has("bot"))
         {
             String key = renderStateObject.getAsJsonPrimitive("bot").getAsString();
-            renderState.textureID[0] = key;
+            textureID[0] = key;
         }
 
         //Bottom aka DOWN
         if (renderStateObject.has("bottom"))
         {
             String key = renderStateObject.getAsJsonPrimitive("bottom").getAsString();
-            renderState.textureID[0] = key;
+            textureID[0] = key;
         }
 
         //Load individual sides
@@ -59,34 +64,33 @@ public class BlockStateJsonProcessor extends RenderJsonSubProcessor<RenderStateB
             final String key2 = direction.name().toLowerCase();
             if (renderStateObject.has(key1))
             {
-                renderState.textureID[direction.ordinal()] = renderStateObject.getAsJsonPrimitive(key1).getAsString();
+                textureID[direction.ordinal()] = renderStateObject.getAsJsonPrimitive(key1).getAsString();
             }
             else if (renderStateObject.has(key2))
             {
-                renderState.textureID[direction.ordinal()] = renderStateObject.getAsJsonPrimitive(key2).getAsString();
+                textureID[direction.ordinal()] = renderStateObject.getAsJsonPrimitive(key2).getAsString();
             }
         }
-        return renderState;
     }
 
     @Override
-    protected void setMainTexture(RenderStateBlock state, String key)
+    protected void setMainTexture(RenderStateTexturedBlock state, String key)
     {
         for (int i = 0; i < 6; i++)
         {
-            if (state.textureID[i] == null)
+            if (state.textureIDs[i] == null)
             {
-                state.textureID[i] = key;
+                state.textureIDs[i] = key;
             }
         }
     }
 
     @Override
-    protected boolean hasTexture(RenderStateBlock state)
+    protected boolean hasTexture(RenderStateTexturedBlock state)
     {
         for (int i = 0; i < 6; i++)
         {
-            if (state.textureID[i] == null)
+            if (state.textureIDs[i] == null)
             {
                 return false;
             }

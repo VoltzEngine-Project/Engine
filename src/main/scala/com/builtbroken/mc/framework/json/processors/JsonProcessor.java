@@ -216,6 +216,4 @@ public abstract class JsonProcessor<D extends IJsonGenObject> implements IJsonPr
         }
         throw new RuntimeException("Could not convert json element into item entry >> '" + element + "'");
     }
-
-
 }
