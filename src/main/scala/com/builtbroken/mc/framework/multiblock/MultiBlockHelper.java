@@ -6,6 +6,7 @@ import com.builtbroken.mc.api.tile.multiblock.IMultiTile;
 import com.builtbroken.mc.api.tile.multiblock.IMultiTileHost;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.imp.transform.region.Cube;
+import com.builtbroken.mc.imp.transform.vector.BlockPos;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
@@ -162,6 +163,83 @@ public class MultiBlockHelper
             logger.error("MultiBlock was never registered, this is a critical error and can have negative effects on gameplay. " +
                     "Make sure the block was not disabled in the configs and contact support to ensure nothing is broken", new RuntimeException());
         }
+    }
+
+    /**
+     * Called to get all positions of the multiblock in the world
+     *
+     * @param tile   - host
+     * @param offset - true to offset by host's position
+     * @return list of block positions
+     */
+    public static List<BlockPos> getMultiBlockPositions(IMultiTileHost tile, boolean offset)
+    {
+        //Rare edge case, should never happen
+        if (tile == null)
+        {
+            logger.error("MultiBlockHelper: buildMultiBlock was called with a null tile ", new RuntimeException());
+            return new ArrayList();
+        }
+        List<BlockPos> list = new ArrayList();
+        //Get layout of multi-block for it's current state
+        Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
+        //Ensure the map is not null or empty in case there is no structure to generate
+        if (map != null && !map.isEmpty())
+        {
+            for (IPos3D pos : map.keySet())
+            {
+                if (offset)
+                {
+                    list.add(new BlockPos(pos.xi() + tile.xi(), pos.yi() + tile.yi(), pos.zi() + tile.zi()));
+                }
+                else
+                {
+                    list.add(new BlockPos(pos));
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Called to check all blocks for the highest redstone level.
+     *
+     * Has a performance of O(n) so do not run often for larger structures.
+     *
+     * @param tile   - host
+     * @param offset - true to offset by host's position
+     * @return 0 - 15
+     */
+    public static int getRedstoneLevel(IMultiTileHost tile, boolean offset)
+    {
+        //Rare edge case, should never happen
+        if (tile == null)
+        {
+            logger.error("MultiBlockHelper: buildMultiBlock was called with a null tile ", new RuntimeException());
+            return 0;
+        }
+        //Get layout of multi-block for it's current state
+        Map<IPos3D, String> map = tile.getLayoutOfMultiBlock();
+        //Ensure the map is not null or empty in case there is no structure to generate
+        if (map != null && !map.isEmpty())
+        {
+            int level = 0;
+            World world = tile.world().unwrap();
+            for (IPos3D pos : map.keySet())
+            {
+                int x = pos.xi() + (offset ? tile.xi() : 0);
+                int y = pos.yi() + (offset ? tile.yi() : 0);
+                int z = pos.zi() + (offset ? tile.zi() : 0);
+
+                int power = world.getStrongestIndirectPower(x, y, z);
+                if (power > level)
+                {
+                    level = power;
+                }
+            }
+            return level;
+        }
+        return 0;
     }
 
     /**
