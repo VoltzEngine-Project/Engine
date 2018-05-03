@@ -12,6 +12,7 @@ import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,18 +51,39 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     public Cube collisionBounds;
 
     /** Render ID to use to pull RenderData from {@link com.builtbroken.mc.client.json.ClientDataHandler#getRenderData(String)} */
-    public String renderID;
+    protected String renderID;
     /** Render state to pull from RenderData */
-    public String renderState;
+    protected String renderState;
     /** Block ID to render as an imitation (e.g. minecraft:sand) */
-    public String blockIDToFake;
+    protected String blockIDToFake;
     /** Actual block instance of {@link #blockToFake} to fake rendering */
-    public Block blockToFake;
+    protected Block blockToFake;
 
     public int ticks = 0;
 
     /** Map of connected tiles */
     public HashMap<ForgeDirection, Block> connectedBlocks = new HashMap();
+
+    public void setRenderState(String id, String state)
+    {
+        renderID = id;
+        renderState = state;
+        Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
+    }
+
+    public void setBlockToFake(Block block)
+    {
+        blockIDToFake = block == null ? null : InventoryUtility.getRegistryName(block);
+        blockToFake = block;
+        Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
+    }
+
+    public void setBlockToFake(String id)
+    {
+        blockToFake = null;
+        blockIDToFake = id;
+        Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
+    }
 
     @Override
     public IMultiTileHost getHost()
@@ -114,6 +136,7 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         super.updateEntity();
         if (ticks == 0)
         {
+            Engine.packetHandler.sendToAllAround(getDescPacket(), this);
             updateConnections();
         }
         if (!worldObj.isRemote && ticks % 20 == 0)
@@ -172,24 +195,19 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
                         this.setHost((IMultiTileHost) tile);
                     }
                 }
-                //Update should render
-                boolean prev = shouldRenderBlock;
+
                 shouldRenderBlock = buf.readBoolean();
 
-                //Update render bounds
-                if (buf.readBoolean())
-                {
-                    overrideRenderBounds = new Cube(buf);
-                }
-                else
-                {
-                    overrideRenderBounds = new Cube(0, 0, 0, 1, 1, 1);
-                }
+                //Load render data
+                String render = ByteBufUtils.readUTF8String(buf);
+                String state = ByteBufUtils.readUTF8String(buf);
+                String blockRenderID = ByteBufUtils.readUTF8String(buf);
 
-                if (prev != shouldRenderBlock)
-                {
-                    worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
-                }
+                renderID = render.isEmpty() || render.equalsIgnoreCase("-") ? null : render;
+                renderState = state.isEmpty() || state.equalsIgnoreCase("-") ? null : state;
+                blockIDToFake = blockRenderID.isEmpty() || blockRenderID.equalsIgnoreCase("-") ? null : blockRenderID;
+
+                worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
                 return true;
             }
         }
@@ -205,14 +223,12 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     public PacketTile getDescPacket()
     {
         Pos pos = getHost() != null ? new Pos(getHost()) : new Pos();
-        if (overrideRenderBounds != null)
-        {
-            return new PacketTile(this, 1, pos, shouldRenderBlock, true, overrideRenderBounds);
-        }
-        else
-        {
-            return new PacketTile(this, 1, pos, shouldRenderBlock, false);
-        }
+
+        String render = renderID != null && !renderID.isEmpty() ? renderID : "-";
+        String state = renderState != null && !renderState.isEmpty() ? renderState : "-";
+        String renderBlockID = blockIDToFake != null && !blockIDToFake.isEmpty() ? blockIDToFake : "-";
+
+        return new PacketTile(this, 1, pos, shouldRenderBlock, render, state, renderBlockID);
     }
 
     @Override
