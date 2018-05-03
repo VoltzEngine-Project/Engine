@@ -12,6 +12,11 @@ import com.google.gson.JsonElement;
  */
 public class BlockModelJsonProcessor extends JsonProcessor<BlockModelData>
 {
+    public BlockModelJsonProcessor()
+    {
+        super(BlockModelData.class);
+    }
+
     @Override
     public String getMod()
     {
