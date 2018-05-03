@@ -75,11 +75,19 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
 
     public void setBlockToFake(ItemStack block)
     {
+        boolean changed = ItemStack.areItemStacksEqual(block, blockToFake);
         blockToFake = block;
 
-        if (!worldObj.isRemote)
+        if(changed)
         {
-            Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
+            if (!worldObj.isRemote)
+            {
+                Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
+            }
+            else
+            {
+                worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+            }
         }
     }
 
