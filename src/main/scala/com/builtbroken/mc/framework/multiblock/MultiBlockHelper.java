@@ -433,10 +433,6 @@ public class MultiBlockHelper
                         String[] split = value.split(";");
                         tile.renderID = split[0];
                         tile.renderState = split[1];
-                        if (split.length > 2)
-                        {
-                            tile.blockIDToFake = split[2];
-                        }
                     }
                     else
                     {

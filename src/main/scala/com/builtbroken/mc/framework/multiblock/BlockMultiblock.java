@@ -189,11 +189,6 @@ public class BlockMultiblock extends BlockContainer
     @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
-        IMultiTile tile = getTile(world, x, y, z);
-        if (tile != null && tile.getHost() != null)
-        {
-            tile.getHost().onMultiTileAdded(tile);
-        }
         super.onBlockAdded(world, x, y, z);
     }
 

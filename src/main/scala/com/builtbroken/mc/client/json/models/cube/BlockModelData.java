@@ -28,13 +28,13 @@ public class BlockModelData extends JsonGenData
         super(processor);
     }
 
-    public boolean render(IBlockAccess world, int x, int y, int z, Block block, RenderBlocks renderBlocks)
+    public boolean render(IBlockAccess world, int x, int y, int z, Block block, int meta, RenderBlocks renderBlocks)
     {
         if(parts.size() > 0)
         {
             for(BlockModelPart part : parts)
             {
-                part.render(world, x, y, z, block, renderBlocks);
+                part.render(world, x, y, z, block, meta, renderBlocks);
             }
             return true;
         }

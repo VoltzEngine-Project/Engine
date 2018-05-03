@@ -11,11 +11,12 @@ import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.imp.transform.region.Cube;
 import com.builtbroken.mc.imp.transform.vector.Pos;
-import com.builtbroken.mc.prefab.inventory.InventoryUtility;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -54,10 +55,8 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     protected String renderID;
     /** Render state to pull from RenderData */
     protected String renderState;
-    /** Block ID to render as an imitation (e.g. minecraft:sand) */
-    protected String blockIDToFake;
     /** Actual block instance of {@link #blockToFake} to fake rendering */
-    protected Block blockToFake;
+    protected ItemStack blockToFake;
 
     public int ticks = 0;
 
@@ -68,21 +67,20 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
     {
         renderID = id;
         renderState = state;
-        Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
+        if (!worldObj.isRemote)
+        {
+            Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
+        }
     }
 
-    public void setBlockToFake(Block block)
+    public void setBlockToFake(ItemStack block)
     {
-        blockIDToFake = block == null ? null : InventoryUtility.getRegistryName(block);
         blockToFake = block;
-        Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
-    }
 
-    public void setBlockToFake(String id)
-    {
-        blockToFake = null;
-        blockIDToFake = id;
-        Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
+        if (!worldObj.isRemote)
+        {
+            Engine.packetHandler.sendToAllAround(getDescPacket(), this); //TODO reduce packet to math changed data
+        }
     }
 
     @Override
@@ -109,14 +107,11 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
         {
             Engine.packetHandler.sendToAllAround(getDescPacket(), this);
         }
+        //TODO find a way to load data?
     }
 
-    public Block getBlockToRender()
+    public ItemStack getBlockToRender()
     {
-        if (blockToFake == null && blockIDToFake != null)
-        {
-            blockToFake = InventoryUtility.getBlock(blockIDToFake);
-        }
         return blockToFake;
     }
 
@@ -196,18 +191,27 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
                     }
                 }
 
+                boolean prevShouldRender = shouldRenderBlock;
                 shouldRenderBlock = buf.readBoolean();
 
                 //Load render data
                 String render = ByteBufUtils.readUTF8String(buf);
                 String state = ByteBufUtils.readUTF8String(buf);
-                String blockRenderID = ByteBufUtils.readUTF8String(buf);
+                ItemStack stack = ByteBufUtils.readItemStack(buf);
 
+                //Check for changes
+                boolean hasChanged = !render.equalsIgnoreCase(this.renderID) || !state.equalsIgnoreCase(this.renderState) || !stack.isItemEqual(blockToFake);
+
+                //Set new values
                 renderID = render.isEmpty() || render.equalsIgnoreCase("-") ? null : render;
                 renderState = state.isEmpty() || state.equalsIgnoreCase("-") ? null : state;
-                blockIDToFake = blockRenderID.isEmpty() || blockRenderID.equalsIgnoreCase("-") ? null : blockRenderID;
+                blockToFake = stack;
 
-                worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+                //If state has changed, force re-render
+                if (hasChanged || prevShouldRender != shouldRenderBlock)
+                {
+                    worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+                }
                 return true;
             }
         }
@@ -226,9 +230,9 @@ public class TileMulti extends TileEntity implements IMultiTile, IPacketIDReceiv
 
         String render = renderID != null && !renderID.isEmpty() ? renderID : "-";
         String state = renderState != null && !renderState.isEmpty() ? renderState : "-";
-        String renderBlockID = blockIDToFake != null && !blockIDToFake.isEmpty() ? blockIDToFake : "-";
+        ItemStack stack = blockToFake != null && blockToFake.getItem() != null ? blockToFake : new ItemStack(Blocks.tnt);
 
-        return new PacketTile(this, 1, pos, shouldRenderBlock, render, state, renderBlockID);
+        return new PacketTile(this, 1, pos, shouldRenderBlock, render, state, stack);
     }
 
     @Override

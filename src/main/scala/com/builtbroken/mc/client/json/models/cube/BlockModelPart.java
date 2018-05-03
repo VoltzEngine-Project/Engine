@@ -1,6 +1,6 @@
 package com.builtbroken.mc.client.json.models.cube;
 
-import com.builtbroken.mc.client.BlockRenderWrapper;
+import com.builtbroken.mc.client.wrapper.BlockRenderWrapper;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.texture.TextureData;
 import com.builtbroken.mc.imp.transform.vector.Pos;
@@ -24,12 +24,12 @@ public class BlockModelPart
 
     public final String[] textureID = new String[6];
 
-    public void render(IBlockAccess world, int x, int y, int z, Block block, RenderBlocks renderer)
+    public void render(IBlockAccess world, int x, int y, int z, Block block, int meta, RenderBlocks renderer)
     {
         bounds(renderer,
                 pixel * position.xf(), pixel * position.yf(), pixel * position.zf(),
                 pixel * size.xf(), pixel * size.yf(), pixel * size.zf());
-        renderBlock(renderer, block, x, y, z, null);
+        renderBlock(renderer, block, meta, x, y, z, null);
     }
 
     protected void bounds(RenderBlocks renderer, double x, double y, double z, double xx, double yy, double zz)
@@ -37,30 +37,36 @@ public class BlockModelPart
         renderer.setRenderBounds(x, y, z, x + xx, y + yy, z + zz);
     }
 
-    public void renderBlock(RenderBlocks renderer, Block block, int x, int y, int z, IIcon icon)
+    public void renderBlock(RenderBlocks renderer, Block block, int meta, int x, int y, int z, IIcon icon)
     {
         if (y == -1)
         {
-            RenderUtility.renderCube(renderer.renderMinX, renderer.renderMinY, renderer.renderMinZ, renderer.renderMaxX, renderer.renderMaxY, renderer.renderMaxZ, getWrapper(block), icon, 0);
+            RenderUtility.renderCube(renderer.renderMinX, renderer.renderMinY, renderer.renderMinZ, renderer.renderMaxX, renderer.renderMaxY, renderer.renderMaxZ, getWrapper(block, meta), icon, 0);
         }
         else
         {
 
             renderer.setOverrideBlockTexture(icon);
-            renderer.renderStandardBlock(getWrapper(block), x, y, z);
+            renderer.renderStandardBlock(getWrapper(block, meta), x, y, z);
             renderer.setOverrideBlockTexture(null);
         }
     }
 
-    protected BlockRenderWrapper getWrapper(Block block)
+    protected BlockRenderWrapper getWrapper(Block block, int meta)
     {
+        if (block instanceof BlockRenderWrapper)
+        {
+            return (BlockRenderWrapper) block;
+        }
+
         if (wrapper == null)
         {
-            wrapper = new BlockRenderWrapper(block);
+            wrapper = new BlockRenderWrapper(block, meta);
         }
         else
         {
             wrapper.realBlock = block;
+            wrapper.realMeta = meta;
             wrapper.clearRenderSides();
         }
         return wrapper;

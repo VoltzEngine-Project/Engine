@@ -8,6 +8,8 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
@@ -53,8 +55,16 @@ public class MultiBlockRenderHelper implements ISimpleBlockRenderingHandler
                     IRenderState state = renderData.getState(multi.renderState);
                     if (state instanceof RenderStateBlockModel)
                     {
-                        Block fakeBlock = multi.getBlockToRender();
-                        return ((RenderStateBlockModel) state).render(world, x, y, z, fakeBlock != null ? fakeBlock : block, renderBlocks);
+                        Block renderBlock = block;
+                        int renderMeta = -1;
+                        ItemStack itemStack = multi.getBlockToRender();
+
+                        if(itemStack != null && itemStack.getItem() instanceof ItemBlock)
+                        {
+                            renderBlock = ((ItemBlock) itemStack.getItem()).field_150939_a;
+                            renderMeta = itemStack.getItem().getMetadata(itemStack.getItemDamage());
+                        }
+                        return ((RenderStateBlockModel) state).render(world, x, y, z, renderBlock, renderMeta, renderBlocks);
                     }
                 }
             }

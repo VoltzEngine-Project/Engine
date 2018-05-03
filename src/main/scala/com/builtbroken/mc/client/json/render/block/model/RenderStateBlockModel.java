@@ -65,12 +65,12 @@ public class RenderStateBlockModel extends RenderState
         return model;
     }
 
-    public boolean render(IBlockAccess world, int x, int y, int z, Block block, RenderBlocks renderBlocks)
+    public boolean render(IBlockAccess world, int x, int y, int z, Block block, int meta, RenderBlocks renderBlocks)
     {
         BlockModelData modelData = getModel();
         if (modelData != null)
         {
-            return modelData.render(world, x, y, z, block, renderBlocks);
+            return modelData.render(world, x, y, z, block, meta, renderBlocks);
         }
         return false;
     }
