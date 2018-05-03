@@ -1,4 +1,4 @@
-package com.builtbroken.mc.client;
+package com.builtbroken.mc.client.wrapper;
 
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.prefab.inventory.InventoryUtility;
@@ -23,18 +23,29 @@ import java.util.List;
 public class BlockRenderWrapper extends Block
 {
     public static int suppressErrorLimit = 5;
-    public static HashMap<Block, List<Exception>> textureErrors = new HashMap();
-    public static HashMap<Block, List<Exception>> otherErrors = new HashMap();
+    public static final HashMap<Block, List<Exception>> textureErrors = new HashMap();
+    public static final HashMap<Block, List<Exception>> otherErrors = new HashMap();
+    public static final BlockAccessWrapper accessWrapper = new BlockAccessWrapper();
 
     public Block realBlock;
+    public int realMeta = -1;
 
     /** Bitmask **/
     private byte renderSides = 0;
 
-    public BlockRenderWrapper(Block block)
+    public BlockRenderWrapper(Block block, int meta)
     {
         super(block.getMaterial());
         realBlock = block;
+        realMeta = meta;
+    }
+
+    protected IBlockAccess getAccess(IBlockAccess access)
+    {
+        accessWrapper.actualWorld = access;
+        accessWrapper.overrideMeta = realMeta;
+        accessWrapper.overrideBlock = realBlock;
+        return accessWrapper;
     }
 
     @Override
@@ -45,7 +56,7 @@ public class BlockRenderWrapper extends Block
         {
             try
             {
-                return realBlock.colorMultiplier(world, x, y, z);
+                return realBlock.colorMultiplier(getAccess(world), x, y, z);
             }
             catch (Exception e)
             {
@@ -74,7 +85,6 @@ public class BlockRenderWrapper extends Block
                 try
                 {
                     return realBlock.shouldSideBeRendered(world, x, y, z, side);
-
                 }
                 catch (Exception e)
                 {
@@ -95,7 +105,7 @@ public class BlockRenderWrapper extends Block
         {
             try
             {
-                return realBlock.getMixedBrightnessForBlock(world, x, y, z);
+                return realBlock.getMixedBrightnessForBlock(getAccess(world), x, y, z);
             }
             catch (Exception e)
             {
@@ -156,7 +166,7 @@ public class BlockRenderWrapper extends Block
         {
             try
             {
-                IIcon icon = realBlock.getIcon(world, x, y, z, side);
+                IIcon icon = realBlock.getIcon(getAccess(world), x, y, z, side);
                 if (icon == null)
                 {
                     //visual error noting null icon
