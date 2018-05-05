@@ -146,7 +146,9 @@ public class ModCreativeTab extends CreativeTabs
     {
         if (item != null)
         {
-            item.getSubItems(item, this, list);
+            List list2 = new ArrayList();
+            item.getSubItems(item, this, list2);
+            list.addAll(list2);
             return true;
         }
         return false;
@@ -202,7 +204,9 @@ public class ModCreativeTab extends CreativeTabs
             Item item = Item.getItemFromBlock(block);
             if (item != null)
             {
-                block.getSubBlocks(item, this, list);
+                List list2 = new ArrayList();
+                block.getSubBlocks(item, this, list2);
+                list.addAll(list2);
                 return true;
             }
             else if (Engine.runningAsDev)
