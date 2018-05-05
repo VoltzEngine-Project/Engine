@@ -75,7 +75,9 @@ public interface IJsonRenderStateProvider
     /**
      * Gets all content IDs used by this object
      * <p>
-     * Used to register renderers.
+     * Used to register renderers. Only needed
+     * for items. As tiles and blocks are handled
+     * via other methods.
      *
      * @return
      */

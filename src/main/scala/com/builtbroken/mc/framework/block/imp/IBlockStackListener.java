@@ -92,6 +92,6 @@ public interface IBlockStackListener extends ITileEventListener
 
     default String getListenerKey()
     {
-        return "blockStack";
+        return BlockListenerKeys.BLOCK_STACK;
     }
 }
