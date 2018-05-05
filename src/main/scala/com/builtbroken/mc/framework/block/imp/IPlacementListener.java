@@ -69,6 +69,19 @@ public interface IPlacementListener extends ITileEventListener
      *               used for com.builtbroken.mc.framework.block.ItemBlockBase
      * @return true if can place
      */
+    default ActionResponse canPlaceAt(IEntityData entity, ItemStack stack)
+    {
+        return canPlaceAt(entity);
+    }
+
+    /**
+     * Called to see if the tile can be placed
+     *
+     * @param entity - entity trying to place the block, only
+     *               used for com.builtbroken.mc.framework.block.ItemBlockBase
+     * @return true if can place
+     */
+    @Deprecated
     default ActionResponse canPlaceAt(IEntityData entity)
     {
         return canPlaceAt();
@@ -103,7 +116,7 @@ public interface IPlacementListener extends ITileEventListener
     @Override
     default String getListenerKey()
     {
-        return "placement";
+        return BlockListenerKeys.PLACEMENT;
     }
 
 }
