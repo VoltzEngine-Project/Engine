@@ -503,7 +503,6 @@ link.completed.name=Link Created
 link.updated.name=Link Updated
 
 # Items
-
 item.voltzengine:exSpawnEgg.name=Explosive Spawn Egg
 
 ## Screwdriver
@@ -512,33 +511,44 @@ item.voltzengine:screwdriver.rotation.name=Rotation MultiTool
 item.voltzengine:screwdriver.item.name=Item MultiTool
 item.voltzengine:screwdriver.fluid.name=Fluid MultiTool
 item.voltzengine:screwdriver.redstone.name=Redstone MultiTool
+item.voltzengine:screwdriver.power.name=Wire MultiTool
+
+item.voltzengine:screwdriver.power.green.name=Green Wire MultiTool
+item.voltzengine:screwdriver.power.yellow.name=Yellow Wire MultiTool
+item.voltzengine:screwdriver.power.red.name=Red Wire MultiTool
+item.voltzengine:screwdriver.power.blue.name=Blue Wire MultiTool
+item.voltzengine:screwdriver.power.purple.name=Purple Wire MultiTool
+item.voltzengine:screwdriver.power.orange.name=Orange Wire MultiTool
 
 item.voltzengine:screwdriver.rotation.green.name=Green Rotation MultiTool
 item.voltzengine:screwdriver.rotation.yellow.name=Yellow Rotation MultiTool
 item.voltzengine:screwdriver.rotation.red.name=Red Rotation MultiTool
 item.voltzengine:screwdriver.rotation.blue.name=Blue Rotation MultiTool
 item.voltzengine:screwdriver.rotation.purple.name=Purple Rotation MultiTool
+item.voltzengine:screwdriver.rotation.orange.name=Orange Rotation MultiTool
 
 item.voltzengine:screwdriver.item.green.name=Green Item MultiTool
 item.voltzengine:screwdriver.item.yellow.name=Yellow Item MultiTool
 item.voltzengine:screwdriver.item.red.name=Red Item MultiTool
 item.voltzengine:screwdriver.item.blue.name=Blue Item MultiTool
 item.voltzengine:screwdriver.item.purple.name=Purple Item MultiTool
+item.voltzengine:screwdriver.item.orange.name=Orange Item MultiTool
 
 item.voltzengine:screwdriver.fluid.green.name=Green Fluid MultiTool
 item.voltzengine:screwdriver.fluid.yellow.name=Yellow Fluid MultiTool
 item.voltzengine:screwdriver.fluid.red.name=Red Fluid MultiTool
 item.voltzengine:screwdriver.fluid.blue.name=Blue Fluid MultiTool
 item.voltzengine:screwdriver.fluid.purple.name=Purple FluidMultiTool
+item.voltzengine:screwdriver.fluid.orange.name=Orange FluidMultiTool
 
 item.voltzengine:screwdriver.redstone.green.name=Green Redstone MultiTool
 item.voltzengine:screwdriver.redstone.yellow.name=Yellow Redstone MultiTool
 item.voltzengine:screwdriver.redstone.red.name=Red Redstone MultiTool
 item.voltzengine:screwdriver.redstone.blue.name=Blue Redstone MultiTool
 item.voltzengine:screwdriver.redstone.purple.name=Purple Redstone MultiTool
+item.voltzengine:screwdriver.redstone.orange.name=Orange Redstone MultiTool
 
 ## Screwdriver Info
-item.voltzengine:screwdriver.name=Screwdriver
 item.voltzengine:screwdriver.mode.rotation.info=Mode: §bRotation
 item.voltzengine:screwdriver.mode.item.info=Mode: §eItem
 item.voltzengine:screwdriver.mode.fluid.info=Mode: §9Fluid
@@ -549,6 +559,7 @@ item.voltzengine:screwdriver.color.yellow.info=Color: Yellow
 item.voltzengine:screwdriver.color.red.info=Color: Red
 item.voltzengine:screwdriver.color.blue.info=Color: Blue
 item.voltzengine:screwdriver.color.purple.info=Color: Purple
+item.voltzengine:screwdriver.color.orange.info=Color: Orange
 
 item.voltzengine:screwdriver.more.info=Hold §bSHIFT§f for more
 

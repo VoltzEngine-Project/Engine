@@ -53,12 +53,12 @@ public class ToolModeRotation extends ToolMode
     @Override
     public String getTexture(String iconString)
     {
-        return iconString + ".rotation.color";
+        return iconString + ".rotation";
     }
 
     @Override
     public String getColorizedTexture(String iconString)
     {
-        return iconString + ".rotation";
+        return iconString + ".rotation.color";
     }
 }
