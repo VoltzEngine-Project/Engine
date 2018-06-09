@@ -8,7 +8,7 @@ public class ToolModeGeneral extends ToolMode
 	@Override
 	public String getInfoName()
 	{
-		return Engine.itemWrench.getUnlocalizedName() + ".mode.general.info";
+		return Engine.itemWrench.getUnlocalizedName() + ".general.info";
 	}
 
     @Override

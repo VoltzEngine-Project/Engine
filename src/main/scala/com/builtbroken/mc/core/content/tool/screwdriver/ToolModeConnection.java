@@ -74,7 +74,7 @@ public class ToolModeConnection extends ToolMode
     @Override
     public String getItemUnlocalizedName(ConnectionColor color)
     {
-        return Engine.itemWrench.getUnlocalizedName() + ".mode." + modeName + "." + color.name().toLowerCase();
+        return Engine.itemWrench.getUnlocalizedName() + "." + modeName + "." + color.name().toLowerCase();
     }
 
     @Override

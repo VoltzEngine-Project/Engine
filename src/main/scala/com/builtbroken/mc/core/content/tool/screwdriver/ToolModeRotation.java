@@ -47,7 +47,7 @@ public class ToolModeRotation extends ToolMode
     @Override
     public String getItemUnlocalizedName(ConnectionColor color)
     {
-        return Engine.itemWrench.getUnlocalizedName() + ".mode.rotation." + color.name().toLowerCase();
+        return Engine.itemWrench.getUnlocalizedName() + ".rotation." + color.name().toLowerCase();
     }
 
     @Override

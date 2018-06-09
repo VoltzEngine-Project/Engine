@@ -553,6 +553,7 @@ item.voltzengine:screwdriver.mode.rotation.info=Mode: §bRotation
 item.voltzengine:screwdriver.mode.item.info=Mode: §eItem
 item.voltzengine:screwdriver.mode.fluid.info=Mode: §9Fluid
 item.voltzengine:screwdriver.mode.redstone.info=Mode: §4Redstone
+item.voltzengine:screwdriver.mode.power.info=Mode: §6Wire
 
 item.voltzengine:screwdriver.color.green.info=Color: Green
 item.voltzengine:screwdriver.color.yellow.info=Color: Yellow
