@@ -503,10 +503,58 @@ link.completed.name=Link Created
 link.updated.name=Link Updated
 
 # Items
-item.voltzengine:screwdriver.name=Screwdriver
-item.voltzengine:screwdriver.tooltip=Used to configure blocks. Shift-right click to change mode.
 
 item.voltzengine:exSpawnEgg.name=Explosive Spawn Egg
+
+## Screwdriver
+item.voltzengine:screwdriver.name=MultiTool
+item.voltzengine:screwdriver.rotation.name=Rotation MultiTool
+item.voltzengine:screwdriver.item.name=Item MultiTool
+item.voltzengine:screwdriver.fluid.name=Fluid MultiTool
+item.voltzengine:screwdriver.redstone.name=Redstone MultiTool
+
+item.voltzengine:screwdriver.rotation.green.name=Green Rotation MultiTool
+item.voltzengine:screwdriver.rotation.yellow.name=Yellow Rotation MultiTool
+item.voltzengine:screwdriver.rotation.red.name=Red Rotation MultiTool
+item.voltzengine:screwdriver.rotation.blue.name=Blue Rotation MultiTool
+item.voltzengine:screwdriver.rotation.purple.name=Purple Rotation MultiTool
+
+item.voltzengine:screwdriver.item.green.name=Green Item MultiTool
+item.voltzengine:screwdriver.item.yellow.name=Yellow Item MultiTool
+item.voltzengine:screwdriver.item.red.name=Red Item MultiTool
+item.voltzengine:screwdriver.item.blue.name=Blue Item MultiTool
+item.voltzengine:screwdriver.item.purple.name=Purple Item MultiTool
+
+item.voltzengine:screwdriver.fluid.green.name=Green Fluid MultiTool
+item.voltzengine:screwdriver.fluid.yellow.name=Yellow Fluid MultiTool
+item.voltzengine:screwdriver.fluid.red.name=Red Fluid MultiTool
+item.voltzengine:screwdriver.fluid.blue.name=Blue Fluid MultiTool
+item.voltzengine:screwdriver.fluid.purple.name=Purple FluidMultiTool
+
+item.voltzengine:screwdriver.redstone.green.name=Green Redstone MultiTool
+item.voltzengine:screwdriver.redstone.yellow.name=Yellow Redstone MultiTool
+item.voltzengine:screwdriver.redstone.red.name=Red Redstone MultiTool
+item.voltzengine:screwdriver.redstone.blue.name=Blue Redstone MultiTool
+item.voltzengine:screwdriver.redstone.purple.name=Purple Redstone MultiTool
+
+## Screwdriver Info
+item.voltzengine:screwdriver.name=Screwdriver
+item.voltzengine:screwdriver.mode.rotation.info=Mode: §bRotation
+item.voltzengine:screwdriver.mode.item.info=Mode: §eItem
+item.voltzengine:screwdriver.mode.fluid.info=Mode: §9Fluid
+item.voltzengine:screwdriver.mode.redstone.info=Mode: §4Redstone
+
+item.voltzengine:screwdriver.color.green.info=Color: Green
+item.voltzengine:screwdriver.color.yellow.info=Color: Yellow
+item.voltzengine:screwdriver.color.red.info=Color: Red
+item.voltzengine:screwdriver.color.blue.info=Color: Blue
+item.voltzengine:screwdriver.color.purple.info=Color: Purple
+
+item.voltzengine:screwdriver.more.info=Hold §bSHIFT§f for more
+
+item.voltzengine:screwdriver.info=Adjusts machine settings
+item.voltzengine:screwdriver.wheel.info=Mouse wheel switches modes
+item.voltzengine:screwdriver.ctrl.info=Ctrl + wheel switches color
 
 # Chips
 item.voltzengine:circuits.circuitBasic.name=Basic Circuit
