@@ -9,6 +9,7 @@ import com.builtbroken.mc.core.network.packet.callback.PacketOpenGUI;
 import com.builtbroken.mc.core.network.packet.callback.chunk.PacketRequestData;
 import com.builtbroken.mc.core.network.packet.callback.chunk.PacketSendData;
 import com.builtbroken.mc.core.network.packet.user.PacketMouseClick;
+import com.builtbroken.mc.core.network.packet.user.PacketMouseScroll;
 import com.builtbroken.mc.core.network.packet.user.PacketPlayerItemMode;
 import com.builtbroken.mc.framework.access.global.packets.PacketAccessGui;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
@@ -45,6 +46,7 @@ public class PacketHandler extends FMLIndexedMessageToMessageCodec<IPacket>
         addPacket(PacketAccessGui.class);
         addPacket(PacketSendData.class);
         addPacket(PacketRequestData.class);
+        addPacket(PacketMouseScroll.class);
     }
 
     public void addPacket(Class<? extends IPacket> clazz) //TODO code system to sync IDs to ensure 100% match client(s) to server

@@ -1,9 +1,11 @@
 package com.builtbroken.mc.core.handler;
 
 import com.builtbroken.mc.api.items.IMouseButtonHandler;
+import com.builtbroken.mc.api.items.tools.IItemMouseScroll;
 import com.builtbroken.mc.api.items.tools.IModeItem;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.network.packet.user.PacketMouseClick;
+import com.builtbroken.mc.core.network.packet.user.PacketMouseScroll;
 import com.builtbroken.mc.core.network.packet.user.PacketPlayerItemMode;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
@@ -49,7 +51,25 @@ public class PlayerKeyHandler
         if (stack != null)
         {
             final Item item = stack.getItem();
-            if (item instanceof IModeItem.IModeScrollItem)
+            if (item instanceof IItemMouseScroll)
+            {
+                if (e.dwheel != 0)
+                {
+                    boolean ctrl = Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
+                    boolean shift = Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+                    IItemMouseScroll.Result result = ((IItemMouseScroll) item).onMouseWheelScrolled(player, stack, ctrl, shift, e.dwheel > 0);
+                    if (result == IItemMouseScroll.Result.CLIENT)
+                    {
+                        e.setCanceled(true);
+                    }
+                    else if (result == IItemMouseScroll.Result.SERVER)
+                    {
+                        Engine.packetHandler.sendToServer(new PacketMouseScroll(player.inventory.currentItem, ctrl, shift, e.dwheel > 0));
+                        e.setCanceled(true);
+                    }
+                }
+            }
+            else if (item instanceof IModeItem.IModeScrollItem)
             {
                 if (player.isSneaking() && e.dwheel != 0)
                 {
@@ -61,7 +81,8 @@ public class PlayerKeyHandler
                     e.setCanceled(true);
                 }
             }
-            else if (item instanceof IMouseButtonHandler && e.button != -1)
+
+            if (item instanceof IMouseButtonHandler && e.button != -1)
             {
                 Engine.packetHandler.sendToServer(new PacketMouseClick(player.inventory.currentItem, e.button, e.buttonstate));
                 ((IMouseButtonHandler) item).mouseClick(stack, player, e.button, e.buttonstate);
