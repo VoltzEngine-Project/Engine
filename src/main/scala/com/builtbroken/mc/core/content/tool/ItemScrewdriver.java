@@ -43,13 +43,18 @@ public class ItemScrewdriver extends ItemToolModeColor implements IToolWrench, I
     @Override
     public boolean canWrench(EntityPlayer entityPlayer, int x, int y, int z)
     {
-        return true;
+        return isWrench(entityPlayer.getHeldItem(), entityPlayer, x, y, z);
     }
 
     @Override
     public void wrenchUsed(EntityPlayer entityPlayer, int x, int y, int z)
     {
 
+    }
+
+    public boolean isWrench(ItemStack stack, EntityPlayer entityPlayer, int x, int y, int z)
+    {
+        return getToolMode(stack) == ToolMode.MODE_GENERAL;
     }
 
     @Override

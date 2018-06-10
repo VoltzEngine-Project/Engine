@@ -93,7 +93,7 @@ public class WrenchUtility
         {
             if (itemStack.getItem() instanceof ItemScrewdriver)
             {
-                return true;
+                return ((ItemScrewdriver) itemStack.getItem()).isWrench(itemStack, player, x, y, z);
             }
 
             WrenchType type = getWrenchTypeFor(itemStack);
