@@ -25,7 +25,7 @@ public class ToolModeConnection extends ToolMode
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, ConnectionColor connectionColor, World world, int x, int y, int z, int sideIndex, float hitX, float hitY, float hitZ)
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, ConnectionColor connectionColor, World world, int x, int y, int z, int sideIndex, float hitX, float hitY, float hitZ)
     {
         IAdjustableConnections machine = null;
         TileEntity tile = world.getTileEntity(x, y, z);
