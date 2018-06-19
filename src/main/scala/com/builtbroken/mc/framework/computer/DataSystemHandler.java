@@ -17,7 +17,14 @@ public final class DataSystemHandler
 
     public static IDataSystem getSystemInfo(Object host)
     {
-        return clazzToSystem.get(host.getClass());
+        IDataSystem system = clazzToSystem.get(host.getClass());
+        if(system == null)
+        {
+            system = clazzToSystem.get(host.getClass().getSuperclass());
+            //TODO move through super classes looking for registered node
+            //TODO cache failed classes so not to re-loop
+        }
+        return system;
     }
 
     /**
