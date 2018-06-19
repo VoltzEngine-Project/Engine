@@ -28,7 +28,7 @@ public final class DataSystemHandler
      */
     public static void generate(String uniqueName, Class<? extends Object> target)
     {
-        register(uniqueName, target, new DataSystemInfo(uniqueName, target));
+        register(uniqueName, target, new DataSystem(uniqueName, target));
     }
 
     /**

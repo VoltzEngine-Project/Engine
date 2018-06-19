@@ -10,10 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * Wrapper for annotation driven data system
+ *
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/18/2018.
  */
-public class DataSystemInfo implements IDataSystem
+public class DataSystem implements IDataSystem
 {
     public final String systemType;
     public final Class<? extends Object> clazz;
@@ -22,7 +24,7 @@ public class DataSystemInfo implements IDataSystem
 
     private String[] methodNames;
 
-    public DataSystemInfo(String systemType, Class<? extends Object> clazz)
+    public DataSystem(String systemType, Class<? extends Object> clazz)
     {
         this.systemType = systemType;
         this.clazz = clazz;
@@ -46,13 +48,17 @@ public class DataSystemInfo implements IDataSystem
 
     private final DataArg[] convert(String[] strings)
     {
-        DataArg[] args = new DataArg[strings.length];
-        for (int i = 0; i < strings.length; i++)
+        if (strings != null && strings.length > 0)
         {
-            String[] split = strings[i].split(":");
-            args[i] = new DataArg(split[1], split[0]);
+            DataArg[] args = new DataArg[strings.length];
+            for (int i = 0; i < strings.length; i++)
+            {
+                String[] split = strings[i].split(":");
+                args[i] = new DataArg(split[1], split[0]);
+            }
+            return args;
         }
-        return args;
+        return null;
     }
 
     public IDataSystemMethod getMethod(String name)
