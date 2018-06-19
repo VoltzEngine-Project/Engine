@@ -8,9 +8,13 @@ It is also important to note these changes are for several repos. As this reposi
 # Versions
 ## 1.10.6
 ### Runtime Changes
+* Added: Computer Craft support
 
 ### Development Changes
-Changed: Machine prefab to return energy buffer interface instead of object
+* Added: Early version of computer data system (designed for -> CC, OC, and eventually AL automation controllers)
+* Added: annotation system for getting data methods
+* Added: registry to add data systems or generate ones from annotations
+* Changed: Machine prefab to return energy buffer interface instead of object
 
 ## 1.10.5 - 6/9/2018
 ### Runtime Changes
