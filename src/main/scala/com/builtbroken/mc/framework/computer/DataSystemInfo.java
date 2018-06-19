@@ -16,13 +16,13 @@ import java.util.List;
 public class DataSystemInfo implements IDataSystem
 {
     public final String systemType;
-    public final Class<? extends IDataSystem> clazz;
+    public final Class<? extends Object> clazz;
 
-    private HashMap<String, IDataSystemMethod> methods;
+    private final HashMap<String, IDataSystemMethod> methods = new HashMap();
 
     private String[] methodNames;
 
-    public DataSystemInfo(String systemType, Class<? extends IDataSystem> clazz)
+    public DataSystemInfo(String systemType, Class<? extends Object> clazz)
     {
         this.systemType = systemType;
         this.clazz = clazz;
