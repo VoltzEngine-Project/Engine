@@ -3,6 +3,7 @@ package com.builtbroken.mc.framework.computer;
 import com.builtbroken.mc.api.computer.DataSystemMethod;
 import com.builtbroken.mc.api.computer.IDataSystem;
 import com.builtbroken.mc.api.computer.IDataSystemMethod;
+import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.lib.helper.ReflectionUtility;
 
 import java.lang.reflect.Method;
@@ -20,7 +21,8 @@ public class DataSystem implements IDataSystem
     public final String systemType;
     public final Class<? extends Object> clazz;
 
-    private final HashMap<String, IDataSystemMethod> methods = new HashMap();
+    private final HashMap<String, IDataSystemMethod> idToMethod = new HashMap();
+    private final HashMap<String, IDataSystemMethod> invokeToMethod = new HashMap();
 
     private String[] methodNames;
 
@@ -28,6 +30,11 @@ public class DataSystem implements IDataSystem
     {
         this.systemType = systemType;
         this.clazz = clazz;
+        mapMethods();
+    }
+
+    private final void mapMethods()
+    {
         try
         {
             List<Method> methods = ReflectionUtility.getAllMethods(clazz);
@@ -42,13 +49,17 @@ public class DataSystem implements IDataSystem
         }
         catch (Exception e)
         {
+            if (Engine.runningAsDev)
+            {
+                throw new RuntimeException("Failed to find invokeToMethod for DataSystem: " + this);
+            }
             e.printStackTrace();
         }
     }
 
     private final DataArg[] convert(String[] strings)
     {
-        if (strings != null && strings.length > 0)
+        if (strings != null && strings.length > 0 && !strings[0].equals(""))
         {
             DataArg[] args = new DataArg[strings.length];
             for (int i = 0; i < strings.length; i++)
@@ -63,38 +74,25 @@ public class DataSystem implements IDataSystem
 
     public IDataSystemMethod getMethod(String name)
     {
-        return methods.get(name.toLowerCase());
+        return idToMethod.get(name.toLowerCase());
     }
 
     public void addMethod(IDataSystemMethod method)
     {
-        int i = 0;
         String id = method.getInvokeName().toLowerCase();
-        do
+        if (idToMethod.containsKey(id))
         {
-            if (methods.containsKey(id))
-            {
-                id = method.getInvokeName().toLowerCase() + (i++);
-            }
-            else
-            {
-                methods.put(id, method);
-                break;
-            }
+            Engine.error("DataSystem#addMethod(" + method + ") registering method over existing method by id[" + id + "]");
         }
-        while (i < 100);
+        idToMethod.put(id, method);
+        invokeToMethod.put(method.getInvokeName(), method);
     }
 
     public String[] getMethodNames()
     {
         if (methodNames == null)
         {
-            methodNames = new String[methods.size()];
-            int i = 0;
-            for (IDataSystemMethod method : methods.values())
-            {
-                methodNames[i++] = method.getName();
-            }
+            methodNames = invokeToMethod.keySet().stream().toArray(String[]::new);
         }
         return methodNames;
     }
