@@ -72,7 +72,7 @@ public class DataMethodInfo implements IDataSystemMethod
         {
             if (args == null)
             {
-                if (inputData == null)
+                if (inputData == null || inputData.length == 0)
                 {
                     return getOut(method.invoke(system));
                 }
