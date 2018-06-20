@@ -12,7 +12,7 @@ public interface ILauncherController
     public LauncherType getLauncherType();
 
     /** Launches the missile into the specified target. */
-    public void launch();
+    public boolean launch();
 
     /** Can the launcher launch the missile? */
     public boolean canLaunch();
@@ -25,6 +25,11 @@ public interface ILauncherController
 
     /** @param target Sets the target of the launcher */
     public void setTarget(Pos target);
+
+    default void setTarget(double x, double y, double z)
+    {
+        setTarget(new Pos(x, y, z));
+    }
 
     /** Places a missile into the launcher. */
     public void placeMissile(ItemStack itemStack);
