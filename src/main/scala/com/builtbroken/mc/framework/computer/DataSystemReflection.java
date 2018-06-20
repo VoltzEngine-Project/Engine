@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Dark(DarkGuardsman, Robert) on 6/18/2018.
  */
 @Deprecated
-public class DataSystem implements IDataSystem
+public class DataSystemReflection implements IDataSystem
 {
     public final String systemType;
     public final Class<? extends Object> clazz;
@@ -27,7 +27,7 @@ public class DataSystem implements IDataSystem
 
     private String[] methodNames;
 
-    public DataSystem(String systemType, Class<? extends Object> clazz)
+    public DataSystemReflection(String systemType, Class<? extends Object> clazz)
     {
         this.systemType = systemType;
         this.clazz = clazz;
