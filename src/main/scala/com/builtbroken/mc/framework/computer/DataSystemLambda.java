@@ -33,14 +33,14 @@ public class DataSystemLambda implements IDataSystem
 
     public void addMethod(String name, Function<Object, Object> function)
     {
-        addMethod(name, (a, b, c) -> runZeroArgMethod(name, c, function));
+        addMethod(name, (host, method, args) -> runZeroArgMethod(name, host, args, function));
     }
 
-    private Object runZeroArgMethod(String name, Object[] args, Function<Object, Object> function)
+    private Object runZeroArgMethod(String name, Object host, Object[] args, Function<Object, Object> function)
     {
         if (args == null || args.length == 0)
         {
-            return function.apply(args);
+            return function.apply(host);
         }
         return new Object[]{"Error: Method '" + name + "' + requires no arguments"};
     }
