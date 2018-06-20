@@ -16,21 +16,90 @@ import java.util.function.Function;
  */
 public final class DataSystemHandler
 {
+    public static int parentSearchLimit = 10;
+
     private static final HashMap<String, Function<Object, FunctionComputer>> sharedMethods = new HashMap();
 
     private static final HashMap<String, IDataSystem> typeToSystem = new HashMap();
     private static final HashMap<Class<? extends Object>, IDataSystem> clazzToSystem = new HashMap();
+    private static final HashMap<Class<? extends Object>, Function<Object, Object>> clazzToRedirect = new HashMap();
 
     private static final List<DataSystemLambda> lambdaDataSystems = new ArrayList();
 
     public static IDataSystem getSystemInfo(Object host)
     {
-        IDataSystem system = clazzToSystem.get(host.getClass());
+        IDataSystem system = getSystem(host);
         if (system == null)
         {
-            system = clazzToSystem.get(host.getClass().getSuperclass());
-            //TODO move through super classes looking for registered node
-            //TODO cache failed classes so not to re-loop
+            return getSystemForRedirect(host);
+        }
+        return null;
+    }
+
+    private static IDataSystem getSystemForRedirect(Object host)
+    {
+        Class clazz = host.getClass();
+        //Try to see if its a redirect tile
+        if (clazzToRedirect.containsKey(clazz))
+        {
+            return getSystemInfo(clazzToRedirect.get(clazz).apply(host));
+        }
+        else
+        {
+            //If failed, try super class(s)... only if we didn't already try once before
+            if (!clazzToRedirect.containsKey(clazz))
+            {
+                int depth = 0;
+                do
+                {
+                    clazz = clazz.getSuperclass();
+                }
+                while (!clazzToRedirect.containsKey(clazz)
+                        && clazz.getSuperclass() != null
+                        && clazz.getSuperclass() != Object.class
+                        && depth++ < parentSearchLimit);
+
+                if (clazzToRedirect.containsKey(clazz))
+                {
+                    clazzToRedirect.put(host.getClass(), clazzToRedirect.get(clazz));
+                }
+                else
+                {
+                    clazzToRedirect.put(host.getClass(), null);
+                }
+            }
+        }
+        return null;
+    }
+
+    private static IDataSystem getSystem(Object host)
+    {
+        Class clazz = host.getClass();
+        //Try to get by class
+        IDataSystem system = clazzToSystem.get(clazz);
+
+        //If failed, try super class(s)... only if we didn't already try once before
+        if (system == null && !clazzToSystem.containsKey(clazz))
+        {
+            int depth = 0;
+            do
+            {
+                clazz = clazz.getSuperclass();
+                system = clazzToSystem.get(clazz);
+            }
+            while (system == null
+                    && clazz.getSuperclass() != null
+                    && clazz.getSuperclass() != Object.class
+                    && depth++ < parentSearchLimit);
+
+            if (system != null)
+            {
+                clazzToSystem.put(host.getClass(), system);
+            }
+            else
+            {
+                clazzToSystem.put(host.getClass(), null);
+            }
         }
         return system;
     }
@@ -45,6 +114,17 @@ public final class DataSystemHandler
     public static void generate(String uniqueName, Class<? extends Object> target)
     {
         register(uniqueName, target, new DataSystemReflection(uniqueName, target));
+    }
+
+    /**
+     * Creates a redirect from one tile to another tile
+     *
+     * @param instance    - used to get the class and other useful data
+     * @param getFunction - function to call to get the real tile
+     */
+    public static void createRedirectTile(Object instance, Function<Object, Object> getFunction)
+    {
+        clazzToRedirect.put(instance.getClass(), getFunction);
     }
 
     /**
