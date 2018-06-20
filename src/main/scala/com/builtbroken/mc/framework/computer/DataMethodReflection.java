@@ -12,7 +12,8 @@ import java.lang.reflect.Method;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/18/2018.
  */
-public class DataMethodInfo implements IDataSystemMethod
+@Deprecated //Avoid using
+public class DataMethodReflection implements IDataSystemMethod
 {
     /** Display name of the method */
     public final String name;
@@ -23,7 +24,7 @@ public class DataMethodInfo implements IDataSystemMethod
     //Name given to computer systems to call
     private final String invokeName;
 
-    public DataMethodInfo(String name, DataMethodType type, Method method, DataArg[] args)
+    public DataMethodReflection(String name, DataMethodType type, Method method, DataArg[] args)
     {
         this.name = name;
         this.type = type;

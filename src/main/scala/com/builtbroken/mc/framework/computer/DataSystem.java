@@ -16,6 +16,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 6/18/2018.
  */
+@Deprecated
 public class DataSystem implements IDataSystem
 {
     public final String systemType;
@@ -43,7 +44,8 @@ public class DataSystem implements IDataSystem
                 DataSystemMethod dataSystemMethod = method.getAnnotation(DataSystemMethod.class);
                 if (dataSystemMethod != null)
                 {
-                    addMethod(new DataMethodInfo(dataSystemMethod.name(), dataSystemMethod.type(), method, convert(dataSystemMethod.args())));
+                    method.setAccessible(true);
+                    addMethod(new DataMethodReflection(dataSystemMethod.name(), dataSystemMethod.type(), method, convert(dataSystemMethod.args())));
                 }
             }
         }
