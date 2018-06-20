@@ -6,6 +6,16 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.10.7
+### Runtime changes
+* Added: shared data system method getEnergy() 
+* Added: shared data system method getEnergyCapacity() 
+* Added: shared data system method for to/from energy conversions (supports RF and IC2)
+
+### Development Changes
+* Replaced: annotation data system with lambda system. Old system will still work for a few versions. However, after toying with the annotation system it was found to not work effectivly. This had nothing to do with implementation but design. As methods would need to be created in order to use annotations in some cases. Instead a lambda expression is now being used to generate logic as needed. Without having to edit the target class for the exposed data/logic methods. As well this opens the possiblity of using VE to add CC and OC support to other mods indirectly. Including the possibility of a JSON driven system.
+
+
 ## 1.10.6
 ### Runtime Changes
 * Added: Computer Craft support
