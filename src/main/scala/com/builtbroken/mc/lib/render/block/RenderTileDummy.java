@@ -12,11 +12,11 @@ import net.minecraft.tileentity.TileEntity;
 public class RenderTileDummy extends TileEntitySpecialRenderer
 {
     @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f)
+    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float deltaFrame)
     {
         if(tile instanceof Tile)
         {
-            ((Tile) tile).renderDynamic(new Pos(x, y, z), f, 0);
+            ((Tile) tile).renderDynamic(new Pos(x, y, z), deltaFrame, 0);
         }
     }
 }
