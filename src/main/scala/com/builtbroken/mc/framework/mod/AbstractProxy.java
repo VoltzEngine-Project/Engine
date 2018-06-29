@@ -18,14 +18,17 @@ import org.lwjgl.input.Keyboard;
  */
 public abstract class AbstractProxy extends AbstractLoadable implements IGuiHandler
 {
+    public static final int GUI_ITEM = 10002;
+    public static final int GUI_ENTITY = 10001;
+
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
-        if (ID == 10002)
+        if (ID == GUI_ITEM)
         {
             return getServerGuiElement(y, player, x);
         }
-        else if (ID == 10001)
+        else if (ID == GUI_ENTITY)
         {
             return getServerGuiElement(y, player, world.getEntityByID(x));
         }
@@ -71,11 +74,11 @@ public abstract class AbstractProxy extends AbstractLoadable implements IGuiHand
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
-        if (ID == 10002)
+        if (ID == GUI_ITEM)
         {
             return getServerGuiElement(y, player, world.getEntityByID(x));
         }
-        else if (ID == 10001)
+        else if (ID == GUI_ENTITY)
         {
             return getClientGuiElement(y, player, world.getEntityByID(x));
         }
