@@ -9,6 +9,7 @@ import net.minecraft.util.StatCollector;
 import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatException;
 import java.util.List;
 
 /**
@@ -20,6 +21,32 @@ import java.util.List;
 public class LanguageUtility
 {
     public static int toolTipLineLength = 120;
+
+    /**
+     * Grabs the localization for the string provided. Make sure the string
+     * matches the exact key in a translation file.
+     *
+     * @param key  - translation key, Example 'tile.sometile.name' or 'tile.modname:sometile.name'
+     * @param args - formatting inputs
+     * @return translated key, or the same string provided if the key didn't match anything
+     */
+    public static String getLocalFormatted(String key, Object... args)
+    {
+        String translation = getLocal(key);
+
+        try
+        {
+            return String.format(translation, args);
+        }
+        catch (IllegalFormatException e)
+        {
+            if (Engine.runningAsDev)
+            {
+                Engine.logger().error("LanguageUtility: Error formatting localized string, " + translation + ", " + args, e);
+            }
+        }
+        return translation;
+    }
 
     /**
      * Grabs the localization for the string provided. Make sure the string
