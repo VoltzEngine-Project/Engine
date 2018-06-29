@@ -4,9 +4,6 @@ import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.mc.api.IWorldPosition;
 import com.builtbroken.mc.api.data.IPacket;
 import com.builtbroken.mc.core.Engine;
-import com.builtbroken.mc.core.network.packet.PacketEntity;
-import com.builtbroken.mc.core.network.packet.PacketTile;
-import com.builtbroken.mc.core.network.packet.PacketType;
 import com.builtbroken.mc.framework.mod.loadable.AbstractLoadable;
 import com.builtbroken.mc.lib.helper.wrapper.ByteBufWrapper;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -15,7 +12,6 @@ import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
@@ -44,22 +40,6 @@ public class PacketManager extends AbstractLoadable
     public static void writeData(ByteBuf data, Object... sendData)
     {
         new ByteBufWrapper.ByteBufWrapper(data).$less$less$less(sendData);
-    }
-
-    @Deprecated
-    public static PacketType getPacketFor(Object obj)
-    {
-        if (obj instanceof TileEntity)
-        {
-            return new PacketTile((TileEntity) obj);
-        }
-
-        if (obj instanceof Entity)
-        {
-            return new PacketEntity((Entity) obj);
-        }
-
-        return null;
     }
 
     public Packet toMCPacket(IPacket packet)
