@@ -403,7 +403,9 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         if (data != null)
         {
             //Attempt to get meta
-            for (String key : getPossibleRenderStateKeys(meta, pass))
+            List<String> keys = new ArrayList();
+            getPossibleRenderStateKeys(keys, meta, pass);
+            for (String key : keys)
             {
                 IRenderState state = data.getState(key);
                 if (state != null)
@@ -427,7 +429,9 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         RenderData data = ClientDataHandler.INSTANCE.getRenderData(getRenderContentID(meta));
         if (data != null)
         {
-            for (String key : getPossibleRenderStateKeys(meta, pass))
+            List<String> keys = new ArrayList();
+            getPossibleRenderStateKeys(keys, meta, pass);
+            for (String key : keys)
             {
                 IRenderState state = data.getState(key);
                 if (state != null)
@@ -443,10 +447,9 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         return 16777215;
     }
 
-    public List<String> getPossibleRenderStateKeys(int meta, int pass)
+    public void getPossibleRenderStateKeys(List<String> keys, int meta, int pass)
     {
         //TODO cache list for faster runtime
-        List<String> keys = new ArrayList();
         if (node.hasSubTypes() && node.subTypeHashMap.containsKey(meta))
         {
             keys.add(RenderData.INVENTORY_RENDER_KEY + "." + node.subTypeHashMap.get(meta).id + "." + pass);
@@ -458,7 +461,6 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
         keys.add(RenderData.INVENTORY_RENDER_KEY + "." + meta);
         keys.add(RenderData.INVENTORY_RENDER_KEY + "." + pass);
         keys.add(RenderData.INVENTORY_RENDER_KEY);
-        return keys;
     }
 
     /**
