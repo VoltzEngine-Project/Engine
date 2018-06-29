@@ -1,15 +1,19 @@
 package com.builtbroken.mc.lib.helper.wrapper
 
-import com.builtbroken.jlib.data.network.{IByteBufWriter, IByteBufReader}
+import java.util
+
+import com.builtbroken.jlib.data.network.{IByteBufReader, IByteBufWriter}
 import com.builtbroken.mc.api.ISave
 import com.builtbroken.mc.core.{Engine, References}
-import com.builtbroken.mc.imp.transform.vector.{Pos, Point}
+import com.builtbroken.mc.imp.transform.vector.{Point, Pos}
 import cpw.mods.fml.common.network.ByteBufUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{FluidStack, FluidTank}
+import scala.collection.JavaConversions._
+import scala.collection.convert.WrapAsScala.enumerationAsScalaIterator
 
 /**
  * Some alias methods to make packets more pleasant.
@@ -81,6 +85,7 @@ object ByteBufWrapper {
         data match {
           case x: Array[Any] => this <<< x
           case x: Seq[Any] => this <<< x
+          case x: util.Collection[Any] => this <<< x
           case x: Int => buf <<< x
           case x: Float => buf <<< x
           case x: Double => buf <<< x
@@ -193,6 +198,11 @@ object ByteBufWrapper {
 
     def <<<(str: String): ByteBuf = {
       ByteBufUtils.writeUTF8String(buf, str)
+      buf
+    }
+
+    def <<<(data: util.Collection[Any]): ByteBuf = {
+      data foreach (this <<< _)
       buf
     }
   }
