@@ -76,7 +76,7 @@ public abstract class AbstractProxy extends AbstractLoadable implements IGuiHand
     {
         if (ID == GUI_ITEM)
         {
-            return getServerGuiElement(y, player, world.getEntityByID(x));
+            return getServerGuiElement(y, player, x);
         }
         else if (ID == GUI_ENTITY)
         {
