@@ -6,6 +6,20 @@ If this is a problem, use exact build numbers to track changes. As each build lo
 It is also important to note these changes are for several repos. As this repository is primarily used for the core segement of the project. Other projects are merged in at build time to create the complete project. 
 
 # Versions
+## 1.11.0 - 6/30/2018
+### Runtime changes
+* Added: Shadowing to disabled buttons
+* Fixed: Rendering issues with Access Gui
+* Fixed: permission issues with Access Gui
+* Fixed: Issues with computer support
+
+### Development Changes
+* Reworked: Packet system to no longer expose ByteBuf for writing. All data needs to be provided as an object or as a Consumer<ByteBuf>
+* Changed: few interfaces in old ICBM Launcher interfaces
+* Changed: TileModuleMachine to return IEnergyBuffer instead of EnergyBuffer
+* Cleanup: Moved NBT keys to static final fields
+
+
 ## 1.10.7-1.10.8 - 6/20/2018
 ### Runtime changes
 * Added: shared data system method getEnergy() 
