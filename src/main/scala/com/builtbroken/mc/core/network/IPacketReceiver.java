@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
  * Applied to tiles that read packets
  * Created by robert on 8/5/2014.
  */
+@Deprecated //Just use the ID version
 public interface IPacketReceiver
 {
     /**

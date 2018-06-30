@@ -38,10 +38,10 @@ public class PacketTile extends PacketType
      */
     public PacketTile(int x, int y, int z, Object... args)
     {
-        super(args);
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        add(this.x = x); //Legacy workaround
+        add(this.y = y); //Legacy workaround
+        add(this.z = z); //Legacy workaround
+        add(args); //Legacy workaround
     }
 
     /**
@@ -56,21 +56,12 @@ public class PacketTile extends PacketType
     }
 
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
-    {
-        buffer.writeInt(x);
-        buffer.writeInt(y);
-        buffer.writeInt(z);
-        buffer.writeBytes(data());
-    }
-
-    @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
+        super.decodeInto(ctx, buffer);
         x = buffer.readInt();
         y = buffer.readInt();
         z = buffer.readInt();
-        data_$eq(buffer);
     }
 
     @Override
@@ -127,7 +118,7 @@ public class PacketTile extends PacketType
     {
         //TODO add checksum or hash to verify the packet is sent to the correct tile
         final Location location = new Location(player.worldObj, x, y, z);
-        sender_$eq(player);
+        sender = player;
         if (tile == null)
         {
             Engine.logger().error(new PacketTileReadException(location, "Null tile"));
@@ -143,7 +134,7 @@ public class PacketTile extends PacketType
                 try
                 {
                     IPacketIDReceiver receiver = (IPacketIDReceiver) tile;
-                    ByteBuf buf = data();
+                    ByteBuf buf = getDataToRead();
 
                     int id;
                     try
@@ -185,7 +176,7 @@ public class PacketTile extends PacketType
                 try
                 {
                     IPacketReceiver receiver = (IPacketReceiver) tile;
-                    receiver.read(data().slice(), player, this);
+                    receiver.read(getDataToRead(), player, this);
                 }
                 catch (IndexOutOfBoundsException e)
                 {

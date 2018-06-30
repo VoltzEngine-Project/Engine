@@ -1,5 +1,6 @@
 package com.builtbroken.mc.framework.logic;
 
+import com.builtbroken.jlib.data.network.IByteBufWriter;
 import com.builtbroken.jlib.data.vector.IPos3D;
 import com.builtbroken.jlib.data.vector.Pos3D;
 import com.builtbroken.mc.api.IWorldPosition;
@@ -40,7 +41,7 @@ import java.util.UUID;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 3/31/2017.
  */
-public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlacementListener, IPlayerUsing
+public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlacementListener, IPlayerUsing, IByteBufWriter
 {
     protected static int DESCRIPTION_PACKET_ID = -1;
     protected static int GUI_PACKET_ID = -2;
@@ -214,8 +215,8 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
         try
         {
             IPacket packet = getPacketForData();
-            packet.data().writeInt(DESCRIPTION_PACKET_ID);
-            writeDescPacket(packet.data());
+            packet.add(DESCRIPTION_PACKET_ID);
+            packet.add(this);
             return packet;
         }
         catch (Exception e)
@@ -277,6 +278,14 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
     public void writeDescPacket(EntityPlayer player, ByteBuf buf)
     {
         writeDescPacket(buf);
+    }
+
+
+    @Override
+    public ByteBuf writeBytes(ByteBuf buf)
+    {
+        writeDescPacket(null, buf);
+        return buf;
     }
 
     /**
@@ -421,8 +430,8 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
                 if (player instanceof EntityPlayerMP && player.worldObj == world().unwrap())
                 {
                     IPacket packet = getPacketForData();
-                    packet.data().writeInt(DESCRIPTION_PACKET_ID);
-                    writeDescPacket(player, packet.data());
+                    packet.add(DESCRIPTION_PACKET_ID);
+                    packet.addWriter(byteBuf -> writeDescPacket(player, byteBuf));
                     Engine.packetHandler.sendToPlayer(packet, (EntityPlayerMP) player);
                 }
             }
@@ -431,7 +440,7 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
 
     public void sendPacketToGuiUsers(IPacket packet)
     {
-        if (world() != null && isServer()&& packet != null)
+        if (world() != null && isServer() && packet != null)
         {
             Iterator<EntityPlayer> players = getPlayersUsing().iterator();
             while (players.hasNext())
@@ -462,8 +471,9 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
                 EntityPlayer player = players.next();
                 if (isValidToSendGUIPacket(player))
                 {
-                    IPacket packet = getHost().getPacketForData(GUI_PACKET_ID);
-                    writeGuiPacket(player, packet.data());
+                    IPacket packet = getPacketForData();
+                    packet.add(GUI_PACKET_ID);
+                    packet.addWriter(byteBuf -> writeGuiPacket(player, byteBuf));
                     Engine.packetHandler.sendToPlayer(packet, (EntityPlayerMP) player);
                 }
                 else
@@ -476,16 +486,16 @@ public class TileNode implements ITileNode, IPacketIDReceiver, ITileDesc, IPlace
 
     protected boolean isValidToSendGUIPacket(EntityPlayer player)
     {
-        if(player instanceof EntityPlayerMP)
+        if (player instanceof EntityPlayerMP)
         {
             Container container = player.openContainer;
-            if(container instanceof ContainerDummy)
+            if (container instanceof ContainerDummy)
             {
                 return ((ContainerDummy) container).tile == this;
             }
-           else if(container instanceof ContainerBase)
+            else if (container instanceof ContainerBase)
             {
-                return ((ContainerBase)container).host == this;
+                return ((ContainerBase) container).host == this;
             }
         }
         return false;

@@ -34,7 +34,7 @@ public class PacketPlayerItemMode extends PacketPlayerItem
         ItemStack stack = player.inventory.getStackInSlot(this.slotId);
         if(stack != null && stack.getItem() instanceof IModeItem)
         {
-            ((IModeItem) stack.getItem()).setMode(stack, data().readInt());
+            ((IModeItem) stack.getItem()).setMode(stack, getDataToRead().readInt());
         }
         else
         {

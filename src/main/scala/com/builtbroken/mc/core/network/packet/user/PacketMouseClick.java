@@ -34,7 +34,7 @@ public class PacketMouseClick extends PacketPlayerItem
         ItemStack stack = player.inventory.getStackInSlot(this.slotId);
         if (stack != null && stack.getItem() instanceof IMouseButtonHandler)
         {
-            ((IMouseButtonHandler) stack.getItem()).mouseClick(stack, player, data().readInt(), data().readBoolean());
+            ((IMouseButtonHandler) stack.getItem()).mouseClick(stack, player, getDataToRead().readInt(), getDataToRead().readBoolean());
         }
         else
         {

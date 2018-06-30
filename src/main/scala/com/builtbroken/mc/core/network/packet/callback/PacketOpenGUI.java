@@ -52,7 +52,7 @@ public class PacketOpenGUI extends PacketTile
             }
             if (guiTile != null)
             {
-                ByteBuf buf = data().slice();
+                ByteBuf buf = getDataToRead();
                 int guiID = buf.readInt();
                 if (!guiTile.openGui(player, guiID))
                 {

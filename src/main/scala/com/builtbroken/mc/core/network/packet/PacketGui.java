@@ -7,7 +7,6 @@ import com.builtbroken.mc.core.network.ex.PacketIDException;
 import com.builtbroken.mc.core.network.ex.PacketTileReadException;
 import com.builtbroken.mc.imp.transform.vector.Location;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,23 +27,6 @@ public class PacketGui extends PacketType
         //Needed for forge to construct the packet
     }
 
-    public PacketGui(Object... args)
-    {
-        super(args);
-    }
-
-    @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
-    {
-        buffer.writeBytes(data());
-    }
-
-    @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
-    {
-        data_$eq(buffer.slice());
-    }
-
     @Override
     public void handleClientSide(EntityPlayer player)
     {
@@ -57,7 +39,7 @@ public class PacketGui extends PacketType
                 try
                 {
                     IPacketIDReceiver receiver = (IPacketIDReceiver) screen;
-                    ByteBuf buf = data().slice();
+                    ByteBuf buf = getDataToRead();
 
                     int id;
                     try
@@ -99,7 +81,7 @@ public class PacketGui extends PacketType
                 try
                 {
                     IPacketReceiver receiver = (IPacketReceiver) screen;
-                    receiver.read(data().slice(), player, this);
+                    receiver.read(getDataToRead(), player, this);
                 }
                 catch (IndexOutOfBoundsException e)
                 {
@@ -135,7 +117,7 @@ public class PacketGui extends PacketType
                 try
                 {
                     IPacketIDReceiver receiver = (IPacketIDReceiver) container;
-                    ByteBuf buf = data().slice();
+                    ByteBuf buf = getDataToRead();
 
                     int id;
                     try
@@ -177,7 +159,7 @@ public class PacketGui extends PacketType
                 try
                 {
                     IPacketReceiver receiver = (IPacketReceiver) container;
-                    receiver.read(data().slice(), player, this);
+                    receiver.read(getDataToRead(), player, this);
                 }
                 catch (IndexOutOfBoundsException e)
                 {

@@ -23,8 +23,8 @@ public class PacketPlayerItem extends PacketType
 
     public PacketPlayerItem(int slotId, Object... args)
     {
-        super(args);
-        this.slotId = slotId;
+        add(this.slotId = slotId);
+        add(args);
     }
 
     public PacketPlayerItem(EntityPlayer player, Object... args)
@@ -33,17 +33,10 @@ public class PacketPlayerItem extends PacketType
     }
 
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
-    {
-        buffer.writeInt(slotId);
-        buffer.writeBytes(data());
-    }
-
-    @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
+        super.decodeInto(ctx, buffer);
         slotId = buffer.readInt();
-        data_$eq(buffer.slice());
     }
 
     @Override
@@ -62,11 +55,11 @@ public class PacketPlayerItem extends PacketType
             {
                 if (item instanceof IPacketReceiver)
                 {
-                    ((IPacketReceiver) item).read(data(), player, this);
+                    ((IPacketReceiver) item).read(getDataToRead(), player, this);
                 }
                 else if (item instanceof IPacketIDReceiver)
                 {
-                    ((IPacketIDReceiver) item).read(data(), data().readInt(), player, this);
+                    ((IPacketIDReceiver) item).read(getDataToRead(), getDataToRead().readInt(), player, this);
                 }
             }
         }
@@ -77,11 +70,11 @@ public class PacketPlayerItem extends PacketType
             {
                 if (stack.getItem() instanceof IPacketReceiver)
                 {
-                    ((IPacketReceiver) stack.getItem()).read(data(), player, this);
+                    ((IPacketReceiver) stack.getItem()).read(getDataToRead(), player, this);
                 }
                 else if (stack.getItem() instanceof IPacketIDReceiver)
                 {
-                    ((IPacketIDReceiver) stack.getItem()).read(data(), data().readInt(), player, this);
+                    ((IPacketIDReceiver) stack.getItem()).read(getDataToRead(), getDataToRead().readInt(), player, this);
                 }
             }
         }
