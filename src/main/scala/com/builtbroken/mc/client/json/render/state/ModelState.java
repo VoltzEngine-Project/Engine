@@ -1,6 +1,5 @@
 package com.builtbroken.mc.client.json.render.state;
 
-import com.builtbroken.jlib.helpers.MathHelper;
 import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.client.json.ClientDataHandler;
 import com.builtbroken.mc.client.json.imp.IModelState;
@@ -136,9 +135,9 @@ public class ModelState extends RenderStateTexture implements IModelState, IJson
         if (rotationOrder != null)
         {
             //Translate by rotation point
-            if (rotationPoint != null)
+            if (rotationPoint != null && !rotationPoint.isZero())
             {
-                GL11.glTranslated(-rotationPoint.x(), -rotationPoint.y(), -rotationPoint.z());
+                GL11.glTranslated(rotationPoint.x(), rotationPoint.y(), rotationPoint.z());
             }
 
             //Rotate
@@ -175,9 +174,9 @@ public class ModelState extends RenderStateTexture implements IModelState, IJson
             }
 
             //Translate by rotation point
-            if (rotationPoint != null)
+            if (rotationPoint != null && !rotationPoint.isZero())
             {
-                GL11.glTranslated(rotationPoint.x(), rotationPoint.y(), rotationPoint.z());
+                GL11.glTranslated(-rotationPoint.x(), -rotationPoint.y(), -rotationPoint.z());
             }
         }
     }
@@ -246,7 +245,7 @@ public class ModelState extends RenderStateTexture implements IModelState, IJson
             roll += ((IModelState) parentState).getRotation().roll();
         }
 
-        GL11.glRotated(MathHelper.clampAngleTo360(roll), 0, 0, 1);
+        GL11.glRotated(roll, 0, 0, 1);
     }
 
     private void doPitch(float extra)
@@ -265,7 +264,7 @@ public class ModelState extends RenderStateTexture implements IModelState, IJson
             pitch += ((IModelState) parentState).getRotation().pitch();
         }
 
-        GL11.glRotated(MathHelper.clampAngleTo360(pitch), 1, 0, 0);
+        GL11.glRotated(pitch, 1, 0, 0);
     }
 
     private void doYaw(float extra)
@@ -284,7 +283,7 @@ public class ModelState extends RenderStateTexture implements IModelState, IJson
             yaw += ((IModelState) parentState).getRotation().yaw();
         }
 
-        GL11.glRotated(MathHelper.clampAngleTo360(yaw), 0, 1, 0);
+        GL11.glRotated(yaw, 0, 1, 0);
     }
 
     @Override
