@@ -6,19 +6,13 @@ import com.builtbroken.mc.imp.transform.vector.Pos;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 9/6/2017.
  */
-public class FrameModelStateData extends JFrame implements ActionListener
+public class FrameModelStateData extends JFrame
 {
-    public static final String COMMAND_RELOAD = "reload";
-    public static final String COMMAND_APPLY = "apply";
-
-
     public final ModelState modelState;
 
     private Label labelModelID;
@@ -45,114 +39,129 @@ public class FrameModelStateData extends JFrame implements ActionListener
     public FrameModelStateData(ModelState modelState)
     {
         this.modelState = modelState;
-        setSize(new Dimension(400, 400));
+        setSize(new Dimension(600, 600));
         setResizable(false);
         setTitle("JSON ModelState debug window");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new GridLayout(0, 2));
+        setLayout(new BorderLayout());
 
-        add(new Label("Model ID:"));
-        add(labelModelID = new Label("---"));
+        //---------------------------------
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new GridLayout(0, 2));
+
+        topPanel.add(new Label("ID:"));
+        topPanel.add(new Label(modelState.id));
+
+        add(topPanel, BorderLayout.NORTH);
+
+        //---------------------------------
+        JPanel centerDataPanel = new JPanel();
+        centerDataPanel.setLayout(new GridLayout(0, 2));
+
+        centerDataPanel.add(new Label("Model ID:"));
+        centerDataPanel.add(labelModelID = new Label("---"));
 
         //Spacer
-        add(new JPanel());
-        add(new JPanel());
+        centerDataPanel.add(new JPanel());
+        centerDataPanel.add(new JPanel());
 
         //-------------------------------
         //Render Offset
-        add(new Label("Offset:"));
-        add(new JPanel());
+        centerDataPanel.add(new Label("Offset:"));
+        centerDataPanel.add(new JPanel());
 
-        add(new Label("X:"));
-        add(renderOffsetX = new TextField(10));
+        centerDataPanel.add(new Label("X:"));
+        centerDataPanel.add(renderOffsetX = new TextField(10));
 
-        add(new Label("Y:"));
-        add(renderOffsetY = new TextField(10));
+        centerDataPanel.add(new Label("Y:"));
+        centerDataPanel.add(renderOffsetY = new TextField(10));
 
-        add(new Label("Z:"));
-        add(renderOffsetZ = new TextField(10));
+        centerDataPanel.add(new Label("Z:"));
+        centerDataPanel.add(renderOffsetZ = new TextField(10));
 
         //Spacer
-        add(new JPanel());
-        add(new JPanel());
+        centerDataPanel.add(new JPanel());
+        centerDataPanel.add(new JPanel());
 
         //-------------------------------
         //Render Scale
-        add(new Label("Scale:"));
-        add(new JPanel());
+        centerDataPanel.add(new Label("Scale:"));
+        centerDataPanel.add(new JPanel());
 
-        add(new Label("X:"));
-        add(renderScaleX = new TextField(10));
+        centerDataPanel.add(new Label("X:"));
+        centerDataPanel.add(renderScaleX = new TextField(10));
 
-        add(new Label("Y:"));
-        add(renderScaleY = new TextField(10));
+        centerDataPanel.add(new Label("Y:"));
+        centerDataPanel.add(renderScaleY = new TextField(10));
 
-        add(new Label("Z:"));
-        add(renderScaleZ = new TextField(10));
+        centerDataPanel.add(new Label("Z:"));
+        centerDataPanel.add(renderScaleZ = new TextField(10));
 
         //Spacer
-        add(new JPanel());
-        add(new JPanel());
+        centerDataPanel.add(new JPanel());
+        centerDataPanel.add(new JPanel());
 
         //-------------------------------
         //Render Scale
-        add(new Label("Rotation Point:"));
-        add(new JPanel());
+        centerDataPanel.add(new Label("Rotation Point:"));
+        centerDataPanel.add(new JPanel());
 
-        add(new Label("X:"));
-        add(renderRotationPointX = new TextField(10));
+        centerDataPanel.add(new Label("X:"));
+        centerDataPanel.add(renderRotationPointX = new TextField(10));
 
-        add(new Label("Y:"));
-        add(renderRotationPointY = new TextField(10));
+        centerDataPanel.add(new Label("Y:"));
+        centerDataPanel.add(renderRotationPointY = new TextField(10));
 
-        add(new Label("Z:"));
-        add(renderRotationPointZ = new TextField(10));
+        centerDataPanel.add(new Label("Z:"));
+        centerDataPanel.add(renderRotationPointZ = new TextField(10));
 
         //Spacer
-        add(new JPanel());
-        add(new JPanel());
+        centerDataPanel.add(new JPanel());
+        centerDataPanel.add(new JPanel());
 
         //-------------------------------
         //Render Scale
-        add(new Label("Rotation:"));
-        add(new JPanel());
+        centerDataPanel.add(new Label("Rotation:"));
+        centerDataPanel.add(new JPanel());
 
-        add(new Label("Yaw:"));
-        add(renderRotationX = new TextField(10));
+        centerDataPanel.add(new Label("Yaw:"));
+        centerDataPanel.add(renderRotationX = new TextField(10));
 
-        add(new Label("Pitch:"));
-        add(renderRotationY = new TextField(10));
+        centerDataPanel.add(new Label("Pitch:"));
+        centerDataPanel.add(renderRotationY = new TextField(10));
 
-        add(new Label("Roll:"));
-        add(renderRotationZ = new TextField(10));
+        centerDataPanel.add(new Label("Roll:"));
+        centerDataPanel.add(renderRotationZ = new TextField(10));
 
         //Spacer
-        add(new JPanel());
-        add(new JPanel());
+        centerDataPanel.add(new JPanel());
+        centerDataPanel.add(new JPanel());
 
-        add(reloadButton = new Button("Reload"));
-        add(applyButton = new Button("Apply"));
 
-        reloadButton.setActionCommand(COMMAND_RELOAD);
-        reloadButton.addActionListener(this);
+        //-----------------------------
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(centerDataPanel);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(getWidth() - 100, getHeight() - 100));
+        scrollPane.setMinimumSize(new Dimension(getWidth() - 100, getHeight() - 100));
+        add(scrollPane, BorderLayout.CENTER);
 
-        applyButton.setActionCommand(COMMAND_APPLY);
-        applyButton.addActionListener(this);
 
+        //-----------------------------
+        JPanel buttonButton = new JPanel();
+        buttonButton.setLayout(new GridLayout(0, 2));
+
+        centerDataPanel.add(reloadButton = new Button("Reload"));
+        centerDataPanel.add(applyButton = new Button("Apply"));
+
+        reloadButton.addActionListener(e -> reloadData());
+        applyButton.addActionListener(e -> applyData());
+
+        add(buttonButton, BorderLayout.SOUTH);
+
+
+        //-----------------------------
         reloadData();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        if (e.getActionCommand().equalsIgnoreCase(COMMAND_RELOAD))
-        {
-            reloadData();
-        }
-        else if (e.getActionCommand().equalsIgnoreCase(COMMAND_APPLY))
-        {
-            applyData();
-        }
     }
 
     protected void reloadData()

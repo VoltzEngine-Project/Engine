@@ -3,11 +3,12 @@ package com.builtbroken.mc.debug.gui.windows;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.render.RenderData;
 import com.builtbroken.mc.client.json.render.item.RenderStateItem;
+import com.builtbroken.mc.client.json.render.state.ModelState;
 import com.builtbroken.mc.debug.IJsonDebugDisplay;
-import com.builtbroken.mc.debug.component.DebugDataCellRenderer;
 import com.builtbroken.mc.debug.data.DebugData;
 import com.builtbroken.mc.debug.data.DebugJsonData;
 import com.builtbroken.mc.debug.data.IJsonDebugData;
+import com.builtbroken.mc.debug.gui.panels.imp.PanelDataList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,26 +21,21 @@ import java.util.Map;
  */
 public class FrameRenderData extends JFrame
 {
-    JList dataLogList;
-    DefaultListModel<IJsonDebugData> debugDataListModel = new DefaultListModel();
-
     RenderData renderData;
 
     public FrameRenderData(RenderData renderData)
     {
         this.renderData = renderData;
-        setSize(new Dimension(400, 400));
+        setSize(new Dimension(600, 600));
         setResizable(false);
         setTitle("JSON RenderData debug window");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-
         JTabbedPane tabbedPane = new JTabbedPane();
         ImageIcon icon = null;
 
-        JComponent panel1 = createJsonDataTab();
-        tabbedPane.addTab("States", icon, panel1,
+        tabbedPane.addTab("States", icon, new TabModels(),
                 "Lists all of the render states");
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
@@ -51,85 +47,50 @@ public class FrameRenderData extends JFrame
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-    public void reloadData(String filter)
+    protected final class TabModels extends PanelDataList<IJsonDebugDisplay>
     {
-        debugDataListModel.clear();
-        for (Map.Entry<String, IRenderState> entry : renderData.renderStatesByName.entrySet())
+        @Override
+        protected IJsonDebugData getDataEntryFor(IJsonDebugDisplay object)
         {
-            if (entry.getValue() instanceof IJsonDebugDisplay)
+            if (object instanceof IJsonDebugDisplay)
             {
-                IJsonDebugDisplay display = (IJsonDebugDisplay) entry.getValue();
-                String displayName = display.getDisplayName() != null ? display.getDisplayName() : display.toString();
-                if (filter == null || filter.isEmpty() || displayName.contains(filter))
-                {
-                    debugDataListModel.addElement(new DebugJsonData(display));
-                }
+                return new DebugJsonData((IJsonDebugDisplay) object);
             }
-            else
+            return new DebugData("MOD: " + object.getMod() + "  ID: " + object.getContentID());
+        }
+
+        @Override
+        protected void buildData()
+        {
+            for (Map.Entry<String, IRenderState> entry : renderData.renderStatesByName.entrySet())
             {
-                String msg = "Key: " + entry.getKey() + " value:" + entry.getValue();
-                if (filter == null || filter.isEmpty() || msg.contains(filter))
+                if (entry.getValue() instanceof IJsonDebugDisplay)
                 {
-                    debugDataListModel.addElement(new DebugData(msg));
+                    dataModel.addElement(new DebugJsonData((IJsonDebugDisplay) entry.getValue()));
+                }
+                else
+                {
+                    String msg = "Key: " + entry.getKey() + " value:" + entry.getValue();
+                    dataModel.addElement(new DebugData(msg));
                 }
             }
         }
     }
 
-    protected JPanel createJsonDataTab()
-    {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        //Create list
-        dataLogList = new JList(debugDataListModel);
-        dataLogList.setLayoutOrientation(JList.VERTICAL);
-        dataLogList.setCellRenderer(new DebugDataCellRenderer());
-
-
-        //Create scroll panel
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setViewportView(dataLogList);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setPreferredSize(new Dimension(getWidth() - 100, getHeight() - 100));
-        scrollPane.setMinimumSize(new Dimension(getWidth() - 100, getHeight() - 100));
-        panel.add(scrollPane, BorderLayout.CENTER);
-
-        //Menu
-        JPanel menuPanel = new JPanel();
-        menuPanel.setMaximumSize(new Dimension(-1, 100));
-
-        //Reload button
-        Button button = new Button("Reload");
-        button.addActionListener(e -> reloadData(null));
-        menuPanel.add(button);
-
-        //Search box
-        JTextField searchBox = new JTextField();
-        searchBox.setMinimumSize(new Dimension(200, -1));
-        searchBox.setPreferredSize(new Dimension(200, 30));
-        searchBox.setToolTipText("Search filter");
-        menuPanel.add(searchBox);
-
-        //Search button
-        button = new Button("Search");
-        button.addActionListener(e -> reloadData(searchBox.getText().trim()));
-        menuPanel.add(button);
-
-        panel.add(menuPanel, BorderLayout.NORTH);
-
-        return panel;
-    }
-
-
     public static void main(String... args)
     {
         RenderData data = new RenderData(null, "someRender", "item");
 
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 3; i++)
         {
             RenderStateItem state = new RenderStateItem("item." + i);
             data.add("item." + i, state);
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            ModelState state = new ModelState("model" + i);
+            data.add("model." + i, state);
         }
 
         FrameRenderData gui = new FrameRenderData(data);

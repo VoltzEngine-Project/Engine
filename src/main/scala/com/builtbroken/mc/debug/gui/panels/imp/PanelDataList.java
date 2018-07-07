@@ -44,7 +44,6 @@ public abstract class PanelDataList<D extends Object> extends JPanel
         //Search button
         button = new Button("Search");
         button.addActionListener(e -> {
-            dataModel.clear();
             reload(searchBox.getText().trim());
         });
         menuPanel.add(button);
@@ -92,7 +91,13 @@ public abstract class PanelDataList<D extends Object> extends JPanel
      */
     protected void reload(String filter)
     {
+        //Clear
+        dataModel.clear();
+
+        //Collect data
         buildData();
+
+        //Filter
         for (D object : data)
         {
             if (object != null)

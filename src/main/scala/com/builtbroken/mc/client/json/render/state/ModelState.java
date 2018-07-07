@@ -7,7 +7,6 @@ import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.models.ModelCustomData;
 import com.builtbroken.mc.client.json.texture.TextureData;
-import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.debug.IJsonDebugDisplay;
 import com.builtbroken.mc.debug.gui.windows.FrameModelStateData;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
@@ -389,14 +388,11 @@ public class ModelState extends RenderStateTexture implements IModelState, IJson
     @Override
     public void onDoubleClickLine()
     {
-        if (Engine.runningAsDev)
+        if (debugWindow == null)
         {
-            if (debugWindow == null)
-            {
-                debugWindow = new FrameModelStateData(this);
-            }
-            debugWindow.show();
+            debugWindow = new FrameModelStateData(this);
         }
+        debugWindow.show();
     }
 
     @Override
