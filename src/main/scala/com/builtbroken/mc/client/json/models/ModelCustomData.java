@@ -78,7 +78,7 @@ public class ModelCustomData extends JsonGenData implements IJsonDebugDisplay
             catch (Exception e)
             {
                 //TODO implement model reload to fix errors
-                Engine.logger().error("Failed to render model " + this);
+                Engine.logger().error("Failed to render model " + this, e);
 
                 //Tick to disable
                 long time = System.nanoTime();
