@@ -36,6 +36,8 @@ public class FrameModelStateData extends JFrame
     private Button reloadButton;
     private Button applyButton;
 
+    public boolean dataNeedsPulled = false;
+
     public FrameModelStateData(ModelState modelState)
     {
         this.modelState = modelState;
@@ -155,7 +157,10 @@ public class FrameModelStateData extends JFrame
         centerDataPanel.add(applyButton = new Button("Apply"));
 
         reloadButton.addActionListener(e -> reloadData());
-        applyButton.addActionListener(e -> applyData());
+        applyButton.addActionListener(e -> {
+            dataNeedsPulled = true;
+            applyButton.setEnabled(false);
+        });
 
         add(buttonButton, BorderLayout.SOUTH);
 
@@ -185,8 +190,17 @@ public class FrameModelStateData extends JFrame
         renderRotationZ.setText("" + (modelState.rotation != null ? modelState.rotation.roll() : 0));
     }
 
-    protected void applyData()
+    /**
+     * Called from model state object to apply data.
+     * Do not call outside of render thread. As this
+     * can break model from rendering.
+     */
+    public void applyData()
     {
+        //Reset data
+        dataNeedsPulled = false;
+
+        //Apply data
         try
         {
             modelState.offset = new Pos(
@@ -219,5 +233,8 @@ public class FrameModelStateData extends JFrame
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error apply changes", JOptionPane.ERROR_MESSAGE);
         }
+
+        //Enable button
+        applyButton.setEnabled(true);
     }
 }

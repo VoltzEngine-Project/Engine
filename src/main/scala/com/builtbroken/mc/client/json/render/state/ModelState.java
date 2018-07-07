@@ -69,6 +69,13 @@ public class ModelState extends RenderStateTexture implements IModelState, IJson
     @Override
     public boolean render(boolean subRender, float yaw, float pitch, float roll)
     {
+        //Pull data if needed
+        if (debugWindow != null && debugWindow.dataNeedsPulled)
+        {
+            debugWindow.applyData();
+        }
+
+        //Get model and texture
         TextureData textureData = getTexture();
         ModelCustomData modelData = getModel();
         if (modelData != null && modelData.getModel() != null)
