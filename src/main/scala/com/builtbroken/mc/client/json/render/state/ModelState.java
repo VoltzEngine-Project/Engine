@@ -7,6 +7,9 @@ import com.builtbroken.mc.client.json.imp.IModelState;
 import com.builtbroken.mc.client.json.imp.IRenderState;
 import com.builtbroken.mc.client.json.models.ModelCustomData;
 import com.builtbroken.mc.client.json.texture.TextureData;
+import com.builtbroken.mc.core.Engine;
+import com.builtbroken.mc.debug.IJsonDebugDisplay;
+import com.builtbroken.mc.debug.gui.windows.FrameModelStateData;
 import com.builtbroken.mc.imp.transform.rotation.EulerAngle;
 import com.builtbroken.mc.imp.transform.vector.Pos;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -20,7 +23,7 @@ import java.util.List;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 11/22/2016.
  */
-public class ModelState extends RenderStateTexture implements IModelState
+public class ModelState extends RenderStateTexture implements IModelState, IJsonDebugDisplay
 {
     /** Model ID to render */
     public String modelID;
@@ -381,6 +384,19 @@ public class ModelState extends RenderStateTexture implements IModelState
         super.addDebugLines(lines);
         lines.add("Model ID = " + modelID);
         lines.add("Model = " + getModel());
+    }
+
+    @Override
+    public void onDoubleClickLine()
+    {
+        if (Engine.runningAsDev)
+        {
+            if (debugWindow == null)
+            {
+                debugWindow = new FrameModelStateData(this);
+            }
+            debugWindow.show();
+        }
     }
 
     @Override
