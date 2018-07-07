@@ -97,6 +97,15 @@ public class ModelStateJsonProcessor extends RenderJsonSubProcessor<ModelState>
             renderState = new ModelState(stateID, modelID, offset, scale, rotation);
         }
 
+        //Loads rotation point
+        if (renderStateObject.has("rotationPoint"))
+        {
+            renderState.rotationPoint = JsonConverterPos.fromJson(renderStateObject.get("rotationPoint"));
+            if (renderState.rotationPoint == null)
+            {
+                throw new IllegalArgumentException("Unknown value type for offset " + renderStateObject.get("rotationPoint"));
+            }
+        }
 
         if (renderStateObject.has("rotationOrder"))
         {

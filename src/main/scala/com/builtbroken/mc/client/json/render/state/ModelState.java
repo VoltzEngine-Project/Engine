@@ -41,13 +41,15 @@ public class ModelState extends RenderStateTexture implements IModelState
     public EulerAngle rotation;
 
     /** Order to rotate */
-    public String[] rotationOrder = new String[]{"roll", "pitch", "yaw"};
+    public String[] rotationOrder = new String[]{"roll", "pitch", "yaw"}; //TODO replace with enum, int, or something to run faster
 
     public boolean renderParent = false;
     public boolean combineRotations = false;
     public boolean renderOnlyParts = true;
 
-    protected EulerAngle _cachedRotation;
+    public EulerAngle _cachedRotation;
+
+    private FrameModelStateData debugWindow;
 
     public ModelState(String ID)
     {
@@ -131,6 +133,13 @@ public class ModelState extends RenderStateTexture implements IModelState
         //Apply rotation, using render defined order
         if (rotationOrder != null)
         {
+            //Translate by rotation point
+            if (rotationPoint != null)
+            {
+                GL11.glTranslated(-rotationPoint.x(), -rotationPoint.y(), -rotationPoint.z());
+            }
+
+            //Rotate
             for (String r : rotationOrder)
             {
                 if (r != null)
@@ -161,6 +170,12 @@ public class ModelState extends RenderStateTexture implements IModelState
                         doYaw(yaw);
                     }
                 }
+            }
+
+            //Translate by rotation point
+            if (rotationPoint != null)
+            {
+                GL11.glTranslated(rotationPoint.x(), rotationPoint.y(), rotationPoint.z());
             }
         }
     }
