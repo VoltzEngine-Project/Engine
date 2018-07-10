@@ -36,7 +36,9 @@ public interface IDestroyedListener extends ITileEventListener
      *
      * @param player      - player who broke the block
      * @param willHarvest - if the block will drop, or is being harvested
-     * @return true if handled, e.g. block was removed during this call
+     * @return true if handled, e.g. block was removed during this call.
+     * Return can be used to cancel normal block break. Useful if
+     * the block needs to remain for logic run later.
      */
     default boolean removedByPlayer(EntityPlayer player, boolean willHarvest)
     {
@@ -73,6 +75,6 @@ public interface IDestroyedListener extends ITileEventListener
     @Override
     default String getListenerKey()
     {
-        return "break";
+        return BlockListenerKeys.BREAK;
     }
 }

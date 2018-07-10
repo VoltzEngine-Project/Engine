@@ -9,6 +9,7 @@ public final class BlockListenerKeys
     public static final String MULTI_BLOCK_LAYOUT_LISTENER = "multiblocklayout";
 
     public static final String BLOCK_STACK = "blockStack";
+    public static final String BREAK = "break";
     public static final String PLACEMENT = "placement";
 
     public static final String TILE_RENDER = "tilerender";
