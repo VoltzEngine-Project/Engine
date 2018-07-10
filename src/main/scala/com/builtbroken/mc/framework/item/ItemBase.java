@@ -330,8 +330,7 @@ public class ItemBase extends Item implements IJsonRenderStateProvider, IJsonGen
                 keys.add(RenderData.INVENTORY_RENDER_KEY + "." + recommendedKey);
                 keys.add(recommendedKey);
             }
-            keys.add(RenderData.INVENTORY_RENDER_KEY + "." + pass);
-            keys.add(RenderData.INVENTORY_RENDER_KEY);
+            getPossibleRenderStateKeys(keys, stack.getItemDamage(), pass);
 
             //Loop through keys until we find a valid match
             for (String key : keys)
