@@ -86,7 +86,7 @@ public abstract class PacketType implements IPacket
         }
         else if (object instanceof Short)
         {
-            data.writeShort((Integer) object);
+            data.writeShort((Short) object);
         }
         else if (object instanceof Long)
         {
