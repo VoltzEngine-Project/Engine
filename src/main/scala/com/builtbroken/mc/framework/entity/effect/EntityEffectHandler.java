@@ -4,7 +4,6 @@ import com.builtbroken.jlib.debug.DebugPrinter;
 import com.builtbroken.jlib.lang.StringHelpers;
 import com.builtbroken.mc.core.Engine;
 import com.builtbroken.mc.core.References;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -120,13 +119,13 @@ public final class EntityEffectHandler
         return null;
     }
 
-    @SubscribeEvent
+    //@SubscribeEvent
     public void onEntityCreated(EntityEvent.EntityConstructing event)
     {
         createEffectProperty(event.entity);
     }
 
-    @SubscribeEvent //TODO find a better way to trigger updates
+    //@SubscribeEvent //TODO find a better way to trigger updates
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
         World world = event.world;
